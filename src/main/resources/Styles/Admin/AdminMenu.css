@@ -1,43 +1,24 @@
 
-.main_menu_container {
+.menu_chinh_container {
     -fx-background-color: #080C53;
-    -fx-alignment: center;
 }
 
-.left_container {
-    -fx-background-color: #080C53;
-    -fx-background-radius: 10;
-    -fx-effect: dropshadow(two-pass-box, #080C53, 5, 0, 0, 4);
+
+.top_menu FontAwesomeIconView {
+    -fx-fill: #ffffff;
 }
 
-/* Title/Logo Section */
-.title_container {
-    -fx-background-color: #080C53;
-    -fx-background-radius: 20 20 0 0;
-    -fx-alignment: top_center;
-    -fx-padding: 10;
-}
-
-.title_container FontAwesomeIconView {
-    -fx-fill: #132A13;
-}
-
-.title_container Text {
-    -fx-fill: #000000;
-    -fx-font-size: 2em;
-}
-
-/* Navigation Section */
+/* Navigation */
 .menu_container {
     -fx-padding: 10 30 10 30;
-    -fx-spacing: 30;
+    -fx-spacing: 5;
     -fx-background-radius: 20;
 }
 
-
+.dang_xuat Button ,
 .menu_container Button {
-    -fx-pref-width: 400;
-    -fx-pref-height: 40;
+    -fx-pref-width: 270;
+    -fx-pref-height: 80;
     -fx-background-color: #080C53;
     -fx-text-fill: #FFFFFF;
     -fx-font-size: 16;
@@ -45,23 +26,26 @@
     -fx-alignment: center_left;
 }
 
-.alt_menu_btn:hover,
+
+.dang_xuat Button FontAwesomeIconView ,
+.menu_container Button FontAwesomeIconView {
+    -fx-fill: #FFFFFF;
+}
+
+
+.dang_xuat {
+    -fx-padding: 10 30 10 30;
+    -fx-background-color: #080C53;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 16;
+    -fx-background-radius: 10;
+    -fx-alignment: top - left;
+}
+
+
+.dang_xuat Button:hover ,
 .menu_container Button:hover {
     -fx-cursor: hand;
     -fx-background-color: #a6adad;
     -fx-text-fill: white;
 }
-
-.menu_container Button FontAwesomeIconView {
-    -fx-fill: #FFFFFF;
-}
-
-.alt_menu_btn {
-    -fx-background-color: #080C53;
-    -fx-text-fill: #FFFFFF;
-    -fx-font-size: 16;
-    -fx-background-radius: 10;
-    -fx-alignment: center_left;
-}
-
-
