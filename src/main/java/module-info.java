@@ -7,4 +7,5 @@ module org.example.flightticketmanagement {
     opens org.example.flightticketmanagement to javafx.fxml;
     exports org.example.flightticketmanagement.Controllers to javafx.fxml;
     exports org.example.flightticketmanagement;
+    exports org.example.flightticketmanagement.Controllers to javafx.fxml;
 }
