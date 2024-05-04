@@ -1,14 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.example.flightticketmanagement.Controllers.Admin.AdminMenuController"
-            prefHeight="400.0" prefWidth="600.0">
 
-</AnchorPane>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="288.0" styleClass="menu_chinh_container" stylesheets="@../../Styles/Admin/AdminMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane prefHeight="278.0" prefWidth="288.0" styleClass="top_menu">
+         <children>
+            <FontAwesomeIconView glyphName="BARS" layoutX="30.0" layoutY="30.0" size="40" wrappingWidth="22.571428298950195" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0" />
+            <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="93.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/admin/Logo_TikeMana.png" />
+               </image>
+            </ImageView>
+            <Line endX="257.0" endY="250.0" layoutY="-6.0" startX="14.0" startY="250.0" stroke="WHITE" AnchorPane.bottomAnchor="26.5" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="243.0" />
+         </children>
+      </AnchorPane>
+      <VBox prefHeight="338.0" prefWidth="288.0" styleClass="menu_container">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" text="Bảng điều khiển">
+               <graphic>
+                  <FontAwesomeIconView glyphName="HOME" size="25" />
+               </graphic>
+            </Button>
+            <Button mnemonicParsing="false" text="Trang chủ">
+               <graphic>
+                  <FontAwesomeIconView glyphName="HOME" size="25" text="" />
+               </graphic>
+            </Button>
+            <Button mnemonicParsing="false" text="Tra cứu">
+               <graphic>
+                  <FontAwesomeIconView glyphName="HOME" size="25" text="" />
+               </graphic>
+            </Button>
+            <Button mnemonicParsing="false" text="Doanh thu">
+               <graphic>
+                  <FontAwesomeIconView size="25" />
+               </graphic>
+            </Button>
+            <Button mnemonicParsing="false" text="Sửa quy định">
+               <graphic>
+                  <FontAwesomeIconView glyphName="FILE" size="25" />
+               </graphic>
+            </Button>
+         </children>
+      </VBox>
+      <VBox prefHeight="195.0" prefWidth="288.0" styleClass="dang_xuat">
+         <children>
+            <Button mnemonicParsing="false" prefWidth="254.0" styleClass="dang_xuat" text="Đăng xuất">
+               <graphic>
+                  <FontAwesomeIconView size="25" />
+               </graphic>
+            </Button>
+         </children>
+      </VBox>
+   </children>
+</VBox>
