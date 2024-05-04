@@ -2,6 +2,7 @@ module org.example.flightticketmanagement {
     requires javafx.controls;
     requires javafx.fxml;
     requires MaterialFX;
+    requires de.jensd.fx.glyphs.fontawesome;
 
 
     opens org.example.flightticketmanagement to javafx.fxml;
