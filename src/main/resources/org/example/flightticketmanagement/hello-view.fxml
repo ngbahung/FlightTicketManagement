@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -12,6 +13,7 @@
   </padding>
 
   <Label fx:id="welcomeText" />
+   <MFXTextField prefHeight="49.0" prefWidth="196.0" promptText="Tên đăng nhập" />
    <MFXDatePicker promptText="Chọn ngày đi" />
   <Button text="Hello!" />
 </VBox>
