@@ -57,3 +57,7 @@
     -fx-text-fill: white;
 }
 
+.text {
+    -fx-font-family: "Open Sans Regular";
+    -fx-font-size: 16;
+}
