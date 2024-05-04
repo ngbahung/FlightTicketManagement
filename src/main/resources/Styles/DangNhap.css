@@ -1,9 +1,9 @@
 
+/* AnchorPane thứ hai */
 .bang_dang_nhap {
     -fx-background-color:  rgba(255, 255, 255, 0.8);
     -fx-background-radius:  20px;
-    -fx-opacity: 0.6;
-    -fx-effect: dropshadow(two-pass-box, #080C53, 50, 0.2, 10, 10);
+    -fx-opacity: 0.8;
 }
 
 .ten_bang {
@@ -13,6 +13,7 @@
     -fx-text-fill: #080C53;
 }
 
+/* VBox */
 .hop_thoai {
     -fx-spacing: 10;
 }
@@ -34,5 +35,26 @@
     -fx-text-fill: #080C53;
     -fx-background-radius: 6.25;
     -fx-border-radius: #263238;
+}
+
+/* Lỗi */
+.loi {
+    -fx-font-size: 17;
+    -fx-text-fill: red;
+}
+
+/* Button */
+.nut_dang_nhap {
+    -fx-background-color: #00A4BD;
+    -fx-font-size: 17;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
+
+.nut_dang_nhap:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #080C53;
+    -fx-text-fill: white;
 }
 
