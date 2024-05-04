@@ -1,0 +1,60 @@
+
+/* AnchorPane thứ hai */
+.bang_dang_nhap {
+    -fx-background-color:  rgba(255, 255, 255, 0.8);
+    -fx-background-radius:  20px;
+    -fx-opacity: 0.8;
+}
+
+.ten_bang {
+    -fx-alignment: center;
+    -fx-font-size: 40;
+    -fx-font-weight: bold;
+    -fx-text-fill: #080C53;
+}
+
+/* VBox */
+.hop_thoai {
+    -fx-spacing: 10;
+}
+
+.hop_thoai Label {
+    -fx-font-size: 17;
+    -fx-pref-width: 220;
+    -fx-pref-height: 23;
+    -fx-font-weight: bold;
+    -fx-text-fill: #263238;
+}
+
+.hop_thoai PasswordField,
+.hop_thoai TextField{
+    -fx-pref-width: 390;
+    -fx-pref-height: 42;
+    -fx-font-size: 17;
+    -fx-font-weight: bold;
+    -fx-text-fill: #080C53;
+    -fx-background-radius: 6.25;
+    -fx-border-radius: #263238;
+}
+
+/* Lỗi */
+.loi {
+    -fx-font-size: 17;
+    -fx-text-fill: red;
+}
+
+/* Button */
+.nut_dang_nhap {
+    -fx-background-color: #00A4BD;
+    -fx-font-size: 17;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
+
+.nut_dang_nhap:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #080C53;
+    -fx-text-fill: white;
+}
+

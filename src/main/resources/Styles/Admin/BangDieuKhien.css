@@ -1,0 +1,75 @@
+
+
+.bang_dieu_khien {
+    -fx-alignment: baseline-left;
+    -fx-text-fill: #080C53;
+    -fx-font-size: 40;
+    -fx-font-weight: 900;
+}
+
+.nguoi_dung {
+    -fx-font-size: 16;
+    -fx-background-color: #00A4BD;
+    -fx-padding: 10 10 10 20;
+    -fx-spacing: 20;
+    -fx-background-radius: 5;
+    -fx-text-fill: white;
+}
+
+/* Them nguoi dung */
+
+.vien {
+    -fx-background-radius: 20;
+    -fx-background-color: white;
+    -fx-border-color: #080C53;
+}
+
+.them_nguoi_dung {
+    -fx-padding: 10 10 10 20;
+    -fx-spacing: 20;
+    -fx-background-color: #080C53;
+    -fx-font-size: 20;
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+}
+
+.thong_tin {
+    -fx-spacing: 2;
+    -fx-alignment: top_left;
+}
+
+.phan_quyen ,
+.thong_tin Label {
+    -fx-font-size: 16;
+    -fx-font-weight: 600;
+    -fx-text-fill: #080C53;
+}
+
+.lua_chon {
+    -fx-font-size: 16;
+    -fx-spacing: 50;
+    -fx-text-fill: #080C53;
+}
+
+.xac_nhan_xoa_sua {
+    -fx-background-color: #080C53;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 16;
+    -fx-background-radius: 3;
+    -fx-alignment: center;
+}
+
+.xac_nhan_luu {
+    -fx-background-color: #00A4BD;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 16;
+    -fx-background-radius: 3;
+    -fx-alignment: center;
+}
+
+.xac_nhan_luu:hover,
+.xac_nhan_xoa_sua:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #a6adad;
+    -fx-text-fill: white;
+}
