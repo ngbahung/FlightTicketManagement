@@ -7,6 +7,7 @@
 }
 
 .ten_bang {
+    -fx-font-family: "Inter Black";
     -fx-alignment: center;
     -fx-font-size: 40;
     -fx-font-weight: bold;
@@ -19,15 +20,15 @@
 }
 
 .hop_thoai Label {
-    -fx-font-size: 16;
+    -fx-font-size:16;
     -fx-pref-width: 220;
     -fx-pref-height: 23;
     -fx-font-weight: bold;
     -fx-text-fill: #263238;
 }
 
-.hop_thoai PasswordField,
-.hop_thoai TextField{
+.mfx-password-field,
+.mfx-text-field{
     -fx-pref-width: 390;
     -fx-pref-height: 42;
     -fx-font-size: 16;
@@ -57,7 +58,4 @@
     -fx-text-fill: white;
 }
 
-.text {
-    -fx-font-family: "Open Sans Regular";
-    -fx-font-size: 16;
-}
+
