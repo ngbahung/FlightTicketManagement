@@ -9,7 +9,8 @@
 <?import javafx.scene.shape.Line?>
 
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="288.0" styleClass="menu_chinh_container" stylesheets="@../../Styles/Admin/AdminMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="288.0" styleClass="menu_chinh_container" stylesheets="@../../Styles/Admin/AdminMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.flightticketmanagement.Controllers.Admin.AdminMenuController">
    <children>
       <AnchorPane prefHeight="278.0" prefWidth="288.0" styleClass="top_menu">
          <children>
