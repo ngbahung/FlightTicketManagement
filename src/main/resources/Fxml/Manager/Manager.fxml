@@ -1,14 +1,160 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXCheckbox?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="Fxml.Manager.Manager"
-            prefHeight="400.0" prefWidth="600.0">
 
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="992.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox prefHeight="800.0" prefWidth="992.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="98.0" prefWidth="992.0" spacing="400.0">
+               <children>
+                  <Label prefHeight="44.0" prefWidth="261.0" text="TRANG CHỦ">
+                     <font>
+                        <Font name="Inter Black" size="36.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="45.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Label prefHeight="25.0" prefWidth="188.0" text="Xin chào, ngbahung!">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="992.0" spacing="52.0">
+               <children>
+                  <MFXButton buttonType="RAISED" depthLevel="LEVEL1" graphicTextGap="18.75" minHeight="-Infinity" minWidth="-Infinity" prefHeight="54.0" prefWidth="243.0" text="Lịch chuyến bay">
+                     <graphic>
+                        <FontAwesomeIcon glyphName="CALENDAR" size="25.65px" text="" />
+                     </graphic>
+                  </MFXButton>
+                  <MFXButton buttonType="RAISED" depthLevel="LEVEL1" graphicTextGap="18.75" minHeight="-Infinity" minWidth="-Infinity" prefHeight="54.0" prefWidth="243.0" text="Bán vé">
+                     <graphic>
+                        <FontAwesomeIcon glyphName="TICKET" size="25.65px" />
+                     </graphic>
+                  </MFXButton>
+                  <MFXButton buttonType="RAISED" depthLevel="LEVEL1" graphicTextGap="18.75" minHeight="-Infinity" minWidth="-Infinity" prefHeight="54.0" prefWidth="243.0" text="Đặt chỗ">
+                     <graphic>
+                        <FontAwesomeIcon glyphName="BOOK" size="25.65px" />
+                     </graphic>
+                  </MFXButton>
+               </children>
+            </HBox>
+            <AnchorPane prefHeight="598.0" prefWidth="1013.0">
+               <children>
+                  <VBox layoutX="42.0" layoutY="14.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="503.0" prefWidth="891.0" AnchorPane.bottomAnchor="50.537" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="77.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="891.0" spacing="40.0">
+                           <children>
+                              <Label text="Mã chuyến bay:" />
+                              <Label prefHeight="17.0" prefWidth="71.0" text="PL11233" />
+                              <Label text="Giá vé:" />
+                              <MFXTextField floatMode="DISABLED" layoutX="217.0" layoutY="25.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="200.0" promptText="VNĐ" />
+                              <Label text="Phổ thông:" />
+                              <MFXTextField layoutX="324.0" layoutY="25.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="169.0" />
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="29.26" right="29.26" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="11.0" layoutY="11.0" prefHeight="62.0" prefWidth="891.0" spacing="40.0">
+                           <children>
+                              <MFXComboBox floatMode="DISABLED" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="264.0" promptText="Sân bay đi" scrollOnOpen="true" selectable="true" />
+                              <MFXComboBox floatMode="DISABLED" layoutX="217.0" layoutY="25.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="200.0" promptText="Sân bay đến" />
+                              <Label text="Thương gia:" />
+                              <MFXTextField minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="177.0" />
+                           </children>
+                           <padding>
+                              <Insets left="29.26" right="29.26" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="72.0" prefHeight="62.0" prefWidth="891.0" spacing="40.0">
+                           <children>
+                              <MFXDatePicker prefHeight="38.0" prefWidth="225.0" promptText="Ngày bay" />
+                              <Label prefHeight="17.0" prefWidth="81.0" text="Giờ bay:" />
+                              <MFXTextField floatMode="DISABLED" layoutX="495.0" layoutY="25.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="200.0" promptText="xx:xx" />
+                              <Label prefHeight="17.0" prefWidth="98.0" text="Hạng nhất:" />
+                              <MFXTextField minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="155.0" />
+                           </children>
+                           <padding>
+                              <Insets left="29.26" right="29.26" />
+                           </padding>
+                        </HBox>
+                        <MFXCheckbox text="Sân bay trung gian">
+                           <VBox.margin>
+                              <Insets left="29.26" />
+                           </VBox.margin>
+                        </MFXCheckbox>
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="224.0" prefHeight="159.0" prefWidth="891.0" spacing="51.42">
+                           <padding>
+                              <Insets bottom="29.26" left="29.26" right="29.26" top="29.26" />
+                           </padding>
+                           <children>
+                              <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0">
+                                 <children>
+                                    <Label text="STT" />
+                                    <Label text="1" />
+                                    <Label text="2" />
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0">
+                                 <children>
+                                    <Label text="Sân bay trung gian" />
+                                    <MFXComboBox floatMode="DISABLED" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="200.0" promptText="Sân bay trung gian 1" />
+                                    <MFXComboBox floatMode="DISABLED" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="200.0" promptText="Sân bay trung gian 2" />
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0">
+                                 <children>
+                                    <Label text="Thời gian dừng" />
+                                    <MFXTextField floatMode="DISABLED" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="200.0" promptText="phút" />
+                                    <MFXTextField floatMode="DISABLED" layoutX="10.0" layoutY="27.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="200.0" promptText="phút" />
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0">
+                                 <children>
+                                    <Label text="Ghi chú" />
+                                    <MFXTextField minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="200.0" />
+                                    <MFXTextField layoutX="10.0" layoutY="27.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="200.0" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="891.0">
+                           <children>
+                              <MFXButton />
+                              <MFXButton />
+                              <MFXButton />
+                           </children>
+                        </HBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </children>
 </AnchorPane>
