@@ -17,6 +17,7 @@
 
 .dang_xuat Button ,
 .menu_container Button {
+    -fx-text-alignment: center;
     -fx-pref-width: 270;
     -fx-pref-height: 80;
     -fx-background-color: #080C53;

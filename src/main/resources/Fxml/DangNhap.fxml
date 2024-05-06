@@ -20,11 +20,11 @@
       <Label fx:id="tenDangNhap_lbl" layoutX="104.0" layoutY="175.0" prefHeight="54.0" prefWidth="235.0" styleClass="ten_bang" text="Đăng nhập" AnchorPane.topAnchor="150.0" />
       <VBox layoutX="34.0" layoutY="241.0" prefHeight="72.0" prefWidth="390.0" styleClass="hop_thoai">
          <Label fx:id="tenTaiKhoan_lbl" text="Tên tài khoản" />
-         <MFXTextField minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="390.0" />
+         <MFXTextField fx:id="tenTK_mfxfld" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="390.0" />
       </VBox>
       <VBox layoutX="34.0" layoutY="342.0" prefHeight="72.0" prefWidth="390.0" styleClass="hop_thoai">
          <Label fx:id="matKhau_lbl" text="Mật khẩu" />
-         <MFXPasswordField minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="390.0" />
+         <MFXPasswordField fx:id="matKhau_mfxpassfld" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="390.0" />
       </VBox>
       <Button fx:id="dangNhap_btn" layoutX="121.0" layoutY="477.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="215.0" styleClass="nut_dang_nhap" text="Đăng nhập" AnchorPane.bottomAnchor="90.0" />
       <Label fx:id="loi_lbl" layoutX="34.0" layoutY="433.0" styleClass="loi" text="Nhập sai tên hoặc mật khẩu. Vui lòng nhập lại" />
