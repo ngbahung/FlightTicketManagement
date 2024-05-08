@@ -22,8 +22,8 @@ public class App extends Application {
                 .setResolveAssets(true)
                 .build()
                 .setGlobal();
-        
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/DangNhap.fxml"));
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/Manager/Manager.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
         stage.show();
