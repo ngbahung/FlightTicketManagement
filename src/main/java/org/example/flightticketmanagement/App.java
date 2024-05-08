@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.example.flightticketmanagement.Models.Model;
 
 import java.io.IOException;
 
@@ -22,10 +23,7 @@ public class App extends Application {
                 .setResolveAssets(true)
                 .build()
                 .setGlobal();
-        
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/DangNhap.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setScene(scene);
-        stage.show();
+
+
     }
 }
