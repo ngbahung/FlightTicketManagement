@@ -20,6 +20,7 @@ public class DangNhapController implements Initializable {
     public MFXTextField tenTK_mfxfld;
     public MFXPasswordField matKhau_mfxpassfld;
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         dangNhap_btn.setOnAction(actionEvent -> moDangNhap());

@@ -14,9 +14,7 @@ public class ViewFactory {
     public AnchorPane getBangDieuKhien(){
         if (bangDieuKhien == null) {
             try {
-                bangDieuKhien = new FXMLLoader(getClass().getResource("/Fxml/Admin/BangDieuKhien.fxml")).load();
-            } catch (Exception e) {
-                e.printStackTrace();
+                bangDieuKhien = new
             }
         }
 
