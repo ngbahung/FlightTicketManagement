@@ -23,14 +23,9 @@
 
 .dang_xuat Button ,
 .menu_container Button {
-<<<<<<< Updated upstream
     -fx-text-alignment: center;
     -fx-pref-width: 270;
     -fx-pref-height: 80;
-=======
-    -fx-pref-width: 300;
-    -fx-pref-height: 50;
->>>>>>> Stashed changes
     -fx-background-color: #080C53;
     -fx-text-fill: #FFFFFF;
     -fx-font-size: 16;
