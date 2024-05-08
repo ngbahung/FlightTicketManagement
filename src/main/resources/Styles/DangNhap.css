@@ -43,8 +43,8 @@
     -fx-text-fill: red;
 }
 
-/* Button */
-.nut_dang_nhap {
+/* mfx-button */
+.mfx-button {
     -fx-background-color: #00A4BD;
     -fx-font-size: 16;
     -fx-text-fill: #ffffff;
@@ -52,10 +52,56 @@
     -fx-background-radius: 10;
 }
 
-.nut_dang_nhap:hover {
-    -fx-cursor: hand;
-    -fx-background-color: #080C53;
+.mfx-button .mfx-ripple-generator {
+    -mfx-ripple-radius: 40;
+    -mfx-auto-clip: true;
+    -fx-background-radius: 10;
+}
+
+.mfx-button .text {
+    -fx-font-smoothing-type: gray;
+}
+
+#custom {
+    -fx-background-color: white;
+    -fx-font-size: 16;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
+
+
+.outline-button {
+    -fx-background-color: transparent;
+    -fx-border-color: #00A4BD;
+    -fx-border-radius: 10;
+
     -fx-text-fill: white;
+}
+
+.outline-button:hover,
+.outline-button:focused {
+    -fx-background-color: #00A4BD;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+}
+
+
+.link-button {
+    -fx-background-color: transparent;
+    -fx-border-radius: 3;
+    -fx-text-fill: #0096FF;
+    -fx-cursor: hand;
+}
+
+.link-button:armed,
+.link-button:focused {
+    -fx-border-color: #006BFF;
+    -fx-text-fill: #006BFF;
+}
+
+.link-button .mfx-ripple-generator {
+    -mfx-ripple-color: #00A4BD;
 }
 
 

@@ -1,25 +1,36 @@
 
+/* Vbox 1*/
 .menu_chinh_container {
+    -fx-padding: 30 30 30 30;
     -fx-background-color: #080C53;
+    -fx-background-radius: 0 20 20 0;
 }
 
-
-.top_menu FontAwesomeIconView {
+.menu_chinh_container FontAwesomeIconView {
     -fx-fill: #ffffff;
 }
 
-/* Navigation */
+.menu_chinh_container ImageView {
+    -fx-padding: 20 20 20 20;
+    -fx-translate-x: 70;
+}
+
+/* VBox 1.1 Navigation */
 .menu_container {
-    -fx-padding: 10 30 10 30;
-    -fx-spacing: 5;
+    -fx-spacing: 10;
     -fx-background-radius: 20;
 }
 
 .dang_xuat Button ,
 .menu_container Button {
+<<<<<<< Updated upstream
     -fx-text-alignment: center;
     -fx-pref-width: 270;
     -fx-pref-height: 80;
+=======
+    -fx-pref-width: 300;
+    -fx-pref-height: 50;
+>>>>>>> Stashed changes
     -fx-background-color: #080C53;
     -fx-text-fill: #FFFFFF;
     -fx-font-size: 16;
@@ -35,7 +46,6 @@
 
 
 .dang_xuat {
-    -fx-padding: 10 30 10 30;
     -fx-background-color: #080C53;
     -fx-text-fill: #FFFFFF;
     -fx-font-size: 16;
