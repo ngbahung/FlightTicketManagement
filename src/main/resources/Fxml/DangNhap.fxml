@@ -1,36 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
-<?import javafx.scene.control.Button?>
+<?import java.lang.String?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="800.0" prefWidth="1280.0" stylesheets="@../Styles/DangNhap.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.DangNhapController">
    <ImageView fitHeight="800.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
       <Image url="@../Images/login/Back_ground.png" />
    </ImageView>
    <AnchorPane prefHeight="625.0" prefWidth="455.0" styleClass="bang_dang_nhap" AnchorPane.bottomAnchor="87.0" AnchorPane.rightAnchor="87.0" AnchorPane.topAnchor="87.0">
-      <ImageView fitHeight="104.0" fitWidth="263.0" layoutX="98.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="55.0">
+      <ImageView fitHeight="40.0" fitWidth="175.0" layoutX="140.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="70.0">
          <Image url="@../Images/login/logo_TikeMana.png" />
       </ImageView>
-      <Label fx:id="tenDangNhap_lbl" layoutX="104.0" layoutY="175.0" prefHeight="54.0" prefWidth="263.0" styleClass="ten_bang" text="Đăng nhập" AnchorPane.topAnchor="150.0">
-         <font>
-            <Font name="Inter Black" size="25.0" />
-         </font></Label>
+      <Label fx:id="tenDangNhap_lbl" layoutX="104.0" layoutY="175.0" prefHeight="54.0" prefWidth="235.0" styleClass="ten_bang" text="Đăng nhập" AnchorPane.topAnchor="150.0" />
       <VBox layoutX="34.0" layoutY="241.0" prefHeight="72.0" prefWidth="390.0" styleClass="hop_thoai">
          <Label fx:id="tenTaiKhoan_lbl" text="Tên tài khoản" />
-         <MFXTextField minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="390.0" promptText="Tên tài khoản" />
+         <MFXTextField fx:id="tenTK_mfxfld" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="390.0" />
       </VBox>
       <VBox layoutX="34.0" layoutY="342.0" prefHeight="72.0" prefWidth="390.0" styleClass="hop_thoai">
          <Label fx:id="matKhau_lbl" text="Mật khẩu" />
-         <MFXPasswordField minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="390.0" promptText="Mật khẩu" />
+         <MFXPasswordField fx:id="matKhau_mfxpassfld" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="390.0" />
       </VBox>
-      <Button fx:id="dangNhap_btn" layoutX="121.0" layoutY="477.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="215.0" styleClass="nut_dang_nhap" text="Đăng nhập" AnchorPane.bottomAnchor="90.0" />
       <Label fx:id="loi_lbl" layoutX="34.0" layoutY="433.0" styleClass="loi" text="Nhập sai tên hoặc mật khẩu. Vui lòng nhập lại" />
+      <MFXButton id="custom" fx:id="dangNhap_btn" layoutX="120.0" layoutY="498.0" prefHeight="56.0" prefWidth="215.0" text="Đăng nhập">
+         <styleClass>
+            <String fx:value="mfx-button" />
+            <String fx:value="mfx-ripple-generator" />
+            <String fx:value="outline-button" />
+            <String fx:value="link-button" />
+         </styleClass>
+      </MFXButton>
    </AnchorPane>
 </AnchorPane>

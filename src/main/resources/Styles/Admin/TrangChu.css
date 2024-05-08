@@ -1,0 +1,15 @@
+
+.text {
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+}
+
+/* Trang chủ */
+.trang_chu {
+    -fx-font-size: 32;
+    -fx-font-family: "Inter Semi Bold";
+    -fx-fill: #080C53;
+    -fx-font-weight: bold;
+}
+
+/* Button lựa chọn */
