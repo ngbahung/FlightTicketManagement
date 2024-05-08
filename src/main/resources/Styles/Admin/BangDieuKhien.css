@@ -1,75 +1,69 @@
 
+/* MFX Button */
 
-.bang_dieu_khien {
-    -fx-alignment: baseline-left;
-    -fx-text-fill: #080C53;
-    -fx-font-size: 40;
-    -fx-font-weight: 900;
-}
-
-.nguoi_dung {
-    -fx-font-size: 16;
+/* mfx-button */
+.mfx-button {
     -fx-background-color: #00A4BD;
-    -fx-padding: 10 10 10 20;
-    -fx-spacing: 20;
-    -fx-background-radius: 5;
-    -fx-text-fill: white;
+    -fx-font-size: 16;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
 }
 
-/* Them nguoi dung */
+.mfx-button .mfx-ripple-generator {
+    -mfx-ripple-radius: 40;
+    -mfx-auto-clip: true;
+    -fx-background-radius: 10;
+}
 
-.vien {
-    -fx-background-radius: 20;
+.mfx-button .text {
+    -fx-font-smoothing-type: gray;
+}
+
+
+
+.link-button {
+    -fx-background-color: transparent;
+    -fx-border-radius: 3;
+    -fx-text-fill: #0096FF;
+    -fx-cursor: hand;
+}
+
+.link-button:armed,
+.link-button:focused {
+    -fx-text-fill: #006BFF;
+}
+
+.link-button .mfx-ripple-generator {
+    -mfx-ripple-color: #00A4BD;
+}
+
+/* Button Thêm */
+#custom_them {
+    -fx-background-color: black;
+    -fx-font-size: 16;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
+
+/* Button Xóa */
+#custom_xoa {
     -fx-background-color: white;
+    -fx-font-size: 16;
+    -fx-text-fill: #080C53;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
     -fx-border-color: #080C53;
 }
 
-.them_nguoi_dung {
-    -fx-padding: 10 10 10 20;
-    -fx-spacing: 20;
+/* Button Sửa */
+#custom_sua {
     -fx-background-color: #080C53;
-    -fx-font-size: 20;
+    -fx-font-size: 16;
     -fx-text-fill: white;
-    -fx-font-weight: 700;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
 }
 
-.thong_tin {
-    -fx-spacing: 2;
-    -fx-alignment: top_left;
-}
 
-.phan_quyen ,
-.thong_tin Label {
-    -fx-font-size: 16;
-    -fx-font-weight: 600;
-    -fx-text-fill: #080C53;
-}
-
-.lua_chon {
-    -fx-font-size: 16;
-    -fx-spacing: 50;
-    -fx-text-fill: #080C53;
-}
-
-.xac_nhan_xoa_sua {
-    -fx-background-color: #080C53;
-    -fx-text-fill: #FFFFFF;
-    -fx-font-size: 16;
-    -fx-background-radius: 3;
-    -fx-alignment: center;
-}
-
-.xac_nhan_luu {
-    -fx-background-color: #00A4BD;
-    -fx-text-fill: #FFFFFF;
-    -fx-font-size: 16;
-    -fx-background-radius: 3;
-    -fx-alignment: center;
-}
-
-.xac_nhan_luu:hover,
-.xac_nhan_xoa_sua:hover {
-    -fx-cursor: hand;
-    -fx-background-color: #a6adad;
-    -fx-text-fill: white;
-}

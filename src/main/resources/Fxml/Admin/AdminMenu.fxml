@@ -8,8 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="288.0" styleClass="menu_chinh_container" stylesheets="@../../Styles/Admin/AdminMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.example.flightticketmanagement.Controllers.Admin.AdminMenuController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="288.0" styleClass="menu_chinh_container" stylesheets="@../../Styles/Admin/AdminMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.AdminMenuController">
     <VBox prefHeight="222.0" prefWidth="229.0">
         <FontAwesomeIconView glyphName="BARS" size="30" />
         <ImageView fitHeight="92.0" fitWidth="108.0" pickOnBounds="true" preserveRatio="true">
@@ -24,37 +23,37 @@
             </VBox.margin>
         </Line>
     </VBox>
-    <VBox prefHeight="360.0" prefWidth="288.0" styleClass="menu_container">
+    <VBox prefHeight="333.0" prefWidth="228.0" styleClass="menu_container">
         <Button fx:id="phanQuyen_btn" mnemonicParsing="false" text="Phân quyền">
             <graphic>
-                <FontAwesomeIconView glyphName="HOME" text="" />
+                <FontAwesomeIconView glyphName="HOME" size="20" text="" />
             </graphic>
         </Button>
         <Button fx:id="trangChu_btn" mnemonicParsing="false" text="Trang chủ">
             <graphic>
-                <FontAwesomeIconView glyphName="HOME" />
+                <FontAwesomeIconView glyphName="HOME" size="20" />
             </graphic>
         </Button>
         <Button fx:id="traCuu_btn" mnemonicParsing="false" text="Tra cứu">
             <graphic>
-                <FontAwesomeIconView glyphName="SEARCH" />
+                <FontAwesomeIconView glyphName="SEARCH" size="20" />
             </graphic>
         </Button>
         <Button fx:id="doanhThu_btn" mnemonicParsing="false" text="Doanh thu">
             <graphic>
-                <FontAwesomeIconView glyphName="FILE" />
+                <FontAwesomeIconView glyphName="FILE" size="20" />
             </graphic>
         </Button>
         <Button fx:id="suaQuyDinh_btn" mnemonicParsing="false" text="Sửa quy định">
             <graphic>
-                <FontAwesomeIconView glyphName="FILE" />
+                <FontAwesomeIconView glyphName="FILE" size="20" />
             </graphic>
         </Button>
     </VBox>
-    <VBox prefHeight="172.0" prefWidth="288.0" styleClass="dang_xuat">
-        <Button fx:id="dangXuat_btn" mnemonicParsing="false" text="Đăng xuât">
+    <VBox prefHeight="165.0" prefWidth="228.0" styleClass="dang_xuat">
+        <Button fx:id="dangXuat_btn" mnemonicParsing="false" prefHeight="70.0" prefWidth="215.0" text="Đăng xuât">
             <graphic>
-                <FontAwesomeIconView glyphName="" />
+                <FontAwesomeIconView glyphName="FILE" size="20" />
             </graphic>
             <VBox.margin>
                 <Insets top="84.0" />
