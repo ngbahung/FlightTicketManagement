@@ -13,3 +13,16 @@
 }
 
 /* Button lựa chọn */
+.lua_chon {
+    -fx-background-color: white;
+    -fx-font-size: 16;
+    -fx-text-fill: #080C53;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
+
+.lua_chon:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #00A4BD;
+    -fx-text-fill: white;
+}

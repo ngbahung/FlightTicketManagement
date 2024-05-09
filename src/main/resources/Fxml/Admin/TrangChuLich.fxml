@@ -1,14 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.example.flightticketmanagement.Controllers.Admin.TrangChuLichController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="600.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/TrangChuLich.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.TrangChuLichController">
+   <AnchorPane layoutX="51.0" layoutY="51.0" prefHeight="476.0" prefWidth="891.0" styleClass="table">
+      <HBox layoutX="36.0" layoutY="416.0" prefHeight="46.0" prefWidth="630.0" spacing="20.0">
+         <MFXButton fx:id="themNhieu_btn" prefHeight="42.0" prefWidth="177.0" styleClass="lua_chon" text="Thêm nhiều" />
+         <MFXButton prefHeight="42.0" prefWidth="177.0" styleClass="lua_chon" text="Xóa / Sửa" fx:id="xoaSua_btn" />
+         <MFXButton fx:id="taiFileExel_btn" prefHeight="42.0" prefWidth="177.0" styleClass="lua_chon" text="Tải lên file excel" />
+      </HBox>
+      <MFXButton fx:id="luu_btn" layoutX="678.0" layoutY="418.0" prefHeight="42.0" prefWidth="177.0" styleClass="luu" text="Lưu" />
+      <VBox layoutX="76.0" layoutY="36.0" prefHeight="161.0" prefWidth="159.0" styleClass="menu_container">
+         <Label fx:id="maChuyenBay_lbl" text="Mã chuyến bay" />
+         <Label fx:id="sanBayDi_lbl" text="Sân bay đi" />
+         <Label fx:id="NgayGio_lbl" text="Ngày - giờ" />
+         <Label fx:id="soLuongHangGhe1_lbl" text="SL hạng ghế 1" />
+      </VBox>
+      <VBox layoutX="494.0" layoutY="36.0" prefHeight="161.0" prefWidth="159.0" styleClass="menu_container">
+         <Label fx:id="giaVe_lbl" text="Giá vé" />
+         <Label fx:id="sanBayDen_lbl" prefHeight="20.0" prefWidth="111.0" text="Sân bay đến" />
+         <Label fx:id="thoiGianBay_lbl" text="Thời gian bay" />
+         <Label fx:id="soLuongHangGhe2_lbl" text="SL hạng ghế 2" />
+      </VBox>
+      <VBox layoutX="247.0" layoutY="23.0" prefHeight="141.0" prefWidth="127.0" styleClass="menu_container">
+         <TextField fx:id="maCB_txtfld" />
+         <TextField fx:id="sanBayDi_txtfld" />
+         <TextField fx:id="ngayGio_txtfld" />
+         <TextField fx:id="soLuongHangGhe1_txtfld" />
+      </VBox>
+      <VBox layoutX="666.0" layoutY="23.0" prefHeight="141.0" prefWidth="127.0" styleClass="menu_container">
+         <TextField fx:id="giaVe_txtfld" />
+         <TextField fx:id="sanBayDen_txtfld" />
+         <TextField fx:id="thoiGianBay_fld" />
+         <TextField fx:id="soLuongHangGhe2_txtfld" />
+      </VBox>
+      <CheckBox fx:id="sanBayTrungGian_chkbox" layoutX="84.0" layoutY="246.0" mnemonicParsing="false" text="Sân bay trung gian" />
+      <TableView layoutX="55.0" layoutY="282.0" prefHeight="116.0" prefWidth="772.0">
+         <columns>
+            <TableColumn prefWidth="75.0" text="STT" />
+            <TableColumn prefWidth="300.0" text="Sân bay trung gian" />
+            <TableColumn prefWidth="200.0" text="Thời gian dừng" />
+            <TableColumn prefWidth="200.0" text="Ghi chú" />
+         </columns>
+      </TableView>
+   </AnchorPane>
 </AnchorPane>
