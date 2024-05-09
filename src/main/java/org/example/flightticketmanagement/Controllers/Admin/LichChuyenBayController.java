@@ -6,10 +6,7 @@ import javafx.scene.control.Button;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class TrangChuController implements Initializable {
-    public Button lichChuyenBay_btn;
-    public Button banVe_btn;
-    public Button datCho_btn;
+public class LichChuyenBayController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

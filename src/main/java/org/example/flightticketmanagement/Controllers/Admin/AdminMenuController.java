@@ -24,6 +24,10 @@ public class AdminMenuController implements Initializable {
     public void addListener(){
         phanQuyen_btn.setOnAction(event -> moPhanQuyen());
         lichChuyenBay_btn.setOnAction(event -> moTrangChuLich());
+        banVe_btn.setOnAction(event -> moBanVe());
+        datCho_btn.setOnAction(event -> moDatCho());
+        doanhThu_btn.setOnAction(event -> moDoanhThu());
+        suaQuyDinh_btn.setOnAction(event -> moSuaQuyDinh());
     }
 
     private void moPhanQuyen(){
@@ -32,5 +36,21 @@ public class AdminMenuController implements Initializable {
 
     private void moTrangChuLich() {
         Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set("TrangChuLich");
+    }
+
+    private void moBanVe(){
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set("BanVe");
+    }
+
+    private void  moDatCho(){
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set("DatCho");
+    }
+
+    private void moDoanhThu(){
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set("DoanhThu");
+    }
+
+    private void moSuaQuyDinh(){
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set("SuaQuyDinh");
     }
 }

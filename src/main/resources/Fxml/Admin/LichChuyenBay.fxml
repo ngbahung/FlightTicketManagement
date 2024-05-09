@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.LichChuyenBayController">
+   <Text fontSmoothingType="LCD" layoutX="76.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="ten" text="LỊCH CHUYẾN BAY" wrappingWidth="355.833984375" AnchorPane.topAnchor="41.0">
+      <font>
+         <Font size="28.0" />
+      </font>
+   </Text>
+   <AnchorPane layoutY="157.0" prefHeight="655.0" prefWidth="992.0">
+      <AnchorPane layoutX="51.0" layoutY="31.0" prefHeight="568.0" prefWidth="891.0" styleClass="table">
+         <HBox layoutX="36.0" layoutY="487.0" prefHeight="46.0" prefWidth="630.0" spacing="20.0">
+            <MFXButton id="custom_1" prefHeight="42.0" prefWidth="177.0" styleClass="lua_chon" text="Thêm nhiều" />
+            <MFXButton id="custom_1" prefHeight="42.0" prefWidth="177.0" styleClass="lua_chon" text="Xóa / Sửa" />
+            <MFXButton id="custom_1" prefHeight="42.0" prefWidth="177.0" styleClass="lua_chon" text="Tải lên file excel" />
+         </HBox>
+         <MFXButton id="custom_2" layoutX="666.0" layoutY="489.0" prefHeight="42.0" prefWidth="177.0" styleClass="luu" text="Lưu" />
+         <VBox layoutX="76.0" layoutY="36.0" prefHeight="161.0" prefWidth="159.0" styleClass="menu_container">
+            <Label text="Mã chuyến bay" />
+            <Label text="Sân bay đi" />
+            <Label text="Ngày - giờ" />
+            <Label text="SL hạng ghế 1" />
+         </VBox>
+         <VBox layoutX="494.0" layoutY="36.0" prefHeight="161.0" prefWidth="159.0" styleClass="menu_container">
+            <Label text="Giá vé" />
+            <Label prefHeight="20.0" prefWidth="111.0" text="Sân bay đến" />
+            <Label text="Thời gian bay" />
+            <Label text="SL hạng ghế 2" />
+         </VBox>
+         <VBox layoutX="247.0" layoutY="23.0" prefHeight="141.0" prefWidth="127.0" styleClass="menu_container">
+            <TextField />
+            <TextField />
+            <TextField />
+            <TextField />
+         </VBox>
+         <VBox layoutX="666.0" layoutY="23.0" prefHeight="141.0" prefWidth="127.0" styleClass="menu_container">
+            <TextField />
+            <TextField />
+            <TextField />
+            <TextField />
+         </VBox>
+         <CheckBox layoutX="76.0" layoutY="228.0" mnemonicParsing="false" text="Sân bay trung gian" />
+         <TableView layoutX="55.0" layoutY="260.0" prefHeight="202.0" prefWidth="772.0">
+            <columns>
+               <TableColumn prefWidth="75.0" text="STT" />
+               <TableColumn prefWidth="300.0" text="Sân bay trung gian" />
+               <TableColumn prefWidth="200.0" text="Thời gian dừng" />
+               <TableColumn prefWidth="200.0" text="Ghi chú" />
+            </columns>
+         </TableView>
+      </AnchorPane>
+   </AnchorPane>
+</AnchorPane>
