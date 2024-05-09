@@ -15,6 +15,8 @@ public class ViewFactory {
     private AnchorPane lichChuyenBayView;
     private AnchorPane banVeView;
     private AnchorPane datChoView;
+    private AnchorPane doanhThuView;
+    private AnchorPane suaQuyDinhView;
 
 
     public ViewFactory(){
@@ -70,6 +72,29 @@ public class ViewFactory {
             }
         }
         return datChoView;
+    }
+
+    public AnchorPane getDoanhThuView() {
+        if (doanhThuView == null){
+            try {
+                doanhThuView = new FXMLLoader(getClass().getResource("/Fxml/Admin/DoanhThu.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        return doanhThuView;
+    }
+
+    public AnchorPane getSuaQuyDinhView() {
+        if (suaQuyDinhView == null){
+            try {
+                suaQuyDinhView = new FXMLLoader(getClass().getResource("/Fxml/Admin/SuaQuyDinh.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return suaQuyDinhView;
     }
 
     public void hienThiManHinhDangNhap(){
