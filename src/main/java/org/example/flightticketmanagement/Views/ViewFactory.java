@@ -11,39 +11,65 @@ import org.example.flightticketmanagement.Controllers.Admin.AdminController;
 public class ViewFactory {
 //  Admin Views
     private final StringProperty adminSelectedMenuItem;
-    private AnchorPane bangDieuKhienView;
-    private AnchorPane trangChuLichView;
+    private AnchorPane phanQuyenView;
+    private AnchorPane lichChuyenBayView;
+    private AnchorPane banVeView;
+    private AnchorPane datChoView;
+
 
     public ViewFactory(){
         this.adminSelectedMenuItem = new SimpleStringProperty("");
     }
-
+/* Admin View Section
+* */
     public StringProperty getAdminSelectedMenuItem() {
         return adminSelectedMenuItem;
     }
 
-    public AnchorPane getBangDieuKhienView(){
-        if (bangDieuKhienView == null) {
+    public AnchorPane getPhanQuyenView(){
+        if (phanQuyenView == null) {
             try {
-                bangDieuKhienView = new FXMLLoader(getClass().getResource("/Fxml/Admin/BangDieuKhien.fxml")).load();
+                phanQuyenView = new FXMLLoader(getClass().getResource("/Fxml/Admin/BangDieuKhien.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }
         }
 
-        return bangDieuKhienView;
+        return phanQuyenView;
     }
 
-    public AnchorPane getTrangChuLichView() {
-        if (trangChuLichView == null){
+    public AnchorPane getLichChuyenBayView() {
+        if (lichChuyenBayView == null){
             try {
-                trangChuLichView = new FXMLLoader(getClass().getResource("/Fxml/Admin/LichChuyenBay.fxml")).load();
+                lichChuyenBayView = new FXMLLoader(getClass().getResource("/Fxml/Admin/LichChuyenBay.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }
         }
 
-        return trangChuLichView;
+        return lichChuyenBayView;
+    }
+
+    public AnchorPane getBanVeView() {
+        if (banVeView == null){
+            try {
+                banVeView = new FXMLLoader(getClass().getResource("/Fxml/Admin/BanVe.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return banVeView;
+    }
+
+    public AnchorPane getDatChoView() {
+        if (datChoView == null){
+            try {
+                datChoView = new FXMLLoader(getClass().getResource("/Fxml/Admin/DatCho.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return datChoView;
     }
 
     public void hienThiManHinhDangNhap(){

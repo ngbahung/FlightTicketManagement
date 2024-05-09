@@ -7,9 +7,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class LichChuyenBayController implements Initializable {
-    public Button lichChuyenBay_btn;
-    public Button banVe_btn;
-    public Button datCho_btn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
