@@ -9,8 +9,9 @@ import java.util.ResourceBundle;
 
 public class AdminMenuController implements Initializable {
     public Button phanQuyen_btn;
-    public Button trangChu_btn;
-    public Button traCuu_btn;
+    public Button lichChuyenBay_btn;
+    public Button banVe_btn;
+    public Button datCho_btn;
     public Button doanhThu_btn;
     public Button suaQuyDinh_btn;
     public Button dangXuat_btn;
@@ -22,7 +23,7 @@ public class AdminMenuController implements Initializable {
 
     public void addListener(){
         phanQuyen_btn.setOnAction(event -> moPhanQuyen());
-        trangChu_btn.setOnAction(event -> moTrangChuLich());
+        lichChuyenBay_btn.setOnAction(event -> moTrangChuLich());
     }
 
     private void moPhanQuyen(){
