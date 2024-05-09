@@ -37,7 +37,7 @@ public class ViewFactory {
     public AnchorPane getTrangChuLichView() {
         if (trangChuLichView == null){
             try {
-                trangChuLichView = new FXMLLoader(getClass().getResource("/Fxml/Admin/QLTrangChuLich.fxml")).load();
+                trangChuLichView = new FXMLLoader(getClass().getResource("/Fxml/Admin/TrangChu.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }
