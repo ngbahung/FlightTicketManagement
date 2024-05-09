@@ -1,0 +1,46 @@
+
+.text {
+    -fx-font-family: Inter;
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+}
+.table {
+    -fx-background-color: white;
+    -fx-border-color: #080C53;
+}
+
+/* Vbox */
+.menu_container {
+    -fx-spacing: 20;
+}
+
+.menu_container Label {
+    -fx-text-alignment: center;
+    -fx-text-fill: #080C53;
+    -fx-background-radius: 10;
+    -fx-alignment: center_left;
+}
+
+.menu_container TextField {
+    -fx-border-color: #080C53;
+}
+
+/* Button */
+.luu ,
+.lua_chon {
+    -fx-background-color: white;
+    -fx-text-fill: #080C53;
+    -fx-background-radius: 10;
+}
+
+.lua_chon:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #080C53;
+    -fx-text-fill: white;
+}
+
+.luu:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #00A4BD;
+    -fx-text-fill: white;
+}
