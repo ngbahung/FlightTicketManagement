@@ -1,11 +1,15 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
+import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-public class TrangChuLichController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class TrangChuLichController implements Initializable {
     public MFXButton themNhieu_btn;
     public MFXButton xoaSua_btn;
     public MFXButton taiFileExel_btn;
@@ -27,4 +31,9 @@ public class TrangChuLichController {
     public TextField thoiGianBay_fld;
     public TextField soLuongHangGhe2_txtfld;
     public CheckBox sanBayTrungGian_chkbox;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    }
 }

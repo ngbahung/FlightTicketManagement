@@ -1,5 +1,7 @@
 package org.example.flightticketmanagement.Views;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -7,20 +9,41 @@ import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.Admin.AdminController;
 
 public class ViewFactory {
-    private AnchorPane bangDieuKhien;
+//  Admin Views
+    private final StringProperty adminSelectedMenuItem;
+    private AnchorPane bangDieuKhienView;
+    private AnchorPane trangChuLichView;
 
-    public ViewFactory(){}
+    public ViewFactory(){
+        this.adminSelectedMenuItem = new SimpleStringProperty("");
+    }
 
-    public AnchorPane getBangDieuKhien(){
-        if (bangDieuKhien == null) {
+    public StringProperty getAdminSelectedMenuItem() {
+        return adminSelectedMenuItem;
+    }
+
+    public AnchorPane getBangDieuKhienView(){
+        if (bangDieuKhienView == null) {
             try {
-                bangDieuKhien = new FXMLLoader(getClass().getResource("/Fxml/Admin/BangDieuKhien.fxml")).load();
+                bangDieuKhienView = new FXMLLoader(getClass().getResource("/Fxml/Admin/BangDieuKhien.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }
         }
 
-        return bangDieuKhien;
+        return bangDieuKhienView;
+    }
+
+    public AnchorPane getTrangChuLichView() {
+        if (trangChuLichView == null){
+            try {
+                trangChuLichView = new FXMLLoader(getClass().getResource("/Fxml/Admin/QLTrangChuLich.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        return trangChuLichView;
     }
 
     public void hienThiManHinhDangNhap(){
