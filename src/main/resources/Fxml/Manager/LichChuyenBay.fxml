@@ -18,13 +18,16 @@
             <TableColumn prefWidth="91.99996948242188" text="Giá vé" />
             <TableColumn prefWidth="55.333251953125" text="Số ghế" />
             <TableColumn prefWidth="86.00006103515625" text="Số ghế trống" />
-            <TableColumn prefWidth="100.0" text="Trạng thái" />
+            <TableColumn prefWidth="74.66668701171875" text="Trung gian" />
+            <TableColumn prefWidth="92.6666259765625" text="Thời gian bay" />
+            <TableColumn prefWidth="134.0" text="Trạng thái" />
         </columns>
       </TableView>
       <HBox alignment="CENTER" layoutX="34.0" layoutY="679.0" prefHeight="69.0" prefWidth="929.0" spacing="50.0">
          <children>
             <MFXButton buttonType="RAISED" depthLevel="LEVEL1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="177.0" text="Thêm" />
-            <MFXButton buttonType="RAISED" depthLevel="LEVEL1" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="177.0" text="Xóa/Sửa" />
+            <MFXButton buttonType="RAISED" depthLevel="LEVEL1" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="177.0" text="Xóa" />
+            <MFXButton buttonType="RAISED" depthLevel="LEVEL1" layoutX="386.0" layoutY="22.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="177.0" text="Sửa" />
             <MFXButton buttonType="RAISED" depthLevel="LEVEL1" layoutX="187.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="177.0" text="Tải lên file Excel" />
          </children>
       </HBox>
