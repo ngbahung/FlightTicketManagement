@@ -15,10 +15,10 @@ public class ManagerController implements Initializable {
         Model.getInstance().getViewFactory().getManagerSelectedMenuItem().addListener((observableValue, oldVal, newVal)-> {
 //          Add switch statement
             switch (newVal){
-                case BANVE -> manager_parent.setCenter(Model.getInstance().getViewFactory().getBanVeManaView());
-                case DATCHO -> manager_parent.setCenter(Model.getInstance().getViewFactory().getDatChoManaView());
-                case DOANHTHU -> manager_parent.setCenter(Model.getInstance().getViewFactory().getDoanhThuManaView());
-                default -> manager_parent.setCenter(Model.getInstance().getViewFactory().getLichCBManaView());
+                case BANVE -> manager_parent.setCenter(Model.getInstance().getViewFactory().getBanVeView());
+                case DATCHO -> manager_parent.setCenter(Model.getInstance().getViewFactory().getDatChoView());
+                case DOANHTHU -> manager_parent.setCenter(Model.getInstance().getViewFactory().getDoanhThuView());
+                default -> manager_parent.setCenter(Model.getInstance().getViewFactory().getLichChuyenBayView());
             }
         });
     }

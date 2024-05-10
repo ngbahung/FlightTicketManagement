@@ -15,7 +15,7 @@
             <VBox.margin>
                 <Insets top="36.0" />
             </VBox.margin>
-            <Image url="@../../Images/admin/Logo_TikeMana.png" />
+            <Image url="@../../Images/admin/logo.png" />
         </ImageView>
         <Line endX="127.5" startX="-100.0" stroke="WHITE">
             <VBox.margin>

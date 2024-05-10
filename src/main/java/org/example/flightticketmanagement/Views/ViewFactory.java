@@ -142,50 +142,6 @@ public class ViewFactory {
         return managerSelectedMenuItem;
     }
 
-    public AnchorPane getLichCBManaView() {
-        if (lichCBManaView == null){
-            try {
-                lichCBManaView = new FXMLLoader(getClass().getResource("/Fxml/Manager/LichChuyenBay.fxml")).load();
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        return lichCBManaView;
-    }
-
-    public AnchorPane getBanVeManaView() {
-        if (banVeManaView == null){
-            try {
-                banVeManaView = new FXMLLoader(getClass().getResource("/Fxml/Manager/BanVe.fxml")).load();
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        return banVeManaView;
-    }
-
-    public AnchorPane getDatChoManaView() {
-        if (datChoManaView == null){
-            try {
-                datChoManaView = new FXMLLoader(getClass().getResource("/Fxml/Manager/DatCho.fxml")).load();
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        return datChoManaView;
-    }
-
-    public AnchorPane getDoanhThuManaView() {
-        if (doanhThuManaView == null){
-            try {
-                doanhThuManaView = new FXMLLoader(getClass().getResource("/Fxml/manager/DoanhThu.fxml")).load();
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        return doanhThuManaView;
-    }
-
     public void hienThiManHinhManager(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Manager/Manager.fxml"));
         ManagerController managerController = new ManagerController();
@@ -210,28 +166,6 @@ public class ViewFactory {
             }
         }
         return lichCBStaView;
-    }
-
-    public AnchorPane getBanVeStaView() {
-        if (banVeStaView == null) {
-            try {
-                banVeStaView = new FXMLLoader(getClass().getResource("/Fxml/Staff/BanVe.fxml")).load();
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        return banVeStaView;
-    }
-
-    public AnchorPane getDatChoStaView() {
-        if (datChoStaView == null) {
-            try {
-                datChoStaView = new FXMLLoader(getClass().getResource("/Fxml/Staff/DatCho.fxml")).load();
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        return datChoStaView;
     }
 
     public void hienThiManHinhStaff(){
