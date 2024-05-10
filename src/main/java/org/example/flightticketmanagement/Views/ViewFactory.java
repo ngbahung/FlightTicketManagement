@@ -25,10 +25,16 @@ public class ViewFactory {
 //    Manager Views
     private final ObjectProperty<ManagerMenuOptions> managerSelectedMenuItem;
     private AnchorPane lichCBManaView;
+    private AnchorPane banVeManaView;
+    private AnchorPane datChoManaView;
+    private AnchorPane doanhThuManaView;
+
 
 //    Staff Views
     private final ObjectProperty<StaffMenuOptions> staffSelectedMenuItem;
     private AnchorPane lichCBStaView;
+    private AnchorPane banVeStaView;
+    private AnchorPane datChoStaView;
 
     public ViewFactory(){
         this.loginAccountType = AccountType.ADMIN;
@@ -138,12 +144,45 @@ public class ViewFactory {
     public AnchorPane getLichCBManaView() {
         if (lichCBManaView == null){
             try {
-                lichChuyenBayView = new FXMLLoader(getClass().getResource("/Fxml/Manager/LichChuyenBay.fxml")).load();
+                lichCBManaView = new FXMLLoader(getClass().getResource("/Fxml/Manager/LichChuyenBay.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }
         }
         return lichCBManaView;
+    }
+
+    public AnchorPane getBanVeManaView() {
+        if (banVeManaView == null){
+            try {
+                banVeManaView = new FXMLLoader(getClass().getResource("/Fxml/Manager/BanVe.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return banVeManaView;
+    }
+
+    public AnchorPane getDatChoManaView() {
+        if (datChoManaView == null){
+            try {
+                datChoManaView = new FXMLLoader(getClass().getResource("/Fxml/Manager/DatCho.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return datChoManaView;
+    }
+
+    public AnchorPane getDoanhThuManaView() {
+        if (doanhThuManaView == null){
+            try {
+                doanhThuManaView = new FXMLLoader(getClass().getResource("/Fxml/manager/DoanhThu.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return doanhThuManaView;
     }
 
     public void hienThiManHinhManager(){
@@ -164,12 +203,34 @@ public class ViewFactory {
     public AnchorPane getLichCBStaView() {
         if (lichCBStaView == null){
             try {
-                lichChuyenBayView = new FXMLLoader(getClass().getResource("/Fxml/Staff/LichChuyenBayStaff.fxml")).load();
+                lichCBStaView = new FXMLLoader(getClass().getResource("/Fxml/Staff/LichChuyenBayStaff.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }
         }
         return lichCBStaView;
+    }
+
+    public AnchorPane getBanVeStaView() {
+        if (banVeStaView == null) {
+            try {
+                banVeStaView = new FXMLLoader(getClass().getResource("/Fxml/Staff/BanVe.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return banVeStaView;
+    }
+
+    public AnchorPane getDatChoStaView() {
+        if (datChoStaView == null) {
+            try {
+                datChoStaView = new FXMLLoader(getClass().getResource("/Fxml/Staff/DatCho.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return datChoStaView;
     }
 
     public void hienThiManHinhStaff(){

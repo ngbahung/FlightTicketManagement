@@ -20,9 +20,19 @@ public class StaffMenuController implements Initializable {
 
     public void addListener(){
         lichChuyenBay_btn.setOnAction(event -> moLichChuyenBay());
+        banVe_btn.setOnAction(event -> moBanVe());
+        datCho_btn.setOnAction(event -> moDatCho());
     }
 
     public void moLichChuyenBay(){
         Model.getInstance().getViewFactory().getStaffSelectedMenuItem().set(StaffMenuOptions.LICHCHUYENBAY);
+    }
+
+    public void moBanVe(){
+        Model.getInstance().getViewFactory().getStaffSelectedMenuItem().set(StaffMenuOptions.BANVE);
+    }
+
+    public void moDatCho(){
+        Model.getInstance().getViewFactory().getStaffSelectedMenuItem().set(StaffMenuOptions.DATCHO);
     }
 }

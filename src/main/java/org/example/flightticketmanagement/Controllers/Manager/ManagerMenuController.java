@@ -23,9 +23,24 @@ public class ManagerMenuController implements Initializable {
 
     public void addListener(){
         lichChuyenBay_btn.setOnAction(event -> moLichChuyenBay());
+        banVe_btn.setOnAction(event -> moBanVe());
+        datCho_btn.setOnAction(event -> moDatCho());
+        doanhThu_btn.setOnAction(event -> moDoanhThu());
     }
 
     public void moLichChuyenBay(){
         Model.getInstance().getViewFactory().getManagerSelectedMenuItem().set(ManagerMenuOptions.LICHCHUYENBAY);
+    }
+
+    public void moBanVe(){
+        Model.getInstance().getViewFactory().getManagerSelectedMenuItem().set(ManagerMenuOptions.BANVE);
+    }
+
+    public void moDatCho(){
+        Model.getInstance().getViewFactory().getManagerSelectedMenuItem().set(ManagerMenuOptions.DATCHO);
+    }
+
+    public void moDoanhThu(){
+        Model.getInstance().getViewFactory().getManagerSelectedMenuItem().set(ManagerMenuOptions.DOANHTHU);
     }
 }

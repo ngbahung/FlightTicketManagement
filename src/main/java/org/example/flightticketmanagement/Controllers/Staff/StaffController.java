@@ -14,7 +14,8 @@ public class StaffController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Model.getInstance().getViewFactory().getStaffSelectedMenuItem().addListener((observableValue, oldVal, newVal)-> {
             switch (newVal){
-//                case
+                case BANVE -> staff_parent.setCenter(Model.getInstance().getViewFactory().getBanVeStaView());
+                case DATCHO -> staff_parent.setCenter(Model.getInstance().getViewFactory().getDatChoStaView());
                 default -> staff_parent.setCenter(Model.getInstance().getViewFactory().getLichCBStaView());
             }
         });
