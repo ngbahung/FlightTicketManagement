@@ -9,63 +9,56 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0"
-      prefWidth="288.0" styleClass="menu_chinh_container" stylesheets="@../../Styles/Manager/ManagerMenu.css"
-      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.example.flightticketmanagement.Controllers.Staff.StaffMenuController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="288.0" styleClass="menu_chinh_container" stylesheets="@../../Styles/Manager/ManagerMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Staff.StaffMenuController">
    <VBox prefHeight="222.0" prefWidth="229.0">
       <FontAwesomeIconView fill="WHITE" glyphName="BARS" size="30">
          <VBox.margin>
-            <Insets left="45.0" top="52.5"/>
+            <Insets left="45.0" top="52.5" />
          </VBox.margin>
       </FontAwesomeIconView>
       <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
          <VBox.margin>
-            <Insets left="99.0" right="99.0" top="24.75"/>
+            <Insets left="99.0" right="99.0" top="24.75" />
          </VBox.margin>
-         <Image url="@../../Images/admin/Logo_TikeMana.png"/>
+         <Image url="@../../Images/admin/Logo_TikeMana.png" />
       </ImageView>
       <Line endX="127.5" startX="-100.0" stroke="WHITE" strokeWidth="0.75">
          <VBox.margin>
-            <Insets left="22.5" right="22.5" top="30.0"/>
+            <Insets left="22.5" right="22.5" top="30.0" />
          </VBox.margin>
       </Line>
    </VBox>
    <VBox alignment="TOP_CENTER" prefHeight="340.0" prefWidth="288.0" spacing="19.5">
       <VBox.margin>
-         <Insets top="38.25"/>
+         <Insets top="38.25" />
       </VBox.margin>
       <styleClass>
-         <String fx:value="menu_chinh_container"/>
-         <String fx:value="menu_container"/>
+         <String fx:value="menu_chinh_container" />
+         <String fx:value="menu_container" />
       </styleClass>
-      <Button graphicTextGap="21.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-              prefHeight="54.0" prefWidth="243.0" text="Lịch chuyến bay">
+      <Button fx:id="lichChuyenBay_btn" graphicTextGap="21.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" text="Lịch chuyến bay">
          <graphic>
-            <FontAwesomeIconView glyphName="PLANE" size="30"/>
+            <FontAwesomeIconView glyphName="PLANE" size="30" />
          </graphic>
       </Button>
-      <Button graphicTextGap="21.0" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity"
-              mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" text="Bán vé">
+      <Button fx:id="banVe_btn" graphicTextGap="21.0" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" text="Bán vé">
          <graphic>
-            <FontAwesomeIconView glyphName="TICKET" size="30"/>
+            <FontAwesomeIconView glyphName="TICKET" size="30" />
          </graphic>
       </Button>
-      <Button graphicTextGap="21.0" layoutX="10.0" layoutY="64.0" minHeight="-Infinity" minWidth="-Infinity"
-              mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" text="Đặt chỗ">
+      <Button fx:id="datCho_btn" graphicTextGap="21.0" layoutX="10.0" layoutY="64.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" text="Đặt chỗ">
          <graphic>
-            <FontAwesomeIconView glyphName="ADDRESS_BOOK" size="30"/>
+            <FontAwesomeIconView glyphName="ADDRESS_BOOK" size="30" />
          </graphic>
       </Button>
    </VBox>
    <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="dang_xuat">
       <padding>
-         <Insets top="100.0"/>
+         <Insets top="100.0" />
       </padding>
-      <Button graphicTextGap="21.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-              prefHeight="54.0" prefWidth="243.0" text="Đăng xuất">
+      <Button graphicTextGap="21.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" text="Đăng xuất">
          <graphic>
-            <FontAwesomeIconView glyphName="SIGN_OUT" size="30"/>
+            <FontAwesomeIconView glyphName="SIGN_OUT" size="30" />
          </graphic>
       </Button>
    </VBox>

@@ -8,6 +8,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.Admin.AdminController;
 import org.example.flightticketmanagement.Controllers.Manager.ManagerController;
+import org.example.flightticketmanagement.Controllers.Staff.StaffController;
 
 public class ViewFactory {
     private AccountType loginAccountType;
@@ -25,11 +26,15 @@ public class ViewFactory {
     private final ObjectProperty<ManagerMenuOptions> managerSelectedMenuItem;
     private AnchorPane lichCBManaView;
 
+//    Staff Views
+    private final ObjectProperty<StaffMenuOptions> staffSelectedMenuItem;
+    private AnchorPane lichCBStaView;
 
     public ViewFactory(){
         this.loginAccountType = AccountType.ADMIN;
         this.adminSelectedMenuItem = new SimpleObjectProperty<>();
         this.managerSelectedMenuItem = new SimpleObjectProperty<>();
+        this.staffSelectedMenuItem = new SimpleObjectProperty<>();
     }
 
     public AccountType getLoginAccountType() {
@@ -148,6 +153,35 @@ public class ViewFactory {
         createStage(loader);
     }
 
+    /*
+    * Staff Views Section
+    * */
+
+    public ObjectProperty<StaffMenuOptions> getStaffSelectedMenuItem() {
+        return staffSelectedMenuItem;
+    }
+
+    public AnchorPane getLichCBStaView() {
+        if (lichCBStaView == null){
+            try {
+                lichChuyenBayView = new FXMLLoader(getClass().getResource("/Fxml/Staff/LichChuyenBayStaff.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return lichCBStaView;
+    }
+
+    public void hienThiManHinhStaff(){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Staff/Staff.fxml"));
+        StaffController staffController = new StaffController();
+        loader.setController(staffController);
+        createStage(loader);
+    }
+
+    /*
+    * DangNhap View Section
+    * */
     public void hienThiManHinhDangNhap(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/DangNhap.fxml"));
         createStage(loader);

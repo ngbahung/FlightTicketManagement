@@ -18,7 +18,7 @@ public class ManagerMenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        addListener();
     }
 
     public void addListener(){

@@ -15,7 +15,8 @@ public class ManagerController implements Initializable {
         Model.getInstance().getViewFactory().getManagerSelectedMenuItem().addListener((observableValue, oldVal, newVal)-> {
 //          Add switch statement
             switch (newVal){
-
+//                case LICHCHUYENBAY -> manager_parent.setCenter(Model.getInstance().getViewFactory().getLichCBManaView());
+                default -> manager_parent.setCenter(Model.getInstance().getViewFactory().getLichCBManaView());
             }
         });
     }

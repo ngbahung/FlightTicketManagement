@@ -1,4 +1,28 @@
 package org.example.flightticketmanagement.Controllers.Staff;
 
-public class StaffMenuController {
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import org.example.flightticketmanagement.Models.Model;
+import org.example.flightticketmanagement.Views.StaffMenuOptions;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class StaffMenuController implements Initializable {
+    public Button lichChuyenBay_btn;
+    public Button banVe_btn;
+    public Button datCho_btn;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        addListener();
+    }
+
+    public void addListener(){
+        lichChuyenBay_btn.setOnAction(event -> moLichChuyenBay());
+    }
+
+    public void moLichChuyenBay(){
+        Model.getInstance().getViewFactory().getStaffSelectedMenuItem().set(StaffMenuOptions.LICHCHUYENBAY);
+    }
 }

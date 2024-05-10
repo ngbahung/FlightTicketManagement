@@ -41,6 +41,8 @@ public class DangNhapController implements Initializable {
             Model.getInstance().getViewFactory().hienThiManHinhAdmin();
         } else if (Model.getInstance().getViewFactory().getLoginAccountType() == AccountType.MANAGER) {
             Model.getInstance().getViewFactory().hienThiManHinhManager();
+        } else if (Model.getInstance().getViewFactory().getLoginAccountType() == AccountType.STAFF) {
+            Model.getInstance().getViewFactory().hienThiManHinhStaff();
         }
     }
 }
