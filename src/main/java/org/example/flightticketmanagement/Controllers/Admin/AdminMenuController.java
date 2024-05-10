@@ -3,6 +3,7 @@ package org.example.flightticketmanagement.Controllers.Admin;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import org.example.flightticketmanagement.Models.Model;
+import org.example.flightticketmanagement.Views.AdminMenuOptions;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -31,26 +32,26 @@ public class AdminMenuController implements Initializable {
     }
 
     private void moPhanQuyen(){
-        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set("PhanQuyen");
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.PHANQUYEN);
     }
 
     private void moTrangChuLich() {
-        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set("TrangChuLich");
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.LICHCHUYENBAY);
     }
 
     private void moBanVe(){
-        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set("BanVe");
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.BANVE);
     }
 
     private void  moDatCho(){
-        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set("DatCho");
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.DATCHO);
     }
 
     private void moDoanhThu(){
-        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set("DoanhThu");
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.DOANHTHU);
     }
 
     private void moSuaQuyDinh(){
-        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set("SuaQuyDinh");
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.SUAQUYDINH);
     }
 }

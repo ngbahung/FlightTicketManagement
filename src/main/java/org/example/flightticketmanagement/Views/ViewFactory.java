@@ -1,16 +1,19 @@
 package org.example.flightticketmanagement.Views;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.Admin.AdminController;
+import org.example.flightticketmanagement.Controllers.Manager.ManagerController;
 
 public class ViewFactory {
+    private AccountType loginAccountType;
+
 //  Admin Views
-    private final StringProperty adminSelectedMenuItem;
+    private final ObjectProperty<AdminMenuOptions> adminSelectedMenuItem;
     private AnchorPane phanQuyenView;
     private AnchorPane lichChuyenBayView;
     private AnchorPane banVeView;
@@ -18,13 +21,28 @@ public class ViewFactory {
     private AnchorPane doanhThuView;
     private AnchorPane suaQuyDinhView;
 
+//    Manager Views
+    private final ObjectProperty<ManagerMenuOptions> managerSelectedMenuItem;
+    private AnchorPane lichCBManaView;
+
 
     public ViewFactory(){
-        this.adminSelectedMenuItem = new SimpleStringProperty("");
+        this.loginAccountType = AccountType.ADMIN;
+        this.adminSelectedMenuItem = new SimpleObjectProperty<>();
+        this.managerSelectedMenuItem = new SimpleObjectProperty<>();
     }
-/* Admin View Section
+
+    public AccountType getLoginAccountType() {
+        return loginAccountType;
+    }
+
+    public void setLoginAccountType(AccountType loginAccountType) {
+        this.loginAccountType = loginAccountType;
+    }
+
+    /* Admin View Section
 * */
-    public StringProperty getAdminSelectedMenuItem() {
+    public ObjectProperty<AdminMenuOptions> getAdminSelectedMenuItem() {
         return adminSelectedMenuItem;
     }
 
@@ -97,17 +115,41 @@ public class ViewFactory {
         return suaQuyDinhView;
     }
 
-    public void hienThiManHinhDangNhap(){
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/DangNhap.fxml"));
-        createStage(loader);
-    }
-
-
-
     public void hienThiManHinhAdmin(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Admin/Admin.fxml"));
         AdminController adminController = new AdminController();
         loader.setController(adminController);
+        createStage(loader);
+    }
+
+    /*
+    * Manager Views Section
+    * */
+
+    public ObjectProperty<ManagerMenuOptions> getManagerSelectedMenuItem() {
+        return managerSelectedMenuItem;
+    }
+
+    public AnchorPane getLichCBManaView() {
+        if (lichCBManaView == null){
+            try {
+                lichChuyenBayView = new FXMLLoader(getClass().getResource("/Fxml/Manager/LichChuyenBay.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return lichCBManaView;
+    }
+
+    public void hienThiManHinhManager(){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Manager/Manager.fxml"));
+        ManagerController managerController = new ManagerController();
+        loader.setController(managerController);
+        createStage(loader);
+    }
+
+    public void hienThiManHinhDangNhap(){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/DangNhap.fxml"));
         createStage(loader);
     }
 
