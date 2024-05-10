@@ -4,6 +4,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.Admin.AdminController;
@@ -261,6 +262,8 @@ public class ViewFactory {
         }
         Stage stage = new Stage();
         stage.setScene(scene);
+        stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/Admin/logo.png"))));
+        stage.setResizable(false);
         stage.setTitle("QUAN LY BAN VE CHUYEN BAY");
         stage.show();
     }
