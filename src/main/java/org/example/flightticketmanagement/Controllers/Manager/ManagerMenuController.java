@@ -2,6 +2,7 @@ package org.example.flightticketmanagement.Controllers.Manager;
 
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 import org.example.flightticketmanagement.Models.Model;
 import org.example.flightticketmanagement.Views.ManagerMenuOptions;
 
@@ -26,6 +27,7 @@ public class ManagerMenuController implements Initializable {
         banVe_btn.setOnAction(event -> moBanVe());
         datCho_btn.setOnAction(event -> moDatCho());
         doanhThu_btn.setOnAction(event -> moDoanhThu());
+        dangXuat_btn.setOnAction(event -> moDangNhap());
     }
 
     public void moLichChuyenBay(){
@@ -42,5 +44,12 @@ public class ManagerMenuController implements Initializable {
 
     public void moDoanhThu(){
         Model.getInstance().getViewFactory().getManagerSelectedMenuItem().set(ManagerMenuOptions.DOANHTHU);
+    }
+
+    private void moDangNhap() {
+        Stage stage = (Stage) dangXuat_btn.getScene().getWindow();
+        Model.getInstance().getViewFactory().dongStage(stage);
+
+        Model.getInstance().getViewFactory().hienThiManHinhDangNhap();
     }
 }
