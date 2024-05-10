@@ -4,6 +4,7 @@
 <?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import java.lang.String?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -15,10 +16,10 @@
       <Image url="@../Images/login/Back_ground.png" />
    </ImageView>
    <AnchorPane prefHeight="625.0" prefWidth="455.0" styleClass="bang_dang_nhap" AnchorPane.bottomAnchor="87.0" AnchorPane.rightAnchor="87.0" AnchorPane.topAnchor="87.0">
-      <ImageView fitHeight="40.0" fitWidth="175.0" layoutX="140.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="70.0">
+      <ImageView fitHeight="40.0" fitWidth="175.0" layoutX="140.0" layoutY="46.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="46.0">
          <Image url="@../Images/login/logo_TikeMana.png" />
       </ImageView>
-      <Label fx:id="tenDangNhap_lbl" layoutX="104.0" layoutY="175.0" prefHeight="54.0" prefWidth="235.0" styleClass="ten_bang" text="Đăng nhập" AnchorPane.topAnchor="150.0" />
+      <Label fx:id="tenDangNhap_lbl" layoutX="110.0" layoutY="93.0" prefHeight="54.0" prefWidth="235.0" styleClass="ten_bang" text="Đăng nhập" AnchorPane.topAnchor="93.0" />
       <VBox layoutX="34.0" layoutY="241.0" prefHeight="72.0" prefWidth="390.0" styleClass="hop_thoai">
          <Label fx:id="tenTaiKhoan_lbl" text="Tên tài khoản" />
          <MFXTextField fx:id="tenTK_mfxfld" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="390.0" />
@@ -36,5 +37,7 @@
             <String fx:value="link-button" />
          </styleClass>
       </MFXButton>
+      <ChoiceBox fx:id="account_selector" layoutX="35.0" layoutY="188.0" prefWidth="150.0" />
+      <Label layoutX="35.0" layoutY="155.0" text="Chọn tài khoản" />
    </AnchorPane>
 </AnchorPane>
