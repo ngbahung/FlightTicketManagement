@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+<AnchorPane prefHeight="800.0" prefWidth="992.0" styleClass="background-color" stylesheets="@../../Styles/Manager/LichChuyenBay.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.LichChuyenBayController">
+   <children>
+      <TableView layoutX="34.0" layoutY="44.0" prefHeight="614.0" prefWidth="929.0" styleClass="table">
+        <columns>
+          <TableColumn prefWidth="98.66665267944336" text="Mã chuyến bay" />
+            <TableColumn prefWidth="70.00003051757812" text="Sân bay đi" />
+            <TableColumn prefWidth="81.33338928222656" text="Sân bay đến" />
+            <TableColumn prefWidth="78.66668701171875" text="Ngày bay" />
+            <TableColumn prefWidth="60.66668701171875" text="Giờ bay" />
+            <TableColumn prefWidth="91.99996948242188" text="Giá vé" />
+            <TableColumn prefWidth="55.333251953125" text="Số ghế" />
+            <TableColumn prefWidth="86.00006103515625" text="Số ghế trống" />
+            <TableColumn prefWidth="100.0" text="Trạng thái" />
+        </columns>
+      </TableView>
+      <HBox alignment="CENTER" layoutX="34.0" layoutY="679.0" prefHeight="69.0" prefWidth="929.0" spacing="50.0">
+         <children>
+            <MFXButton buttonType="RAISED" depthLevel="LEVEL1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="177.0" text="Thêm" />
+            <MFXButton buttonType="RAISED" depthLevel="LEVEL1" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="177.0" text="Xóa/Sửa" />
+            <MFXButton buttonType="RAISED" depthLevel="LEVEL1" layoutX="187.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="177.0" text="Tải lên file Excel" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
