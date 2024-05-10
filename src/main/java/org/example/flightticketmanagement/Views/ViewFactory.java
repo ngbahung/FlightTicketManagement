@@ -37,7 +37,7 @@ public class ViewFactory {
     private AnchorPane datChoStaView;
 
     public ViewFactory(){
-        this.loginAccountType = AccountType.ADMIN;
+        this.loginAccountType = AccountType.STAFF;
         this.adminSelectedMenuItem = new SimpleObjectProperty<>();
         this.managerSelectedMenuItem = new SimpleObjectProperty<>();
         this.staffSelectedMenuItem = new SimpleObjectProperty<>();
