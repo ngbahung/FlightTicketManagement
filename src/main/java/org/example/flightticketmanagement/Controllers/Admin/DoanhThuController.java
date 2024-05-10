@@ -1,13 +1,11 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class LichChuyenBayController implements Initializable {
-
+public class DoanhThuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 

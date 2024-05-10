@@ -1,62 +1,155 @@
 package org.example.flightticketmanagement.Views;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.Admin.AdminController;
+import org.example.flightticketmanagement.Controllers.Manager.ManagerController;
 
 public class ViewFactory {
+    private AccountType loginAccountType;
+
 //  Admin Views
-    private final StringProperty adminSelectedMenuItem;
-    private AnchorPane bangDieuKhienView;
-    private AnchorPane trangChuLichView;
+    private final ObjectProperty<AdminMenuOptions> adminSelectedMenuItem;
+    private AnchorPane phanQuyenView;
+    private AnchorPane lichChuyenBayView;
+    private AnchorPane banVeView;
+    private AnchorPane datChoView;
+    private AnchorPane doanhThuView;
+    private AnchorPane suaQuyDinhView;
+
+//    Manager Views
+    private final ObjectProperty<ManagerMenuOptions> managerSelectedMenuItem;
+    private AnchorPane lichCBManaView;
+
 
     public ViewFactory(){
-        this.adminSelectedMenuItem = new SimpleStringProperty("");
+        this.loginAccountType = AccountType.ADMIN;
+        this.adminSelectedMenuItem = new SimpleObjectProperty<>();
+        this.managerSelectedMenuItem = new SimpleObjectProperty<>();
     }
 
-    public StringProperty getAdminSelectedMenuItem() {
+    public AccountType getLoginAccountType() {
+        return loginAccountType;
+    }
+
+    public void setLoginAccountType(AccountType loginAccountType) {
+        this.loginAccountType = loginAccountType;
+    }
+
+    /* Admin View Section
+* */
+    public ObjectProperty<AdminMenuOptions> getAdminSelectedMenuItem() {
         return adminSelectedMenuItem;
     }
 
-    public AnchorPane getBangDieuKhienView(){
-        if (bangDieuKhienView == null) {
+    public AnchorPane getPhanQuyenView(){
+        if (phanQuyenView == null) {
             try {
-                bangDieuKhienView = new FXMLLoader(getClass().getResource("/Fxml/Admin/BangDieuKhien.fxml")).load();
+                phanQuyenView = new FXMLLoader(getClass().getResource("/Fxml/Admin/BangDieuKhien.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }
         }
 
-        return bangDieuKhienView;
+        return phanQuyenView;
     }
 
-    public AnchorPane getTrangChuLichView() {
-        if (trangChuLichView == null){
+    public AnchorPane getLichChuyenBayView() {
+        if (lichChuyenBayView == null){
             try {
-                trangChuLichView = new FXMLLoader(getClass().getResource("/Fxml/Admin/LichChuyenBay.fxml")).load();
+                lichChuyenBayView = new FXMLLoader(getClass().getResource("/Fxml/Admin/LichChuyenBay.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }
         }
 
-        return trangChuLichView;
+        return lichChuyenBayView;
     }
 
-    public void hienThiManHinhDangNhap(){
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/DangNhap.fxml"));
-        createStage(loader);
+    public AnchorPane getBanVeView() {
+        if (banVeView == null){
+            try {
+                banVeView = new FXMLLoader(getClass().getResource("/Fxml/Admin/BanVe.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return banVeView;
     }
 
+    public AnchorPane getDatChoView() {
+        if (datChoView == null){
+            try {
+                datChoView = new FXMLLoader(getClass().getResource("/Fxml/Admin/DatCho.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return datChoView;
+    }
 
+    public AnchorPane getDoanhThuView() {
+        if (doanhThuView == null){
+            try {
+                doanhThuView = new FXMLLoader(getClass().getResource("/Fxml/Admin/DoanhThu.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        return doanhThuView;
+    }
+
+    public AnchorPane getSuaQuyDinhView() {
+        if (suaQuyDinhView == null){
+            try {
+                suaQuyDinhView = new FXMLLoader(getClass().getResource("/Fxml/Admin/SuaQuyDinh.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return suaQuyDinhView;
+    }
 
     public void hienThiManHinhAdmin(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Admin/Admin.fxml"));
         AdminController adminController = new AdminController();
         loader.setController(adminController);
+        createStage(loader);
+    }
+
+    /*
+    * Manager Views Section
+    * */
+
+    public ObjectProperty<ManagerMenuOptions> getManagerSelectedMenuItem() {
+        return managerSelectedMenuItem;
+    }
+
+    public AnchorPane getLichCBManaView() {
+        if (lichCBManaView == null){
+            try {
+                lichChuyenBayView = new FXMLLoader(getClass().getResource("/Fxml/Manager/LichChuyenBay.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return lichCBManaView;
+    }
+
+    public void hienThiManHinhManager(){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Manager/Manager.fxml"));
+        ManagerController managerController = new ManagerController();
+        loader.setController(managerController);
+        createStage(loader);
+    }
+
+    public void hienThiManHinhDangNhap(){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/DangNhap.fxml"));
         createStage(loader);
     }
 

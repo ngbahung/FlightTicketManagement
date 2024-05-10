@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.StackedBarChart?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/BanVe.css"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.flightticketmanagement.Controllers.Admin.DatChoController">
+    <Text fontSmoothingType="LCD" layoutX="103.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0"
+          styleClass="ban_ve" text="Doanh Thu" wrappingWidth="177.0" AnchorPane.topAnchor="99.0">
+        <font>
+          <Font size="28.0"/>
+        </font>
+    </Text>
+    <BarChart layoutX="95.0" layoutY="235.0" prefHeight="331.0" prefWidth="370.0">
+      <xAxis>
+          <CategoryAxis side="BOTTOM"/>
+      </xAxis>
+      <yAxis>
+          <NumberAxis side="LEFT"/>
+      </yAxis>
+    </BarChart>
+    <StackedBarChart layoutX="552.0" layoutY="238.0" prefHeight="325.0" prefWidth="344.0">
+      <xAxis>
+          <CategoryAxis side="BOTTOM"/>
+      </xAxis>
+      <yAxis>
+          <NumberAxis side="LEFT"/>
+      </yAxis>
+    </StackedBarChart>
+</AnchorPane>
