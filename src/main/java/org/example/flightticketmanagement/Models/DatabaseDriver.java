@@ -6,10 +6,10 @@ import java.sql.SQLException;
 public class DatabaseDriver {
     public Connection conn;
 
-    public DatabaseDriver() {
+    public Connection getDBDriver() {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
-            conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:TRINH","sys as sysdba","Trinh@3004");
+            conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:TRINH","TIKIMANA","password");
             if (conn != null) {
                 System.out.println("Successfully connected to database");
             } else {
@@ -18,5 +18,7 @@ public class DatabaseDriver {
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
+
+        return conn;
     }
 }
