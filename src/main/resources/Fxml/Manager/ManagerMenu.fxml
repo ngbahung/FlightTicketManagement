@@ -56,20 +56,23 @@
             <FontAwesomeIconView glyphName="SIGNAL" size="30" />
          </graphic>
       </Button>
-      <Button fx:id="suaQuyDinh_btn" graphicTextGap="21.0" layoutX="10.0" layoutY="172.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" text="Sửa quy định">
+   </VBox>
+   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="19.5" styleClass="dang_xuat">
+      <Button graphicTextGap="21.0" layoutX="33.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" text="Tài khoản">
          <graphic>
-            <FontAwesomeIconView glyphName="PENCIL_SQUARE" size="30" />
+            <FontAwesomeIconView glyphName="USER_CIRCLE" size="30" />
          </graphic>
       </Button>
-   </VBox>
-   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="dang_xuat">
-      <padding>
-         <Insets top="100.0" />
-      </padding>
       <Button fx:id="dangXuat_btn" graphicTextGap="21.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" text="Đăng xuất">
          <graphic>
             <FontAwesomeIconView glyphName="SIGN_OUT" size="30" />
          </graphic>
       </Button>
+      <VBox.margin>
+         <Insets />
+      </VBox.margin>
+      <padding>
+         <Insets top="40.0" />
+      </padding>
    </VBox>
 </VBox>
