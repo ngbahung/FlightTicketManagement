@@ -7,6 +7,6 @@
     </left>
 
     <center>
-        <fx:include source="BangDieuKhien.fxml"/>
+        <fx:include source="PhanQuyen.fxml"/>
     </center>
 </BorderPane>

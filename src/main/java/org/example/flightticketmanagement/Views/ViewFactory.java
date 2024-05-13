@@ -61,7 +61,7 @@ public class ViewFactory {
     public AnchorPane getPhanQuyenView(){
         if (phanQuyenView == null) {
             try {
-                phanQuyenView = new FXMLLoader(getClass().getResource("/Fxml/Admin/BangDieuKhien.fxml")).load();
+                phanQuyenView = new FXMLLoader(getClass().getResource("/Fxml/Admin/PhanQuyen.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -133,6 +133,8 @@ public class ViewFactory {
         loader.setController(adminController);
         createStage(loader);
     }
+
+
 
     /*
     * Manager Views Section
