@@ -1,0 +1,39 @@
+.top-bar {
+    -fx-background-color: #080C53;
+}
+
+.background {
+    -fx-background-color: #ffffff;
+}
+
+.text {
+    -fx-font-family: Inter;
+
+}
+
+.top-bar-text {
+    -fx-text-fill: white;
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+}
+
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #080C53;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-font-size: 12;
+}
+
+.bottom-bar-text {
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
+
+.total-income {
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+    -fx-background-color: #080C53;
+}
