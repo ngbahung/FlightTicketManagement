@@ -1,0 +1,58 @@
+.text {
+    -fx-font-family: Inter;
+}
+
+.background-color {
+    -fx-background-color: white;
+}
+
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #080C53;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+}
+
+.grid-pane {
+    -fx-border-radius: 10;
+    -fx-border-color: #080C53;
+    -fx-border-width: 2;
+    -fx-font-weight: bold;
+}
+
+.text-field {
+    -fx-border-color: #080C53;
+    -fx-font-family: Inter;
+}
+
+.sua-quy-dinh-btn {
+    -fx-background-color: #080C53;
+    -fx-text-fill: white;
+    -fx-border-radius: 20;
+    -fx-font-size: 16;
+    -fx-font-family: Inter;
+    -fx-background-radius: 20;
+    -fx-font-weight: bold;
+}
+
+.sua-quy-dinh-btn:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #00A4BD;
+    -fx-text-fill: white;
+}
+
+.button-row {
+    -fx-background-color: #080C53;
+    -fx-text-fill: white;
+    -fx-border-radius: 20;
+    -fx-font-size: 16;
+    -fx-font-family: Inter;
+    -fx-background-radius: 20;
+    -fx-font-weight: bold;
+}
+
+.button-row:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #00A4BD;
+    -fx-text-fill: white;
+}

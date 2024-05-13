@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import java.lang.String?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+<AnchorPane prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/PhanQuyen.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.BangDieuKhienController">
+    <TableView editable="true" layoutX="52.0" layoutY="46.0" prefHeight="453.0" prefWidth="897.0" AnchorPane.bottomAnchor="301.0" AnchorPane.leftAnchor="52.0" AnchorPane.rightAnchor="43.0" AnchorPane.topAnchor="46.0">
+      <columns>
+          <TableColumn minWidth="0.0" prefWidth="359.0" text="Tên đăng nhập" />
+         <TableColumn minWidth="0.0" prefWidth="282.0" text="Mật khẩu" />
+         <TableColumn minWidth="0.0" prefWidth="255.0" text="Nhóm" />
+      </columns>
+    </TableView>
+    <HBox layoutX="594.0" layoutY="730.0" prefHeight="40.0" prefWidth="355.0" spacing="22.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="594.0" AnchorPane.rightAnchor="43.0" AnchorPane.topAnchor="730.0">
+        <MFXButton id="custom_them" fx:id="them_btn" prefHeight="50.0" prefWidth="150.0" text="Thêm">
+         <styleClass>
+            <String fx:value="mfx-button" />
+            <String fx:value="mfx-ripple-generator" />
+            <String fx:value="text" />
+            <String fx:value="link-button" />
+         </styleClass></MFXButton>
+        <MFXButton id="custom_xoa" prefHeight="50.0" prefWidth="150.0" text="Xóa" fx:id="xoa_btn">
+         <styleClass>
+            <String fx:value="mfx-button" />
+            <String fx:value="mfx-ripple-generator" />
+            <String fx:value="text" />
+            <String fx:value="link-button" />
+         </styleClass></MFXButton>
+        <MFXButton id="custom_sua" fx:id="sua_btn" prefHeight="50.0" prefWidth="150.0" text="Sửa">
+         <styleClass>
+            <String fx:value="link-button" />
+            <String fx:value="mfx-button" />
+            <String fx:value="mfx-ripple-generator" />
+            <String fx:value="text" />
+         </styleClass></MFXButton>
+    </HBox>
+</AnchorPane>
