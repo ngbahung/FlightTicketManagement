@@ -26,42 +26,42 @@
     <VBox prefHeight="333.0" prefWidth="228.0" styleClass="menu_container">
         <Button fx:id="phanQuyen_btn" graphicTextGap="21.0" mnemonicParsing="false" text="Phân quyền">
          <graphic>
-            <FontAwesomeIconView glyphName="USERS" size="20" />
+            <FontAwesomeIconView glyphName="USERS" size="30" />
          </graphic>
         </Button>
         <Button fx:id="lichChuyenBay_btn" graphicTextGap="21.0" mnemonicParsing="false" text="Lịch chuyến bay">
             <graphic>
-                <FontAwesomeIconView glyphName="PLANE" size="20" />
+                <FontAwesomeIconView glyphName="PLANE" size="30" />
             </graphic>
         </Button>
         <Button fx:id="banVe_btn" graphicTextGap="21.0" mnemonicParsing="false" text="Bán vé">
             <graphic>
-                <FontAwesomeIconView glyphName="TICKET" size="20" />
+                <FontAwesomeIconView glyphName="TICKET" size="30" />
             </graphic>
         </Button>
         <Button fx:id="datCho_btn" graphicTextGap="21.0" mnemonicParsing="false" text="Đặt chỗ">
             <graphic>
-                <FontAwesomeIconView glyphName="ADDRESS_BOOK" size="20" />
+                <FontAwesomeIconView glyphName="ADDRESS_BOOK" size="30" />
             </graphic>
         </Button>
       <Button fx:id="doanhThu_btn" graphicTextGap="21.0" mnemonicParsing="false" text="Doanh thu">
          <graphic>
-            <FontAwesomeIconView glyphName="SIGNAL" size="20" />
+            <FontAwesomeIconView glyphName="SIGNAL" size="30" />
          </graphic>
       </Button>
         <Button fx:id="suaQuyDinh_btn" alignment="CENTER" graphicTextGap="21.0" mnemonicParsing="false" text="Sửa quy định">
             <graphic>
-                <FontAwesomeIconView glyphName="PENCIL_SQUARE" size="20" />
+                <FontAwesomeIconView glyphName="PENCIL_SQUARE" size="30" />
             </graphic>
         </Button>
     </VBox>
-    <VBox prefHeight="165.0" prefWidth="228.0" styleClass="dang_xuat">
-        <Button fx:id="dangXuat_btn" graphicTextGap="21.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="215.0" text="Đăng xuât">
+    <VBox alignment="BOTTOM_LEFT" prefHeight="183.0" prefWidth="228.0" styleClass="dang_xuat">
+        <Button fx:id="dangXuat_btn" graphicTextGap="21.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="215.0" text="Đăng xuất">
             <graphic>
                 <FontAwesomeIconView glyphName="SIGN_OUT" size="20" />
             </graphic>
             <VBox.margin>
-                <Insets top="84.0" />
+                <Insets />
             </VBox.margin>
         </Button>
     </VBox>
