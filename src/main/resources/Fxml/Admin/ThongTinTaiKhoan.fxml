@@ -12,9 +12,9 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane prefHeight="800.0" prefWidth="992.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Fxml.Admin.ThongTinTaiKhoan">
+<AnchorPane prefHeight="800.0" prefWidth="992.0" styleClass="background" stylesheets="@../../Styles/Admin/ThongTinTaiKhoan.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Fxml.Admin.ThongTinTaiKhoan">
    <children>
-      <GridPane layoutX="188.0" layoutY="143.0" prefHeight="201.0" prefWidth="598.0">
+      <GridPane layoutX="158.0" layoutY="141.0" prefHeight="201.0" prefWidth="756.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="432.0" minWidth="10.0" prefWidth="175.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="724.0" minWidth="10.0" prefWidth="423.0" />
@@ -36,10 +36,10 @@
             <MFXTextField layoutX="185.0" layoutY="71.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="423.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
       </GridPane>
-      <Text layoutX="60.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="THÔNG TIN TÀI KHOẢN" />
-      <MFXButton graphicTextGap="10.0" layoutX="703.0" layoutY="373.0" prefHeight="41.0" prefWidth="83.0" text="Sửa">
+      <Text layoutX="60.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="THÔNG TIN TÀI KHOẢN" />
+      <MFXButton fx:id="custom_sua" graphicTextGap="10.0" layoutX="727.0" layoutY="353.0" prefHeight="41.0" prefWidth="108.0" text="Sửa">
          <graphic>
-            <FontAwesomeIconView glyphName="EDIT" size="20" />
+            <FontAwesomeIconView fill="WHITE" glyphName="EDIT" size="20" />
          </graphic>
       </MFXButton>
    </children>
