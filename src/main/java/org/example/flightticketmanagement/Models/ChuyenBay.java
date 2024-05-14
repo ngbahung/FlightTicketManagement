@@ -6,17 +6,21 @@ public class ChuyenBay {
     private String maChuyenBay;
     private String maDuongBay;
     private Integer soLuongGhe;
+    private Integer soChuyenBay;
     private LocalDateTime thoiGianXuatPhat;
     private LocalDateTime thoiGianKetThuc ;
     private String trangThai;
+    private Float giaVe;
 
-    public ChuyenBay(String maChuyenBay, String maDuongBay, Integer soLuongGhe, LocalDateTime thoiGianXuatPhat, LocalDateTime thoiGianKetThuc, String trangThai) {
+    public ChuyenBay(String maChuyenBay, String maDuongBay, Integer soLuongGhe, Integer soChuyenBay, LocalDateTime thoiGianXuatPhat, LocalDateTime thoiGianKetThuc, String trangThai, Float giaVe) {
         this.maChuyenBay = maChuyenBay;
         this.maDuongBay = maDuongBay;
         this.soLuongGhe = soLuongGhe;
+        this.soChuyenBay = soChuyenBay;
         this.thoiGianXuatPhat = thoiGianXuatPhat;
         this.thoiGianKetThuc = thoiGianKetThuc;
         this.trangThai = trangThai;
+        this.giaVe = giaVe;
     }
 
     public String getMaChuyenBay() {
@@ -51,6 +55,14 @@ public class ChuyenBay {
         this.thoiGianXuatPhat = thoiGianXuatPhat;
     }
 
+    public Integer getSoChuyenBay() {
+        return soChuyenBay;
+    }
+
+    public void setSoChuyenBay(Integer soChuyenBay) {
+        this.soChuyenBay = soChuyenBay;
+    }
+
     public LocalDateTime getThoiGianKetThuc() {
         return thoiGianKetThuc;
     }
@@ -65,5 +77,13 @@ public class ChuyenBay {
 
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
+    }
+
+    public Float getGiaVe() {
+        return giaVe;
+    }
+
+    public void setGiaVe(Float giaVe) {
+        this.giaVe = giaVe;
     }
 }

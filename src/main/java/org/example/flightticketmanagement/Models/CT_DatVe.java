@@ -6,14 +6,16 @@ public class CT_DatVe {
     private String maCT_DatVe;
     private String maVe;
     private String maKhachHang;
-    private LocalDateTime thoiGianGiuGhe;
+    private LocalDateTime ngayMuaVe;
+    private LocalDateTime ngayThanhToan;
     private String trangThai;
 
-    public CT_DatVe(String maCT_DatVe, String maVe, String maKhachHang, LocalDateTime thoiGianGiuGhe, String trangThai) {
+    public CT_DatVe(String maCT_DatVe, String maVe, String maKhachHang, LocalDateTime ngayMuaVe, LocalDateTime ngayThanhToan, String trangThai) {
         this.maCT_DatVe = maCT_DatVe;
         this.maVe = maVe;
         this.maKhachHang = maKhachHang;
-        this.thoiGianGiuGhe = thoiGianGiuGhe;
+        this.ngayMuaVe = ngayMuaVe;
+        this.ngayThanhToan = ngayThanhToan;
         this.trangThai = trangThai;
     }
 
@@ -41,12 +43,12 @@ public class CT_DatVe {
         this.maKhachHang = maKhachHang;
     }
 
-    public LocalDateTime getThoiGianGiuGhe() {
-        return thoiGianGiuGhe;
+    public LocalDateTime getNgayMuaVe() {
+        return ngayMuaVe;
     }
 
-    public void setThoiGianGiuGhe(LocalDateTime thoiGianGiuGhe) {
-        this.thoiGianGiuGhe = thoiGianGiuGhe;
+    public void setNgayMuaVe(LocalDateTime ngayMuaVe) {
+        this.ngayMuaVe = ngayMuaVe;
     }
 
     public String getTrangThai() {
@@ -55,5 +57,13 @@ public class CT_DatVe {
 
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
+    }
+
+    public LocalDateTime getNgayThanhToan() {
+        return ngayThanhToan;
+    }
+
+    public void setNgayThanhToan(LocalDateTime ngayThanhToan) {
+        this.ngayThanhToan = ngayThanhToan;
     }
 }
