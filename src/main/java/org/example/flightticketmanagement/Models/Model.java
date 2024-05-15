@@ -6,7 +6,7 @@ public class Model {
     private static Model model;
     private  final ViewFactory viewFactory;
 
-    private Model(){
+    private Model() {
         this.viewFactory = new ViewFactory();
     }
 

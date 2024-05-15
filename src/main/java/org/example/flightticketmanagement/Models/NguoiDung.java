@@ -1,5 +1,7 @@
 package org.example.flightticketmanagement.Models;
 
+import java.util.*;
+
 public class NguoiDung {
     private String tenDangNhap;
     private String maKhau;

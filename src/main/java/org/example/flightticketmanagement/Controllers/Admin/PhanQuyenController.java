@@ -83,39 +83,39 @@ public class PhanQuyenController implements Initializable {
                 String matKhau = resultSet.getString("matKhau");
                 String nhom = resultSet.getString("nhom");
 
-                phanquyen_data.add(new PhanQuyen(ten, matKhau, nhom));
-
-                ten_tbcolumn.setCellValueFactory(new PropertyValueFactory<>("ten"));
-                matKhau_tbcolumn.setCellValueFactory(new PropertyValueFactory<>("matKhau"));
-                nhom_tbcolumn.setCellValueFactory(new PropertyValueFactory<>("nhom"));
-
-                phanQuyen_table.setItems(phanquyen_data);
-
-//               Tìm kiếm
-                FilteredList<PhanQuyen> filteredData = new FilteredList<>(phanquyen_data, p -> true);
-                tuKhoa_txtfld.textProperty().addListener((observable, oldvalue, newvalue) -> {
-                    filteredData.setPredicate(PhanQuyen -> {
-
-//                        Nếu không tìm thấy dữ liệu
-                        if (newvalue.isBlank() || newvalue.isEmpty()) {
-                            return true;
-                        }
-
-                        String tuTimKiem = newvalue.toLowerCase();
-
-                        if (PhanQuyen.getTen().toLowerCase().contains(tuTimKiem)) {
-                            return true;
-                        } else if (PhanQuyen.getMatKhau().toLowerCase().contains(tuTimKiem)) {
-                            return true;
-                        } else return PhanQuyen.getNhom().toLowerCase().contains(tuTimKiem);
-                    });
-                });
-
-                SortedList<PhanQuyen> sortedData = new SortedList<>(filteredData);
-
-                sortedData.comparatorProperty().bind(phanQuyen_table.comparatorProperty());
-
-                phanQuyen_table.setItems(sortedData);
+//                phanquyen_data.add(new PhanQuyen(ten, matKhau, nhom));
+//
+//                ten_tbcolumn.setCellValueFactory(new PropertyValueFactory<>("ten"));
+//                matKhau_tbcolumn.setCellValueFactory(new PropertyValueFactory<>("matKhau"));
+//                nhom_tbcolumn.setCellValueFactory(new PropertyValueFactory<>("nhom"));
+//
+//                phanQuyen_table.setItems(phanquyen_data);
+//
+////               Tìm kiếm
+//                FilteredList<PhanQuyen> filteredData = new FilteredList<>(phanquyen_data, p -> true);
+//                tuKhoa_txtfld.textProperty().addListener((observable, oldvalue, newvalue) -> {
+//                    filteredData.setPredicate(PhanQuyen -> {
+//
+////                        Nếu không tìm thấy dữ liệu
+//                        if (newvalue.isBlank() || newvalue.isEmpty()) {
+//                            return true;
+//                        }
+//
+//                        String tuTimKiem = newvalue.toLowerCase();
+//
+//                        if (PhanQuyen.getTen().toLowerCase().contains(tuTimKiem)) {
+//                            return true;
+//                        } else if (PhanQuyen.getMatKhau().toLowerCase().contains(tuTimKiem)) {
+//                            return true;
+//                        } else return PhanQuyen.getNhom().toLowerCase().contains(tuTimKiem);
+//                    });
+//                });
+//
+//                SortedList<PhanQuyen> sortedData = new SortedList<>(filteredData);
+//
+//                sortedData.comparatorProperty().bind(phanQuyen_table.comparatorProperty());
+//
+//                phanQuyen_table.setItems(sortedData);
             }
         } catch (SQLException e) {
             Logger.getLogger(PhanQuyenController.class.getName()).log(Level.SEVERE, null, e);

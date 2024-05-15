@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/PhanQuyen.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.BangDieuKhienController">
+<AnchorPane prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/PhanQuyen.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.PhanQuyenController">
     <TableView editable="true" layoutX="52.0" layoutY="46.0" prefHeight="453.0" prefWidth="897.0" AnchorPane.bottomAnchor="301.0" AnchorPane.leftAnchor="52.0" AnchorPane.rightAnchor="43.0" AnchorPane.topAnchor="46.0">
       <columns>
           <TableColumn minWidth="0.0" prefWidth="359.0" text="Tên đăng nhập" />
