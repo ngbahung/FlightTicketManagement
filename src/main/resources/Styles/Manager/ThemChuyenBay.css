@@ -3,3 +3,58 @@
     -fx-font-size: 12;
     -fx-font-weight: bold;
 }
+
+.background-color {
+    -fx-background-color: white;
+}
+
+.grid-pane {
+    -fx-border-radius: 10;
+    -fx-border-color: #080C53;
+}
+
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #080C53;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+}
+
+.combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #080C53;
+    -fx-border-radius: 10;
+}
+
+#custom-2:hover {
+    -fx-background-color: #080C53;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+.text-field {
+    -fx-border-color: #080C53;
+}
+
+#custom-2 {
+    -fx-background-color: #00A4BD;
+    -fx-text-fill: white;
+    -fx-border-radius: 10;
+    -fx-font-size: 16;
+}
+
+.vbox {
+    -fx-border-color: #080C53;
+    -fx-border-radius: 10;
+}
+
+#custom {
+    -fx-background-color: #080C53;
+    -fx-text-fill: white;
+    -fx-font-size: 16;
+}
+
+#custom:hover {
+    -fx-background-color: #00A4BD;
+    -fx-text-fill: white;
+}

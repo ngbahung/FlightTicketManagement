@@ -1,0 +1,16 @@
+.text {
+    -fx-font-family: Inter;
+}
+
+.label {
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+    -fx-text-fill: #080C53;
+}
+
+.mfx-text-field .text-field {
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 10;
+    -fx-border-width: 2;
+    -fx-font-size: 16;
+}
