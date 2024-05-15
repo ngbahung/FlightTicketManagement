@@ -61,7 +61,7 @@ public class ViewFactory {
     public AnchorPane getPhanQuyenView(){
         if (phanQuyenView == null) {
             try {
-                phanQuyenView = new FXMLLoader(getClass().getResource("/Fxml/Admin/BangDieuKhien.fxml")).load();
+                phanQuyenView = new FXMLLoader(getClass().getResource("/Fxml/Admin/PhanQuyen.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -119,7 +119,7 @@ public class ViewFactory {
     public AnchorPane getSuaQuyDinhView() {
         if (suaQuyDinhView == null){
             try {
-                suaQuyDinhView = new FXMLLoader(getClass().getResource("/Fxml/Admin/SuaQuyDinh.fxml")).load();
+                suaQuyDinhView = new FXMLLoader(getClass().getResource("/Fxml/Admin/QuyDinh.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }
