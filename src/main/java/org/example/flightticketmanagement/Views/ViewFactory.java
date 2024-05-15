@@ -4,10 +4,12 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.Admin.AdminController;
 import org.example.flightticketmanagement.Controllers.Manager.ManagerController;
+import org.example.flightticketmanagement.Controllers.Staff.StaffController;
 
 public class ViewFactory {
     private AccountType loginAccountType;
@@ -24,12 +26,22 @@ public class ViewFactory {
 //    Manager Views
     private final ObjectProperty<ManagerMenuOptions> managerSelectedMenuItem;
     private AnchorPane lichCBManaView;
+    private AnchorPane banVeManaView;
+    private AnchorPane datChoManaView;
+    private AnchorPane doanhThuManaView;
 
+
+//    Staff Views
+    private final ObjectProperty<StaffMenuOptions> staffSelectedMenuItem;
+    private AnchorPane lichCBStaView;
+    private AnchorPane banVeStaView;
+    private AnchorPane datChoStaView;
 
     public ViewFactory(){
-        this.loginAccountType = AccountType.ADMIN;
+        this.loginAccountType = AccountType.STAFF;
         this.adminSelectedMenuItem = new SimpleObjectProperty<>();
         this.managerSelectedMenuItem = new SimpleObjectProperty<>();
+        this.staffSelectedMenuItem = new SimpleObjectProperty<>();
     }
 
     public AccountType getLoginAccountType() {
@@ -130,17 +142,6 @@ public class ViewFactory {
         return managerSelectedMenuItem;
     }
 
-    public AnchorPane getLichCBManaView() {
-        if (lichCBManaView == null){
-            try {
-                lichChuyenBayView = new FXMLLoader(getClass().getResource("/Fxml/Manager/LichChuyenBay.fxml")).load();
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        return lichCBManaView;
-    }
-
     public void hienThiManHinhManager(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Manager/Manager.fxml"));
         ManagerController managerController = new ManagerController();
@@ -148,6 +149,35 @@ public class ViewFactory {
         createStage(loader);
     }
 
+    /*
+    * Staff Views Section
+    * */
+
+    public ObjectProperty<StaffMenuOptions> getStaffSelectedMenuItem() {
+        return staffSelectedMenuItem;
+    }
+
+    public AnchorPane getLichCBStaView() {
+        if (lichCBStaView == null){
+            try {
+                lichCBStaView = new FXMLLoader(getClass().getResource("/Fxml/Staff/LichChuyenBayStaff.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return lichCBStaView;
+    }
+
+    public void hienThiManHinhStaff(){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Staff/Staff.fxml"));
+        StaffController staffController = new StaffController();
+        loader.setController(staffController);
+        createStage(loader);
+    }
+
+    /*
+    * DangNhap View Section
+    * */
     public void hienThiManHinhDangNhap(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/DangNhap.fxml"));
         createStage(loader);
@@ -166,6 +196,8 @@ public class ViewFactory {
         }
         Stage stage = new Stage();
         stage.setScene(scene);
+        stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/Admin/logo.png"))));
+        stage.setResizable(false);
         stage.setTitle("QUAN LY BAN VE CHUYEN BAY");
         stage.show();
     }

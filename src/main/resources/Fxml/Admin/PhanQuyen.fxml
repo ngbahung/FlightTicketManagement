@@ -7,15 +7,15 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/BangDieuKhien.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.BangDieuKhienController">
-    <TableView layoutX="167.0" layoutY="52.0" prefHeight="450.0" prefWidth="720.0" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="100.0">
+<AnchorPane prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/PhanQuyen.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.BangDieuKhienController">
+    <TableView editable="true" layoutX="52.0" layoutY="46.0" prefHeight="453.0" prefWidth="897.0" AnchorPane.bottomAnchor="301.0" AnchorPane.leftAnchor="52.0" AnchorPane.rightAnchor="43.0" AnchorPane.topAnchor="46.0">
       <columns>
-          <TableColumn minWidth="0.0" prefWidth="250.0" text="Tên đăng nhập" />
-         <TableColumn minWidth="0.0" prefWidth="250.0" text="Mật khẩu" />
-         <TableColumn minWidth="0.0" prefWidth="300.0" text="Nhóm" />
+          <TableColumn minWidth="0.0" prefWidth="359.0" text="Tên đăng nhập" />
+         <TableColumn minWidth="0.0" prefWidth="282.0" text="Mật khẩu" />
+         <TableColumn minWidth="0.0" prefWidth="255.0" text="Nhóm" />
       </columns>
     </TableView>
-    <HBox layoutX="338.0" layoutY="628.0" prefHeight="63.0" prefWidth="500.0" spacing="22.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="338.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="637.0">
+    <HBox layoutX="594.0" layoutY="730.0" prefHeight="40.0" prefWidth="355.0" spacing="22.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="594.0" AnchorPane.rightAnchor="43.0" AnchorPane.topAnchor="730.0">
         <MFXButton id="custom_them" fx:id="them_btn" prefHeight="50.0" prefWidth="150.0" text="Thêm">
          <styleClass>
             <String fx:value="mfx-button" />

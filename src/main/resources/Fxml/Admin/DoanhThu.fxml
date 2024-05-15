@@ -1,36 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.BarChart?>
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.chart.StackedBarChart?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/BanVe.css"
-            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.flightticketmanagement.Controllers.Admin.DatChoController">
-    <Text fontSmoothingType="LCD" layoutX="103.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0"
-          styleClass="ban_ve" text="Doanh Thu" wrappingWidth="177.0" AnchorPane.topAnchor="99.0">
-        <font>
-          <Font size="28.0"/>
-        </font>
-    </Text>
-    <BarChart layoutX="95.0" layoutY="235.0" prefHeight="331.0" prefWidth="370.0">
-      <xAxis>
-          <CategoryAxis side="BOTTOM"/>
-      </xAxis>
-      <yAxis>
-          <NumberAxis side="LEFT"/>
-      </yAxis>
-    </BarChart>
-    <StackedBarChart layoutX="552.0" layoutY="238.0" prefHeight="325.0" prefWidth="344.0">
-      <xAxis>
-          <CategoryAxis side="BOTTOM"/>
-      </xAxis>
-      <yAxis>
-          <NumberAxis side="LEFT"/>
-      </yAxis>
-    </StackedBarChart>
+<AnchorPane prefHeight="800.0" prefWidth="992.0" styleClass="background" stylesheets="@../../Styles/Admin/DoanhThu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.DatChoController">
+   <children>
+      <TableView layoutX="33.0" layoutY="68.0" prefHeight="310.0" prefWidth="510.0">
+        <columns>
+          <TableColumn prefWidth="53.0" text="STT" />
+          <TableColumn prefWidth="133.0" text="Mã chuyến bay" />
+            <TableColumn prefWidth="121.0" text="Số vé bán được" />
+            <TableColumn prefWidth="112.0" text="Doanh thu" />
+            <TableColumn prefWidth="87.0" text="Tỉ lệ (%)" />
+        </columns>
+      </TableView>
+      <AnchorPane prefHeight="62.0" prefWidth="992.0" styleClass="top-bar">
+         <children>
+            <HBox alignment="CENTER" layoutX="213.0" layoutY="8.0" prefHeight="47.0" prefWidth="566.0" spacing="30.0">
+               <children>
+                  <Label styleClass="top-bar-text" text="Tháng:" />
+                  <ComboBox prefHeight="25.0" prefWidth="112.0" />
+                  <Label layoutX="10.0" layoutY="10.0" styleClass="top-bar-text" text="Năm:" />
+                  <ComboBox layoutX="46.0" layoutY="10.0" prefHeight="25.0" prefWidth="112.0" />
+                  <MFXButton prefHeight="31.0" prefWidth="97.0" text="Thống kê">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="SEARCH" size="20" />
+                     </graphic>
+                  </MFXButton>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutY="386.0" prefHeight="62.0" prefWidth="992.0" styleClass="top-bar">
+         <children>
+            <HBox alignment="CENTER" layoutX="213.0" layoutY="8.0" prefHeight="47.0" prefWidth="566.0" spacing="30.0">
+               <children>
+                  <Label layoutX="10.0" layoutY="10.0" styleClass="top-bar-text" text="Năm:" />
+                  <ComboBox layoutX="46.0" layoutY="10.0" prefHeight="25.0" prefWidth="112.0" />
+                  <MFXButton prefHeight="31.0" prefWidth="97.0" text="Thống kê">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="SEARCH" size="20" />
+                     </graphic>
+                  </MFXButton>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+      <HBox alignment="CENTER_LEFT" layoutX="565.0" layoutY="323.0" prefHeight="55.0" prefWidth="378.0" spacing="20.0">
+         <children>
+            <Label styleClass="bottom-bar-text" text="Tổng doanh thu:" />
+            <TextField editable="false" prefHeight="43.0" prefWidth="185.0" styleClass="total-income" text="0 VNĐ" />
+         </children>
+      </HBox>
+      <TableView layoutX="33.0" layoutY="457.0" prefHeight="324.0" prefWidth="510.0">
+         <columns>
+            <TableColumn prefWidth="67.33334732055664" text="Tháng" />
+            <TableColumn prefWidth="148.66661834716797" text="Số chuyến bay" />
+            <TableColumn prefWidth="171.33338928222656" text="Doanh thu" />
+            <TableColumn prefWidth="115.99990844726562" text="Tỉ lệ (%)" />
+         </columns>
+      </TableView>
+      <HBox alignment="CENTER_LEFT" layoutX="570.0" layoutY="727.0" prefHeight="55.0" prefWidth="378.0" spacing="20.0">
+         <children>
+            <Label styleClass="bottom-bar-text" text="Tổng doanh thu:" />
+            <TextField editable="false" prefHeight="31.0" prefWidth="185.0" styleClass="total-income" text="0 VNĐ" />
+         </children>
+      </HBox>
+   </children>
 </AnchorPane>

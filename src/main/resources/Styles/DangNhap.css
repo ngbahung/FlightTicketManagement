@@ -1,3 +1,8 @@
+.text {
+    -fx-font-family: Inter;
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+}
 
 /* AnchorPane thứ hai */
 .bang_dang_nhap {

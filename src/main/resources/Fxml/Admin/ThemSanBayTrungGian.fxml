@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" prefHeight="301.0" prefWidth="321.0" spacing="30.0" styleClass="background-color" stylesheets="@../../Styles/Manager/SuaSBTG.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label prefHeight="25.0" prefWidth="253.0" text="Thêm sân bay trung gian" />
+      <ComboBox prefHeight="25.0" prefWidth="286.0" promptText="Sân bay trung gian" />
+      <TextField promptText="Thời gian dừng (phút)" />
+      <TextField promptText="Ghi chú" />
+      <MFXButton prefHeight="39.0" prefWidth="95.0" text="Lưu" />
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>

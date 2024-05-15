@@ -1,0 +1,29 @@
+.text {
+    -fx-font-family: Inter;
+}
+
+.tittle {
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
+    -fx-text-fill: #080C53;
+}
+
+.text-field {
+    -fx-border-color: #080C53;
+    -fx-font-family: Inter;
+}
+.button {
+    -fx-background-color: #080C53;
+    -fx-text-fill: white;
+    -fx-border-radius: 20;
+    -fx-font-size: 16;
+    -fx-font-family: Inter;
+    -fx-background-radius: 20;
+    -fx-font-weight: bold;
+}
+
+.button:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #00A4BD;
+    -fx-text-fill: white;
+}
