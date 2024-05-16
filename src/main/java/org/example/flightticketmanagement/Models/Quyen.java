@@ -1,27 +1,27 @@
 package org.example.flightticketmanagement.Models;
 
 public class Quyen {
-    private String MaQuyen;
-    private String TenQuyen;
+    private String maQuyen;
+    private String tenQuyen;
 
     public Quyen(String maQuyen, String tenQuyen) {
-        this.MaQuyen = maQuyen;
-        this.TenQuyen = tenQuyen;
-    }
-
-    public String getTenQuyen() {
-        return TenQuyen;
-    }
-
-    public void setTenQuyen(String tenQuyen) {
-        this.TenQuyen = tenQuyen;
+        this.maQuyen = maQuyen;
+        this.tenQuyen = tenQuyen;
     }
 
     public String getMaQuyen() {
-        return MaQuyen;
+        return maQuyen;
     }
 
-    public void setMaQuyen(String roleID) {
-        this.MaQuyen = roleID;
+    public void setMaQuyen(String maQuyen) {
+        this.maQuyen = maQuyen;
+    }
+
+    public String getTenQuyen() {
+        return tenQuyen;
+    }
+
+    public void setTenQuyen(String tenQuyen) {
+        this.tenQuyen = tenQuyen;
     }
 }
