@@ -10,48 +10,48 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="800.0" prefWidth="992.0" styleClass="background-color" stylesheets="@../../Styles/Admin/LichChuyenBay.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.LichChuyenBayController">
-   <children>
-      <TableView layoutX="34.0" layoutY="155.0" prefHeight="530.0" prefWidth="929.0">
-         <columns>
-            <TableColumn prefWidth="98.66665267944336" text="Mã chuyến bay" />
-            <TableColumn prefWidth="81.0" text="Sân bay đi" />
-            <TableColumn prefWidth="90.0" text="Sân bay đến" />
-            <TableColumn prefWidth="118.0" text="Ngày bay" />
-            <TableColumn prefWidth="74.0" text="Giờ bay" />
-            <TableColumn prefWidth="83.0" text="Số ghế trống" />
-            <TableColumn prefWidth="55.0" text="Số ghế" />
-            <TableColumn prefWidth="89.0" text="Số điểm dừng" />
-            <TableColumn prefWidth="92.0" text="Thời gian bay" />
-            <TableColumn prefWidth="146.0" text="Giá vé" />
-         </columns>
-      </TableView>
-      <HBox alignment="CENTER" layoutX="34.0" layoutY="703.0" prefHeight="69.0" prefWidth="929.0" spacing="50.0" styleClass="background-color">
-         <children>
-            <MFXButton buttonType="RAISED" depthLevel="LEVEL1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="177.0" text="Thêm" />
-            <MFXButton buttonType="RAISED" depthLevel="LEVEL1" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="177.0" text="Xóa" />
-            <MFXButton buttonType="RAISED" depthLevel="LEVEL1" layoutX="386.0" layoutY="22.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="177.0" text="Sửa" />
-            <MFXButton buttonType="RAISED" depthLevel="LEVEL1" layoutX="187.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="177.0" text="Tải lên file Excel" />
-         </children>
+<AnchorPane prefHeight="800.0" prefWidth="992.0" styleClass="background-color"
+            stylesheets="@../../Styles/Admin/LichChuyenBay.css" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.flightticketmanagement.Controllers.Admin.LichChuyenBayController">
+   <TableView layoutX="34.0" layoutY="155.0" prefHeight="530.0" prefWidth="929.0">
+      <columns>
+         <TableColumn prefWidth="98.66665267944336" text="Mã chuyến bay"/>
+         <TableColumn prefWidth="81.0" text="Sân bay đi"/>
+         <TableColumn prefWidth="90.0" text="Sân bay đến"/>
+         <TableColumn prefWidth="118.0" text="Ngày bay"/>
+         <TableColumn prefWidth="74.0" text="Giờ bay"/>
+         <TableColumn prefWidth="83.0" text="Số ghế trống"/>
+         <TableColumn prefWidth="55.0" text="Số ghế"/>
+         <TableColumn prefWidth="89.0" text="Số điểm dừng"/>
+         <TableColumn prefWidth="92.0" text="Thời gian bay"/>
+         <TableColumn prefWidth="146.0" text="Giá vé"/>
+      </columns>
+   </TableView>
+   <HBox alignment="CENTER" layoutX="34.0" layoutY="703.0" prefHeight="69.0" prefWidth="929.0" spacing="50.0"
+         styleClass="background-color">
+      <MFXButton buttonType="RAISED" depthLevel="LEVEL1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0"
+                 prefWidth="177.0" text="Thêm"/>
+      <MFXButton buttonType="RAISED" depthLevel="LEVEL1" layoutX="10.0" layoutY="10.0" minHeight="-Infinity"
+                 minWidth="-Infinity" prefHeight="45.0" prefWidth="177.0" text="Xóa"/>
+      <MFXButton buttonType="RAISED" depthLevel="LEVEL1" layoutX="386.0" layoutY="22.0" minHeight="-Infinity"
+                 minWidth="-Infinity" prefHeight="45.0" prefWidth="177.0" text="Sửa"/>
+      <MFXButton buttonType="RAISED" depthLevel="LEVEL1" layoutX="187.0" layoutY="10.0" minHeight="-Infinity"
+                 minWidth="-Infinity" prefHeight="45.0" prefWidth="177.0" text="Tải lên file Excel"/>
+   </HBox>
+   <AnchorPane layoutX="174.0" layoutY="50.0" prefHeight="75.0" prefWidth="706.0" styleClass="filter-pane">
+      <effect>
+         <DropShadow/>
+      </effect>
+      <HBox alignment="CENTER" layoutX="21.0" layoutY="14.0" prefHeight="47.0" prefWidth="665.0" spacing="50.0">
+         <MFXTextField floatMode="DISABLED" floatingTextGap="2.0" prefWidth="140.0" promptText="Sân bay đi"/>
+         <MFXTextField floatMode="DISABLED" prefWidth="140.0" promptText="Sân bay đến"/>
+         <MFXDatePicker prefHeight="38.0" prefWidth="137.0" promptText="Chọn ngày"/>
+         <MFXButton prefHeight="30.0" prefWidth="105.0" text="Tìm kiếm">
+            <graphic>
+               <FontAwesomeIconView glyphName="SEARCH" size="20"/>
+            </graphic>
+         </MFXButton>
       </HBox>
-      <AnchorPane layoutX="174.0" layoutY="50.0" prefHeight="75.0" prefWidth="706.0" styleClass="filter-pane">
-         <effect>
-            <DropShadow />
-         </effect>
-         <children>
-            <HBox alignment="CENTER" layoutX="21.0" layoutY="14.0" prefHeight="47.0" prefWidth="665.0" spacing="50.0">
-               <children>
-                  <MFXTextField floatMode="DISABLED" floatingTextGap="2.0" prefWidth="140.0" promptText="Sân bay đi" />
-                  <MFXTextField floatMode="DISABLED" prefWidth="140.0" promptText="Sân bay đến" />
-                  <MFXDatePicker prefHeight="38.0" prefWidth="137.0" promptText="Chọn ngày" />
-                  <MFXButton prefHeight="30.0" prefWidth="105.0" text="Tìm kiếm">
-                     <graphic>
-                        <FontAwesomeIconView glyphName="SEARCH" size="20" />
-                     </graphic>
-                  </MFXButton>
-               </children>
-            </HBox>
-         </children>
-      </AnchorPane>
-   </children>
+   </AnchorPane>
 </AnchorPane>
