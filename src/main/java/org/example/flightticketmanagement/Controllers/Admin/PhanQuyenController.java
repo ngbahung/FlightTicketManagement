@@ -69,7 +69,7 @@ public class PhanQuyenController implements Initializable {
 
 
         DatabaseDriver driver = new DatabaseDriver();
-        Connection connectDB = driver.getDBDriver();
+        Connection connectDB = driver.getConnection();
 
         String phanQuyenViewQuery = "SELECT * FROM PHANQUYEN";
 
