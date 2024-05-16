@@ -119,7 +119,7 @@ public class ViewFactory {
     public AnchorPane getSuaQuyDinhView() {
         if (suaQuyDinhView == null){
             try {
-                suaQuyDinhView = new FXMLLoader(getClass().getResource("/Fxml/Admin/SuaQuyDinh.fxml")).load();
+                suaQuyDinhView = new FXMLLoader(getClass().getResource("/Fxml/Admin/QuyDinh.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }
