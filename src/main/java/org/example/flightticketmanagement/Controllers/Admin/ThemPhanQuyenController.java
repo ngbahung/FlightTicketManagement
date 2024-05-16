@@ -46,7 +46,7 @@ public class ThemPhanQuyenController implements Initializable {
     private PreparedStatement prepare;
     private ResultSet result;
 
-    private AlertMessage alert = new AlertMessage();
+    private final AlertMessage alert = new AlertMessage();
 
     private PhanQuyenController parentController;
 

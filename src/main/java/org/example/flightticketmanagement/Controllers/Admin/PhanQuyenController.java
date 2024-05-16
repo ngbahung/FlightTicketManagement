@@ -1,5 +1,6 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,6 +36,12 @@ public class PhanQuyenController implements Initializable {
     private MFXTextField tuKhoa_txtfld;
 
     @FXML
+    private MFXTextField timKiem_txtfld;
+
+    @FXML
+    private FontAwesomeIconView timkiem_btn;
+
+    @FXML
     private MFXButton refresh_btn;
 
     @FXML
@@ -68,6 +75,7 @@ public class PhanQuyenController implements Initializable {
         ketnoiPhanQuyen();
         refresh_btn.setOnAction(this::refreshData);
         xoa_btn.setOnAction(this::deleteSelectedAccounts);
+        sua_btn.setOnAction(this::openEditForm);
     }
 
     @FXML
@@ -96,14 +104,14 @@ public class PhanQuyenController implements Initializable {
         ObservableList<TaiKhoan> selectedAccounts = phanQuyen_table.getSelectionModel().getSelectedItems();
 
         if (selectedAccounts.isEmpty()) {
-            alert.errorMessage("No accounts selected. Please select at least one account to delete.");
+            alert.errorMessage("Không chọn tài khoản nào. Vui lòng chọn một tài khoản để xóa.");
             return;
         }
 
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmationAlert.setTitle("Confirm Deletion");
-        confirmationAlert.setHeaderText("Are you sure you want to delete the selected accounts?");
-        confirmationAlert.setContentText("This action cannot be undone.");
+        confirmationAlert.setTitle("Xác nhận xóa");
+        confirmationAlert.setHeaderText("Bạn có muốn xóa những tài khoản đã chọn?");
+        confirmationAlert.setContentText("Hành động này không thể quay lại.");
 
         Optional<ButtonType> result = confirmationAlert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -118,16 +126,16 @@ public class PhanQuyenController implements Initializable {
 
                 int[] results = prepare.executeBatch();
                 if (results.length > 0) {
-                    alert.successMessage("Selected accounts have been successfully deleted.");
+                    alert.successMessage("Tài khoản đã được xóa thành công.");
                 } else {
-                    alert.errorMessage("Failed to delete the selected accounts.");
+                    alert.errorMessage("Không xóa được tài khoản đã chọn.");
                 }
 
                 ketnoiPhanQuyen();  // Refresh the table
 
             } catch (SQLException e) {
                 e.printStackTrace();
-                alert.errorMessage("Error occurred while deleting accounts. Please check the logs for more details.");
+                alert.errorMessage("Lỗi khi đang xóa tài khoản. Vui lòng kiểm tra lại.");
             } finally {
                 try {
                     if (prepare != null) prepare.close();
@@ -190,5 +198,28 @@ public class PhanQuyenController implements Initializable {
         ketnoiPhanQuyen();
     }
 
+    @FXML
+    void openEditForm(ActionEvent event) {
+        TaiKhoan selectedAccount = phanQuyen_table.getSelectionModel().getSelectedItem();
+        if (selectedAccount == null) {
+            alert.errorMessage("Không chọn tài khoản nào. Vui lòng chọn một tài khoản để sửa.");
+            return;
+        }
 
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Admin/SuaPhanQuyen.fxml"));
+            Parent root = loader.load();
+
+            SuaPhanQuyenController controller = loader.getController();
+            controller.setAccountData(selectedAccount);  // Pass the selected account data to the controller
+            controller.setParentController(this);  // Pass the parent controller to refresh the table
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Sửa Phân Quyền");
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
