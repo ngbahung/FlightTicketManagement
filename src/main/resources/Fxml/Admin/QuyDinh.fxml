@@ -71,7 +71,7 @@
       <Button layoutX="162.0" layoutY="38.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="144.0" styleClass="sua-quy-dinh-btn" text="Sửa quy định" />
       <HBox layoutX="650.0" layoutY="38.0" prefHeight="26.0" prefWidth="295.0" spacing="20.0">
          <children>
-            <TextField prefHeight="35.0" prefWidth="229.0" promptText="Tìm kiếm " />
+            <TextField prefHeight="35.0" prefWidth="229.0" promptText="Tên sân bay" />
             <FontAwesomeIconView glyphName="SEARCH" size="30" />
          </children>
       </HBox>
@@ -84,7 +84,7 @@
       </HBox>
       <HBox layoutX="133.0" layoutY="497.0" prefHeight="26.0" prefWidth="295.0" spacing="20.0">
          <children>
-            <TextField prefHeight="35.0" prefWidth="229.0" promptText="Tìm kiếm " />
+            <TextField prefHeight="35.0" prefWidth="229.0" promptText="Tên hạng vé" />
             <FontAwesomeIconView glyphName="SEARCH" size="30" />
          </children>
       </HBox>

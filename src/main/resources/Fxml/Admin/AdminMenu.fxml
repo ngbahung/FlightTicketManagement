@@ -41,7 +41,7 @@
         </Button>
         <Button fx:id="datCho_btn" graphicTextGap="21.0" mnemonicParsing="false" text="Lịch sử">
             <graphic>
-                <FontAwesomeIconView glyphName="ADDRESS_BOOK" size="30" />
+                <FontAwesomeIconView glyphName="HISTORY" size="30" />
             </graphic>
         </Button>
       <Button fx:id="doanhThu_btn" graphicTextGap="21.0" mnemonicParsing="false" text="Doanh thu">
