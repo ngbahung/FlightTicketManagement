@@ -31,7 +31,7 @@
                   <ComboBox prefHeight="25.0" prefWidth="112.0" />
                   <Label layoutX="10.0" layoutY="10.0" styleClass="top-bar-text" text="Năm:" />
                   <ComboBox layoutX="46.0" layoutY="10.0" prefHeight="25.0" prefWidth="112.0" />
-                  <MFXButton fx:id="custom_button" buttonType="RAISED" depthLevel="LEVEL1" prefHeight="31.0" prefWidth="123.0" text="Thống kê">
+                  <MFXButton id="custom_button" buttonType="RAISED" depthLevel="LEVEL1" prefHeight="31.0" prefWidth="123.0" text="Thống kê">
                      <graphic>
                         <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20" />
                      </graphic>
@@ -47,7 +47,7 @@
                <children>
                   <Label layoutX="10.0" layoutY="10.0" styleClass="top-bar-text" text="Năm:" />
                   <ComboBox layoutX="46.0" layoutY="10.0" prefHeight="25.0" prefWidth="112.0" />
-                  <MFXButton fx:id="custom_button2" buttonType="RAISED" depthLevel="LEVEL1" prefHeight="31.0" prefWidth="123.0" text="Thống kê">
+                  <MFXButton id="custom_button2" buttonType="RAISED" depthLevel="LEVEL1" prefHeight="31.0" prefWidth="123.0" text="Thống kê">
                      <graphic>
                         <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20" />
                      </graphic>
@@ -77,8 +77,8 @@
             <TextField editable="false" prefHeight="31.0" prefWidth="185.0" styleClass="total-income" text="0 VNĐ" />
          </children>
       </HBox>
-      <MFXButton fx:id="custom_button3" buttonType="RAISED" depthLevel="LEVEL1" layoutX="784.0" layoutY="321.0" prefHeight="40.0" prefWidth="153.0" styleClass="mfx-button-report" text="In báo cáo" />
-      <MFXButton fx:id="custom_button4" buttonType="RAISED" depthLevel="LEVEL1" layoutX="784.0" layoutY="728.0" prefHeight="40.0" prefWidth="153.0" styleClass="mfx-button-report" text="In báo cáo" />
+      <MFXButton id="custom_button3" buttonType="RAISED" depthLevel="LEVEL1" layoutX="784.0" layoutY="321.0" prefHeight="40.0" prefWidth="153.0" styleClass="mfx-button-report" text="In báo cáo" />
+      <MFXButton id="custom_button4" buttonType="RAISED" depthLevel="LEVEL1" layoutX="784.0" layoutY="728.0" prefHeight="40.0" prefWidth="153.0" styleClass="mfx-button-report" text="In báo cáo" />
       <Separator layoutY="389.0" prefHeight="8.0" prefWidth="992.0" />
    </children>
 </AnchorPane>
