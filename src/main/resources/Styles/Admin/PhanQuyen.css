@@ -50,6 +50,11 @@
     -mfx-ripple-color: #00A4BD;
 }
 
+#custom {
+    -fx-font-size: 16;
+    -fx-font-weight: 700;
+}
+
 /* Button Thêm */
 #custom_them {
     -fx-background-color: black;

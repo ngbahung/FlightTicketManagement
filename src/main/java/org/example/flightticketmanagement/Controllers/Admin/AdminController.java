@@ -2,7 +2,6 @@ package org.example.flightticketmanagement.Controllers.Admin;
 
 import javafx.fxml.Initializable;
 import javafx.scene.layout.BorderPane;
-import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.Model;
 
 import java.net.URL;
@@ -17,9 +16,10 @@ public class AdminController implements Initializable {
             switch (newVal){
                 case LICHCHUYENBAY -> admin_parent.setCenter(Model.getInstance().getViewFactory().getLichChuyenBayView());
                 case BANVE -> admin_parent.setCenter(Model.getInstance().getViewFactory().getBanVeView());
-                case DATCHO -> admin_parent.setCenter(Model.getInstance().getViewFactory().getDatChoView());
+                case LICHSU -> admin_parent.setCenter(Model.getInstance().getViewFactory().getLichSuView());
                 case DOANHTHU -> admin_parent.setCenter(Model.getInstance().getViewFactory().getDoanhThuView());
                 case SUAQUYDINH -> admin_parent.setCenter(Model.getInstance().getViewFactory().getSuaQuyDinhView());
+                case TAIKHOAN -> admin_parent.setCenter(Model.getInstance().getViewFactory().getTaiKhoanView());
                 default -> admin_parent.setCenter(Model.getInstance().getViewFactory().getPhanQuyenView());
             }
         });

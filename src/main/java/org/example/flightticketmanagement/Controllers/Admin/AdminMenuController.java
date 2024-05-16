@@ -49,7 +49,7 @@ public class AdminMenuController implements Initializable {
     }
 
     private void  moDatCho(){
-        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.DATCHO);
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.LICHSU);
     }
 
     private void moDoanhThu(){

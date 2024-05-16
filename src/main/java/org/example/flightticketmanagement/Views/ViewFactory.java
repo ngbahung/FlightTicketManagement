@@ -19,23 +19,18 @@ public class ViewFactory {
     private AnchorPane phanQuyenView;
     private AnchorPane lichChuyenBayView;
     private AnchorPane banVeView;
-    private AnchorPane datChoView;
+    private AnchorPane lichSuView;
     private AnchorPane doanhThuView;
     private AnchorPane suaQuyDinhView;
+    private AnchorPane taiKhoanView;
 
 //    Manager Views
     private final ObjectProperty<ManagerMenuOptions> managerSelectedMenuItem;
-    private AnchorPane lichCBManaView;
-    private AnchorPane banVeManaView;
-    private AnchorPane datChoManaView;
-    private AnchorPane doanhThuManaView;
 
 
 //    Staff Views
     private final ObjectProperty<StaffMenuOptions> staffSelectedMenuItem;
     private AnchorPane lichCBStaView;
-    private AnchorPane banVeStaView;
-    private AnchorPane datChoStaView;
 
     public ViewFactory(){
         this.loginAccountType = AccountType.STAFF;
@@ -93,15 +88,15 @@ public class ViewFactory {
         return banVeView;
     }
 
-    public AnchorPane getDatChoView() {
-        if (datChoView == null){
+    public AnchorPane getLichSuView() {
+        if (lichSuView == null){
             try {
-                datChoView = new FXMLLoader(getClass().getResource("/Fxml/Admin/DatCho.fxml")).load();
+                lichSuView = new FXMLLoader(getClass().getResource("/Fxml/Admin/DatCho.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }
         }
-        return datChoView;
+        return lichSuView;
     }
 
     public AnchorPane getDoanhThuView() {
@@ -125,6 +120,17 @@ public class ViewFactory {
             }
         }
         return suaQuyDinhView;
+    }
+
+    public AnchorPane getTaiKhoanView() {
+        if (taiKhoanView == null){
+            try {
+                taiKhoanView = new FXMLLoader(getClass().getResource("/Fxml/Admin/ThongTinTaiKhoan.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return taiKhoanView;
     }
 
     public void hienThiManHinhAdmin(){

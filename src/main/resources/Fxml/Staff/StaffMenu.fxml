@@ -46,7 +46,7 @@
             <FontAwesomeIconView glyphName="TICKET" size="30" />
          </graphic>
       </Button>
-      <Button fx:id="datCho_btn" graphicTextGap="21.0" layoutX="10.0" layoutY="64.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" text="Đặt chỗ">
+      <Button fx:id="datCho_btn" graphicTextGap="21.0" layoutX="10.0" layoutY="64.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" text="Lịch sử">
          <graphic>
             <FontAwesomeIconView glyphName="ADDRESS_BOOK" size="30" />
          </graphic>

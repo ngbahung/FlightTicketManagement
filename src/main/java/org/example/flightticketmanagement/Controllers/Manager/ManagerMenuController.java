@@ -42,7 +42,7 @@ public class ManagerMenuController implements Initializable {
     }
 
     public void moDatCho(){
-        Model.getInstance().getViewFactory().getManagerSelectedMenuItem().set(ManagerMenuOptions.DATCHO);
+        Model.getInstance().getViewFactory().getManagerSelectedMenuItem().set(ManagerMenuOptions.LICHSU);
     }
 
     public void moDoanhThu(){

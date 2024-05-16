@@ -66,8 +66,8 @@
                <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" text="" />
             </graphic>
          </MFXButton>
-         <MFXTextField fx:id="timKiem_txtfld" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="579.0" />
-         <MFXButton id="custom_them" fx:id="refresh_btn1" onAction="#newPage" prefHeight="32.0" prefWidth="66.0" text=" ">
+         <MFXTextField id="custom" fx:id="timKiem_txtfld" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="579.0" />
+         <MFXButton id="custom_them" fx:id="timkiem_btn" prefHeight="32.0" prefWidth="66.0" text=" ">
             <styleClass>
                <String fx:value="mfx-button" />
                <String fx:value="mfx-ripple-generator" />
@@ -75,7 +75,7 @@
                <String fx:value="link-button" />
             </styleClass>
             <graphic>
-               <FontAwesomeIconView fx:id="timkiem_btn" fill="WHITE" glyphName="SEARCH" size="20" />
+               <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20" />
             </graphic>
          </MFXButton>
       </children>

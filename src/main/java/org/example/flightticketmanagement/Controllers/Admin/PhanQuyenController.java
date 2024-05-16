@@ -1,9 +1,10 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,18 +29,19 @@ import java.util.ResourceBundle;
 public class PhanQuyenController implements Initializable {
     @FXML
     private MFXButton them_btn;
+
+
+    @FXML
+    private MFXButton timkiem_btn;
+
     @FXML
     private MFXButton xoa_btn;
+
     @FXML
     private MFXButton sua_btn;
-    @FXML
-    private MFXTextField tuKhoa_txtfld;
 
     @FXML
     private MFXTextField timKiem_txtfld;
-
-    @FXML
-    private FontAwesomeIconView timkiem_btn;
 
     @FXML
     private MFXButton refresh_btn;
@@ -68,7 +70,8 @@ public class PhanQuyenController implements Initializable {
     private Statement statement;
     private ResultSet result;
 
-    private AlertMessage alert = new AlertMessage();
+    private final AlertMessage alert = new AlertMessage();
+    private FilteredList<TaiKhoan> filteredData;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -76,6 +79,33 @@ public class PhanQuyenController implements Initializable {
         refresh_btn.setOnAction(this::refreshData);
         xoa_btn.setOnAction(this::deleteSelectedAccounts);
         sua_btn.setOnAction(this::openEditForm);
+        searchPhanQuyen();
+    }
+
+    private void searchPhanQuyen() {
+        filteredData = new FilteredList<>(phanQuyen_table.getItems(), p -> true);
+        timKiem_txtfld.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(taiKhoan -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+                if (taiKhoan.getTen().toLowerCase().contains(lowerCaseFilter) ||
+                        taiKhoan.getEmail().toLowerCase().contains(lowerCaseFilter) ||
+                        taiKhoan.getMaTaiKhoan().toLowerCase().contains(lowerCaseFilter) ||
+                        taiKhoan.getPassword().toLowerCase().contains(lowerCaseFilter) ||
+                        taiKhoan.getMaQuyen().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                return false;
+            });
+        });
+
+        SortedList<TaiKhoan> sortedData = new SortedList<>(filteredData);
+
+        sortedData.comparatorProperty().bind(phanQuyen_table.comparatorProperty());
+
+        phanQuyen_table.setItems(sortedData);
     }
 
     @FXML
@@ -94,10 +124,14 @@ public class PhanQuyenController implements Initializable {
         }
     }
 
+
+
+
     @FXML
     void refreshData(ActionEvent event) {
         ketnoiPhanQuyen();
     }
+
 
     @FXML
     void deleteSelectedAccounts(ActionEvent event) {
@@ -197,6 +231,7 @@ public class PhanQuyenController implements Initializable {
     public void refreshTable() {
         ketnoiPhanQuyen();
     }
+
 
     @FXML
     void openEditForm(ActionEvent event) {
