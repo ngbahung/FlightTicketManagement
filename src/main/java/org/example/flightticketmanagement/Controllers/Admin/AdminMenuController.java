@@ -14,12 +14,13 @@ public class AdminMenuController implements Initializable {
     public Button phanQuyen_btn;
     public Button lichChuyenBay_btn;
     public Button banVe_btn;
-    public Button datCho_btn;
+    public Button lichSu_btn;
     public Button doanhThu_btn;
     public Button suaQuyDinh_btn;
+    public Button taiKhoan_btn;
     public Button dangXuat_btn;
 
-    private AlertMessage alert = new AlertMessage();
+    private final AlertMessage alert = new AlertMessage();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -30,9 +31,10 @@ public class AdminMenuController implements Initializable {
         phanQuyen_btn.setOnAction(event -> moPhanQuyen());
         lichChuyenBay_btn.setOnAction(event -> moTrangChuLich());
         banVe_btn.setOnAction(event -> moBanVe());
-        datCho_btn.setOnAction(event -> moDatCho());
+        lichSu_btn.setOnAction(event -> moLichSu());
         doanhThu_btn.setOnAction(event -> moDoanhThu());
         suaQuyDinh_btn.setOnAction(event -> moSuaQuyDinh());
+        taiKhoan_btn.setOnAction(event -> moTaiKhoan());
         dangXuat_btn.setOnAction(event -> moDangNhap());
     }
 
@@ -48,7 +50,7 @@ public class AdminMenuController implements Initializable {
         Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.BANVE);
     }
 
-    private void  moDatCho(){
+    private void  moLichSu(){
         Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.LICHSU);
     }
 
@@ -58,6 +60,10 @@ public class AdminMenuController implements Initializable {
 
     private void moSuaQuyDinh(){
         Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.SUAQUYDINH);
+    }
+
+    private void moTaiKhoan() {
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.TAIKHOAN);
     }
 
     private void moDangNhap() {

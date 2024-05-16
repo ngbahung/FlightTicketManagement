@@ -13,12 +13,13 @@ import java.util.ResourceBundle;
 public class ManagerMenuController implements Initializable {
     public Button lichChuyenBay_btn;
     public Button banVe_btn;
-    public Button datCho_btn;
+    public Button lichSu_btn;
     public Button doanhThu_btn;
-    public Button suaQuyDinh_btn;
+    public Button taiKhoan_btn;
     public Button dangXuat_btn;
 
-    private AlertMessage alert = new AlertMessage();
+    private final AlertMessage alert = new AlertMessage();
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -28,8 +29,9 @@ public class ManagerMenuController implements Initializable {
     public void addListener(){
         lichChuyenBay_btn.setOnAction(event -> moLichChuyenBay());
         banVe_btn.setOnAction(event -> moBanVe());
-        datCho_btn.setOnAction(event -> moDatCho());
+        lichSu_btn.setOnAction(event -> moLichSu());
         doanhThu_btn.setOnAction(event -> moDoanhThu());
+        taiKhoan_btn.setOnAction(event -> moTaiKhoan());
         dangXuat_btn.setOnAction(event -> moDangNhap());
     }
 
@@ -41,12 +43,16 @@ public class ManagerMenuController implements Initializable {
         Model.getInstance().getViewFactory().getManagerSelectedMenuItem().set(ManagerMenuOptions.BANVE);
     }
 
-    public void moDatCho(){
+    public void moLichSu(){
         Model.getInstance().getViewFactory().getManagerSelectedMenuItem().set(ManagerMenuOptions.LICHSU);
     }
 
     public void moDoanhThu(){
         Model.getInstance().getViewFactory().getManagerSelectedMenuItem().set(ManagerMenuOptions.DOANHTHU);
+    }
+
+    public void moTaiKhoan(){
+        Model.getInstance().getViewFactory().getManagerSelectedMenuItem().set(ManagerMenuOptions.TAIKHOAN);
     }
 
     private void moDangNhap() {

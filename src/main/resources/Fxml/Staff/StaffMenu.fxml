@@ -46,14 +46,14 @@
             <FontAwesomeIconView glyphName="TICKET" size="30" />
          </graphic>
       </Button>
-      <Button fx:id="datCho_btn" graphicTextGap="21.0" layoutX="10.0" layoutY="64.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" text="Lịch sử">
+      <Button fx:id="lichSu_btn" graphicTextGap="21.0" layoutX="10.0" layoutY="64.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" text="Lịch sử">
          <graphic>
             <FontAwesomeIconView glyphName="HISTORY" size="30" />
          </graphic>
       </Button>
    </VBox>
    <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="19.5" styleClass="dang_xuat">
-      <Button graphicTextGap="21.0" layoutX="33.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" text="Tài khoản">
+      <Button fx:id="taiKhoan_btn" graphicTextGap="21.0" layoutX="33.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" text="Tài khoản">
          <graphic>
             <FontAwesomeIconView glyphName="USER_CIRCLE" size="30" />
          </graphic>

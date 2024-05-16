@@ -5,6 +5,5 @@ public enum ManagerMenuOptions {
     BANVE,
     LICHSU,
     DOANHTHU,
-    SUAQUYDINH,
     TAIKHOAN
 }

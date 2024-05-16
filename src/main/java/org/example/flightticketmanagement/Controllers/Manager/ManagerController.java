@@ -18,6 +18,7 @@ public class ManagerController implements Initializable {
                 case BANVE -> manager_parent.setCenter(Model.getInstance().getViewFactory().getBanVeView());
                 case LICHSU -> manager_parent.setCenter(Model.getInstance().getViewFactory().getLichSuView());
                 case DOANHTHU -> manager_parent.setCenter(Model.getInstance().getViewFactory().getDoanhThuView());
+                case TAIKHOAN -> manager_parent.setCenter(Model.getInstance().getViewFactory().getTaiKhoanView());
                 default -> manager_parent.setCenter(Model.getInstance().getViewFactory().getLichChuyenBayView());
             }
         });
