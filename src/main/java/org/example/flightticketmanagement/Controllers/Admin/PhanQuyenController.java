@@ -1,56 +1,67 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
-import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
-import org.example.flightticketmanagement.Models.PhanQuyen;
+import org.example.flightticketmanagement.Models.TaiKhoan;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class PhanQuyenController implements Initializable {
-    public MFXButton them_btn;
-    public MFXButton xoa_btn;
-    public MFXButton sua_btn;
-    public MFXTextField tuKhoa_txtfld;
+    @FXML
+    private MFXButton them_btn;
+    @FXML
+    private MFXButton xoa_btn;
+    @FXML
+    private MFXButton sua_btn;
+    @FXML
+    private MFXTextField tuKhoa_txtfld;
 
     @FXML
-    private TableView<PhanQuyen> phanQuyen_table;
+    private MFXButton refresh_btn;
 
     @FXML
-    private TableColumn<PhanQuyen, String> ten_tbcolumn;
+    private TableView<TaiKhoan> phanQuyen_table;
 
     @FXML
-    private TableColumn<PhanQuyen, String> matKhau_tbcolumn;
+    private TableColumn<?, ?> email_tablecolumn;
 
     @FXML
-    private TableColumn<PhanQuyen, String> nhom_tbcolumn;
+    private TableColumn<?, ?> id_tablecolumn;
+
+    @FXML
+    private TableColumn<?, ?> loaitaikhoan_tablecolumn;
+
+    @FXML
+    private TableColumn<?, ?> matkhau_tablecolumn;
+
+    @FXML
+    private TableColumn<?, ?> ten_tablecolumn;
 
     @FXML
     void newPage(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Admin/ThemPhanQuyen.fxml"));
             Parent root = loader.load();
+            ThemPhanQuyenController controller = loader.getController();
+            controller.setParentController(this);  // Pass the instance of PhanQuyenController
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Thêm Phân Quyền");
@@ -60,67 +71,122 @@ public class PhanQuyenController implements Initializable {
         }
     }
 
-    ObservableList<PhanQuyen> phanquyen_data = FXCollections.observableArrayList();
+    @FXML
+    void refreshData(ActionEvent event) {
+        ketnoiPhanQuyen();
+    }
 
+    @FXML
+    void deleteSelectedAccounts(ActionEvent event) {
+        ObservableList<TaiKhoan> selectedAccounts = phanQuyen_table.getSelectionModel().getSelectedItems();
+
+        if (selectedAccounts.isEmpty()) {
+            alert.errorMessage("No accounts selected. Please select at least one account to delete.");
+            return;
+        }
+
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Confirm Deletion");
+        confirmationAlert.setHeaderText("Are you sure you want to delete the selected accounts?");
+        confirmationAlert.setContentText("This action cannot be undone.");
+
+        Optional<ButtonType> result = confirmationAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                connect = DatabaseDriver.getConnection();
+                prepare = connect.prepareStatement("DELETE FROM TaiKhoan WHERE maTaiKhoan = ?");
+
+                for (TaiKhoan taiKhoan : selectedAccounts) {
+                    prepare.setString(1, taiKhoan.getMaTaiKhoan());
+                    prepare.addBatch();
+                }
+
+                int[] results = prepare.executeBatch();
+                if (results.length > 0) {
+                    alert.successMessage("Selected accounts have been successfully deleted.");
+                } else {
+                    alert.errorMessage("Failed to delete the selected accounts.");
+                }
+
+                ketnoiPhanQuyen();  // Refresh the table
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                alert.errorMessage("Error occurred while deleting accounts. Please check the logs for more details.");
+            } finally {
+                try {
+                    if (prepare != null) prepare.close();
+                    if (connect != null) connect.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    // DATABASE TOOLS
+    private Connection connect;
+    private PreparedStatement prepare;
+    private Statement statement;
+    private ResultSet result;
+
+    private AlertMessage alert = new AlertMessage();
+
+    // Connect to the database TaiKhoan and Quyen to display in the table
+    public void ketnoiPhanQuyen() {
+        ObservableList<TaiKhoan> taiKhoanList = FXCollections.observableArrayList();
+
+        String sql = "SELECT TaiKhoan.maTaiKhoan, TaiKhoan.ten, TaiKhoan.email, TaiKhoan.password, Quyen.tenQuyen " +
+                "FROM TaiKhoan " +
+                "JOIN Quyen ON TaiKhoan.maQuyen = Quyen.maQuyen";
+
+        try {
+            connect = DatabaseDriver.getConnection();
+            statement = connect.createStatement();
+            result = statement.executeQuery(sql);
+
+            while (result.next()) {
+                String maTaiKhoan = result.getString("maTaiKhoan");
+                String ten = result.getString("ten");
+                String email = result.getString("email");
+                String password = result.getString("password");
+                String loaiTaiKhoan = result.getString("tenQuyen");
+
+                TaiKhoan taiKhoan = new TaiKhoan(maTaiKhoan, ten, "", email, password, null, loaiTaiKhoan);
+                taiKhoanList.add(taiKhoan);
+            }
+
+            // Thiết lập giá trị của các cột trong bảng
+            id_tablecolumn.setCellValueFactory(new PropertyValueFactory<>("maTaiKhoan"));
+            ten_tablecolumn.setCellValueFactory(new PropertyValueFactory<>("ten"));
+            email_tablecolumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+            matkhau_tablecolumn.setCellValueFactory(new PropertyValueFactory<>("password"));
+            loaitaikhoan_tablecolumn.setCellValueFactory(new PropertyValueFactory<>("maQuyen"));
+
+            phanQuyen_table.setItems(taiKhoanList);
+            phanQuyen_table.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);  // Allow multiple selection
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+                if (connect != null) connect.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void refreshTable() {
+        ketnoiPhanQuyen();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-
-
-        DatabaseDriver driver = new DatabaseDriver();
-        Connection connectDB = driver.getConnection();
-
-        String phanQuyenViewQuery = "SELECT * FROM PHANQUYEN";
-
-        try {
-            Statement statement = connectDB.createStatement();
-            ResultSet resultSet = statement.executeQuery(phanQuyenViewQuery);
-
-            while (resultSet.next()) {
-
-                String ten = resultSet.getString("ten");
-                String matKhau = resultSet.getString("matKhau");
-                String nhom = resultSet.getString("nhom");
-
-                phanquyen_data.add(new PhanQuyen(ten, matKhau, nhom));
-
-                ten_tbcolumn.setCellValueFactory(new PropertyValueFactory<>("ten"));
-                matKhau_tbcolumn.setCellValueFactory(new PropertyValueFactory<>("matKhau"));
-                nhom_tbcolumn.setCellValueFactory(new PropertyValueFactory<>("nhom"));
-
-                phanQuyen_table.setItems(phanquyen_data);
-
-//               Tìm kiếm
-                FilteredList<PhanQuyen> filteredData = new FilteredList<>(phanquyen_data, p -> true);
-                tuKhoa_txtfld.textProperty().addListener((observable, oldvalue, newvalue) -> {
-                    filteredData.setPredicate(PhanQuyen -> {
-
-//                        Nếu không tìm thấy dữ liệu
-                        if (newvalue.isBlank() || newvalue.isEmpty()) {
-                            return true;
-                        }
-
-                        String tuTimKiem = newvalue.toLowerCase();
-
-                        if (PhanQuyen.getTen().toLowerCase().contains(tuTimKiem)) {
-                            return true;
-                        } else if (PhanQuyen.getMatKhau().toLowerCase().contains(tuTimKiem)) {
-                            return true;
-                        } else return PhanQuyen.getNhom().toLowerCase().contains(tuTimKiem);
-                    });
-                });
-
-                SortedList<PhanQuyen> sortedData = new SortedList<>(filteredData);
-
-                sortedData.comparatorProperty().bind(phanQuyen_table.comparatorProperty());
-
-                phanQuyen_table.setItems(sortedData);
-            }
-        } catch (SQLException e) {
-            Logger.getLogger(PhanQuyenController.class.getName()).log(Level.SEVERE, null, e);
-            e.printStackTrace();
-        }
+        ketnoiPhanQuyen();
+        refresh_btn.setOnAction(this::refreshData);
+        xoa_btn.setOnAction(this::deleteSelectedAccounts);
     }
 }
-

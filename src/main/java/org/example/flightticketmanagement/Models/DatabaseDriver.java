@@ -9,9 +9,9 @@ public class DatabaseDriver {
     private static final String port = "1521";
     private static final String database = "TRINH";
     private static final String url = "jdbc:oracle:thin:@localhost:" + port + ":" + database;
-    public Connection con;
+    public static Connection con;
 
-    public Connection getConnection() {
+    public static Connection getConnection() {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             con = DriverManager.getConnection(url, user, password);
