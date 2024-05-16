@@ -54,6 +54,23 @@ public class ThemPhanQuyenController implements Initializable {
         this.parentController = parentController;
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        sdt_txtfld.setTextFormatter(new TextFormatter<>(change ->
+                (change.getControlNewText().matches("0\\d*") && change.getControlNewText().length() <= 10) ? change : null));
+
+        ngay_datepicker.setEditable(false);
+
+        vaiTro_combobox.setItems(FXCollections.observableArrayList("Admin", "Manager", "Staff"));
+        maTaiKhoan_txtfld.setText(generateAccountID());
+        maTaiKhoan_txtfld.setDisable(true);
+
+        ten_txtfld.textProperty().addListener((observable, oldValue, newValue) -> {
+            email_txtfld.setText(generateEmail(newValue));
+            matKhau_txtfld.setText(generatePassword(newValue));
+        });
+    }
+
     @FXML
     void addAccount(ActionEvent event) {
         String ten = ten_txtfld.getText();
@@ -179,22 +196,5 @@ public class ThemPhanQuyenController implements Initializable {
             default:
                 return null;
         }
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        sdt_txtfld.setTextFormatter(new TextFormatter<>(change ->
-                (change.getControlNewText().matches("0\\d*") && change.getControlNewText().length() <= 10) ? change : null));
-
-        ngay_datepicker.setEditable(false);
-
-        vaiTro_combobox.setItems(FXCollections.observableArrayList("Admin", "Manager", "Staff"));
-        maTaiKhoan_txtfld.setText(generateAccountID());
-        maTaiKhoan_txtfld.setDisable(true);
-
-        ten_txtfld.textProperty().addListener((observable, oldValue, newValue) -> {
-            email_txtfld.setText(generateEmail(newValue));
-            matKhau_txtfld.setText(generatePassword(newValue));
-        });
     }
 }

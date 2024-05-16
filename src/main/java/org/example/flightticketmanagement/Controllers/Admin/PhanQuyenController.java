@@ -55,6 +55,21 @@ public class PhanQuyenController implements Initializable {
     @FXML
     private TableColumn<?, ?> ten_tablecolumn;
 
+    // DATABASE TOOLS
+    private Connection connect;
+    private PreparedStatement prepare;
+    private Statement statement;
+    private ResultSet result;
+
+    private AlertMessage alert = new AlertMessage();
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        ketnoiPhanQuyen();
+        refresh_btn.setOnAction(this::refreshData);
+        xoa_btn.setOnAction(this::deleteSelectedAccounts);
+    }
+
     @FXML
     void newPage(ActionEvent event) {
         try {
@@ -124,14 +139,6 @@ public class PhanQuyenController implements Initializable {
         }
     }
 
-    // DATABASE TOOLS
-    private Connection connect;
-    private PreparedStatement prepare;
-    private Statement statement;
-    private ResultSet result;
-
-    private AlertMessage alert = new AlertMessage();
-
     // Connect to the database TaiKhoan and Quyen to display in the table
     public void ketnoiPhanQuyen() {
         ObservableList<TaiKhoan> taiKhoanList = FXCollections.observableArrayList();
@@ -183,10 +190,5 @@ public class PhanQuyenController implements Initializable {
         ketnoiPhanQuyen();
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        ketnoiPhanQuyen();
-        refresh_btn.setOnAction(this::refreshData);
-        xoa_btn.setOnAction(this::deleteSelectedAccounts);
-    }
+
 }
