@@ -30,7 +30,6 @@ public class PhanQuyenController implements Initializable {
     @FXML
     private MFXButton them_btn;
 
-
     @FXML
     private MFXButton timkiem_btn;
 
@@ -79,32 +78,30 @@ public class PhanQuyenController implements Initializable {
         refresh_btn.setOnAction(this::refreshData);
         xoa_btn.setOnAction(this::deleteSelectedAccounts);
         sua_btn.setOnAction(this::openEditForm);
-        searchPhanQuyen();
+        timkiem_btn.setOnAction(this::searchPhanQuyen);
     }
 
-    private void searchPhanQuyen() {
-        filteredData = new FilteredList<>(phanQuyen_table.getItems(), p -> true);
-        timKiem_txtfld.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(taiKhoan -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                String lowerCaseFilter = newValue.toLowerCase();
-                if (taiKhoan.getTen().toLowerCase().contains(lowerCaseFilter) ||
-                        taiKhoan.getEmail().toLowerCase().contains(lowerCaseFilter) ||
-                        taiKhoan.getMaTaiKhoan().toLowerCase().contains(lowerCaseFilter) ||
-                        taiKhoan.getPassword().toLowerCase().contains(lowerCaseFilter) ||
-                        taiKhoan.getMaQuyen().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-                return false;
-            });
+    private void searchPhanQuyen(ActionEvent event) {
+        String filterText = timKiem_txtfld.getText();
+        if (filterText == null || filterText.isEmpty()) {
+            phanQuyen_table.setItems(filteredData);
+            return;
+        }
+
+        String lowerCaseFilter = filterText.toLowerCase();
+        filteredData.setPredicate(taiKhoan -> {
+            if (taiKhoan.getTen().toLowerCase().contains(lowerCaseFilter) ||
+                    taiKhoan.getEmail().toLowerCase().contains(lowerCaseFilter) ||
+                    taiKhoan.getMaTaiKhoan().toLowerCase().contains(lowerCaseFilter) ||
+                    taiKhoan.getPassword().toLowerCase().contains(lowerCaseFilter) ||
+                    taiKhoan.getMaQuyen().toLowerCase().contains(lowerCaseFilter)) {
+                return true;
+            }
+            return false;
         });
 
         SortedList<TaiKhoan> sortedData = new SortedList<>(filteredData);
-
         sortedData.comparatorProperty().bind(phanQuyen_table.comparatorProperty());
-
         phanQuyen_table.setItems(sortedData);
     }
 
@@ -124,14 +121,10 @@ public class PhanQuyenController implements Initializable {
         }
     }
 
-
-
-
     @FXML
     void refreshData(ActionEvent event) {
         ketnoiPhanQuyen();
     }
-
 
     @FXML
     void deleteSelectedAccounts(ActionEvent event) {
@@ -213,6 +206,7 @@ public class PhanQuyenController implements Initializable {
             loaitaikhoan_tablecolumn.setCellValueFactory(new PropertyValueFactory<>("maQuyen"));
 
             phanQuyen_table.setItems(taiKhoanList);
+            filteredData = new FilteredList<>(taiKhoanList, p -> true);
             phanQuyen_table.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);  // Allow multiple selection
 
         } catch (SQLException e) {
@@ -232,7 +226,6 @@ public class PhanQuyenController implements Initializable {
         ketnoiPhanQuyen();
     }
 
-
     @FXML
     void openEditForm(ActionEvent event) {
         TaiKhoan selectedAccount = phanQuyen_table.getSelectionModel().getSelectedItem();
@@ -244,11 +237,9 @@ public class PhanQuyenController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Admin/SuaPhanQuyen.fxml"));
             Parent root = loader.load();
-
             SuaPhanQuyenController controller = loader.getController();
-            controller.setAccountData(selectedAccount);  // Pass the selected account data to the controller
-            controller.setParentController(this);  // Pass the parent controller to refresh the table
-
+            controller.setSelectedTaiKhoan(selectedAccount);
+            controller.setParentController(this);
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Sửa Phân Quyền");

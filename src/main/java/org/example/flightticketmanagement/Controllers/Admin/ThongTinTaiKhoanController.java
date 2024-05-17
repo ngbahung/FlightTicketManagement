@@ -228,6 +228,6 @@ public class ThongTinTaiKhoanController implements Initializable {
     }
 
     private void styleInfoLabel() {
-        info_lbl.setStyle("-fx-font-weight: bold; -fx-text-fill: #080C53;");
+        info_lbl.setStyle("-fx-font-weight: bold; -fx-text-fill: red;");
     }
 }
