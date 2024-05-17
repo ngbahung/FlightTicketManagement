@@ -82,7 +82,7 @@ public class SuaPhanQuyenController implements Initializable {
 
         // Kiểm tra các trường bắt buộc
         if (ten.isEmpty() || sdt.isEmpty() || sdt.length() != 10 || !sdt.startsWith("0") || vaiTro_combobox.getValue() == null) {
-            alert.errorMessage("Please fill in all required fields correctly.");
+            alert.errorMessage("Vui lòng điền đầy đủ thông tin.");
             return;
         }
 
@@ -107,7 +107,7 @@ public class SuaPhanQuyenController implements Initializable {
 
             int rowsAffected = prepare.executeUpdate();
             if (rowsAffected > 0) {
-                alert.successMessage("Account has been updated successfully.");
+                alert.successMessage("Tài khoản đã được sửa thành công. ");
                 sua_btn.getScene().getWindow().hide();
 
                 // Notify parent controller to refresh the table
@@ -115,11 +115,11 @@ public class SuaPhanQuyenController implements Initializable {
                     parentController.refreshTable();
                 }
             } else {
-                alert.errorMessage("Failed to update the account. Please check the logs for more details.");
+                alert.errorMessage("Không sửa được tài khoản. Vui lòng kiểm tra lại.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            alert.errorMessage("Failed to update the account. Please check the logs for more details.");
+            alert.errorMessage("Không sửa được tài khoản. Vui lòng kiểm tra lại.");
         } finally {
             try {
                 if (prepare != null) {

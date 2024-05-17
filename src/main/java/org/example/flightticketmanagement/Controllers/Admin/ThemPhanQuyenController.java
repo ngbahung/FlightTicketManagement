@@ -78,7 +78,7 @@ public class ThemPhanQuyenController implements Initializable {
 
         // Kiểm tra các trường bắt buộc
         if (ten.isEmpty() || sdt.isEmpty() || sdt.length() != 10 || !sdt.startsWith("0") || vaiTro_combobox.getValue() == null || ngay_datepicker.getValue() == null) {
-            alert.errorMessage("Please fill in all required fields correctly.");
+            alert.errorMessage("Vui lòng điền đầy đủ thông tin.");
             return;
         }
 
@@ -101,7 +101,7 @@ public class ThemPhanQuyenController implements Initializable {
 
             int rowsAffected = prepare.executeUpdate();
             if (rowsAffected > 0) {
-                alert.successMessage("New account has been added successfully.");
+                alert.successMessage("Tài khoản mới đã được thêm thành công.");
                 them_btn.getScene().getWindow().hide();
 
                 // Notify parent controller to refresh the table
@@ -109,11 +109,11 @@ public class ThemPhanQuyenController implements Initializable {
                     parentController.refreshTable();
                 }
             } else {
-                alert.errorMessage("Failed to add the account. Please check the logs for more details.");
+                alert.errorMessage("Không thêm được tài khoản. Vui lòng kiểm tra lại.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            alert.errorMessage("Failed to add the account. Please check the logs for more details.");
+            alert.errorMessage("Không thêm được tài khoản. Vui lòng kiểm tra lại.");
         } finally {
             try {
                 if (prepare != null) {

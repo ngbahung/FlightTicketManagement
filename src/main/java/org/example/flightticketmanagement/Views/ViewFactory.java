@@ -17,7 +17,6 @@ public class ViewFactory {
 //  Admin Views
     private final ObjectProperty<AdminMenuOptions> adminSelectedMenuItem;
     private AnchorPane phanQuyenView;
-    private AnchorPane lichChuyenBayView;
     private AnchorPane banVeView;
     private AnchorPane lichSuView;
     private AnchorPane doanhThuView;
@@ -26,6 +25,7 @@ public class ViewFactory {
 
 //    Manager Views
     private final ObjectProperty<ManagerMenuOptions> managerSelectedMenuItem;
+    private AnchorPane lichChuyenBayView;
 
 
 //    Staff Views
@@ -63,18 +63,6 @@ public class ViewFactory {
         }
 
         return phanQuyenView;
-    }
-
-    public AnchorPane getLichChuyenBayView() {
-        if (lichChuyenBayView == null){
-            try {
-                lichChuyenBayView = new FXMLLoader(getClass().getResource("/Fxml/Admin/LichChuyenBay.fxml")).load();
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-
-        return lichChuyenBayView;
     }
 
     public AnchorPane getBanVeView() {
@@ -148,6 +136,18 @@ public class ViewFactory {
 
     public ObjectProperty<ManagerMenuOptions> getManagerSelectedMenuItem() {
         return managerSelectedMenuItem;
+    }
+
+    public AnchorPane getLichChuyenBayView() {
+        if (lichChuyenBayView == null){
+            try {
+                lichChuyenBayView = new FXMLLoader(getClass().getResource("/Fxml/Manager/LichChuyenBay.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        return lichChuyenBayView;
     }
 
     public void hienThiManHinhManager(){

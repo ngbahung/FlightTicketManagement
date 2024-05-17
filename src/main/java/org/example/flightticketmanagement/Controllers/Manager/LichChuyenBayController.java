@@ -1,4 +1,4 @@
-package org.example.flightticketmanagement.Controllers.Admin;
+package org.example.flightticketmanagement.Controllers.Manager;
 
 import javafx.fxml.Initializable;
 

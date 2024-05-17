@@ -29,7 +29,6 @@ public class DangNhapController implements Initializable {
     public MFXPasswordField matKhau_mfxpassfld;
     public ChoiceBox<AccountType> account_selector;
 
-    // DATABASE TOOLS
     private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
@@ -64,11 +63,13 @@ public class DangNhapController implements Initializable {
             result = prepare.executeQuery();
 
             if (result.next()) {
+                String maTaiKhoan = result.getString("MaTaiKhoan");
                 String maQuyen = result.getString("MaQuyen");
                 AccountType accountType = getAccountType(maQuyen);
 
                 if (accountType == selectedAccountType) {
                     Model.getInstance().getViewFactory().setLoginAccountType(accountType);
+                    Model.getInstance().setLoggedInUserId(maTaiKhoan);  // Store the logged-in user ID
                     openMainScreen(accountType);
                 } else {
                     loi_lbl.setText("Account type does not match.");
