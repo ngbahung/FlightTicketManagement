@@ -16,8 +16,9 @@ public class ManagerController implements Initializable {
 //          Add switch statement
             switch (newVal){
                 case BANVE -> manager_parent.setCenter(Model.getInstance().getViewFactory().getBanVeView());
-                case DATCHO -> manager_parent.setCenter(Model.getInstance().getViewFactory().getDatChoView());
+                case LICHSU -> manager_parent.setCenter(Model.getInstance().getViewFactory().getLichSuView());
                 case DOANHTHU -> manager_parent.setCenter(Model.getInstance().getViewFactory().getDoanhThuView());
+                case TAIKHOAN -> manager_parent.setCenter(Model.getInstance().getViewFactory().getTaiKhoanView());
                 default -> manager_parent.setCenter(Model.getInstance().getViewFactory().getLichChuyenBayView());
             }
         });

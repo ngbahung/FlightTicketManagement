@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import java.lang.String?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/PhanQuyen.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.BangDieuKhienController">
-    <TableView editable="true" layoutX="52.0" layoutY="46.0" prefHeight="453.0" prefWidth="897.0" AnchorPane.bottomAnchor="301.0" AnchorPane.leftAnchor="52.0" AnchorPane.rightAnchor="43.0" AnchorPane.topAnchor="46.0">
+<AnchorPane prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/PhanQuyen.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.PhanQuyenController">
+    <TableView fx:id="phanQuyen_table" editable="true" layoutX="48.0" layoutY="142.0" prefHeight="453.0" prefWidth="897.0" AnchorPane.bottomAnchor="205.0" AnchorPane.leftAnchor="48.0" AnchorPane.rightAnchor="47.0" AnchorPane.topAnchor="142.0">
       <columns>
-          <TableColumn minWidth="0.0" prefWidth="359.0" text="Tên đăng nhập" />
-         <TableColumn minWidth="0.0" prefWidth="282.0" text="Mật khẩu" />
-         <TableColumn minWidth="0.0" prefWidth="255.0" text="Nhóm" />
+         <TableColumn id="custom" fx:id="id_tablecolumn" prefWidth="95.0" text="ID" />
+          <TableColumn id="custom" fx:id="ten_tablecolumn" minWidth="0.0" prefWidth="165.0" text="Tên hiển thị" />
+         <TableColumn id="custom" fx:id="email_tablecolumn" minWidth="0.0" prefWidth="241.0" text="Email" />
+         <TableColumn id="custom" fx:id="matkhau_tablecolumn" minWidth="0.0" prefWidth="185.0" text="Mật khẩu" />
+         <TableColumn id="custom" fx:id="loaitaikhoan_tablecolumn" prefWidth="201.0" text="Loại tài khoản" />
       </columns>
     </TableView>
     <HBox layoutX="594.0" layoutY="730.0" prefHeight="40.0" prefWidth="355.0" spacing="22.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="594.0" AnchorPane.rightAnchor="43.0" AnchorPane.topAnchor="730.0">
-        <MFXButton id="custom_them" fx:id="them_btn" prefHeight="50.0" prefWidth="150.0" text="Thêm">
+        <MFXButton id="custom_them" fx:id="them_btn" onAction="#newPage" prefHeight="50.0" prefWidth="150.0" text="Thêm">
          <styleClass>
             <String fx:value="mfx-button" />
             <String fx:value="mfx-ripple-generator" />
@@ -38,4 +42,42 @@
             <String fx:value="text" />
          </styleClass></MFXButton>
     </HBox>
+   <MFXButton id="custom_them" layoutX="57.0" layoutY="631.0" prefHeight="32.0" prefWidth="205.0" text="Thông tin chi tiết">
+      <styleClass>
+         <String fx:value="mfx-button" />
+         <String fx:value="mfx-ripple-generator" />
+         <String fx:value="text" />
+         <String fx:value="link-button" />
+      </styleClass>
+      <graphic>
+         <FontAwesomeIconView fill="WHITE" glyphName="USER" />
+      </graphic>
+   </MFXButton>
+   <HBox alignment="CENTER" layoutX="107.0" layoutY="31.0" prefHeight="60.0" prefWidth="781.0" spacing="20.0">
+      <children>
+         <MFXButton id="custom_them" fx:id="refresh_btn" onAction="#newPage" prefHeight="32.0" prefWidth="62.0" text=" ">
+            <styleClass>
+               <String fx:value="mfx-button" />
+               <String fx:value="mfx-ripple-generator" />
+               <String fx:value="text" />
+               <String fx:value="link-button" />
+            </styleClass>
+            <graphic>
+               <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" text="" />
+            </graphic>
+         </MFXButton>
+         <MFXTextField id="custom" fx:id="timKiem_txtfld" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="579.0" />
+         <MFXButton id="custom_them" fx:id="timkiem_btn" prefHeight="32.0" prefWidth="66.0" text=" ">
+            <styleClass>
+               <String fx:value="mfx-button" />
+               <String fx:value="mfx-ripple-generator" />
+               <String fx:value="text" />
+               <String fx:value="link-button" />
+            </styleClass>
+            <graphic>
+               <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20" />
+            </graphic>
+         </MFXButton>
+      </children>
+   </HBox>
 </AnchorPane>

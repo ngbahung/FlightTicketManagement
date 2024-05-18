@@ -3,6 +3,7 @@ package org.example.flightticketmanagement.Controllers.Admin;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.Model;
 import org.example.flightticketmanagement.Views.AdminMenuOptions;
 
@@ -13,10 +14,13 @@ public class AdminMenuController implements Initializable {
     public Button phanQuyen_btn;
     public Button lichChuyenBay_btn;
     public Button banVe_btn;
-    public Button datCho_btn;
+    public Button lichSu_btn;
     public Button doanhThu_btn;
     public Button suaQuyDinh_btn;
+    public Button taiKhoan_btn;
     public Button dangXuat_btn;
+
+    private final AlertMessage alert = new AlertMessage();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -27,9 +31,10 @@ public class AdminMenuController implements Initializable {
         phanQuyen_btn.setOnAction(event -> moPhanQuyen());
         lichChuyenBay_btn.setOnAction(event -> moTrangChuLich());
         banVe_btn.setOnAction(event -> moBanVe());
-        datCho_btn.setOnAction(event -> moDatCho());
+        lichSu_btn.setOnAction(event -> moLichSu());
         doanhThu_btn.setOnAction(event -> moDoanhThu());
         suaQuyDinh_btn.setOnAction(event -> moSuaQuyDinh());
+        taiKhoan_btn.setOnAction(event -> moTaiKhoan());
         dangXuat_btn.setOnAction(event -> moDangNhap());
     }
 
@@ -45,8 +50,8 @@ public class AdminMenuController implements Initializable {
         Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.BANVE);
     }
 
-    private void  moDatCho(){
-        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.DATCHO);
+    private void  moLichSu(){
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.LICHSU);
     }
 
     private void moDoanhThu(){
@@ -57,10 +62,18 @@ public class AdminMenuController implements Initializable {
         Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.SUAQUYDINH);
     }
 
-    private void moDangNhap() {
-        Stage stage = (Stage) dangXuat_btn.getScene().getWindow();
-        Model.getInstance().getViewFactory().dongStage(stage);
-
-        Model.getInstance().getViewFactory().hienThiManHinhDangNhap();
+    private void moTaiKhoan() {
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.TAIKHOAN);
     }
+
+    private void moDangNhap() {
+        boolean confirmed = alert.confirmationMessage("Bạn có chắc chắn muốn đăng xuất không?");
+
+        if (confirmed) {
+            Stage stage = (Stage) dangXuat_btn.getScene().getWindow();
+            Model.getInstance().getViewFactory().dongStage(stage);
+            Model.getInstance().getViewFactory().hienThiManHinhDangNhap();
+        }
+    }
+
 }

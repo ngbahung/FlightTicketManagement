@@ -3,6 +3,7 @@ package org.example.flightticketmanagement.Controllers.Manager;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.Model;
 import org.example.flightticketmanagement.Views.ManagerMenuOptions;
 
@@ -12,10 +13,13 @@ import java.util.ResourceBundle;
 public class ManagerMenuController implements Initializable {
     public Button lichChuyenBay_btn;
     public Button banVe_btn;
-    public Button datCho_btn;
+    public Button lichSu_btn;
     public Button doanhThu_btn;
-    public Button suaQuyDinh_btn;
+    public Button taiKhoan_btn;
     public Button dangXuat_btn;
+
+    private final AlertMessage alert = new AlertMessage();
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -25,8 +29,9 @@ public class ManagerMenuController implements Initializable {
     public void addListener(){
         lichChuyenBay_btn.setOnAction(event -> moLichChuyenBay());
         banVe_btn.setOnAction(event -> moBanVe());
-        datCho_btn.setOnAction(event -> moDatCho());
+        lichSu_btn.setOnAction(event -> moLichSu());
         doanhThu_btn.setOnAction(event -> moDoanhThu());
+        taiKhoan_btn.setOnAction(event -> moTaiKhoan());
         dangXuat_btn.setOnAction(event -> moDangNhap());
     }
 
@@ -38,18 +43,25 @@ public class ManagerMenuController implements Initializable {
         Model.getInstance().getViewFactory().getManagerSelectedMenuItem().set(ManagerMenuOptions.BANVE);
     }
 
-    public void moDatCho(){
-        Model.getInstance().getViewFactory().getManagerSelectedMenuItem().set(ManagerMenuOptions.DATCHO);
+    public void moLichSu(){
+        Model.getInstance().getViewFactory().getManagerSelectedMenuItem().set(ManagerMenuOptions.LICHSU);
     }
 
     public void moDoanhThu(){
         Model.getInstance().getViewFactory().getManagerSelectedMenuItem().set(ManagerMenuOptions.DOANHTHU);
     }
 
-    private void moDangNhap() {
-        Stage stage = (Stage) dangXuat_btn.getScene().getWindow();
-        Model.getInstance().getViewFactory().dongStage(stage);
+    public void moTaiKhoan(){
+        Model.getInstance().getViewFactory().getManagerSelectedMenuItem().set(ManagerMenuOptions.TAIKHOAN);
+    }
 
-        Model.getInstance().getViewFactory().hienThiManHinhDangNhap();
+    private void moDangNhap() {
+        boolean confirmed = alert.confirmationMessage("Bạn có chắc chắn muốn đăng xuất không?");
+
+        if (confirmed) {
+            Stage stage = (Stage) dangXuat_btn.getScene().getWindow();
+            Model.getInstance().getViewFactory().dongStage(stage);
+            Model.getInstance().getViewFactory().hienThiManHinhDangNhap();
+        }
     }
 }
