@@ -1,0 +1,81 @@
+
+.text {
+    -fx-font-family: Inter;
+    -fx-font-size: 16;
+}
+
+/*Table View*/
+
+.table-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #080C53;
+    -fx-border-radius: 10;
+    -fx-border-width: 2;
+}
+
+/* mfx-button */
+.mfx-button {
+    -fx-background-color: #00A4BD;
+    -fx-font-size: 16;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
+
+.mfx-button .mfx-ripple-generator {
+    -mfx-ripple-radius: 40;
+    -mfx-auto-clip: true;
+    -fx-background-radius: 10;
+}
+
+.mfx-button .text {
+    -fx-font-smoothing-type: gray;
+}
+
+
+
+.link-button {
+    -fx-background-color: transparent;
+    -fx-border-radius: 3;
+    -fx-text-fill: #0096FF;
+    -fx-cursor: hand;
+}
+
+.link-button:armed,
+.link-button:focused {
+    -fx-text-fill: #006BFF;
+}
+
+.link-button .mfx-ripple-generator {
+    -mfx-ripple-color: #00A4BD;
+}
+
+/* Button Thêm */
+#custom_them {
+    -fx-background-color: black;
+    -fx-font-size: 16;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
+
+/* Button Xóa */
+#custom_xoa {
+    -fx-background-color: white;
+    -fx-font-size: 16;
+    -fx-text-fill: #080C53;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-border-color: #080C53;
+}
+
+/* Button Sửa */
+#custom_sua {
+    -fx-background-color: #080C53;
+    -fx-font-size: 16;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
+
+

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="270.0" prefWidth="303.0" spacing="30.0" stylesheets="@../../Styles/Admin/ThemHangVe.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label styleClass="tittle" text="Sửa hạng vé" />
+      <TextField prefHeight="41.0" prefWidth="263.0" promptText="Tên hạng vé" />
+      <TextField prefHeight="41.0" prefWidth="263.0" promptText="Hệ số" />
+      <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="73.0" text="Lưu" />
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>

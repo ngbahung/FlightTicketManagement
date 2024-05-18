@@ -1,0 +1,32 @@
+.text {
+    -fx-font-family: Inter;
+}
+
+.table-view {
+    -fx-border-color: #080C53;
+    -fx-background-color: white;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+}
+
+.filter-pane {
+    -fx-background-color: #080C53;
+    -fx-background-radius: 20;
+}
+
+
+.background {
+    -fx-background-color: #ffffff;
+}
+
+
+/* Button */
+#custom_1 {
+    -fx-background-color: #080C53;
+    -fx-text-fill: white;
+}
+
+#custom_2 {
+    -fx-background-color: #00A4BD;
+    -fx-text-fill: white;
+}

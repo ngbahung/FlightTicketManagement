@@ -1,0 +1,31 @@
+.text {
+    -fx-font-family: Inter;
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+}
+
+.menu_chinh_container {
+    -fx-background-color: #080C53;
+    -fx-background-radius: 0 20 20 0;
+}
+
+.dang_xuat Button ,
+.menu_container Button {
+    -fx-text-alignment: center;
+    -fx-background-color: #080C53;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 16;
+    -fx-background-radius: 10;
+    -fx-alignment: center_left;
+}
+
+.menu_chinh_container FontAwesomeIconView {
+    -fx-fill: #ffffff;
+}
+
+.dang_xuat Button:hover ,
+.menu_container Button:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #a6adad;
+    -fx-text-fill: white;
+}
