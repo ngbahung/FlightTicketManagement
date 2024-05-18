@@ -12,11 +12,11 @@
 <AnchorPane prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/PhanQuyen.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.PhanQuyenController">
     <TableView fx:id="phanQuyen_table" editable="true" layoutX="48.0" layoutY="142.0" prefHeight="453.0" prefWidth="897.0" AnchorPane.bottomAnchor="205.0" AnchorPane.leftAnchor="48.0" AnchorPane.rightAnchor="47.0" AnchorPane.topAnchor="142.0">
       <columns>
-         <TableColumn fx:id="id_tablecolumn" prefWidth="65.0" text="ID" />
-          <TableColumn fx:id="ten_tablecolumn" minWidth="0.0" prefWidth="188.0" text="Tên hiển thị" />
-         <TableColumn fx:id="email_tablecolumn" minWidth="0.0" prefWidth="200.0" text="Email" />
-         <TableColumn fx:id="matkhau_tablecolumn" minWidth="0.0" prefWidth="219.0" text="Mật khẩu" />
-         <TableColumn fx:id="loaitaikhoan_tablecolumn" prefWidth="215.0" text="Loại tài khoản" />
+         <TableColumn id="custom" fx:id="id_tablecolumn" prefWidth="95.0" text="ID" />
+          <TableColumn id="custom" fx:id="ten_tablecolumn" minWidth="0.0" prefWidth="165.0" text="Tên hiển thị" />
+         <TableColumn id="custom" fx:id="email_tablecolumn" minWidth="0.0" prefWidth="241.0" text="Email" />
+         <TableColumn id="custom" fx:id="matkhau_tablecolumn" minWidth="0.0" prefWidth="185.0" text="Mật khẩu" />
+         <TableColumn id="custom" fx:id="loaitaikhoan_tablecolumn" prefWidth="201.0" text="Loại tài khoản" />
       </columns>
     </TableView>
     <HBox layoutX="594.0" layoutY="730.0" prefHeight="40.0" prefWidth="355.0" spacing="22.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="594.0" AnchorPane.rightAnchor="43.0" AnchorPane.topAnchor="730.0">

@@ -1,7 +1,7 @@
 
 .text {
     -fx-font-family: Inter;
-    -fx-font-size: 16;
+    -fx-font-size: 14;
 }
 
 /*Table View*/
@@ -11,6 +11,7 @@
     -fx-border-color: #080C53;
     -fx-border-radius: 10;
     -fx-border-width: 2;
+    -fx-font-size: 14;
 }
 
 /* mfx-button */
@@ -51,8 +52,7 @@
 }
 
 #custom {
-    -fx-font-size: 16;
-    -fx-font-weight: 700;
+    -fx-font-size: 14;
 }
 
 /* Button Thêm */
