@@ -41,14 +41,14 @@
          <MFXDatePicker fx:id="ngay_datepicker" prefHeight="38.0" prefWidth="137.0" promptText="Chọn ngày" />
          <MFXButton fx:id="timkiem_btn" prefHeight="30.0" prefWidth="47.0" text=" ">
             <graphic>
-               <FontAwesomeIconView glyphName="SEARCH" size="20" />
+               <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" selectionFill="#f2e8e8" size="20" />
             </graphic>
          </MFXButton>
       </HBox>
    </AnchorPane>
    <MFXButton layoutX="79.0" layoutY="68.0" text=" ">
       <graphic>
-         <FontAwesomeIconView fx:id="refresh_btn" glyphName="REFRESH" size="30" />
+         <FontAwesomeIconView fx:id="refresh_btn" fill="WHITE" glyphName="REFRESH" size="30" />
       </graphic>
    </MFXButton>
 </AnchorPane>

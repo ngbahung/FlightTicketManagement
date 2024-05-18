@@ -15,11 +15,6 @@ public class DatabaseDriver {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             con = DriverManager.getConnection(url, user, password);
-            if (con != null) {
-                System.out.println("Successfully connected to database");
-            } else {
-                System.out.println("Error connecting to database");
-            }
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
