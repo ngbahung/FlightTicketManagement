@@ -1,29 +1,24 @@
 .text {
     -fx-font-family: Inter;
-    -fx-font-size: 16;
-    -fx-font-weight: bold;
 }
 
-.table {
+.table-view {
     -fx-border-color: #080C53;
     -fx-background-color: white;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
 }
 
-/* Bán vé */
-.ban_ve {
-    -fx-font-size: 30;
-    -fx-fill: #080C53;
-    -fx-font-weight: bold;
-}
-
-/* Vé chuyến bay */
-.ve_chuyen_bay {
+.filter-pane {
     -fx-background-color: #080C53;
+    -fx-background-radius: 20;
 }
 
-.ve_chuyen_bay Label {
-    -fx-text-fill: white;
+
+.background {
+    -fx-background-color: #ffffff;
 }
+
 
 /* Button */
 #custom_1 {

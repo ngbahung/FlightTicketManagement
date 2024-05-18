@@ -85,7 +85,7 @@ public class ViewFactory {
     public AnchorPane getBanVeView() {
         if (banVeView == null){
             try {
-                banVeView = new FXMLLoader(getClass().getResource("/Fxml/Admin/BanVe.fxml")).load();
+                banVeView = new FXMLLoader(getClass().getResource("/Fxml/Admin/TraCuuBanVe.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -96,7 +96,7 @@ public class ViewFactory {
     public AnchorPane getDatChoView() {
         if (datChoView == null){
             try {
-                datChoView = new FXMLLoader(getClass().getResource("/Fxml/Admin/DatCho.fxml")).load();
+                datChoView = new FXMLLoader(getClass().getResource("/Fxml/Admin/LichSuDatVe.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }
