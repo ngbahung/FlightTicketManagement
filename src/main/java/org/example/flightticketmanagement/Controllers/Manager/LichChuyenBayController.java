@@ -14,6 +14,7 @@ import org.example.flightticketmanagement.Models.DatabaseDriver;
 import java.net.URL;
 import java.sql.*;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class LichChuyenBayController implements Initializable {
@@ -92,17 +93,56 @@ public class LichChuyenBayController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         connect = DatabaseDriver.getConnection();
-        if (connect == null) {
-            alert.errorMessage("Could not connect to the database.");
-        } else {
-            loadData();
-        }
+        loadData(null, null, null);
+        timkiem_btn.setOnAction(this::handleSearch);
+        refresh_btn.setOnMouseClicked(event -> loadData(null, null, null));
     }
 
-    private void loadData() {
+    private void loadData(String sanBayDi, String sanBayDen, LocalDate ngayBay) {
+        chuyenBay_tableview.getItems().clear();  // Clear previous search results
+
         try {
-            String query = "SELECT * FROM CHUYENBAY"; // Update table name if needed
-            prepare = connect.prepareStatement(query);
+            StringBuilder query = new StringBuilder("SELECT * FROM CHUYENBAY");
+            boolean hasCondition = false;
+
+            // Check if there are conditions to add to the WHERE clause
+            if ((sanBayDi != null && !sanBayDi.isEmpty()) || (sanBayDen != null && !sanBayDen.isEmpty()) || ngayBay != null) {
+                query.append(" WHERE");
+            }
+
+            if (sanBayDi != null && !sanBayDi.isEmpty()) {
+                query.append(" MaDuongBay IN (SELECT MaDuongBay FROM DUONGBAY WHERE MaSanBayDi = (SELECT MaSanBay FROM SANBAY WHERE UPPER(TenSanBay) LIKE ? AND ROWNUM = 1))");
+                hasCondition = true;
+            }
+
+            if (sanBayDen != null && !sanBayDen.isEmpty()) {
+                if (hasCondition) {
+                    query.append(" AND");
+                }
+                query.append(" MaDuongBay IN (SELECT MaDuongBay FROM DUONGBAY WHERE MaSanBayDen = (SELECT MaSanBay FROM SANBAY WHERE UPPER(TenSanBay) LIKE ? AND ROWNUM = 1))");
+                hasCondition = true;
+            }
+
+            if (ngayBay != null) {
+                if (hasCondition) {
+                    query.append(" AND");
+                }
+                query.append(" TRUNC(TGXP) = ?");
+            }
+
+            prepare = connect.prepareStatement(query.toString());
+
+            int index = 1;
+            if (sanBayDi != null && !sanBayDi.isEmpty()) {
+                prepare.setString(index++, "%" + sanBayDi.toUpperCase() + "%");
+            }
+            if (sanBayDen != null && !sanBayDen.isEmpty()) {
+                prepare.setString(index++, "%" + sanBayDen.toUpperCase() + "%");
+            }
+            if (ngayBay != null) {
+                prepare.setDate(index, Date.valueOf(ngayBay));
+            }
+
             result = prepare.executeQuery();
 
             chuyenBay_tableview.getItems().clear();
@@ -143,6 +183,13 @@ public class LichChuyenBayController implements Initializable {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void handleSearch(ActionEvent event) {
+        String sanBayDi = sanbaydi_txtfld.getText().trim();
+        String sanBayDen = sanbayden_txtfld.getText().trim();
+        LocalDate ngayBay = ngay_datepicker.getValue();
+        loadData(sanBayDi, sanBayDen, ngayBay);
     }
 
     private String getSanBayDi(String maDuongBay) {
@@ -201,10 +248,15 @@ public class LichChuyenBayController implements Initializable {
     }
 
     private String formatDuration(Duration duration) {
-        long hours = duration.toHours();
-        long minutes = duration.minusHours(hours).toMinutes();
+        long totalMinutes = duration.toMinutes();
+        long days = totalMinutes / (24 * 60);
+        long hours = (totalMinutes % (24 * 60)) / 60;
+        long minutes = totalMinutes % 60;
 
         String formattedDuration = "";
+        if (days > 0) {
+            formattedDuration += days + " ngày ";
+        }
         if (hours > 0) {
             formattedDuration += hours + " giờ ";
         }
@@ -214,4 +266,5 @@ public class LichChuyenBayController implements Initializable {
 
         return formattedDuration.trim(); // Loại bỏ khoảng trắng thừa nếu có
     }
+
 }
