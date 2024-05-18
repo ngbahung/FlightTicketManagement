@@ -7,10 +7,10 @@ public class CT_HangVe {
     private Integer soGheTrong;
     private Integer soGheDat;
 
-    public CT_HangVe(String maChuyenBay, Integer soLuongGhe, String maHangVe, Integer soGheTrong, Integer soGheDat) {
+    public CT_HangVe(String maChuyenBay, String maHangVe, Integer soLuongGhe, Integer soGheTrong, Integer soGheDat) {
         this.maChuyenBay = maChuyenBay;
-        this.soLuongGhe = soLuongGhe;
         this.maHangVe = maHangVe;
+        this.soLuongGhe = soLuongGhe;
         this.soGheTrong = soGheTrong;
         this.soGheDat = soGheDat;
     }

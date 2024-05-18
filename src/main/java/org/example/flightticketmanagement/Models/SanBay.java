@@ -2,18 +2,16 @@ package org.example.flightticketmanagement.Models;
 
 public class SanBay {
     private String maSanBay;
-    private String maQuocGia;
     private String tenSanBay;
     private String tenVietTat;
     private String diaChi;
-    private String trangThai;
+    private Integer trangThai;
 
-    public SanBay(String maSanBay, String maQuocGia, String tenSanBay, String diaChi, String tenVietTat, String trangThai) {
+    public SanBay(String maSanBay, String tenSanBay, String tenVietTat, String diaChi, Integer trangThai) {
         this.maSanBay = maSanBay;
-        this.maQuocGia = maQuocGia;
         this.tenSanBay = tenSanBay;
-        this.diaChi = diaChi;
         this.tenVietTat = tenVietTat;
+        this.diaChi = diaChi;
         this.trangThai = trangThai;
     }
 
@@ -23,14 +21,6 @@ public class SanBay {
 
     public void setMaSanBay(String maSanBay) {
         this.maSanBay = maSanBay;
-    }
-
-    public String getMaQuocGia() {
-        return maQuocGia;
-    }
-
-    public void setMaQuocGia(String maQuocGia) {
-        this.maQuocGia = maQuocGia;
     }
 
     public String getTenSanBay() {
@@ -57,11 +47,11 @@ public class SanBay {
         this.diaChi = diaChi;
     }
 
-    public String getTrangThai() {
+    public Integer getTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(String trangThai) {
+    public void setTrangThai(Integer trangThai) {
         this.trangThai = trangThai;
     }
 }

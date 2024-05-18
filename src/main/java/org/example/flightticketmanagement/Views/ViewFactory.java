@@ -17,25 +17,20 @@ public class ViewFactory {
 //  Admin Views
     private final ObjectProperty<AdminMenuOptions> adminSelectedMenuItem;
     private AnchorPane phanQuyenView;
-    private AnchorPane lichChuyenBayView;
     private AnchorPane banVeView;
-    private AnchorPane datChoView;
+    private AnchorPane lichSuView;
     private AnchorPane doanhThuView;
     private AnchorPane suaQuyDinhView;
+    private AnchorPane taiKhoanView;
 
 //    Manager Views
     private final ObjectProperty<ManagerMenuOptions> managerSelectedMenuItem;
-    private AnchorPane lichCBManaView;
-    private AnchorPane banVeManaView;
-    private AnchorPane datChoManaView;
-    private AnchorPane doanhThuManaView;
+    private AnchorPane lichChuyenBayView;
 
 
 //    Staff Views
     private final ObjectProperty<StaffMenuOptions> staffSelectedMenuItem;
     private AnchorPane lichCBStaView;
-    private AnchorPane banVeStaView;
-    private AnchorPane datChoStaView;
 
     public ViewFactory(){
         this.loginAccountType = AccountType.STAFF;
@@ -70,18 +65,6 @@ public class ViewFactory {
         return phanQuyenView;
     }
 
-    public AnchorPane getLichChuyenBayView() {
-        if (lichChuyenBayView == null){
-            try {
-                lichChuyenBayView = new FXMLLoader(getClass().getResource("/Fxml/Admin/LichChuyenBay.fxml")).load();
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-
-        return lichChuyenBayView;
-    }
-
     public AnchorPane getBanVeView() {
         if (banVeView == null){
             try {
@@ -93,15 +76,15 @@ public class ViewFactory {
         return banVeView;
     }
 
-    public AnchorPane getDatChoView() {
-        if (datChoView == null){
+    public AnchorPane getLichSuView() {
+        if (lichSuView == null){
             try {
-                datChoView = new FXMLLoader(getClass().getResource("/Fxml/Admin/DatCho.fxml")).load();
+                lichSuView = new FXMLLoader(getClass().getResource("/Fxml/Admin/LichSu.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }
         }
-        return datChoView;
+        return lichSuView;
     }
 
     public AnchorPane getDoanhThuView() {
@@ -119,12 +102,23 @@ public class ViewFactory {
     public AnchorPane getSuaQuyDinhView() {
         if (suaQuyDinhView == null){
             try {
-                suaQuyDinhView = new FXMLLoader(getClass().getResource("/Fxml/Admin/SuaQuyDinh.fxml")).load();
+                suaQuyDinhView = new FXMLLoader(getClass().getResource("/Fxml/Admin/QuyDinh.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }
         }
         return suaQuyDinhView;
+    }
+
+    public AnchorPane getTaiKhoanView() {
+        if (taiKhoanView == null){
+            try {
+                taiKhoanView = new FXMLLoader(getClass().getResource("/Fxml/Admin/ThongTinTaiKhoan.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return taiKhoanView;
     }
 
     public void hienThiManHinhAdmin(){
@@ -142,6 +136,18 @@ public class ViewFactory {
 
     public ObjectProperty<ManagerMenuOptions> getManagerSelectedMenuItem() {
         return managerSelectedMenuItem;
+    }
+
+    public AnchorPane getLichChuyenBayView() {
+        if (lichChuyenBayView == null){
+            try {
+                lichChuyenBayView = new FXMLLoader(getClass().getResource("/Fxml/Manager/LichChuyenBay.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        return lichChuyenBayView;
     }
 
     public void hienThiManHinhManager(){

@@ -2,15 +2,17 @@ package org.example.flightticketmanagement.Models;
 
 public class DuongBay {
     private String maDuongBay;
-    private String maQuocGiaDi;
-    private String maQuocGiaDen;
+    private String maSanBayDi;
+    private String maSanBayDen;
+    private String maSanBayTG;
     private String tenDuongBay;
     private Float doDaiDuongBay;
 
-    public DuongBay(String maDuongBay, String maQuocGiaDi, String maQuocGiaDen, String tenDuongBay, Float doDaiDuongBay) {
+    public DuongBay(String maDuongBay, String maSanBayDi, String maSanBayDen, String maSanBayTG, String tenDuongBay, Float doDaiDuongBay) {
         this.maDuongBay = maDuongBay;
-        this.maQuocGiaDi = maQuocGiaDi;
-        this.maQuocGiaDen = maQuocGiaDen;
+        this.maSanBayDi = maSanBayDi;
+        this.maSanBayDen = maSanBayDen;
+        this.maSanBayTG = maSanBayTG;
         this.tenDuongBay = tenDuongBay;
         this.doDaiDuongBay = doDaiDuongBay;
     }
@@ -23,12 +25,28 @@ public class DuongBay {
         this.maDuongBay = maDuongBay;
     }
 
-    public String getMaQuocGiaDi() {
-        return maQuocGiaDi;
+    public String getMaSanBayDi() {
+        return maSanBayDi;
     }
 
-    public void setMaQuocGiaDi(String maQuocGiaDi) {
-        this.maQuocGiaDi = maQuocGiaDi;
+    public void setMaSanBayDi(String maSanBayDi) {
+        this.maSanBayDi = maSanBayDi;
+    }
+
+    public String getMaSanBayDen() {
+        return maSanBayDen;
+    }
+
+    public void setMaSanBayDen(String maSanBayDen) {
+        this.maSanBayDen = maSanBayDen;
+    }
+
+    public String getMaSanBayTG() {
+        return maSanBayTG;
+    }
+
+    public void setMaSanBayTG(String maSanBayTG) {
+        this.maSanBayTG = maSanBayTG;
     }
 
     public String getTenDuongBay() {
@@ -39,15 +57,7 @@ public class DuongBay {
         this.tenDuongBay = tenDuongBay;
     }
 
-    public String getMaQuocGiaDen() {
-        return maQuocGiaDen;
-    }
-
-    public void setMaQuocGiaDen(String maQuocGiaDen) {
-        this.maQuocGiaDen = maQuocGiaDen;
-    }
-
-    public float getDoDaiDuongBay() {
+    public Float getDoDaiDuongBay() {
         return doDaiDuongBay;
     }
 

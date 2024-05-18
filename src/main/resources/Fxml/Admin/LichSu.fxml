@@ -14,7 +14,7 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/BanVe.css"
             xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.flightticketmanagement.Controllers.Admin.DatChoController">
+            fx:controller="org.example.flightticketmanagement.Controllers.Admin.LichSuController">
     <Text fontSmoothingType="LCD" layoutX="103.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0"
           styleClass="ban_ve" text="Đặt chỗ" wrappingWidth="177.0" AnchorPane.topAnchor="99.0">
         <font>

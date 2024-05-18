@@ -4,26 +4,20 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseDriver {
-    public Connection conn;
+    private static final String user = "TIKIMANA";
+    private static final String password = "password";
+    private static final String port = "1521";
+    private static final String database = "TRINH";
+    private static final String url = "jdbc:oracle:thin:@localhost:" + port + ":" + database;
+    public static Connection con;
 
-    public Connection getDBDriver() {
+    public static Connection getConnection() {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
-            conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","fly","password");
-            if (conn != null) {
-                System.out.println("Successfully connected to database");
-            } else {
-                System.out.println("Error connecting to database");
-            }
+            con = DriverManager.getConnection(url, user, password);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
-
-        return conn;
-    }
-
-    public static void main(String[] args) {
-        DatabaseDriver driver = new DatabaseDriver();
-        Connection connectDB = driver.getDBDriver();
+        return con;
     }
 }
