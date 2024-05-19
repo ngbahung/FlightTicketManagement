@@ -19,8 +19,9 @@ public class ViewFactory {
     private AnchorPane phanQuyenView;
     private AnchorPane lichChuyenBayView;
     private AnchorPane banVeView;
-    private AnchorPane datChoView;
+    private AnchorPane lichSuView;
     private AnchorPane doanhThuView;
+    private AnchorPane taiKhoanView;
     private AnchorPane suaQuyDinhView;
 
 //    Manager Views
@@ -93,15 +94,15 @@ public class ViewFactory {
         return banVeView;
     }
 
-    public AnchorPane getDatChoView() {
-        if (datChoView == null){
+    public AnchorPane getLichSuView() {
+        if (lichSuView == null){
             try {
-                datChoView = new FXMLLoader(getClass().getResource("/Fxml/Admin/LichSuDatVe.fxml")).load();
+                lichSuView = new FXMLLoader(getClass().getResource("/Fxml/Admin/LichSuDatVe.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }
         }
-        return datChoView;
+        return lichSuView;
     }
 
     public AnchorPane getDoanhThuView() {
@@ -114,6 +115,18 @@ public class ViewFactory {
         }
 
         return doanhThuView;
+    }
+
+    public AnchorPane getTaiKhoanView() {
+        if (taiKhoanView == null){
+            try {
+                taiKhoanView = new FXMLLoader(getClass().getResource("/Fxml/Admin/ThongTinTaiKhoan.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        return taiKhoanView;
     }
 
     public AnchorPane getSuaQuyDinhView() {
