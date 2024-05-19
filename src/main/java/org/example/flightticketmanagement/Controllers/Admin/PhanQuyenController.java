@@ -79,6 +79,7 @@ public class PhanQuyenController implements Initializable {
         xoa_btn.setOnAction(this::deleteSelectedAccounts);
         sua_btn.setOnAction(this::openEditForm);
         timkiem_btn.setOnAction(this::searchPhanQuyen);
+        them_btn.setOnAction(this::newPage);
     }
 
     private void searchPhanQuyen(ActionEvent event) {
