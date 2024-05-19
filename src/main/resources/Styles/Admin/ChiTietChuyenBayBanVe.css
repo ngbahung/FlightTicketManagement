@@ -1,0 +1,67 @@
+.flight-detail {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20;
+    -fx-font-weight: bold;
+}
+
+.text {
+    -fx-font-family: Inter;
+}
+
+.vb-flight-detail {
+    -fx-font-family: Inter;
+    -fx-font-size: 12;
+    -fx-text-fill: white;
+}
+
+.table-label {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #080C53;
+    -fx-border-width: 2;
+}
+
+.table-text {
+    -fx-font-family: Inter;
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+}
+
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #080C53;
+    -fx-border-width: 2;
+    -fx-font-size: 12;
+}
+
+/* Button */
+.button {
+    -fx-background-color:  #080C53;
+    -fx-text-fill: white;
+    -fx-border-radius: 20;
+    -fx-font-size: 16;
+    -fx-font-family: Inter;
+    -fx-background-radius: 20;
+}
+
+.button:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #00A4BD;
+    -fx-text-fill: white;
+}
+
+/* Custom */
+#custom_1 {
+    -fx-background-color: #080C53;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+#custom_2 {
+    -fx-background-color: #00A4BD;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.background-color {
+    -fx-background-color: #ffffff;
+}
