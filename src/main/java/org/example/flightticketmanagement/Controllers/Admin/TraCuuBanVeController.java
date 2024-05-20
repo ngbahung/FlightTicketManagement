@@ -1,5 +1,8 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,6 +12,7 @@ import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.ChuyenBay;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
 import org.example.flightticketmanagement.Models.SanBay;
+import org.example.flightticketmanagement.Models.Ve;
 
 import java.net.URL;
 import java.sql.*;
@@ -69,17 +73,13 @@ public class TraCuuBanVeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Initialization logic
         setScrollPane(scrollPane);
         fillMenuButtonsItems();
-
-        // Load airports data
         loadAirports();
-
-        // Add event handler to search button
-        searchButton.setOnAction(event -> fillDataOfFlights());
-
-        // Initial data load
+        searchButton.setOnAction(event -> {
+            clearOldData();
+            fillDataOfFlights();
+        });
         fillDataOfFlights();
     }
 
@@ -103,18 +103,44 @@ public class TraCuuBanVeController implements Initializable {
         fillMenuButtonsItems();
     }
 
+    private Map<ChuyenBay, List<Ve>> chuyenBayVeMap = new HashMap<>();
+
     private void showDesiredFlights() {
         try {
             List<ChuyenBay> flights = fetchFlightsFromDatabase();
             for (ChuyenBay flight : flights) {
-                if (desiredSearchData(flight)) {
-                    vbox.getChildren().add(createFlight(flight));
+                List<Ve> ves = fetchVeByMaChuyenBay(flight.getMaChuyenBay()); // Fetch VEs for this flight
+                if (!ves.isEmpty()) { // Check if VEs exist for this flight
+                    chuyenBayVeMap.put(flight, ves); // Associate the flight with its list of VEs
+                    vbox.getChildren().add(createFlight(flight)); // Pass the VEs to the createFlight method
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    private List<Ve> fetchVeByMaChuyenBay(String maChuyenBay) {
+        List<Ve> veList = new ArrayList<>();
+        try {
+            connect = DatabaseDriver.getConnection();
+            prepare = connect.prepareStatement("SELECT * FROM VE WHERE MaChuyenBay = ?");
+            prepare.setString(1, maChuyenBay);
+            result = prepare.executeQuery();
+            while (result.next()) {
+                Ve ve = new Ve();
+                ve.setMaVe(result.getString("MaVe"));
+                ve.setMaChuyenBay(result.getString("MaChuyenBay"));
+                ve.setMaHangVe(result.getString("MaHangVe"));
+                ve.setMaGhe(result.getInt("MaGhe"));
+                ve.setGiaTien(result.getFloat("GiaTien"));
+                veList.add(ve);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return veList;
+    }
+
 
     private void clearOldData() {
         vbox.getChildren().clear();
@@ -130,7 +156,7 @@ public class TraCuuBanVeController implements Initializable {
             e.printStackTrace();
         }
     }
-
+    
     private List<ChuyenBay> fetchFlightsFromDatabase() throws SQLException {
         List<ChuyenBay> flights = new ArrayList<>();
         String query = "SELECT MaChuyenBay, MaDuongBay, SoLuongGhe, SoChuyenBay, TGXP, TGKT, TrangThai, GiaVe FROM CHUYENBAY";
@@ -254,8 +280,17 @@ public class TraCuuBanVeController implements Initializable {
         TraCuuBanVeController.setLabelStyle(priceLabel, "black");
         hbox.getChildren().add(priceLabel);
     }
+    
+    private Label createAirportLabels(ChuyenBay chuyenBay){
+        return new Label();
+    }
+    
+    private Label createTimeLabels(ChuyenBay chuyenBay){
+        return new Label(chuyenBay.getThoiGianXuatPhat().getHour() + ":" + chuyenBay.getThoiGianXuatPhat().getMinute()
+            + " " + chuyenBay.getThoiGianXuatPhat().getSecond());
+    }
 
-    private void setHboxOnAction(HBox hbox, ChuyenBay flight) {
+    private void setHboxOnAction(HBox hbox, ChuyenBay chuyenBay) {
         hbox.setOnMouseClicked(event -> {
             try {
                 invalidInputForPriceMsg.setVisible(!validMaxPrice());
@@ -269,15 +304,86 @@ public class TraCuuBanVeController implements Initializable {
         });
     }
 
+
     private boolean validMaxPrice() {
-        try {
-            String maxPriceText = maxPrice.getText();
-            if (maxPriceText.isEmpty()) return true; // No max price set
-            float price = Float.parseFloat(maxPriceText);
-            return price > 0;
-        } catch (NumberFormatException e) {
+        if (!maxPrice.getText().isEmpty()) {
+            try {
+                float maxPriceValue = Float.parseFloat(maxPrice.getText());
+                String seatClass = getSeatClass();
+
+                if (!seatClass.equals("Seat class")) {
+                    float seatClassMultiplier = getSeatClassMultiplier(seatClass);
+                    ChuyenBay flight = fetchChuyenBay(); // Assuming you have a method to fetch the flight
+                    if (flight != null) {
+                        // Adjust this logic based on how you retrieve the ticket price from the flight object
+                        float flightPrice = flight.getGiaVe();
+                        if (maxPriceValue < flightPrice * seatClassMultiplier) {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private ChuyenBay fetchChuyenBay() {
+        return null;
+    }
+
+    private float getSeatClassMultiplier(String seatClass) {
+        // This is a placeholder method. Implement the actual database query to get the HeSo value.
+        switch (seatClass) {
+            case "Tiết kiệm":
+                return 1.0f;
+            case "Phổ thông":
+                return 1.3f;
+            case "Thương gia":
+                return 1.8f;
+            case "Hạng nhất":
+                return 2.5f;
+            default:
+                return 1.0f; // Default multiplier in case seat class is not recognized
+        }
+    }
+
+    public boolean desiredSearchData(ChuyenBay flight, Ve ve) {
+        if(!desiredDepartureAirportCode(flight)) {
             return false;
         }
+        if(!desiredArrivalAirportCode(flight)) {
+            return false;
+        }
+        if(!desiredDepartureDate(flight)) {
+            return false;
+        }
+        if(!validNumOfPassengers(flight)) {
+            return false;
+        }
+        if(!desiredMaxDepartureTime(flight)) {
+            return false;
+        }
+        if(!desiredMaxArrivalTime(flight)) {
+            return false;
+        }
+        if(!maxPrice.getText().isEmpty()) {
+            if(!validNum(maxPrice)) {
+                invalidInputForPriceMsg.setVisible(true);
+                return false;
+            }
+            invalidInputForPriceMsg.setVisible(false);
+            if(!validMaxPrice()) {
+                return false;
+            }
+        }
+        invalidInputForPriceMsg.setVisible(false);
+        return true;
     }
 
     private boolean validNum(TextField textField) {
@@ -291,15 +397,262 @@ public class TraCuuBanVeController implements Initializable {
         }
     }
 
-    private void setScrollPane(ScrollPane scrollPane) {
-        scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
+    private boolean validTime(Time desiredMaxTime, Time flightTime) {
+        String hour = desiredMaxTime.getHour();
+        String period = desiredMaxTime.getPeriod();
+        if (period.equals("PM")) {
+
+            if(flightTime.getPeriod().equals("PM")) {
+
+                if (flightTime.getHour().compareTo(hour) > 0) {
+                    return false;
+                }
+            }
+        }
+        if (period.equals("AM")) {
+
+            if (flightTime.getPeriod().equals("PM")) {
+                return false;
+            }
+
+            if (flightTime.getHour().compareTo(hour) > 0) {
+                return false;
+            }
+
+        }
+        return true;
     }
 
-    private void fillMenuButtonsItems() {
-        fillMenuButton(fromWhereMenuButton, new HashMap<>());
-        fillMenuButton(whereToMenuButton, new HashMap<>());
+    @FXML
+    private void validNumForPrice(ActionEvent actionEvent) {
+        String text = maxPrice.getText().trim();
+        if (!text.isEmpty()) {
+            try {
+                int value = Integer.parseInt(text);
+                invalidInputForPriceMsg.setVisible(false);
+                enableSearchButton();
+            } catch (NumberFormatException e) {
+                invalidInputForPriceMsg.setVisible(true);
+                searchButton.setDisable(true);
+            }
+        }
+        if(text.isEmpty()){
+            invalidInputForPriceMsg.setVisible(false);
+            enableSearchButton();
+        }
     }
+
+    private void setScrollPane(ScrollPane scrollPane) {
+//        scrollPane.setFitToWidth(true);
+//        scrollPane.setFitToHeight(true);
+        scrollPane.setPannable(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+    }
+
+    private boolean datePickerUsed() {
+        return datePicker.getValue() != null;
+    }
+    private boolean fromWhereUsed() {
+        return !fromWhereMenuButton.getText().equals("From Where ?");
+    }
+    private boolean whereToUsed() {
+        return !whereToMenuButton.getText().equals("Where to ?");
+    }
+
+    public void enableSearchButton() {
+        if(!fromWhereUsed()) {
+            searchButton.setDisable(true);
+            return;
+        }
+        if(!whereToUsed()) {
+            searchButton.setDisable(true);
+            return;
+        }
+        if(!datePickerUsed()) {
+            searchButton.setDisable(true);
+            return;
+        }
+        if(!validNum(numOfPassengers)) {
+            searchButton.setDisable(true);
+            return;
+        }
+        if(!validMaxPrice()) {
+            searchButton.setDisable(true);
+            return;
+        }
+        searchButton.setDisable(false);
+    }
+
+    @FXML
+    private void setFromWhereMenuButton(ActionEvent e) {
+        Object source = e.getSource();
+        MenuItem menuItem = (MenuItem) source;
+        fromWhereMenuButton.setText(menuItem.getText());
+        enableSearchButton();
+    }
+    @FXML
+    private void setWhereToMenuButton(ActionEvent e) {
+        Object source = e.getSource();
+        MenuItem menuItem = (MenuItem) source;
+        whereToMenuButton.setText(menuItem.getText());
+        enableSearchButton();
+    }
+    @FXML
+    private void setMaxDepartTimeMenuButtonText(ActionEvent e) {
+        Object source = e.getSource();
+        MenuItem menuItem = (MenuItem) source;
+        maxDepartTimeButton.setText(menuItem.getText());
+    }
+    @FXML
+    private void setMaxArrivalTimeMenuButtonText(ActionEvent e) {
+        Object source = e.getSource();
+        MenuItem menuItem = (MenuItem) source;
+        maxArrivalTimeButton.setText(menuItem.getText());
+    }
+    @FXML
+    private void setSeatClassMenuButtonText(ActionEvent e) {
+        Object source = e.getSource();
+        MenuItem menuItem = (MenuItem) source;
+        seatClassButton.setText(menuItem.getText());
+    }
+
+    private String getDepartureAirportCode() {
+        return fromWhereMenuButton.getText();
+    }
+    private String getArrivalAirportCode() {
+        return whereToMenuButton.getText();
+    }
+    private String chosenDay() {
+        return Integer.toString(datePicker.getValue().getDayOfMonth());
+    }
+    private String chosenMonth() {
+        return Integer.toString(datePicker.getValue().getMonth().getValue());
+    }
+    private String chosenYear() {
+        return Integer.toString(datePicker.getValue().getYear());
+    }
+    private void prependZeroIfNeeded(String item) {
+        if (Integer.parseInt(item) < 10) {
+            item = "0" + item;
+        }
+    }
+
+    private int getNumberOfPassengers() {
+        return Integer.parseInt(numOfPassengers.getText());
+    }
+    private Time getMaxDepartureTime() {
+        String time = maxDepartTimeButton.getText();
+        return Time.parse(time);
+    }
+
+
+    private Time getMaxArrivalTime() {
+        String time = maxArrivalTimeButton.getText();
+        return Time.parse(time);
+    }
+    private String getSeatClass() {
+        return seatClassButton.getText();
+    }
+    private int getMaxPrice() {
+        return Integer.parseInt(maxPrice.getText());
+    }
+
+
+    private void fillMenuButtonsItems() {
+        fillMaps();
+        departureAirports.clear();
+        arrivalAirports.clear();
+        fillTimeButtons();
+    }
+
+    private String fetchMaSanBayDiByMaDuongBay(String maDuongBay) {
+        String maSanBayDi = null;
+        try (Connection connect = DatabaseDriver.getConnection();
+             PreparedStatement prepare = connect.prepareStatement(
+                     "SELECT MaSanBayDi FROM DUONGBAY WHERE MaDuongBay = ?")) {
+            prepare.setString(1, maDuongBay);
+            try (ResultSet result = prepare.executeQuery()) {
+                if (result.next()) {
+                    maSanBayDi = result.getString("MaSanBayDi");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return maSanBayDi;
+    }
+
+    private boolean desiredDepartureAirportCode(ChuyenBay flight) {
+        String maSanBayDi = fetchMaSanBayDiByMaDuongBay(flight.getMaDuongBay());
+        return getDepartureAirportCode().equals(maSanBayDi);
+    }
+    private String fetchMaSanBayDenByMaDuongBay(String maDuongBay) {
+        String maSanBayDen = null;
+        try (Connection connect = DatabaseDriver.getConnection();
+             PreparedStatement prepare = connect.prepareStatement(
+                     "SELECT MaSanBayDen FROM DUONGBAY WHERE MaDuongBay = ?")) {
+            prepare.setString(1, maDuongBay);
+            try (ResultSet result = prepare.executeQuery()) {
+                if (result.next()) {
+                    maSanBayDen = result.getString("MaSanBayDen");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return maSanBayDen;
+    }
+
+    private boolean desiredArrivalAirportCode(ChuyenBay flight) {
+        String maSanBayDen = fetchMaSanBayDenByMaDuongBay(flight.getMaDuongBay());
+        return getArrivalAirportCode().equals(maSanBayDen);
+    }
+    private boolean desiredDepartureDate(ChuyenBay flight) {
+        LocalDate desiredDate = getDepartureDate();
+
+        LocalDate flightDepartureDate = flight.getThoiGianXuatPhat().toLocalDate();
+
+        return desiredDate.equals(flightDepartureDate);
+    }
+
+    // Example implementation of getDepartureDate
+    private LocalDate getDepartureDate() {
+        // Replace with actual logic to get the desired departure date
+        return LocalDate.of(2023, 5, 20); // Example date
+    }
+
+    private boolean validNumOfPassengers(ChuyenBay flight) {
+        return getNumberOfPassengers() <= flight.getSoLuongGhe();
+    }
+
+    private boolean desiredMaxDepartureTime(ChuyenBay flight) {
+        if(!maxDepartTimeButton.getText().equals("Max departure time")) {
+            Time maxDepartureTime = getMaxDepartureTime();
+            LocalTime localTime = flight.getThoiGianXuatPhat().toLocalTime();
+
+            String hour = String.valueOf(localTime.getHour());
+            String minute = String.valueOf(localTime.getMinute());
+            String period = localTime.getHour() < 12 ? "AM" : "PM";
+            Time flightDepartureTime = new Time(hour, minute, period);
+            return validTime(maxDepartureTime, flightDepartureTime);
+        }
+        return true;
+    }
+
+    private boolean desiredMaxArrivalTime(ChuyenBay flight) {
+        if (!maxArrivalTimeButton.getText().equals("Max arrival time")) {
+            Time maxArrivalTime = getMaxArrivalTime();
+            Time flightDepartureTime = new Time(
+                    String.valueOf(flight.getThoiGianXuatPhat().getHour()),
+                    String.valueOf(flight.getThoiGianXuatPhat().getMinute()),
+                    flight.getThoiGianXuatPhat().getHour() < 12 ? "AM" : "PM"
+            );
+            return validTime(maxArrivalTime, flightDepartureTime);
+        }
+        return true;
+    }
+
 
     private void fillMenuButton(MenuButton menuButton, Map<String, Boolean> items) {
         menuButton.getItems().clear();
@@ -313,51 +666,80 @@ public class TraCuuBanVeController implements Initializable {
 
 
     public static void setLabelStyle(Label label, String color) {
-        label.setStyle("-fx-text-fill: " + color + "; -fx-font-size: 14px; -fx-font-weight: bold;");
+//        label.setStyle("-fx-text-fill: " + color + "; -fx-font-size: 14px; -fx-font-weight: bold;");
+        if(color.equals("white")) {
+            label.setStyle("-fx-pref-width: 400;" +
+                    "-fx-padding: 25;" +
+                    " -fx-border-width: 5;" +
+                    " -fx-alignment: center;" +
+                    " -fx-font-size: 13; " +
+                    "-fx-text-fill: white");
+            return;
+        }
+        label.setStyle("-fx-pref-width: 400;" +
+                "-fx-padding: 25;" +
+                " -fx-border-width: 5;" +
+                " -fx-alignment: center;" +
+                " -fx-font-size: 13;" +
+                "-fx-text-fill: black");
     }
 
     private void vboxStyling(VBox vbox) {
         vbox.setSpacing(10);
         vbox.setStyle("-fx-padding: 10;");
+        vbox.setStyle("-fx-background-color: white;");
     }
 
     private void hboxStyling(HBox hbox) {
         hbox.setSpacing(20);
         hbox.setStyle("-fx-padding: 10; -fx-border-color: black; -fx-border-width: 1;");
+//       flyx
+        hboxStyle(hbox);
+        hboxHover(hbox);
+        hboxClicked(hbox);
     }
 
-    private boolean desiredSearchData(ChuyenBay flight) {
-        boolean matches = true;
-
-        // Check max price
-        if (!maxPrice.getText().isEmpty()) {
-            try {
-                float maxPriceValue = Float.parseFloat(maxPrice.getText());
-                if (flight.getGiaVe() > maxPriceValue) {
-                    matches = false;
+    public void hboxStyle(HBox hbox) {
+        hbox.setStyle("-fx-background-color: white;" +
+                " -fx-border-width: 1;" +
+                " -fx-border-color: black;");
+    }
+    public void hboxHover(HBox hbox) {
+        hbox.setOnMouseEntered(event ->{
+            hbox.setStyle("-fx-background-color: #605DEC; -fx-border-color: black;");
+            hbox.getChildren().forEach(node -> {
+                if (node instanceof Label) {
+                    setLabelStyle((Label) node, "white");
                 }
-            } catch (NumberFormatException e) {
-                invalidInputForPriceMsg.setVisible(true);
-                matches = false;
-            }
-        }
+            });
+        });
 
-        // Check number of passengers
-        if (!numOfPassengers.getText().isEmpty()) {
-            try {
-                int passengerCount = Integer.parseInt(numOfPassengers.getText());
-                if (flight.getSoLuongGhe() < passengerCount) {
-                    matches = false;
+        hbox.setOnMouseExited(event ->{
+            hbox.setStyle("-fx-background-color: white; -fx-border-color: black;");
+            hbox.getChildren().forEach(node -> {
+                if (node instanceof Label) {
+                    setLabelStyle((Label) node, "black");
                 }
-            } catch (NumberFormatException e) {
-                invalidInputOfPassengersMsg.setVisible(true);
-                matches = false;
-            }
-        }
-
-        // Additional filtering logic (e.g., date, time, airports) can be added here
-
-        return matches;
+            });
+        });
+    }
+    public void hboxClicked(HBox hbox) {
+        hbox.setOnMousePressed(event ->{
+            hbox.setStyle("-fx-background-color: #4422ac; -fx-border-color: white;");
+            hbox.getChildren().forEach(node -> {
+                if (node instanceof Label) {
+                    setLabelStyle((Label) node, "white");
+                }
+            });
+        });
+        hbox.setOnMouseReleased(event ->{
+            hbox.setStyle("-fx-background-color: #605DEC; -fx-border-color: black;");
+            hbox.getChildren().forEach(node -> {
+                if (node instanceof Label) {
+                    setLabelStyle((Label) node, "white");
+                }
+            });
+        });
     }
 
     private void loadAirports() {
@@ -383,24 +765,16 @@ public class TraCuuBanVeController implements Initializable {
     }
 
     // Add your event handlers here for menu button texts
-    private void setFromWhereMenuButtonText(ActionEvent event) {
+    @FXML
+    void setFromWhereMenuButtonText(ActionEvent event) {
         MenuItem source = (MenuItem) event.getSource();
         fromWhereMenuButton.setText(source.getText());
     }
 
-    private void setWhereToMenuButtonText(ActionEvent event) {
+    @FXML
+    void setWhereToMenuButtonText(ActionEvent event) {
         MenuItem source = (MenuItem) event.getSource();
         whereToMenuButton.setText(source.getText());
-    }
-
-    private void setMaxDepartTimeMenuButtonText(ActionEvent event) {
-        MenuItem source = (MenuItem) event.getSource();
-        maxDepartTimeButton.setText(source.getText());
-    }
-
-    private void setMaxArrivalTimeMenuButtonText(ActionEvent event) {
-        MenuItem source = (MenuItem) event.getSource();
-        maxArrivalTimeButton.setText(source.getText());
     }
 
     private void fillMaps() {

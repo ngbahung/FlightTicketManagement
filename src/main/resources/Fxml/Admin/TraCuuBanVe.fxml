@@ -17,190 +17,81 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<<<<<<< Updated upstream
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="992.0"
-            stylesheets="@../../Styles/Admin/BanVe.css" xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.flightticketmanagement.Controllers.Admin.TraCuuBanVeController">
-   <ImageView fitHeight="596.0" fitWidth="985.0" layoutX="4.0" layoutY="3.0" opacity="0.75" pickOnBounds="true"
-              preserveRatio="true">
-      <Image url="@../../Images/admin/World.png"/>
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/BanVe.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.TraCuuBanVeController">
+   <ImageView fitHeight="596.0" fitWidth="985.0" layoutX="4.0" layoutY="3.0" opacity="0.75" pickOnBounds="true" preserveRatio="true">
+      <Image url="@../../Images/admin/World.png" />
    </ImageView>
-   <Pane layoutX="772.0" layoutY="242.0" prefHeight="500.0" prefWidth="200.0">
-      <MenuButton fx:id="maxDepartTimeButton" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="50.0"
-                  prefWidth="200.0" style="-fx-background-color: white;" text="Max departure time">
-         <cursor>
-            <Cursor fx:constant="HAND"/>
-         </cursor>
-      </MenuButton>
-      <MenuButton fx:id="maxArrivalTimeButton" layoutY="100.0" mnemonicParsing="false" prefHeight="50.0"
-                  prefWidth="200.0" style="-fx-background-color: white;" text="Max arrival time">
-         <cursor>
-            <Cursor fx:constant="HAND"/>
-         </cursor>
-      </MenuButton>
-      <MenuButton fx:id="seatClassButton" layoutX="-2.0" layoutY="225.0" mnemonicParsing="false" prefHeight="50.0"
-                  prefWidth="200.0" style="-fx-background-color: white;" text="Seat class">
-         <items>
-            <MenuItem mnemonicParsing="false" text="Tiết kiệm"/>
-            <MenuItem mnemonicParsing="false" text="Phổ thông"/>
-            <MenuItem mnemonicParsing="false" text="Thương gia"/>
-            <MenuItem mnemonicParsing="false" text="Hạng nhất"/>
-         </items>
-         <cursor>
-            <Cursor fx:constant="HAND"/>
-         </cursor>
-      </MenuButton>
-      <TextField fx:id="maxPrice" layoutY="341.0" prefHeight="50.0" prefWidth="200.0" promptText="Max price "
-                 style="-fx-background-insets: 0;"/>
-      <Label fx:id="invalidInputForPriceMsg" layoutY="450.0" prefHeight="18.0" prefWidth="98.0"
-             text="Must enter digits..." textFill="#cc0202" visible="false"/>
-   </Pane>
-   <Pane layoutX="32.0" layoutY="130.0" prefHeight="48.0" prefWidth="947.0">
-      <MenuButton fx:id="fromWhereMenuButton" mnemonicParsing="false" prefHeight="48.0" prefWidth="257.0"
-                  text="From Where ?">
+   <Pane layoutX="45.0" layoutY="57.0" prefHeight="48.0" prefWidth="947.0">
+      <MenuButton fx:id="fromWhereMenuButton" mnemonicParsing="false" onAction="#setFromWhereMenuButtonText" prefHeight="48.0" prefWidth="257.0" text="From Where ?">
          <font>
-            <Font size="22.0"/>
+            <Font size="22.0" />
          </font>
          <cursor>
-            <Cursor fx:constant="HAND"/>
+            <Cursor fx:constant="HAND" />
          </cursor>
          <graphic>
             <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-               <Image url="@../../../../../../FlyXpert/src/main/resources/flyxpert/flyxpert/departure-1.png"/>
+               <Image url="@../../Images/admin/departure-1.png" />
             </ImageView>
          </graphic>
       </MenuButton>
-      <Separator layoutX="298.0" orientation="VERTICAL" prefHeight="48.0" prefWidth="0.0"/>
-      <MenuButton fx:id="whereToMenuButton" layoutX="257.0" mnemonicParsing="false" prefHeight="48.0"
-                  prefWidth="223.0" text="Where to ?">
+      <Separator layoutX="298.0" orientation="VERTICAL" prefHeight="48.0" prefWidth="0.0" />
+      <MenuButton fx:id="whereToMenuButton" layoutX="257.0" mnemonicParsing="false" onAction="#setWhereToMenuButtonText" prefHeight="48.0" prefWidth="223.0" text="Where to ?">
          <font>
-            <Font size="22.0"/>
+            <Font size="22.0" />
          </font>
          <cursor>
-            <Cursor fx:constant="HAND"/>
+            <Cursor fx:constant="HAND" />
          </cursor>
          <graphic>
-            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true"
-                       preserveRatio="true">
-               <Image url="@../../../../../../FlyXpert/src/main/resources/flyxpert/flyxpert/AirplaneLandingIcon.png"/>
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+               <Image url="@../../Images/admin/AirplaneLandingIcon.png" />
             </ImageView>
          </graphic>
       </MenuButton>
-      <DatePicker fx:id="datePicker" layoutX="480.0" prefHeight="48.0" prefWidth="135.0" promptText="Depart"
-                  style="-fx-background-color: white;">
+      <DatePicker fx:id="datePicker" layoutX="480.0" onAction="#enableSearchButton" prefHeight="48.0" prefWidth="135.0" promptText="Depart" style="-fx-background-color: white;">
          <cursor>
-            <Cursor fx:constant="HAND"/>
+            <Cursor fx:constant="HAND" />
          </cursor>
       </DatePicker>
-      <TextField fx:id="numOfPassengers" layoutX="615.0" prefHeight="48.0" prefWidth="200.0"
-                 promptText="Number of passengers" style="-fx-background-insets: 0;"/>
-      <Button fx:id="searchButton" disable="true" layoutX="815.0" mnemonicParsing="false"
-              onAction="#fillDataOfFlights" prefHeight="48.0" prefWidth="122.0" text="Search">
+      <TextField fx:id="numOfPassengers" layoutX="615.0" onAction="#enableSearchButton" prefHeight="48.0" prefWidth="200.0" promptText="Number of passengers" style="-fx-background-insets: 0;" />
+      <Button fx:id="searchButton" disable="true" layoutX="815.0" mnemonicParsing="false" onAction="#fillDataOfFlights" prefHeight="48.0" prefWidth="122.0" text="Search">
          <font>
-            <Font size="22.0"/>
+            <Font size="22.0" />
          </font>
       </Button>
    </Pane>
-   <ScrollPane fx:id="scrollPane" layoutX="70.0" layoutY="220.0" prefHeight="500.0" prefWidth="672.0">
-      <VBox fx:id="vbox" prefHeight="500.0" prefWidth="663.0">
+   <ScrollPane fx:id="scrollPane" layoutX="70.0" layoutY="220.0" prefHeight="500.0" prefWidth="907.0">
+      <VBox fx:id="vbox" prefHeight="500.0" prefWidth="889.0">
          <opaqueInsets>
-            <Insets top="10.0"/>
+            <Insets top="10.0" />
          </opaqueInsets>
       </VBox>
    </ScrollPane>
-   <Label fx:id="invalidInputOfPassengersMsg" layoutX="872.0" layoutY="178.0" prefHeight="18.0" prefWidth="98.0"
-          text="Must enter digits..." textFill="#cc0202" visible="false"/>
-=======
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/BanVe.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.BanVeController">
-   <children>
-      <ImageView fitHeight="489.0" fitWidth="1061.0" layoutX="-12.0" layoutY="20.0" opacity="0.75" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../../../../FlyXpert/src/main/resources/flyxpert/flyxpert/World.png" />
-         </image>
-      </ImageView>
-      <Pane layoutX="768.0" layoutY="220.0" prefHeight="500.0" prefWidth="200.0">
-         <children>
-            <MenuButton fx:id="maxDepartTimeButton" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#setMaxDepartTimeMenuButtonText" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: white;" stylesheets="@../../Styles/Admin/BanVe.css" text="Max departure time">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </MenuButton>
-            <MenuButton fx:id="maxArrivalTimeButton" layoutY="100.0" mnemonicParsing="false" onAction="#setMaxArrivalTimeMenuButtonText" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: white;" stylesheets="@../../Styles/Admin/BanVe.css" text="Max arrival time">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </MenuButton>
-            <MenuButton fx:id="seatClassButton" layoutX="-2.0" layoutY="211.0" mnemonicParsing="false" onAction="#setSeatClassMenuButtonText" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: white;" stylesheets="@../../Styles/Admin/BanVe.css" text="Seat class">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#setSeatClassMenuButtonText" text="Economy class" />
-                  <MenuItem mnemonicParsing="false" onAction="#setSeatClassMenuButtonText" text="Business class" />
-                  <MenuItem mnemonicParsing="false" onAction="#setSeatClassMenuButtonText" text="First class" />
-               </items>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </MenuButton>
-            <TextField fx:id="maxPrice" layoutX="-2.0" layoutY="323.0" onAction="#validNumForPrice" prefHeight="50.0" prefWidth="200.0" promptText="Max price " style="-fx-background-insets: 0;" stylesheets="@../../Styles/Admin/BanVe.css" />
-            <Label fx:id="invalidInputForPriceMsg" layoutY="450.0" prefHeight="18.0" prefWidth="98.0" text="Must enter digits..." textFill="#cc0202" visible="false" />
-         </children>
-      </Pane>
-      <Pane layoutX="24.0" layoutY="90.0" prefHeight="48.0" prefWidth="945.0">
-         <children>
-            <MenuButton fx:id="fromWhereMenuButton" mnemonicParsing="false" onAction="#setFromWhereMenuButtonText" prefHeight="48.0" prefWidth="226.0" stylesheets="@../../Styles/Admin/BanVe.css" text="From Where ?">
-               <font>
-                  <Font size="22.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <graphic>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../FlyXpert/src/main/resources/flyxpert/flyxpert/departure-1.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </MenuButton>
-            <Separator layoutX="298.0" orientation="VERTICAL" prefHeight="48.0" prefWidth="0.0" />
-            <MenuButton fx:id="whereToMenuButton" layoutX="226.0" mnemonicParsing="false" onAction="#setWhereToMenuButtonText" prefHeight="48.0" prefWidth="194.0" stylesheets="@../../Styles/Admin/BanVe.css" text="Where to ?">
-               <font>
-                  <Font size="22.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <graphic>
-                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../FlyXpert/src/main/resources/flyxpert/flyxpert/AirplaneLandingIcon.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </MenuButton>
-            <DatePicker fx:id="datePicker" layoutX="420.0" onAction="#enableSearchButton" prefHeight="48.0" prefWidth="200.0" promptText="Depart" style="-fx-background-color: white;" stylesheets="@../../Styles/Admin/BanVe.css">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </DatePicker>
-            <TextField fx:id="numOfPassengers" layoutX="620.0" onAction="#enableSearchButton" prefHeight="48.0" prefWidth="151.0" promptText="Number of passengers" style="-fx-background-insets: 0;" stylesheets="@../../Styles/Admin/BanVe.css" />
-            <Button fx:id="searchButton" disable="true" layoutX="771.0" mnemonicParsing="false" onAction="#fillDataOfFlights" prefHeight="48.0" prefWidth="151.0" stylesheets="@../../Styles/Admin/BanVe.css" text="Search">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </Button>
-         </children>
-      </Pane>
-      <ScrollPane fx:id="scrollPane" layoutX="70.0" layoutY="220.0" prefHeight="500.0" prefWidth="677.0" stylesheets="@../../Styles/Admin/BanVe.css">
-         <content>
-            <VBox fx:id="vbox" prefHeight="500.0" prefWidth="679.0" stylesheets="@../../Styles/Admin/BanVe.css">
-               <opaqueInsets>
-                  <Insets top="10.0" />
-               </opaqueInsets>
-            </VBox>
-         </content>
-      </ScrollPane>
-      <Label fx:id="invalidInputOfPassengersMsg" layoutX="603.0" layoutY="178.0" prefHeight="18.0" prefWidth="226.0" text="Must enter digits..." textFill="#cc0202" visible="false" />
-   </children>
->>>>>>> Stashed changes
+   <Label fx:id="invalidInputOfPassengersMsg" layoutX="662.0" layoutY="106.0" prefHeight="31.0" prefWidth="200.0" text="Must enter digits..." textFill="#cc0202" visible="false" />
+   <Pane layoutX="45.0" layoutY="139.0" prefHeight="48.0" prefWidth="808.0">
+      <MenuButton fx:id="maxDepartTimeButton" contentDisplay="RIGHT" layoutY="-1.0" mnemonicParsing="false" onAction="#setMaxDepartTimeMenuButtonText" prefHeight="50.0" prefWidth="209.0" style="-fx-background-color: white;" text="Max departure time">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </MenuButton>
+      <MenuButton fx:id="maxArrivalTimeButton" layoutX="209.0" layoutY="-1.0" mnemonicParsing="false" onAction="#setMaxArrivalTimeMenuButtonText" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: white;" text="Max arrival time">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </MenuButton>
+      <MenuButton fx:id="seatClassButton" layoutX="409.0" layoutY="-1.0" mnemonicParsing="false" onAction="#setSeatClassMenuButtonText" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: white;" text="Seat class">
+         <items>
+            <MenuItem mnemonicParsing="false" text="Tiết kiệm" />
+            <MenuItem mnemonicParsing="false" text="Phổ thông" />
+            <MenuItem mnemonicParsing="false" text="Thương gia" />
+            <MenuItem mnemonicParsing="false" text="Hạng nhất" />
+         </items>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </MenuButton>
+      <TextField fx:id="maxPrice" layoutX="609.0" layoutY="-1.0" onAction="#validNumForPrice" prefHeight="50.0" prefWidth="200.0" promptText="Max price " style="-fx-background-insets: 0;" />
+   </Pane>
+   <Label fx:id="invalidInputForPriceMsg" layoutX="658.0" layoutY="186.0" prefHeight="31.0" prefWidth="200.0" text="Must enter digits..." textFill="#cc0202" visible="false" />
 </AnchorPane>

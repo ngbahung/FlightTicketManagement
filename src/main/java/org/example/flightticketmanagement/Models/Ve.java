@@ -9,6 +9,8 @@ public class Ve {
     private Integer maGhe;
     private Float giaTien;
 
+    public Ve(){}
+
     public Ve(String maVe, String maChuyenBay, String maHangVe, Integer maGhe, Float giaTien) {
         this.maVe = maVe;
         this.maChuyenBay = maChuyenBay;

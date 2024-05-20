@@ -90,35 +90,4 @@ public class ChuyenBay {
         this.giaVe = giaVe;
     }
 
-    public static class ChuyenBayDAO {
-        public List<ChuyenBay> getChuyenBays(String departure, String destination, LocalDateTime date, Integer maxPrice) {
-            List<ChuyenBay> chuyenBays = new ArrayList<>();
-            String sql = "SELECT * FROM CHUYENBAY WHERE MaDuongBay LIKE ? AND TGXP >= ? AND GiaVe <= ?";
-
-            try (Connection conn = DatabaseDriver.getConnection();
-                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setString(1, departure + "%" + destination);
-                pstmt.setTimestamp(2, Timestamp.valueOf(date));
-                pstmt.setInt(3, maxPrice);
-
-                ResultSet rs = pstmt.executeQuery();
-                while (rs.next()) {
-                    ChuyenBay chuyenBay = new ChuyenBay(
-                            rs.getString("MaChuyenBay"),
-                            rs.getString("MaDuongBay"),
-                            rs.getInt("SoLuongGhe"),
-                            rs.getInt("SoChuyenBay"),
-                            rs.getTimestamp("TGXP").toLocalDateTime(),
-                            rs.getTimestamp("TGKT").toLocalDateTime(),
-                            rs.getString("TrangThai"),
-                            rs.getFloat("GiaVe")
-                    );
-                    chuyenBays.add(chuyenBay);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return chuyenBays;
-        }
-    }
 }
