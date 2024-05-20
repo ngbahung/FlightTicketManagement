@@ -1,7 +1,11 @@
 package org.example.flightticketmanagement.Models;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class DatabaseDriver {
     public Connection conn;
