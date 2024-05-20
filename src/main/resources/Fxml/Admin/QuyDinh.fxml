@@ -35,12 +35,12 @@
             <Label text="Thời gian dừng tối đa:" GridPane.rowIndex="3" />
             <Label text="Thời gian chậm nhất cho phép đặt vé:" GridPane.rowIndex="4" />
             <Label text="Thời gian chậm nhất cho phép hủy đặt vé:" GridPane.rowIndex="5" />
-            <TextField fx:id="mintgbay_txf" editable="false" promptText="phút" GridPane.columnIndex="1" />
-            <TextField fx:id="maxsbtg_txf" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="mintgdung_tfx" editable="false" promptText="phút" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="maxtgdung_tfx" editable="false" promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField fx:id="mintgdatve_tfx" editable="false" promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextField fx:id="mintghuyve_tfx" editable="false" promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextField fx:id="mintgbay_txf" disable="true" editable="false" promptText="phút" GridPane.columnIndex="1" />
+            <TextField fx:id="maxsbtg_txf" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="mintgdung_tfx" disable="true" editable="false" promptText="phút" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="maxtgdung_tfx" disable="true" editable="false" promptText="phút" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="mintgdatve_tfx" disable="true" editable="false" promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="mintghuyve_tfx" disable="true" editable="false" promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </children>
          <padding>
             <Insets left="20.0" right="20.0" />
