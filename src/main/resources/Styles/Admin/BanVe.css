@@ -29,7 +29,11 @@
 .context-menu {
     -fx-pref-width: 200; /* Set the preferred width */
     -fx-pref-height: 150; /* Set the preferred height */
+<<<<<<< Updated upstream
     -fx-font-size: 12;
+=======
+    -fx-font-size: 16px;
+>>>>>>> Stashed changes
     -fx-background-radius: 10;
 }
 #scrollPane {
@@ -45,12 +49,31 @@
 #scrollPane:hover .scroll-bar {
     -fx-opacity: 0;
 }
+<<<<<<< Updated upstream
 
 /* MiniContextMenu */
 .context-menu {
     -fx-pref-width: 100; /* Set the preferred width */
     -fx-pref-height: 75; /* Set the preferred height */
     -fx-font-size: 12;
+=======
+/*System global*/
+#FlyXpertLabel{
+    -fx-text-fill: linear-gradient(to right, #15b2d1, #8f15e1);
+    -fx-font-size: 50;
+    -fx-font-family: System;
+    -fx-font-weight: bold;
+}
+
+.label{
+    -fx-font-family: System;
+}
+/*MiniContext*/
+.context-menu {
+    -fx-pref-width: 100; /* Set the preferred width */
+    -fx-pref-height: 75; /* Set the preferred height */
+    -fx-font-size: 16px;
+>>>>>>> Stashed changes
     -fx-background-radius: 10;
 }
 
@@ -64,10 +87,34 @@
 .date-picker > .arrow-button {
     -fx-background-color: transparent;
 }
+<<<<<<< Updated upstream
 /* Ba Hung */
 
 .text {
+=======
+
+
+
+/*TRINH EDIT*/
+#custom {
+    -fx-font-size: 14;
+>>>>>>> Stashed changes
     -fx-font-family: Inter;
+}
+
+#custom_1 {
+    -fx-font-size: 14;
+    -fx-font-family: Inter;
+    -fx-background-color: #080C53;
+    -fx-text-fill: white;
+}
+
+
+/*TRINH EDIT*/
+
+.text .label .combo-box{
+    -fx-font-family: Inter;
+    -fx-font-size: 14px;
 }
 
 .table-view {
@@ -89,12 +136,55 @@
 
 
 /* Button */
-#custom_1 {
-    -fx-background-color: #080C53;
-    -fx-text-fill: white;
-}
-
 #custom_2 {
     -fx-background-color: #00A4BD;
     -fx-text-fill: white;
+}
+
+/* Style.css*/
+.button {
+    -fx-background-color: #605DEC; /* Green color */
+    -fx-text-fill: white; /* Text color */
+    -fx-border-color: black;
+}
+.button:hover {
+    -fx-background-color: #4422ac;
+    -fx-text-fill: white;
+    -fx-border-color: black;
+}
+.button:pressed {
+    -fx-background-color: #4422ac;
+    -fx-text-fill: white;
+    -fx-border-color: white;
+}
+#fromWhereMenuButton {
+    -fx-background-color: white;
+}
+#whereToMenuButton {
+    -fx-background-color: white;
+}
+#calendarButton {
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+.context-menu {
+    -fx-pref-width: 200; /* Set the preferred width */
+    -fx-pref-height: 150; /* Set the preferred height */
+    -fx-font-size: 16px;
+    -fx-background-radius: 10;
+}
+#scrollPane {
+    -fx-background-color: white;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+#scrollPane .scroll-bar {
+    -fx-opacity: 0;
+}
+
+#scrollPane:hover .scroll-bar {
+    -fx-opacity: 0;
 }
