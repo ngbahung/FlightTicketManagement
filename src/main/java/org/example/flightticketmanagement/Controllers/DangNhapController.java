@@ -7,6 +7,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
 import org.example.flightticketmanagement.Models.Model;
@@ -41,6 +43,16 @@ public class DangNhapController implements Initializable {
         account_selector.setValue(Model.getInstance().getViewFactory().getLoginAccountType());
         account_selector.valueProperty().addListener(observable -> Model.getInstance().getViewFactory().setLoginAccountType(account_selector.getValue()));
         dangNhap_btn.setOnAction(actionEvent -> moDangNhap());
+
+        // Add key event listeners for ENTER key
+        tenTK_mfxfld.addEventHandler(KeyEvent.KEY_PRESSED, this::handleKeyPressed);
+        matKhau_mfxpassfld.addEventHandler(KeyEvent.KEY_PRESSED, this::handleKeyPressed);
+    }
+
+    private void handleKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            moDangNhap();
+        }
     }
 
     private void moDangNhap() {
