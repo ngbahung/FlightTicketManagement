@@ -128,11 +128,11 @@ public class QuyDinhController implements Initializable {
     private FilteredList<HangVe> filteredHangVeData;
 
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         showSanBayList();
         showHangVeList();
+        loadThamSoData();
         suasanbay_btn.setOnAction(this::editSelectedAirports);
         xoasanbay_btn.setOnAction(this::deactivateSelectedAirports);
         searchSanBay_btn.setOnAction(this::searchSanBay);
@@ -302,8 +302,8 @@ public class QuyDinhController implements Initializable {
         }
     }
 
-        @FXML
-        void deactivateSelectedAirports(ActionEvent event) {
+    @FXML
+    void deactivateSelectedAirports(ActionEvent event) {
         ObservableList<SanBay> selectedAirports = sanbay_tbv.getSelectionModel().getSelectedItems();
 
         if (selectedAirports.isEmpty()) {
@@ -408,7 +408,7 @@ public class QuyDinhController implements Initializable {
         sanbay_tbv.setItems(sortedData);
     }
 
-    private void searchHangVe(ActionEvent e){
+    private void searchHangVe(ActionEvent e) {
         String keyword = searchhangve_tfx.getText();
         if (keyword == null || keyword.isEmpty()) {
             hangve_tbv.setItems(filteredHangVeData);
@@ -503,5 +503,51 @@ public class QuyDinhController implements Initializable {
         }
     }
 
+    private void loadThamSoData() {
+        String query = "SELECT * FROM THAMSO";
+        try {
+            connect = DatabaseDriver.getConnection();
+            statement = connect.createStatement();
+            result = statement.executeQuery(query);
 
+            while (result.next()) {
+                String maThuocTinh = result.getString("MaThuocTinh");
+                int giaTri = result.getInt("GiaTri");
+
+                switch (maThuocTinh) {
+                    case "TGBTT":
+                        mintgbay_txf.setText(String.valueOf(giaTri));
+                        break;
+                    case "SSBTGTMD":
+                        maxsbtg_txf.setText(String.valueOf(giaTri));
+                        break;
+                    case "TGDTT":
+                        mintgdung_tfx.setText(String.valueOf(giaTri));
+                        break;
+                    case "TGDTD":
+                        maxtgdung_tfx.setText(String.valueOf(giaTri));
+                        break;
+                    case "TGTTDV":
+                        mintgdatve_tfx.setText(String.valueOf(giaTri));
+                        break;
+                    case "TGTT_HV":
+                        mintghuyve_tfx.setText(String.valueOf(giaTri));
+                        break;
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+                if (connect != null) connect.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+    }
 }
