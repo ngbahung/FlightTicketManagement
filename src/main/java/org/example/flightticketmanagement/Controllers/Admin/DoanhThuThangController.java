@@ -47,7 +47,7 @@ public class DoanhThuThangController implements Initializable {
     private TextField dtThang_tongdt_txfl;
 
     //tao connection
-    private Connection connection;
+    private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
 
@@ -57,7 +57,46 @@ public class DoanhThuThangController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        connection = DatabaseDriver.getConnection();
+        connect = DatabaseDriver.getConnection();
+        DTThang_FillDataForComboBoxNam();
+        DTThang_FillDataForComboBoxThang();
+        dtThang_thongKe_btn.setOnMouseClicked(event -> DTThang_LoadData());
+    }
+
+    public void DTThang_LoadData() {
+        if(dtThang_cbbox_namSelection.getSelectionModel().isEmpty()){
+            alert.errorMessage("Vui lòng chọn năm cần thống kê");
+        }
+        if(dtThang_cbbox_thangSelection.getSelectionModel().isEmpty()){
+            alert.errorMessage("Vui lòng chọn tháng cần thống kê");
+        }
+        try
+        {
+            Integer namBaoCao = dtThang_cbbox_namSelection.getSelectionModel().getSelectedItem();
+            Integer thangBaoCao = dtThang_cbbox_thangSelection.getSelectionModel().getSelectedItem();
+
+            String query = "SELECT"+
+                            "MaChuyenBay"+",SoVeDaBan"+",DoanhThu"+",TyLe"+
+                            "FROM"+ "BAOCAOTHANG"+
+                            "WHERE Thang = (?)"+
+                            "AND Nam = (?)";
+            prepare = connect.prepareStatement(query);
+            prepare.setInt(1, thangBaoCao);
+            prepare.setInt(2, namBaoCao);
+            result = prepare.executeQuery();
+            dtThang_tableView.getItems().clear();
+        }
+    }
+    public void DTThang_FillDataForComboBoxNam() {
+        int currentYear = LocalDate.now().getYear();
+        for(int i = currentYear; i >= 2000; i--){
+            dtThang_cbbox_namSelection.getItems().add(i);
+        }
+    }
+    public void DTThang_FillDataForComboBoxThang() {
+        for(int i = 1; i <= 12; i++){
+            dtThang_cbbox_thangSelection.getItems().add(i);
+        }
     }
 
 }

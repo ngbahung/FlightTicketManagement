@@ -9,6 +9,8 @@ public class BaoCaoThang {
     private Integer soVeDaBan;
     private Float doanhThu;
     private Float tyLe;
+    private Integer stt;
+
 
     public BaoCaoThang(String maBCThang, String maBCNam, Integer nam, Integer thang, String maChuyenBay, Integer soVeDaBan, Float doanhThu, Float tyLe) {
         this.maBCThang = maBCThang;
@@ -83,5 +85,13 @@ public class BaoCaoThang {
 
     public void setTyLe(Float tyLe) {
         this.tyLe = tyLe;
+    }
+
+    public Integer getStt() {
+        return stt;
+    }
+
+    public void setStt(Integer stt) {
+        this.stt = stt;
     }
 }
