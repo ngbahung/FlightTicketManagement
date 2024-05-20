@@ -53,7 +53,7 @@ public class DoanhThuThangController implements Initializable {
 
     private final AlertMessage alert = new AlertMessage();
 
-    private BigDecimal tongDoanhThuNam = BigDecimal.valueOf(0.0);
+    private BigDecimal tongDoanhThuThang = BigDecimal.valueOf(0.0);
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -70,22 +70,54 @@ public class DoanhThuThangController implements Initializable {
         if(dtThang_cbbox_thangSelection.getSelectionModel().isEmpty()){
             alert.errorMessage("Vui lòng chọn tháng cần thống kê");
         }
-        try
-        {
+        try {
             Integer namBaoCao = dtThang_cbbox_namSelection.getSelectionModel().getSelectedItem();
             Integer thangBaoCao = dtThang_cbbox_thangSelection.getSelectionModel().getSelectedItem();
 
-            String query = "SELECT"+
-                            "MaChuyenBay"+",SoVeDaBan"+",DoanhThu"+",TyLe"+
-                            "FROM"+ "BAOCAOTHANG"+
-                            "WHERE Thang = (?)"+
-                            "AND Nam = (?)";
+            String query = "SELECT MaChuyenBay, SoVeDaBan, DoanhThu, TyLe " +
+                    "FROM BAOCAOTHANG " +
+                    "WHERE Thang = ? " +
+                    "AND Nam = ?";
             prepare = connect.prepareStatement(query);
             prepare.setInt(1, thangBaoCao);
             prepare.setInt(2, namBaoCao);
             result = prepare.executeQuery();
+
             dtThang_tableView.getItems().clear();
+
+            int stt = 1;
+            while (result.next()) {
+                // Tạo đối tượng BaoCaoThang mới từ kết quả truy vấn và thêm vào TableView
+                BaoCaoThang baoCaoThang = new BaoCaoThang(
+                        stt,
+                        result.getString("MaChuyenBay"),
+                        result.getInt("SoVeDaBan"),
+                        result.getBigDecimal("DoanhThu"),
+                        result.getFloat("TyLe")
+                );
+                dtThang_tableView.getItems().add(baoCaoThang);
+                stt++;
+                tongDoanhThuThang = tongDoanhThuThang.add(baoCaoThang.getDoanhThu());
+            }
+            dtThang_tongdt_txfl.setText(tongDoanhThuThang.toString() + " VNĐ");
+
+            dtThang_stt_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(Integer.toString(cellData.getValue().getStt())));
+            dtThang_macb_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getMaChuyenBay())));
+            dtThang_soVe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(Integer.toString(cellData.getValue().getSoVeDaBan())));
+            dtThang_doanhThu_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDoanhThu().toString()));
+            dtThang_tyLe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTyLe().toString()));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Error occurred while loading data from the database.");
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (prepare != null) prepare.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+
     }
     public void DTThang_FillDataForComboBoxNam() {
         int currentYear = LocalDate.now().getYear();
