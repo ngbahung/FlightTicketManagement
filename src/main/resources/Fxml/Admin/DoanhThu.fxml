@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="800.0" prefWidth="992.0" styleClass="background" stylesheets="@../../Styles/Admin/DoanhThu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.LichSuController">
+<AnchorPane prefHeight="800.0" prefWidth="992.0" styleClass="background" stylesheets="@../../Styles/Admin/DoanhThu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.DoanhThuController">
    <children>
       <TableView layoutX="33.0" layoutY="68.0" prefHeight="310.0" prefWidth="510.0">
         <columns>
@@ -46,8 +46,8 @@
             <HBox alignment="CENTER" layoutX="600.0" layoutY="8.0" prefHeight="47.0" prefWidth="378.0" spacing="30.0">
                <children>
                   <Label layoutX="10.0" layoutY="10.0" styleClass="top-bar-text" text="Năm:" />
-                  <ComboBox layoutX="46.0" layoutY="10.0" prefHeight="25.0" prefWidth="112.0" />
-                  <MFXButton id="custom_button2" buttonType="RAISED" depthLevel="LEVEL1" prefHeight="31.0" prefWidth="123.0" text="Thống kê">
+                  <ComboBox fx:id="dtNam_cbbox_namSelection" layoutX="46.0" layoutY="10.0" prefHeight="25.0" prefWidth="112.0" />
+                  <MFXButton id="custom_button2" fx:id="dtNam_thongKe_btn" buttonType="RAISED" depthLevel="LEVEL1" prefHeight="31.0" prefWidth="123.0" text="Thống kê">
                      <graphic>
                         <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20" />
                      </graphic>
@@ -57,28 +57,28 @@
             <Text layoutX="41.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="DOANH THU NĂM" />
          </children>
       </AnchorPane>
-      <HBox alignment="CENTER_LEFT" layoutX="570.0" layoutY="252.0" prefHeight="55.0" prefWidth="378.0" spacing="20.0">
+      <HBox alignment="CENTER_LEFT" layoutX="570.0" layoutY="252.0" prefHeight="55.0" prefWidth="416.0" spacing="20.0">
          <children>
             <Label styleClass="bottom-bar-text" text="Tổng doanh thu:" />
-            <TextField editable="false" prefHeight="43.0" prefWidth="185.0" styleClass="total-income" text="0 VNĐ" />
+            <TextField editable="false" prefHeight="43.0" prefWidth="234.0" styleClass="total-income" text="0 VNĐ" />
          </children>
       </HBox>
-      <TableView layoutX="33.0" layoutY="457.0" prefHeight="324.0" prefWidth="510.0">
+      <TableView fx:id="dtNam_tableview" layoutX="33.0" layoutY="457.0" prefHeight="324.0" prefWidth="510.0">
          <columns>
-            <TableColumn prefWidth="67.33334732055664" text="Tháng" />
-            <TableColumn prefWidth="148.66661834716797" text="Số chuyến bay" />
-            <TableColumn prefWidth="171.33338928222656" text="Doanh thu" />
-            <TableColumn prefWidth="115.99990844726562" text="Tỉ lệ (%)" />
+            <TableColumn fx:id="dtNam_Thang_tbcolumn" prefWidth="67.33334732055664" text="Tháng" />
+            <TableColumn fx:id="dtNam_soChuyen_tbcolumn" prefWidth="148.66661834716797" text="Số chuyến bay" />
+            <TableColumn fx:id="dtNam_dt_tbcolumn" prefWidth="171.33338928222656" text="Doanh thu" />
+            <TableColumn fx:id="dtNam_tiLe_tbcolumn" prefWidth="115.99990844726562" text="Tỉ lệ (%)" />
          </columns>
       </TableView>
-      <HBox alignment="CENTER_LEFT" layoutX="570.0" layoutY="661.0" prefHeight="55.0" prefWidth="378.0" spacing="20.0">
+      <HBox alignment="CENTER_LEFT" layoutX="570.0" layoutY="661.0" prefHeight="55.0" prefWidth="416.0" spacing="20.0">
          <children>
             <Label styleClass="bottom-bar-text" text="Tổng doanh thu:" />
-            <TextField editable="false" prefHeight="31.0" prefWidth="185.0" styleClass="total-income" text="0 VNĐ" />
+            <TextField fx:id="dtNam_tongdt_txtfld" editable="false" prefHeight="43.0" prefWidth="234.0" styleClass="total-income" text="0 VNĐ" />
          </children>
       </HBox>
       <MFXButton id="custom_button3" buttonType="RAISED" depthLevel="LEVEL1" layoutX="784.0" layoutY="321.0" prefHeight="40.0" prefWidth="153.0" styleClass="mfx-button-report" text="In báo cáo" />
-      <MFXButton id="custom_button4" buttonType="RAISED" depthLevel="LEVEL1" layoutX="784.0" layoutY="728.0" prefHeight="40.0" prefWidth="153.0" styleClass="mfx-button-report" text="In báo cáo" />
+      <MFXButton id="custom_button4" fx:id="dtNam_inBaoCao_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="784.0" layoutY="728.0" prefHeight="40.0" prefWidth="153.0" styleClass="mfx-button-report" text="In báo cáo" />
       <Separator layoutY="389.0" prefHeight="8.0" prefWidth="992.0" />
    </children>
 </AnchorPane>

@@ -14,7 +14,7 @@ public class Model {
         this.loginAccountType = AccountType.STAFF;
     }
 
-    public static synchronized Model getInstance(){
+    public static synchronized Model getInstance() {
         if (model == null){
             model = new Model();
         }
