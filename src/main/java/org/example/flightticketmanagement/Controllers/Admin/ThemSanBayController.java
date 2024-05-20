@@ -124,6 +124,9 @@ public class ThemSanBayController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         idNewSanBay_textfield.setText(generateMaSanBay());
         luu_btn.setOnAction(this::saveNewAirport);
+        tenVietTatNew_textfield.textProperty().addListener((observable, oldValue, newValue) -> {
+            tenVietTatNew_textfield.setText(newValue.toUpperCase());
+        });
     }
 
     private String removeDiacritics(String str) {
