@@ -1,47 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
-<?import io.github.palexdev.materialfx.controls.MFXTextField?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.effect.DropShadow?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="800.0" prefWidth="992.0" styleClass="background" stylesheets="@../../Styles/Admin/BanVe.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.BanVeController">
-   <AnchorPane layoutX="143.0" layoutY="54.0" prefHeight="75.0" prefWidth="706.0" styleClass="filter-pane">
-      <effect>
-         <DropShadow />
-      </effect>
-      <children>
-         <HBox alignment="CENTER" layoutX="21.0" layoutY="14.0" prefHeight="47.0" prefWidth="665.0" spacing="50.0">
-            <children>
-               <MFXTextField floatMode="DISABLED" floatingTextGap="2.0" prefWidth="140.0" promptText="Sân bay đi" />
-               <MFXTextField floatMode="DISABLED" prefWidth="140.0" promptText="Sân bay đến" />
-               <MFXDatePicker prefHeight="38.0" prefWidth="137.0" promptText="Chọn ngày" />
-               <MFXButton prefHeight="30.0" prefWidth="105.0" text="Tìm kiếm">
-                  <graphic>
-                     <FontAwesomeIconView glyphName="SEARCH" size="20" />
-                  </graphic>
-               </MFXButton>
-            </children>
-         </HBox>
-      </children>
-   </AnchorPane>
-   <TableView layoutX="32.0" layoutY="177.0" prefHeight="530.0" prefWidth="929.0">
-      <columns>
-         <TableColumn prefWidth="98.66665267944336" text="Mã chuyến bay" />
-         <TableColumn prefWidth="81.0" text="Sân bay đi" />
-         <TableColumn prefWidth="90.0" text="Sân bay đến" />
-         <TableColumn prefWidth="94.0" text="Ngày bay" />
-         <TableColumn prefWidth="68.0" text="Giờ bay" />
-         <TableColumn prefWidth="113.0" text="Số ghế trống" />
-         <TableColumn text="Số ghế đặt" />
-         <TableColumn prefWidth="97.0" text="Số điểm dừng" />
-         <TableColumn prefWidth="116.0" text="Giá cơ bản" />
-         <TableColumn prefWidth="89.0" text="Chi tiết" />
-      </columns>
-   </TableView>
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/BanVe.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.TraCuuBanVeController">
+   <ImageView fitHeight="596.0" fitWidth="985.0" layoutX="4.0" layoutY="3.0" opacity="0.75" pickOnBounds="true" preserveRatio="true">
+      <Image url="@../../Images/admin/World.png" />
+   </ImageView>
+   <Pane id="custom" layoutX="45.0" layoutY="57.0" prefHeight="48.0" prefWidth="947.0">
+      <MenuButton fx:id="fromWhereMenuButton" mnemonicParsing="false" onAction="#setFromWhereMenuButtonText" prefHeight="48.0" prefWidth="232.0" text="From Where ?">
+         <font>
+            <Font size="22.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <graphic>
+            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+               <Image url="@../../Images/admin/departure-1.png" />
+            </ImageView>
+         </graphic>
+      </MenuButton>
+      <Separator layoutX="298.0" orientation="VERTICAL" prefHeight="48.0" prefWidth="0.0" />
+      <MenuButton fx:id="whereToMenuButton" layoutX="231.0" mnemonicParsing="false" onAction="#setWhereToMenuButtonText" prefHeight="48.0" prefWidth="215.0" text="Where to ?">
+         <font>
+            <Font size="22.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <graphic>
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+               <Image url="@../../Images/admin/AirplaneLandingIcon.png" />
+            </ImageView>
+         </graphic>
+      </MenuButton>
+      <DatePicker fx:id="datePicker" layoutX="447.0" onAction="#enableSearchButton" prefHeight="48.0" prefWidth="168.0" promptText="Depart" style="-fx-background-color: white;">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </DatePicker>
+      <TextField fx:id="numOfPassengers" layoutX="615.0" onAction="#enableSearchButton" prefHeight="48.0" prefWidth="200.0" promptText="Number of passengers" style="-fx-background-insets: 0;" />
+      <Button fx:id="searchButton" disable="true" layoutX="815.0" mnemonicParsing="false" onAction="#fillDataOfFlights" prefHeight="48.0" prefWidth="122.0" text="Search">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Button>
+   </Pane>
+   <ScrollPane id="custom" fx:id="scrollPane" layoutX="23.0" layoutY="220.0" prefHeight="500.0" prefWidth="955.0">
+      <VBox id="custom" fx:id="vbox" prefHeight="500.0" prefWidth="955.0">
+         <opaqueInsets>
+            <Insets top="10.0" />
+         </opaqueInsets>
+      </VBox>
+   </ScrollPane>
+   <Label id="custom" fx:id="invalidInputOfPassengersMsg" layoutX="662.0" layoutY="106.0" prefHeight="31.0" prefWidth="200.0" text="Must enter digits..." textFill="red" visible="false" />
+   <Pane id="custom" layoutX="45.0" layoutY="139.0" prefHeight="48.0" prefWidth="808.0">
+      <MenuButton id="custom" fx:id="maxDepartTimeButton" contentDisplay="RIGHT" layoutY="-1.0" mnemonicParsing="false" onAction="#setMaxDepartTimeMenuButtonText" prefHeight="50.0" prefWidth="209.0" style="-fx-background-color: white;" text="Max departure time">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </MenuButton>
+      <MenuButton id="custom" fx:id="maxArrivalTimeButton" layoutX="209.0" layoutY="-1.0" mnemonicParsing="false" onAction="#setMaxArrivalTimeMenuButtonText" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: white;" text="Max arrival time">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </MenuButton>
+      <MenuButton id="custom" fx:id="seatClassButton" layoutX="409.0" layoutY="-1.0" mnemonicParsing="false" onAction="#setSeatClassMenuButtonText" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: white;" text="Seat class">
+         <items>
+            <MenuItem mnemonicParsing="false" text="Tiết kiệm" />
+            <MenuItem mnemonicParsing="false" text="Phổ thông" />
+            <MenuItem mnemonicParsing="false" text="Thương gia" />
+            <MenuItem mnemonicParsing="false" text="Hạng nhất" />
+         </items>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </MenuButton>
+      <TextField id="custom" fx:id="maxPrice" layoutX="609.0" layoutY="-1.0" onAction="#validNumForPrice" prefHeight="50.0" prefWidth="200.0" promptText="Max price " style="-fx-background-insets: 0;" />
+   </Pane>
+   <Label id="custom" fx:id="invalidInputForPriceMsg" layoutX="658.0" layoutY="186.0" prefHeight="31.0" prefWidth="200.0" text="Must enter digits..." textFill="red" visible="false" />
 </AnchorPane>
