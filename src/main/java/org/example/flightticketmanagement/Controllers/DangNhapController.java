@@ -59,6 +59,9 @@ public class DangNhapController implements Initializable {
         String tenTK = tenTK_mfxfld.getText().trim();
         String matKhau = matKhau_mfxpassfld.getText().trim();
         AccountType selectedAccountType = account_selector.getValue();
+        //tenTK_mfxfld.setText("hungtd@gmail.com");
+        //matKhau_mfxpassfld.setText("hungtd");
+        //account_selector.setValue(AccountType.MANAGER);
 
         if (tenTK.isEmpty() || matKhau.isEmpty() || selectedAccountType == null) {
             loi_lbl.setText("Please fill in all fields.");
