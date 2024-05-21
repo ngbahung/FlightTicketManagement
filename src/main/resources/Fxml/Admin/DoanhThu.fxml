@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="800.0" prefWidth="992.0" styleClass="background" stylesheets="@../../Styles/Admin/DoanhThu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.LichSuController">
+<AnchorPane prefHeight="800.0" prefWidth="992.0" styleClass="background" stylesheets="@../../Styles/Admin/DoanhThu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.DoanhThuController">
    <children>
       <TableView fx:id="dtThang_tableView" layoutX="33.0" layoutY="68.0" prefHeight="310.0" prefWidth="510.0">
          <columns>
@@ -43,7 +43,7 @@
       </AnchorPane>
       <AnchorPane layoutY="393.0" prefHeight="55.0" prefWidth="992.0" styleClass="top-bar">
          <children>
-            <HBox fx:id="dtNam_cbbox_namSelection" alignment="CENTER" layoutX="600.0" layoutY="8.0" prefHeight="47.0" prefWidth="378.0" spacing="30.0">
+            <HBox alignment="CENTER" layoutX="600.0" layoutY="8.0" prefHeight="47.0" prefWidth="378.0" spacing="30.0">
                <children>
                   <Label layoutX="10.0" layoutY="10.0" styleClass="top-bar-text" text="Năm:" />
                   <ComboBox fx:id="dtNam_cbbox_namSelection" layoutX="46.0" layoutY="10.0" prefHeight="25.0" prefWidth="112.0" />
