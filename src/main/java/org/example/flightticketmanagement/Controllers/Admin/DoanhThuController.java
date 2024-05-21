@@ -230,6 +230,7 @@ public class DoanhThuController implements Initializable {
     public void DTThang_FillDataForComboBoxThang() {
         for(int i = 1; i <= 12; i++){
             dtThang_cbbox_thangSelection.getItems().add(i);
+            
         }
     }
 }
