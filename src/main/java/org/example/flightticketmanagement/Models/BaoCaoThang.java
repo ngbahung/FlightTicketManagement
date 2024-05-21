@@ -1,5 +1,7 @@
 package org.example.flightticketmanagement.Models;
 
+import java.math.BigDecimal;
+
 public class BaoCaoThang {
     private String maBCThang;
     private String maBCNam;
@@ -7,14 +9,13 @@ public class BaoCaoThang {
     private Integer thang;
     private String maChuyenBay;
     private Integer soVeDaBan;
-    private Float doanhThu;
+    private BigDecimal doanhThu;
     private Float tyLe;
+    private Integer stt;
 
-    public BaoCaoThang(String maBCThang, String maBCNam, Integer nam, Integer thang, String maChuyenBay, Integer soVeDaBan, Float doanhThu, Float tyLe) {
-        this.maBCThang = maBCThang;
-        this.maBCNam = maBCNam;
-        this.nam = nam;
-        this.thang = thang;
+
+    public BaoCaoThang(Integer stt, String maChuyenBay, Integer soVeDaBan, BigDecimal doanhThu, Float tyLe) {
+        this.stt = stt;
         this.maChuyenBay = maChuyenBay;
         this.soVeDaBan = soVeDaBan;
         this.doanhThu = doanhThu;
@@ -69,11 +70,11 @@ public class BaoCaoThang {
         this.soVeDaBan = soVeDaBan;
     }
 
-    public Float getDoanhThu() {
+    public BigDecimal getDoanhThu() {
         return doanhThu;
     }
 
-    public void setDoanhThu(Float doanhThu) {
+    public void setDoanhThu(BigDecimal doanhThu) {
         this.doanhThu = doanhThu;
     }
 
@@ -83,5 +84,13 @@ public class BaoCaoThang {
 
     public void setTyLe(Float tyLe) {
         this.tyLe = tyLe;
+    }
+
+    public Integer getStt() {
+        return stt;
+    }
+
+    public void setStt(Integer stt) {
+        this.stt = stt;
     }
 }
