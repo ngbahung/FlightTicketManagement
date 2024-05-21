@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" stylesheets="@../../Styles/Admin/SuaThamSo.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: #ffffff;" stylesheets="@../../Styles/Admin/SuaThamSo.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.SuaThamSoQuyDinhController">
    <children>
-      <Label styleClass="title" text="Sửa quy định" />
+      <Label styleClass="title" text="SỬA THAM SỐ" />
       <GridPane hgap="20.0" prefHeight="358.0" prefWidth="370.0" styleClass="grid-pane">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="288.0" minWidth="10.0" prefWidth="170.33336385091147" />
@@ -32,18 +32,18 @@
             <Label text="Thời gian dừng tối đa:" GridPane.rowIndex="3" />
             <Label text="Thời gian chậm nhất cho phép đặt vé:" GridPane.rowIndex="4" />
             <Label text="Thời gian chậm nhất cho phép hủy đặt vé:" GridPane.rowIndex="5" />
-            <TextField promptText="phút" GridPane.columnIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField promptText="phút" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextField promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextField fx:id="tgBayToiThieu_tf" promptText="phút" GridPane.columnIndex="1" />
+            <TextField fx:id="numSBTGmax_tf" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="minTGDung_tf" promptText="phút" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="maxTGDung_tf" promptText="phút" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="tgChamNhatDatVe_tf" promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="tgChamNhatHuyVe_tf" promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </children>
          <padding>
             <Insets left="20.0" right="20.0" />
          </padding>
       </GridPane>
-      <MFXButton prefHeight="25.0" prefWidth="88.0" styleClass="button-row" text="Lưu" />
+      <MFXButton fx:id="luuThamSo_btn" buttonType="RAISED" depthLevel="LEVEL1" onAction="#saveChangesOnParameter" prefHeight="25.0" prefWidth="88.0" styleClass="button-row" text="Lưu" />
    </children>
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

@@ -41,6 +41,11 @@ public class SuaSanBayController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         luu_btn.setOnAction(this::updateAirportInfo);
+
+        // Add listener for tenVietTat_txf to convert input to uppercase
+        tenVietTat_textfield.textProperty().addListener((observable, oldValue, newValue) -> {
+            tenVietTat_textfield.setText(newValue.toUpperCase());
+        });
     }
 
     public void setSanBay(SanBay selectedAirport) {
