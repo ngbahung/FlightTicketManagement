@@ -139,6 +139,9 @@ public class QuyDinhController implements Initializable {
         searchHangVe_btn.setOnAction(this::searchHangVe);
         refreshSanBayData_btn.setOnAction(e -> showSanBayList());
         refreshHangVeData_btn.setOnAction(e -> showHangVeList());
+        suahangve_btn.setOnAction(this::editSelectedTicketClass);
+        xoahangve_btn.setOnAction(this::deactiveSelectedTicketClass);
+        suaquydinh_btn.setOnAction(this::editParameter);
     }
 
     private void showHangVeList() {
@@ -503,7 +506,7 @@ public class QuyDinhController implements Initializable {
         }
     }
 
-    private void loadThamSoData() {
+    public void loadThamSoData() {
         String query = "SELECT * FROM THAMSO";
         try {
             connect = DatabaseDriver.getConnection();
@@ -549,5 +552,22 @@ public class QuyDinhController implements Initializable {
         }
 
 
+    }
+
+    @FXML
+    void editParameter(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/SuaThamSo.fxml"));
+            Parent root = loader.load();
+            SuaThamSoQuyDinhController suaThamSoQuyDinhController = loader.getController();
+            suaThamSoQuyDinhController.setParentController(this);  // Pass the instance of QuyDinhController
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Sửa Tham Số Quy Định");
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
