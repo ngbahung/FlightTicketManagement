@@ -163,6 +163,9 @@ public class DoanhThuController implements Initializable {
     @FXML
     private TextField dtThang_tongdt_txfl;
 
+    @FXML
+    private MFXButton dtThang_inBaoCao_btn;
+
     private BigDecimal tongDoanhThuThang = BigDecimal.valueOf(0.0);
 
     public void DTThang_LoadData() {
@@ -230,7 +233,7 @@ public class DoanhThuController implements Initializable {
     public void DTThang_FillDataForComboBoxThang() {
         for(int i = 1; i <= 12; i++){
             dtThang_cbbox_thangSelection.getItems().add(i);
-            
+
         }
     }
 }
