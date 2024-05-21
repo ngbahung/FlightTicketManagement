@@ -367,14 +367,17 @@ public class TraCuuBanVeController implements Initializable {
             String query = "SELECT MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai FROM SANBAY";
             result = statement.executeQuery(query);
 
+            int rowNum = 1;
+
             while (result.next()) {
                 String maSanBay = result.getString("MaSanBay");
                 String tenSanBay = result.getString("TenSanBay");
                 String tenVietTat = result.getString("TenVietTat");
                 String diaChi = result.getString("DiaChi");
                 int trangThai = result.getInt("TrangThai");
+                int soThuTu = rowNum++;
 
-                SanBay sanBay = new SanBay(maSanBay, tenSanBay, tenVietTat, diaChi, trangThai);
+                SanBay sanBay = new SanBay(maSanBay, tenSanBay, tenVietTat, diaChi, trangThai, soThuTu);
                 airports.put(maSanBay, sanBay);
             }
         } catch (SQLException e) {
