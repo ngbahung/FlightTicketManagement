@@ -173,7 +173,7 @@ public class DoanhThuController implements Initializable {
     public void DTThang_UpDateData(Integer namBaoCao, Integer thangBaoCao, BigDecimal tongDoanhThuThang){
         try {
 
-            String query = "SELECT MaChuyenBay, SoVeDaBan, DoanhThu, TyLe " +
+            String query = "SELECT MaChuyenBay, SoVeDaBan, DoanhThu" +
                     "FROM BAOCAOTHANG " +
                     "WHERE Thang = ? " +
                     "AND Nam = ?";
