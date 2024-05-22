@@ -17,6 +17,12 @@ public class BaoCaoNam {
         this.tyLe = tyLe;
     }
 
+    public BaoCaoNam(Integer thang, Integer soChuyenBay, BigDecimal doanhThu) {
+        this.thang = thang;
+        this.soChuyenBay = soChuyenBay;
+        this.doanhThu = doanhThu;
+    }
+
     public String getMaBCNam() {
         return maBCNam;
     }

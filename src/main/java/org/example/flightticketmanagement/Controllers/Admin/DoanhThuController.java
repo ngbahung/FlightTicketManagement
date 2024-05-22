@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
@@ -65,7 +66,7 @@ public class DoanhThuController implements Initializable {
         dtThang_thongKe_btn.setOnMouseClicked(event -> DTThang_LoadData());
     }
 
-    void DTNam_LoadData() {
+    public void DTNam_LoadData() {
         if (dtNam_cbbox_namSelection.getSelectionModel().isEmpty()) {
             alert.errorMessage("Vui lòng chọn năm cần thống kê.");
             return;
@@ -124,7 +125,7 @@ public class DoanhThuController implements Initializable {
         }
     }
 
-    void DTNam_FillDataForComboBoxNam() {
+    public void DTNam_FillDataForComboBoxNam() {
         int currentNam = LocalDate.now().getYear();
         for (int i = currentNam; i >= 2000; i--) {
             dtNam_cbbox_namSelection.getItems().add(i);
@@ -168,16 +169,9 @@ public class DoanhThuController implements Initializable {
 
     private BigDecimal tongDoanhThuThang = BigDecimal.valueOf(0.0);
 
-    public void DTThang_LoadData() {
-        if(dtThang_cbbox_namSelection.getSelectionModel().isEmpty()){
-            alert.errorMessage("Vui lòng chọn năm cần thống kê");
-        }
-        if(dtThang_cbbox_thangSelection.getSelectionModel().isEmpty()){
-            alert.errorMessage("Vui lòng chọn tháng cần thống kê");
-        }
+
+    public void DTThang_UpDateData(Integer namBaoCao, Integer thangBaoCao, BigDecimal tongDoanhThuThang){
         try {
-            Integer namBaoCao = dtThang_cbbox_namSelection.getSelectionModel().getSelectedItem();
-            Integer thangBaoCao = dtThang_cbbox_thangSelection.getSelectionModel().getSelectedItem();
 
             String query = "SELECT MaChuyenBay, SoVeDaBan, DoanhThu, TyLe " +
                     "FROM BAOCAOTHANG " +
@@ -191,26 +185,65 @@ public class DoanhThuController implements Initializable {
             dtThang_tableView.getItems().clear();
 
             int stt = 1;
+            Double tyLe = 0.0;
             while (result.next()) {
                 // Tạo đối tượng BaoCaoThang mới từ kết quả truy vấn và thêm vào TableView
+                tyLe = (result.getBigDecimal("DoanhThu").divide(tongDoanhThuThang, 2, RoundingMode.HALF_UP)).doubleValue()*100;
                 BaoCaoThang baoCaoThang = new BaoCaoThang(
                         stt,
                         result.getString("MaChuyenBay"),
                         result.getInt("SoVeDaBan"),
                         result.getBigDecimal("DoanhThu"),
-                        result.getFloat("TyLe")
+                        tyLe
                 );
                 dtThang_tableView.getItems().add(baoCaoThang);
                 stt++;
-                tongDoanhThuThang = tongDoanhThuThang.add(baoCaoThang.getDoanhThu());
             }
-            dtThang_tongdt_txfl.setText(tongDoanhThuThang.toString() + " VNĐ");
 
             dtThang_stt_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(Integer.toString(cellData.getValue().getStt())));
             dtThang_macb_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getMaChuyenBay())));
             dtThang_soVe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(Integer.toString(cellData.getValue().getSoVeDaBan())));
             dtThang_doanhThu_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDoanhThu().toString()));
             dtThang_tyLe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTyLe().toString()));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Error occurred while loading data from the database.");
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (prepare != null) prepare.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public void DTThang_LoadData() {
+        if(dtThang_cbbox_namSelection.getSelectionModel().isEmpty()){
+            alert.errorMessage("Vui lòng chọn năm cần thống kê");
+        }
+        if(dtThang_cbbox_thangSelection.getSelectionModel().isEmpty()){
+            alert.errorMessage("Vui lòng chọn tháng cần thống kê");
+        }
+        try {
+            Integer namBaoCao = dtThang_cbbox_namSelection.getSelectionModel().getSelectedItem();
+            Integer thangBaoCao = dtThang_cbbox_thangSelection.getSelectionModel().getSelectedItem();
+
+            String query = "SELECT DoanhThu" +
+                    "FROM BAOCAOTHANG " +
+                    "WHERE Thang = ? " +
+                    "AND Nam = ?";
+            prepare = connect.prepareStatement(query);
+            prepare.setInt(1, thangBaoCao);
+            prepare.setInt(2, namBaoCao);
+            result = prepare.executeQuery();
+
+            while (result.next()) {
+
+                tongDoanhThuThang = tongDoanhThuThang.add(result.getBigDecimal("DoanhThu"));
+            }
+            DTThang_UpDateData(namBaoCao, thangBaoCao, tongDoanhThuThang);
+            dtThang_tongdt_txfl.setText(tongDoanhThuThang.toString() + " VNĐ");
+
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Error occurred while loading data from the database.");
