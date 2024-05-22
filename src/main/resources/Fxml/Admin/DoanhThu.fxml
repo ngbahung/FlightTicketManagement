@@ -14,13 +14,13 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="992.0" styleClass="background" stylesheets="@../../Styles/Admin/DoanhThu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.DoanhThuController">
    <children>
-      <TableView layoutX="33.0" layoutY="68.0" prefHeight="310.0" prefWidth="510.0">
+      <TableView fx:id="dtThang_tableView" layoutX="33.0" layoutY="68.0" prefHeight="310.0" prefWidth="510.0">
         <columns>
-          <TableColumn prefWidth="53.0" text="STT" />
-          <TableColumn prefWidth="133.0" text="Mã chuyến bay" />
-            <TableColumn prefWidth="121.0" text="Số vé bán được" />
-            <TableColumn prefWidth="112.0" text="Doanh thu" />
-            <TableColumn prefWidth="87.0" text="Tỉ lệ (%)" />
+          <TableColumn fx:id="dtThang_stt_tbcolumn" prefWidth="53.0" text="STT" />
+          <TableColumn fx:id="dtThang_macb_tbcolumn" prefWidth="133.0" text="Mã chuyến bay" />
+            <TableColumn fx:id="dtThang_soVe_tbcolumn" prefWidth="121.0" text="Số vé bán được" />
+            <TableColumn fx:id="dtThang_doanhThu_tbcolumn" prefWidth="112.0" text="Doanh thu" />
+            <TableColumn fx:id="dtThang_tyLe_tbcolumn" prefWidth="87.0" text="Tỉ lệ (%)" />
         </columns>
       </TableView>
       <AnchorPane prefHeight="62.0" prefWidth="992.0" styleClass="top-bar">
@@ -28,10 +28,10 @@
             <HBox alignment="CENTER" layoutX="377.0" layoutY="8.0" prefHeight="47.0" prefWidth="601.0" spacing="30.0">
                <children>
                   <Label styleClass="top-bar-text" text="Tháng:" />
-                  <ComboBox prefHeight="25.0" prefWidth="112.0" />
+                  <ComboBox fx:id="dtThang_cbbox_thangSelection" prefHeight="25.0" prefWidth="112.0" />
                   <Label layoutX="10.0" layoutY="10.0" styleClass="top-bar-text" text="Năm:" />
-                  <ComboBox layoutX="46.0" layoutY="10.0" prefHeight="25.0" prefWidth="112.0" />
-                  <MFXButton id="custom_button" buttonType="RAISED" depthLevel="LEVEL1" prefHeight="31.0" prefWidth="123.0" text="Thống kê">
+                  <ComboBox fx:id="dtThang_cbbox_namSelection" layoutX="46.0" layoutY="10.0" prefHeight="25.0" prefWidth="112.0" />
+                  <MFXButton id="custom_button" fx:id="dtThang_thongKe_btn" buttonType="RAISED" depthLevel="LEVEL1" prefHeight="31.0" prefWidth="123.0" text="Thống kê">
                      <graphic>
                         <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20" />
                      </graphic>
@@ -60,7 +60,7 @@
       <HBox alignment="CENTER_LEFT" layoutX="570.0" layoutY="252.0" prefHeight="55.0" prefWidth="416.0" spacing="20.0">
          <children>
             <Label styleClass="bottom-bar-text" text="Tổng doanh thu:" />
-            <TextField editable="false" prefHeight="43.0" prefWidth="234.0" styleClass="total-income" text="0 VNĐ" />
+            <TextField fx:id="dtThang_tongdt_txfl" editable="false" prefHeight="43.0" prefWidth="234.0" styleClass="total-income" text="0 VNĐ" />
          </children>
       </HBox>
       <TableView fx:id="dtNam_tableview" layoutX="33.0" layoutY="457.0" prefHeight="324.0" prefWidth="510.0">
