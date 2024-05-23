@@ -1,0 +1,101 @@
+.top-bar {
+    -fx-background-color: #ffffff;
+}
+
+.background {
+    -fx-background-color: #ffffff;
+}
+
+.text {
+    -fx-font-family: Inter;
+
+}
+
+.title {
+    -fx-text-fill: #080C53;
+    -fx-font-size: 30;
+    -fx-font-weight: bold;
+}
+
+.top-bar-text {
+    -fx-text-fill: #080C53;
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+}
+
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #080C53;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-font-size: 12;
+}
+
+.bottom-bar-text {
+    -fx-text-fill: #080C53;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
+
+.total-income {
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+    -fx-background-color: #080C53;
+}
+
+#custom_button {
+    -fx-background-color: #080C53;
+    -fx-text-fill: white;
+    -fx-font-size: 16;
+    -fx-font-family: Inter;
+    -fx-font-weight: bold;
+}
+
+#custom_button:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #00A4BD;
+    -fx-text-fill: white;
+}
+
+#custom_button2 {
+    -fx-background-color: #080C53;
+    -fx-text-fill: white;
+    -fx-font-size: 16;
+    -fx-font-family: Inter;
+    -fx-font-weight: bold;
+}
+
+#custom_button2:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #00A4BD;
+    -fx-text-fill: white;
+}
+
+#custom_button3 {
+    -fx-background-color: #080C53;
+    -fx-text-fill: white;
+    -fx-font-size: 16;
+    -fx-font-family: Inter;
+    -fx-font-weight: bold;
+}
+
+#custom_button3:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #00A4BD;
+    -fx-text-fill: white;
+}
+
+#custom_button4 {
+    -fx-background-color: #080C53;
+    -fx-text-fill: white;
+    -fx-font-size: 16;
+    -fx-font-family: Inter;
+    -fx-font-weight: bold;
+}
+
+#custom_button4:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #00A4BD;
+    -fx-text-fill: white;
+}

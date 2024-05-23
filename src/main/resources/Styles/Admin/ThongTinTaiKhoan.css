@@ -1,0 +1,49 @@
+.text {
+    -fx-font-family: Inter;
+}
+
+.background {
+    -fx-background-color: #ffffff;
+}
+
+.title {
+    -fx-font-family: Inter;
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #080C53;
+}
+
+.label {
+    -fx-font-size: 20px;
+}
+
+.mfx-button {
+    -fx-background-color: #00A4BD;
+    -fx-font-size: 16;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
+
+.mfx-button .mfx-ripple-generator {
+    -mfx-ripple-radius: 40;
+    -mfx-auto-clip: true;
+    -fx-background-radius: 10;
+}
+
+.mfx-button .text {
+    -fx-font-smoothing-type: gray;
+}
+
+#custom {
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+}
+
+#custom_sua {
+    -fx-background-color: #080C53;
+    -fx-font-size: 16;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/ChiTietChuyenBayBanVe.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Fxml.Admin.ChiTietChuyenBayBanVe">
+   <children>
+      <AnchorPane layoutX="204.0" layoutY="57.0" prefHeight="159.0" prefWidth="585.0" styleClass="flight-detail">
+         <effect>
+            <DropShadow />
+         </effect>
+         <children>
+            <HBox alignment="CENTER" layoutX="22.0" layoutY="28.0" prefHeight="52.0" prefWidth="541.0" spacing="30.0">
+               <children>
+                  <VBox prefHeight="65.0" prefWidth="150.0" spacing="5.0" styleClass="vb-flight-detail">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã chuyến bay" />
+                        <MFXTextField allowEdit="false" editable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
+                     </children>
+                  </VBox>
+                  <VBox layoutX="377.0" layoutY="10.0" prefHeight="65.0" prefWidth="150.0" spacing="5.0" styleClass="vb-flight-detail">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sân bay đi" />
+                        <MFXTextField allowEdit="false" editable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
+                     </children>
+                  </VBox>
+                  <VBox layoutX="477.0" layoutY="10.0" prefHeight="65.0" prefWidth="150.0" spacing="5.0" styleClass="vb-flight-detail">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sân bay đến" />
+                        <MFXTextField allowEdit="false" editable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="22.0" layoutY="80.0" prefHeight="52.0" prefWidth="541.0" spacing="30.0">
+               <children>
+                  <VBox prefHeight="65.0" prefWidth="150.0" spacing="5.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày bay" />
+                        <MFXTextField allowEdit="false" editable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
+                     </children>
+                  </VBox>
+                  <VBox layoutX="377.0" layoutY="10.0" prefHeight="65.0" prefWidth="150.0" spacing="5.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Giờ bay" />
+                        <MFXTextField allowEdit="false" editable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
+                     </children>
+                  </VBox>
+                  <VBox layoutX="477.0" layoutY="10.0" prefHeight="65.0" prefWidth="150.0" spacing="5.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Số ghế trống" />
+                        <MFXTextField allowEdit="false" editable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+      <VBox layoutX="44.0" layoutY="265.0" prefHeight="350.0" prefWidth="458.0">
+         <children>
+            <AnchorPane prefHeight="40.0" prefWidth="458.0" styleClass="table-label">
+               <children>
+                  <Text layoutX="141.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="table-text" text="SÂN BAY TRUNG GIAN" />
+               </children>
+            </AnchorPane>
+            <TableView prefHeight="314.0" prefWidth="458.0">
+              <columns>
+                <TableColumn prefWidth="75.0" text="Thứ tự" />
+                <TableColumn prefWidth="123.0" text="Tên sân bay" />
+                  <TableColumn prefWidth="125.0" text="Thời gian dừng" />
+                  <TableColumn prefWidth="133.0" text="Ghi chú" />
+              </columns>
+            </TableView>
+         </children>
+      </VBox>
+      <VBox layoutX="520.0" layoutY="265.0" prefHeight="350.0" prefWidth="434.0">
+         <children>
+            <AnchorPane prefHeight="40.0" prefWidth="458.0" styleClass="table-label">
+               <children>
+                  <Text layoutX="180.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="table-text" text="HẠNG VÉ" />
+               </children>
+            </AnchorPane>
+            <TableView prefHeight="314.0" prefWidth="436.0">
+               <columns>
+                  <TableColumn prefWidth="147.0" text="Tên hạng vé" />
+                  <TableColumn prefWidth="148.0" text="Giá tiền" />
+                  <TableColumn prefWidth="162.0" text="Ghế trống" />
+               </columns>
+            </TableView>
+         </children>
+      </VBox>
+      <HBox alignment="TOP_RIGHT" layoutX="713.0" layoutY="701.0" prefHeight="38.0" prefWidth="241.0" spacing="30.0">
+         <children>
+            <MFXButton id="custom_1" buttonType="RAISED" depthLevel="LEVEL1" graphicTextGap="20.0" prefHeight="43.0" prefWidth="139.0" text="Mua vé">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="BOOK" size="20" />
+               </graphic>
+            </MFXButton>
+         </children>
+      </HBox>
+      <MFXButton id="custom_2" buttonType="RAISED" depthLevel="LEVEL1" graphicTextGap="10.0" layoutX="44.0" layoutY="38.0" prefHeight="38.0" prefWidth="115.0" text="Quay lại">
+         <graphic>
+            <FontAwesomeIconView fill="WHITE" glyphName="MAIL_REPLY" size="20" />
+         </graphic>
+      </MFXButton>
+   </children>
+</AnchorPane>

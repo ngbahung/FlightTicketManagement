@@ -1,0 +1,112 @@
+.text {
+    -fx-font-family: Inter;
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+}
+
+/* AnchorPane thứ hai */
+.bang_dang_nhap {
+    -fx-background-color:  rgba(255, 255, 255, 0.8);
+    -fx-background-radius:  20px;
+    -fx-opacity: 0.8;
+}
+
+.ten_bang {
+    -fx-font-family: "Inter Black";
+    -fx-alignment: center;
+    -fx-font-size: 40;
+    -fx-font-weight: bold;
+    -fx-text-fill: #080C53;
+}
+
+/* VBox */
+.hop_thoai {
+    -fx-spacing: 10;
+}
+
+.hop_thoai Label {
+    -fx-font-size:16;
+    -fx-pref-width: 220;
+    -fx-pref-height: 23;
+    -fx-font-weight: bold;
+    -fx-text-fill: #263238;
+}
+
+.mfx-password-field,
+.mfx-text-field{
+    -fx-pref-width: 390;
+    -fx-pref-height: 42;
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-text-fill: #080C53;
+    -fx-background-radius: 6.25;
+}
+
+/* Lỗi */
+.loi {
+    -fx-font-size: 16;
+    -fx-text-fill: red;
+}
+
+/* mfx-button */
+.mfx-button {
+    -fx-background-color: #00A4BD;
+    -fx-font-size: 16;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
+
+.mfx-button .mfx-ripple-generator {
+    -mfx-ripple-radius: 40;
+    -mfx-auto-clip: true;
+    -fx-background-radius: 10;
+}
+
+.mfx-button .text {
+    -fx-font-smoothing-type: gray;
+}
+
+#custom {
+    -fx-background-color: white;
+    -fx-font-size: 16;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
+
+
+.outline-button {
+    -fx-background-color: transparent;
+    -fx-border-color: #00A4BD;
+    -fx-border-radius: 10;
+
+    -fx-text-fill: white;
+}
+
+.outline-button:hover,
+.outline-button:focused {
+    -fx-background-color: #00A4BD;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+}
+
+
+.link-button {
+    -fx-background-color: transparent;
+    -fx-border-radius: 3;
+    -fx-text-fill: #0096FF;
+    -fx-cursor: hand;
+}
+
+.link-button:armed,
+.link-button:focused {
+    -fx-border-color: #006BFF;
+    -fx-text-fill: #006BFF;
+}
+
+.link-button .mfx-ripple-generator {
+    -mfx-ripple-color: #00A4BD;
+}
+
+

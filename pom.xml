@@ -17,14 +17,38 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
-      <version>17.0.6</version>
+      <version>21.0.3</version>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
-      <version>17.0.6</version>
+      <version>21.0.3</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/de.jensd/fontawesomefx-fontawesome -->
+    <dependency>
+      <groupId>de.jensd</groupId>
+      <artifactId>fontawesomefx-fontawesome</artifactId>
+      <version>4.7.0-9.1.2</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc8 -->
+    <dependency>
+      <groupId>com.oracle.database.jdbc</groupId>
+      <artifactId>ojdbc8</artifactId>
+      <version>23.2.0.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.github.palexdev</groupId>
+      <artifactId>materialfx</artifactId>
+      <version>11.17.0</version>
+    </dependency>
+    <dependency>
+      <groupId>io.github.palexdev</groupId>
+      <artifactId>mfxcomponents</artifactId>
+      <version>11.17.0</version>
+    </dependency>
 <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
@@ -36,7 +60,20 @@
       <artifactId>junit-jupiter-engine</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
-    </dependency>  </dependencies>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.jasperreports</groupId>
+      <artifactId>jasperreports</artifactId>
+      <version>6.21.3</version>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.jasperreports</groupId>
+      <artifactId>jasperreports-components</artifactId>
+      <version>6.20.0</version> <!-- Use the latest version available -->
+    </dependency>
+
+
+  </dependencies>
 
   <build>
     <plugins>
