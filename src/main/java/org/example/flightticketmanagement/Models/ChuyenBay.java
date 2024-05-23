@@ -15,6 +15,12 @@ public class ChuyenBay {
     private String trangThai;
     private Float giaVe;
 
+    // DATABASE TOOLS
+    private Connection connect;
+    private PreparedStatement prepare;
+    private Statement statement;
+    private ResultSet result;
+
     public ChuyenBay(String maChuyenBay, String maDuongBay, Integer soLuongGhe, Integer soChuyenBay, LocalDateTime thoiGianXuatPhat, LocalDateTime thoiGianKetThuc, String trangThai, Float giaVe) {
         this.maChuyenBay = maChuyenBay;
         this.maDuongBay = maDuongBay;
