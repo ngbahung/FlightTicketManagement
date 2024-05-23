@@ -51,13 +51,13 @@ public class DoanhThuController implements Initializable {
 
     private ReportController reportController;
     private boolean DTN_isThongKeThanhCong = false;
-    private List<BaoCaoNam> listBaoCaoNam;
+    private List<BaoCaoNam> listBaoCaoNam = new ArrayList<BaoCaoNam>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        DTN_isThongKeThanhCong = false;
         reportController = new ReportController();
-        listBaoCaoNam = new ArrayList<BaoCaoNam>();
+
+
         connect = DatabaseDriver.getConnection();
         DTNam_FillDataForComboBoxNam();
         DTThang_FillDataForComboBoxNam();
@@ -82,22 +82,22 @@ public class DoanhThuController implements Initializable {
                 ") " +
                 "SELECT" +
                 "    m.Thang as Thang," +
-                "    NVL(b.SoChuyenBay, 0) AS SoCuyenBay," +
-                "    NVL(b.DoanhThu, 0) AS DoanhThu," +
+                "    NVL(b.SoChuyenBay, 0) AS SoChuyenBay," +
+                "    NVL(b.DoanhThu, 0) AS DoanhThu " +
                 "FROM" +
                 "    Months m " +
                 "LEFT JOIN" +
-                "    BAOCAONAM b ON m.Thang = b.Thang AND b.Nam = (?) " +
+                "    BAOCAONAM b ON m.Thang = b.Thang AND b.Nam = ? " +
                 "ORDER BY" +
                 "    m.Thang";
-
         try (PreparedStatement prepare = connect.prepareStatement(query)) {
             prepare.setInt(1, namBaoCao);
             try (ResultSet result = prepare.executeQuery()) {
                 dtNam_tableview.getItems().clear();
                 listBaoCaoNam.clear();
                 while (result.next()) {
-                    Double tyLe = (result.getBigDecimal("DoanhThu").divide(tongDoanhThuNam,2,RoundingMode.HALF_UP).doubleValue())*100;
+                    BigDecimal doanhThu = result.getBigDecimal("DoanhThu");
+                    Double tyLe = (doanhThu.divide(tongDoanhThuNam, 2, RoundingMode.HALF_UP).doubleValue()) * 100;
                     BaoCaoNam baoCaoNam = new BaoCaoNam(
                             result.getInt("Thang"),
                             result.getInt("SoChuyenBay"),
@@ -203,7 +203,7 @@ public class DoanhThuController implements Initializable {
     private Integer DTT_thangBaoCao = 0;
 
     private boolean DTT_isThongKeThanhCong = false;
-    private List<BaoCaoThang> listBaoCaoThang;
+    private List<BaoCaoThang> listBaoCaoThang = new ArrayList<BaoCaoThang>();
 
     public void InBaoCaoThang() {
         if (DTT_isThongKeThanhCong == false) {
