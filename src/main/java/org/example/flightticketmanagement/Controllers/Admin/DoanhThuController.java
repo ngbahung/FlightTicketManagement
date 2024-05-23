@@ -11,6 +11,8 @@ import java.math.RoundingMode;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import org.example.flightticketmanagement.Models.BaoCaoNam;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
@@ -37,6 +39,142 @@ public class DoanhThuController implements Initializable {
     @FXML
     private TextField dtNam_tongdt_txtfld;
 
+
+    private Connection connect;
+    private PreparedStatement prepare;
+    private ResultSet result;
+
+    private final AlertMessage alert = new AlertMessage();
+    private BigDecimal tongDoanhThuNam = BigDecimal.valueOf(0.0);
+
+    private Integer DTN_namBaoCao = 0;
+
+    private ReportController reportController;
+    private boolean DTN_isThongKeThanhCong = false;
+    private List<BaoCaoNam> listBaoCaoNam;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        DTN_isThongKeThanhCong = false;
+        reportController = new ReportController();
+        listBaoCaoNam = new ArrayList<BaoCaoNam>();
+        connect = DatabaseDriver.getConnection();
+        DTNam_FillDataForComboBoxNam();
+        DTThang_FillDataForComboBoxNam();
+        DTThang_FillDataForComboBoxThang();
+        dtNam_thongKe_btn.setOnMouseClicked(event -> DTNam_LoadData());
+        dtThang_thongKe_btn.setOnMouseClicked(event -> DTThang_LoadData());
+        dtNam_inBaoCao_btn.setOnMouseClicked(event -> InBaoCaoNam());
+        dtThang_inBaoCao_btn.setOnMouseClicked(event -> InBaoCaoThang());
+    }
+
+    public void InBaoCaoNam() {
+        if (DTN_isThongKeThanhCong == false) {
+            alert.errorMessage("Vui lòng thống kê doanh thu trước khi xuất báo cáo!");
+            return;
+        }
+        reportController.PrintReportBaoCaoNam(DTN_namBaoCao, listBaoCaoNam);
+    }
+
+    public void DTNam_UpdateData(Integer namBaoCao, BigDecimal tongDoanhThuNam){
+        String query = "WITH Months AS (" +
+                "    SELECT LEVEL AS Thang FROM dual CONNECT BY LEVEL <= 12" +
+                ") " +
+                "SELECT" +
+                "    m.Thang as Thang," +
+                "    NVL(b.SoChuyenBay, 0) AS SoCuyenBay," +
+                "    NVL(b.DoanhThu, 0) AS DoanhThu," +
+                "FROM" +
+                "    Months m " +
+                "LEFT JOIN" +
+                "    BAOCAONAM b ON m.Thang = b.Thang AND b.Nam = (?) " +
+                "ORDER BY" +
+                "    m.Thang";
+
+        try (PreparedStatement prepare = connect.prepareStatement(query)) {
+            prepare.setInt(1, namBaoCao);
+            try (ResultSet result = prepare.executeQuery()) {
+                dtNam_tableview.getItems().clear();
+                listBaoCaoNam.clear();
+                while (result.next()) {
+                    Double tyLe = (result.getBigDecimal("DoanhThu").divide(tongDoanhThuNam,2,RoundingMode.HALF_UP).doubleValue())*100;
+                    BaoCaoNam baoCaoNam = new BaoCaoNam(
+                            result.getInt("Thang"),
+                            result.getInt("SoChuyenBay"),
+                            result.getBigDecimal("DoanhThu"),
+                            tyLe
+                    );
+                    listBaoCaoNam.add(baoCaoNam);
+                    dtNam_tableview.getItems().add(baoCaoNam);
+                }
+                DTN_isThongKeThanhCong = true;
+
+                dtNam_tongdt_txtfld.setText(tongDoanhThuNam.toString() + " VNĐ");
+                dtNam_Thang_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(Integer.toString(cellData.getValue().getThang())));
+                dtNam_soChuyen_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(Integer.toString(cellData.getValue().getSoChuyenBay())));
+                dtNam_dt_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDoanhThu().toString()));
+                dtNam_tiLe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTyLe().toString()));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Error occurred while loading data from the database.");
+        }
+    }
+
+    public void DTNam_LoadTongDT() {
+        if (dtThang_cbbox_namSelection.getSelectionModel().isEmpty()) {
+            alert.errorMessage("Vui lòng chọn năm cần thống kê");
+            return;
+        }
+        if (dtThang_cbbox_thangSelection.getSelectionModel().isEmpty()) {
+            alert.errorMessage("Vui lòng chọn tháng cần thống kê");
+            return;
+        }
+
+        DTN_namBaoCao = dtNam_cbbox_namSelection.getSelectionModel().getSelectedItem();
+        DTN_isThongKeThanhCong = false;
+
+        String query = "WITH Months AS (" +
+                "    SELECT LEVEL AS Thang FROM dual CONNECT BY LEVEL <= 12" +
+                ") " +
+                "SELECT" +
+                "    m.Thang, " +
+                "    NVL(b.DoanhThu, 0) AS doanhthu " +
+                "FROM" +
+                "    Months m " +
+                "LEFT JOIN" +
+                "    BAOCAONAM b ON m.Thang = b.Thang AND b.Nam = ? " +
+                "ORDER BY" +
+                "    m.Thang";
+
+        try (PreparedStatement prepare = connect.prepareStatement(query)) {
+            prepare.setInt(1, DTT_namBaoCao);
+            try (ResultSet result = prepare.executeQuery()) {
+                tongDoanhThuNam = BigDecimal.valueOf(0.0);
+                while (result.next()) {
+                    tongDoanhThuNam = tongDoanhThuNam.add(result.getBigDecimal("DoanhThu"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Error occurred while loading data from the database.");
+        }
+    }
+
+    public void DTNam_LoadData(){
+        DTNam_LoadTongDT();
+        DTNam_UpdateData(DTN_namBaoCao, tongDoanhThuNam);
+    }
+
+    public void DTNam_FillDataForComboBoxNam() {
+        int currentNam = LocalDate.now().getYear();
+        for (int i = currentNam; i >= 2000; i--) {
+            dtNam_cbbox_namSelection.getItems().add(i);
+        }
+    }
+
+    // bao cao thang
+
     @FXML
     private ComboBox<Integer> dtThang_cbbox_namSelection;
     @FXML
@@ -60,88 +198,21 @@ public class DoanhThuController implements Initializable {
     @FXML
     private MFXButton dtThang_inBaoCao_btn;
 
-    private Connection connect;
-    private PreparedStatement prepare;
-    private ResultSet result;
-
-    private final AlertMessage alert = new AlertMessage();
-    private BigDecimal tongDoanhThuNam = BigDecimal.valueOf(0.0);
     private BigDecimal tongDoanhThuThang = BigDecimal.valueOf(0.0);
     private Integer DTT_namBaoCao = 0;
     private Integer DTT_thangBaoCao = 0;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        connect = DatabaseDriver.getConnection();
-        if (connect == null) {
-            alert.errorMessage("Không thể kết nối đến cơ sở dữ liệu.");
+    private boolean DTT_isThongKeThanhCong = false;
+    private List<BaoCaoThang> listBaoCaoThang;
+
+    public void InBaoCaoThang() {
+        if (DTT_isThongKeThanhCong == false) {
+            alert.errorMessage("Vui lòng thống kê doanh thu trước khi xuất báo cáo!");
             return;
         }
-        DTNam_FillDataForComboBoxNam();
-        DTThang_FillDataForComboBoxNam();
-        DTThang_FillDataForComboBoxThang();
-        dtNam_thongKe_btn.setOnMouseClicked(event -> DTNam_LoadData());
-        dtThang_thongKe_btn.setOnMouseClicked(event -> DTThang_LoadData());
+        reportController.PrintReportBaoCaoThang(DTT_namBaoCao, DTT_thangBaoCao, listBaoCaoThang);
     }
 
-    public void DTNam_LoadData() {
-        if (dtNam_cbbox_namSelection.getSelectionModel().isEmpty()) {
-            alert.errorMessage("Vui lòng chọn năm cần thống kê.");
-            return;
-        }
-        Integer namBaoCao = dtNam_cbbox_namSelection.getSelectionModel().getSelectedItem();
-        String query = "WITH Months AS (" +
-                "    SELECT LEVEL AS Thang FROM dual CONNECT BY LEVEL <= 12" +
-                ") " +
-                "SELECT" +
-                "    m.Thang as thang," +
-                "    NVL(b.SoChuyenBay, 0) AS sochuyenbay," +
-                "    NVL(b.DoanhThu, 0) AS doanhthu," +
-                "    NVL(b.Tyle, 0) AS tyle " +
-                "FROM" +
-                "    Months m " +
-                "LEFT JOIN" +
-                "    BAOCAONAM b ON m.Thang = b.Thang AND b.Nam = ? " +
-                "ORDER BY" +
-                "    m.Thang";
-
-        try (PreparedStatement prepare = connect.prepareStatement(query)) {
-            prepare.setInt(1, namBaoCao);
-            try (ResultSet result = prepare.executeQuery()) {
-                dtNam_tableview.getItems().clear();
-                tongDoanhThuNam = BigDecimal.valueOf(0.0);
-
-                while (result.next()) {
-                    BaoCaoNam bcNam = new BaoCaoNam(
-                            result.getInt("thang"),
-                            result.getInt("sochuyenbay"),
-                            result.getBigDecimal("doanhthu"),
-                            result.getFloat("tyle")
-                    );
-                    dtNam_tableview.getItems().add(bcNam);
-                    tongDoanhThuNam = tongDoanhThuNam.add(bcNam.getDoanhThu());
-                }
-                dtNam_tongdt_txtfld.setText(tongDoanhThuNam.toString() + " VNĐ");
-
-                dtNam_Thang_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(Integer.toString(cellData.getValue().getThang())));
-                dtNam_soChuyen_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(Integer.toString(cellData.getValue().getSoChuyenBay())));
-                dtNam_dt_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDoanhThu().toString()));
-                dtNam_tiLe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTyLe().toString()));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            alert.errorMessage("Error occurred while loading data from the database.");
-        }
-    }
-
-    public void DTNam_FillDataForComboBoxNam() {
-        int currentYear = LocalDate.now().getYear();
-        for (int i = currentYear; i >= 2000; i--) {
-            dtNam_cbbox_namSelection.getItems().add(i);
-        }
-    }
-
-    // bao cao thang
     public void DTThang_UpDateData(Integer namBaoCao, Integer thangBaoCao, BigDecimal tongDoanhThuThang) {
         String query = "SELECT MaChuyenBay, SoVeDaBan, DoanhThu " +
                 "FROM BAOCAOTHANG " +
@@ -152,10 +223,11 @@ public class DoanhThuController implements Initializable {
             prepare.setInt(2, namBaoCao);
             try (ResultSet result = prepare.executeQuery()) {
                 dtThang_tableView.getItems().clear();
+                listBaoCaoThang.clear();
                 int stt = 1;
                 while (result.next()) {
                     BigDecimal doanhThu = result.getBigDecimal("DoanhThu");
-                    double tyLe = doanhThu.divide(tongDoanhThuThang, 2, RoundingMode.HALF_UP).doubleValue() * 100;
+                    Double tyLe = (doanhThu.divide(tongDoanhThuThang, 2, RoundingMode.HALF_UP).doubleValue()) * 100;
                     BaoCaoThang baoCaoThang = new BaoCaoThang(
                             stt,
                             result.getString("MaChuyenBay"),
@@ -163,9 +235,11 @@ public class DoanhThuController implements Initializable {
                             doanhThu,
                             tyLe
                     );
+                    listBaoCaoThang.add(baoCaoThang);
                     dtThang_tableView.getItems().add(baoCaoThang);
                     stt++;
                 }
+                DTT_isThongKeThanhCong = true;
                 dtThang_tongdt_txfl.setText(tongDoanhThuThang.toString() + " VNĐ");
 
                 dtThang_stt_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(Integer.toString(cellData.getValue().getStt())));
@@ -191,6 +265,7 @@ public class DoanhThuController implements Initializable {
         }
         DTT_namBaoCao = dtThang_cbbox_namSelection.getSelectionModel().getSelectedItem();
         DTT_thangBaoCao = dtThang_cbbox_thangSelection.getSelectionModel().getSelectedItem();
+        DTT_isThongKeThanhCong = false;
 
         String query = "SELECT DoanhThu " +
                 "FROM BAOCAOTHANG " +

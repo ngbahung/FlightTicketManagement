@@ -6,7 +6,9 @@ import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.BaoCaoNam;
+import org.example.flightticketmanagement.Models.BaoCaoThang;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,10 +18,10 @@ public class ReportController {
     public void PrintReportBaoCaoNam(Integer namBaoCao, List<BaoCaoNam> listBaoCaoNam) {
         try {
             String fileJRXMLPath = "src/main/resources/Report/DT_Nam_Report.jrxml";
-
+            LocalDateTime ngayLapBaoCao = LocalDateTime.now();
             Map<String, Object> parameters = new HashMap<String, Object>();
             parameters.put("namBaoCao", namBaoCao);
-            parameters.put("ngayLapBaoCao", "Thứ 4 22/05/2024");
+            parameters.put("ngayLapBaoCao", ngayLapBaoCao);
 
             JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(listBaoCaoNam);
 
@@ -32,15 +34,16 @@ public class ReportController {
             e.printStackTrace();
         }
     }
-    public void PrintReportBaoCaoThang(Integer namBaoCao, List<BaoCaoNam> listBaoCaoNam) {
+    public void PrintReportBaoCaoThang(Integer namBaoCao,Integer thangBaoCao, List<BaoCaoThang> listBaoCaoThang){
         try {
             String fileJRXMLPath = "src/main/resources/Report/DT_Thang_Report.jrxml";
-
+            LocalDateTime ngayLapBaoCao = LocalDateTime.now();
             Map<String, Object> parameters = new HashMap<String, Object>();
             parameters.put("namBaoCao", namBaoCao);
-            parameters.put("ngayLapBaoCao", "Thứ 4 22/05/2024");
+            parameters.put("thangBaoCao", thangBaoCao);
+            parameters.put("ngayLapBaoCao", ngayLapBaoCao);
 
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(listBaoCaoNam);
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(listBaoCaoThang);
 
             JasperReport report = JasperCompileManager.compileReport(fileJRXMLPath);
 

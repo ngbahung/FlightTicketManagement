@@ -8,20 +8,15 @@ public class BaoCaoNam {
     private Integer thang;
     private Integer soChuyenBay;
     private BigDecimal doanhThu;
-    private Float tyLe;
+    private Double tyLe;
 
-    public BaoCaoNam(Integer thang, Integer soChuyenBay, BigDecimal doanhThu, Float tyLe) {
+    public BaoCaoNam(Integer thang, Integer soChuyenBay, BigDecimal doanhThu, Double tyLe) {
         this.thang = thang;
         this.soChuyenBay = soChuyenBay;
         this.doanhThu = doanhThu;
         this.tyLe = tyLe;
     }
 
-    public BaoCaoNam(Integer thang, Integer soChuyenBay, BigDecimal doanhThu) {
-        this.thang = thang;
-        this.soChuyenBay = soChuyenBay;
-        this.doanhThu = doanhThu;
-    }
 
     public String getMaBCNam() {
         return maBCNam;
@@ -63,11 +58,11 @@ public class BaoCaoNam {
         this.doanhThu = doanhThu;
     }
 
-    public Float getTyLe() {
+    public Double getTyLe() {
         return tyLe;
     }
 
-    public void setTyLe(Float tyLe) {
+    public void setTyLe(Double tyLe) {
         this.tyLe = tyLe;
     }
 }
