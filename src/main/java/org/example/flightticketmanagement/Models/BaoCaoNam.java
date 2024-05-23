@@ -1,16 +1,26 @@
 package org.example.flightticketmanagement.Models;
 
+import java.math.BigDecimal;
+
 public class BaoCaoNam {
+
     private String maBCNam;
     private Integer nam;
     private Integer thang;
     private Integer soChuyenBay;
-    private Float doanhThu;
+    private BigDecimal doanhThu;
     private Float tyLe;
 
-    public BaoCaoNam(String maBCNam, Integer nam, Integer thang, Integer soChuyenBay, Float doanhThu, Float tyLe) {
+    public BaoCaoNam(String maBCNam, Integer nam, Integer thang, Integer soChuyenBay, BigDecimal doanhThu, Float tyLe) {
         this.maBCNam = maBCNam;
         this.nam = nam;
+        this.thang = thang;
+        this.soChuyenBay = soChuyenBay;
+        this.doanhThu = doanhThu;
+        this.tyLe = tyLe;
+    }
+
+    public BaoCaoNam(Integer thang, Integer soChuyenBay, BigDecimal doanhThu, Float tyLe) {
         this.thang = thang;
         this.soChuyenBay = soChuyenBay;
         this.doanhThu = doanhThu;
@@ -49,11 +59,11 @@ public class BaoCaoNam {
         this.soChuyenBay = soChuyenBay;
     }
 
-    public Float getDoanhThu() {
+    public BigDecimal getDoanhThu() {
         return doanhThu;
     }
 
-    public void setDoanhThu(Float doanhThu) {
+    public void setDoanhThu(BigDecimal doanhThu) {
         this.doanhThu = doanhThu;
     }
 
@@ -63,5 +73,17 @@ public class BaoCaoNam {
 
     public void setTyLe(Float tyLe) {
         this.tyLe = tyLe;
+    }
+
+    @Override
+    public String toString() {
+        return "BaoCaoNam{" +
+                "maBCNam='" + maBCNam + '\'' +
+                ", nam=" + nam +
+                ", thang=" + thang +
+                ", soChuyenBay=" + soChuyenBay +
+                ", doanhThu=" + doanhThu +
+                ", tyLe=" + tyLe +
+                '}';
     }
 }

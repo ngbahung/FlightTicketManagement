@@ -6,6 +6,7 @@ module org.example.flightticketmanagement {
     requires de.jensd.fx.glyphs.fontawesome;
     requires com.oracle.database.jdbc;
     requires java.sql;
+    requires jasperreports;
 
     opens org.example.flightticketmanagement to javafx.fxml;
     opens org.example.flightticketmanagement.Controllers.Admin to javafx.fxml;
