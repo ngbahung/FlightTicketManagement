@@ -18,7 +18,7 @@ public class ReportController {
     public void PrintReportBaoCaoNam(Integer namBaoCao, List<BaoCaoNam> listBaoCaoNam) {
         try {
             String fileJRXMLPath = "src/main/resources/Report/DT_Nam_Report.jrxml";
-            LocalDateTime ngayLapBaoCao = LocalDateTime.now();
+            String ngayLapBaoCao = LocalDateTime.now()+"";
             Map<String, Object> parameters = new HashMap<String, Object>();
             parameters.put("namBaoCao", namBaoCao);
             parameters.put("ngayLapBaoCao", ngayLapBaoCao);
@@ -37,7 +37,7 @@ public class ReportController {
     public void PrintReportBaoCaoThang(Integer namBaoCao,Integer thangBaoCao, List<BaoCaoThang> listBaoCaoThang){
         try {
             String fileJRXMLPath = "src/main/resources/Report/DT_Thang_Report.jrxml";
-            LocalDateTime ngayLapBaoCao = LocalDateTime.now();
+            String ngayLapBaoCao = LocalDateTime.now()+"";
             Map<String, Object> parameters = new HashMap<String, Object>();
             parameters.put("namBaoCao", namBaoCao);
             parameters.put("thangBaoCao", thangBaoCao);

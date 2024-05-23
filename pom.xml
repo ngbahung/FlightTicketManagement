@@ -71,8 +71,14 @@
       <artifactId>jasperreports</artifactId>
       <version>6.21.2</version>
     </dependency>
-  </dependencies>
-
+    <dependency>
+      <groupId>com.example</groupId>
+      <artifactId>timesnewroman-fonts</artifactId>
+      <version>1.0</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/src/main/resources/Font_Extension/timesnewroman-fonts.jar</systemPath>
+    </dependency>
+</dependencies>
   <build>
     <plugins>
       <plugin>

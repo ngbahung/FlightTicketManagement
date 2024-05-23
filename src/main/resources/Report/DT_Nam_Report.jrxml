@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BaoCaoNam" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dda39f69-b7b1-4018-aa52-17d512ffb98e">
+
+    <property name="net.sf.jasperreports.export.pdf.force.linebreak.policy" value="true"/>
+    <property name="net.sf.jasperreports.export.pdf.character.encoding" value="Identity-H"/>
+    <property name="net.sf.jasperreports.export.pdf.font.embed" value="true"/>
     <property name="com.jaspersoft.studio.data.sql.tables" value=""/>
     <property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
     <parameter name="namBaoCao" class="java.lang.Integer"/>
@@ -20,7 +24,7 @@
             <frame>
                 <reportElement mode="Opaque" x="-20" y="-20" width="594" height="92" backcolor="#006699" uuid="b9d84c97-9e3f-4174-8f7f-1694813a3607"/>
                 <staticText>
-                    <reportElement x="70" y="20" width="380" height="43" forecolor="#FFFFFF" uuid="2a6734b4-90fe-4b30-880c-d4e15a93ac6e"/>
+                    <reportElement x="30" y="20" width="330" height="43" forecolor="#FFFFFF" uuid="2a6734b4-90fe-4b30-880c-d4e15a93ac6e"/>
                     <textElement>
                         <font fontName="Times New Roman" size="24" isBold="true"/>
                     </textElement>
@@ -29,14 +33,14 @@
                 <staticText>
                     <reportElement x="440" y="55" width="106" height="20" forecolor="#FFFFFF" uuid="a0020984-9d1d-407a-b3f3-41a91f9124cb"/>
                     <textElement textAlignment="Right">
-                        <font size="14" isBold="false"/>
+                        <font fontName="Times New Roman" size="14" isBold="false"/>
                     </textElement>
                     <text><![CDATA[TikeMana Airline]]></text>
                 </staticText>
                 <textField>
-                    <reportElement x="405" y="20" width="176" height="30" forecolor="#FFFFFF" uuid="225e7217-223d-4b07-addb-e9db52271ce8"/>
+                    <reportElement x="370" y="20" width="176" height="30" forecolor="#FFFFFF" uuid="225e7217-223d-4b07-addb-e9db52271ce8"/>
                     <textElement>
-                        <font fontName="Times New Roman" size="24"/>
+                        <font fontName="Times New Roman" size="24" isBold="true"/>
                     </textElement>
                     <textFieldExpression><![CDATA[$P{namBaoCao}]]></textFieldExpression>
                 </textField>
@@ -56,7 +60,7 @@
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="02efd415-35fa-4dfb-8bf7-8f308fc4d674"/>
                 </reportElement>
                 <textElement textAlignment="Center">
-                    <font size="14" isBold="true"/>
+                    <font fontName="Times New Roman" size="16" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Tháng]]></text>
             </staticText>
@@ -65,7 +69,7 @@
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2738271c-f8ae-4a65-958f-ac05cab084f1"/>
                 </reportElement>
                 <textElement textAlignment="Center">
-                    <font size="14" isBold="true"/>
+                    <font fontName="Times New Roman" size="16" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Số chuyến bay]]></text>
             </staticText>
@@ -74,7 +78,7 @@
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2e4ff9b6-820b-4d56-81ba-ad23af80ea3a"/>
                 </reportElement>
                 <textElement textAlignment="Center">
-                    <font size="14" isBold="true"/>
+                    <font fontName="Times New Roman" size="16" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Doanh thu]]></text>
             </staticText>
@@ -83,7 +87,7 @@
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7e42f5f1-f0d0-4029-b6ef-83e5a9258e8e"/>
                 </reportElement>
                 <textElement textAlignment="Center">
-                    <font size="14" isBold="true"/>
+                    <font fontName="Times New Roman" size="16" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Tỷ lệ ]]></text>
             </staticText>
