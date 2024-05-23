@@ -9,6 +9,7 @@
     <queryString language="SQL">
         <![CDATA[select * from address]]>
     </queryString>
+    <field name="STT" class="java.lang.Integer"/>
     <field name="maChuyenBay" class="java.lang.String"/>
     <field name="soVeBan" class="java.lang.Integer"/>
     <field name="doanhThu" class="java.math.BigDecimal"/>
@@ -60,7 +61,7 @@
                 <reportElement x="0" y="21" width="555" height="1" forecolor="#666666" uuid="e225c1de-21ee-4d58-a5ef-31b829ce813e"/>
             </line>
             <staticText>
-                <reportElement mode="Opaque" x="0" y="0" width="140" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="dfa38359-3735-41c8-8425-282d2e987817">
+                <reportElement mode="Opaque" x="40" y="1" width="140" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="dfa38359-3735-41c8-8425-282d2e987817">
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="02efd415-35fa-4dfb-8bf7-8f308fc4d674"/>
                 </reportElement>
                 <textElement textAlignment="Center">
@@ -69,7 +70,7 @@
                 <text><![CDATA[Mã chuyến bay]]></text>
             </staticText>
             <staticText>
-                <reportElement mode="Opaque" x="140" y="0" width="140" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="be417b75-1c81-4386-a697-61a929ca0a02">
+                <reportElement mode="Opaque" x="180" y="0" width="100" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="be417b75-1c81-4386-a697-61a929ca0a02">
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2738271c-f8ae-4a65-958f-ac05cab084f1"/>
                 </reportElement>
                 <textElement textAlignment="Center">
@@ -95,6 +96,15 @@
                 </textElement>
                 <text><![CDATA[Tỷ lệ]]></text>
             </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="0" y="0" width="40" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="0e5406d5-d6de-42e9-8ec9-a7f4dc2f579f">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7e42f5f1-f0d0-4029-b6ef-83e5a9258e8e"/>
+                </reportElement>
+                <textElement textAlignment="Center">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[STT]]></text>
+            </staticText>
         </band>
     </columnHeader>
     <detail>
@@ -103,7 +113,7 @@
                 <reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="c22193ae-7699-4d90-b82d-6327dfe05849"/>
             </line>
             <textField textAdjust="StretchHeight">
-                <reportElement x="0" y="0" width="140" height="20" uuid="c2f95ea4-ddbc-4369-91fa-4e0ca5153468">
+                <reportElement x="40" y="-2" width="140" height="20" uuid="c2f95ea4-ddbc-4369-91fa-4e0ca5153468">
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="02efd415-35fa-4dfb-8bf7-8f308fc4d674"/>
                 </reportElement>
                 <textElement textAlignment="Center">
@@ -112,7 +122,7 @@
                 <textFieldExpression><![CDATA[$F{maChuyenBay}]]></textFieldExpression>
             </textField>
             <textField textAdjust="StretchHeight">
-                <reportElement x="140" y="0" width="140" height="20" uuid="9f4c6d22-b5dd-427a-a0d5-f3e7be94df60">
+                <reportElement x="180" y="0" width="100" height="20" uuid="9f4c6d22-b5dd-427a-a0d5-f3e7be94df60">
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2738271c-f8ae-4a65-958f-ac05cab084f1"/>
                 </reportElement>
                 <textElement textAlignment="Center">
@@ -137,6 +147,15 @@
                     <font size="14"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{tyLe}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="0" y="0" width="40" height="20" uuid="721264ca-d0db-4e51-9411-1be2c1901ec8">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7e42f5f1-f0d0-4029-b6ef-83e5a9258e8e"/>
+                </reportElement>
+                <textElement textAlignment="Center">
+                    <font size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{STT}]]></textFieldExpression>
             </textField>
         </band>
     </detail>

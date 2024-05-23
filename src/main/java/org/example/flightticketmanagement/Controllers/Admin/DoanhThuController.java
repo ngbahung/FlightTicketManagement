@@ -141,6 +141,7 @@ public class DoanhThuController implements Initializable {
         }
     }
 
+    // bao cao thang
     public void DTThang_UpDateData(Integer namBaoCao, Integer thangBaoCao, BigDecimal tongDoanhThuThang) {
         String query = "SELECT MaChuyenBay, SoVeDaBan, DoanhThu " +
                 "FROM BAOCAOTHANG " +
