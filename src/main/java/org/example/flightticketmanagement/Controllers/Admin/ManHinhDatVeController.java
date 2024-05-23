@@ -22,6 +22,12 @@ import java.util.ResourceBundle;
 
 public class ManHinhDatVeController implements Initializable {
     @FXML
+    private MFXTextField maKH_txtfld;
+
+    @FXML
+    private MFXTextField diaChi_txtfld;
+
+    @FXML
     private MFXTextField cccd_txtfld;
 
     @FXML
@@ -97,6 +103,18 @@ public class ManHinhDatVeController implements Initializable {
         hangVe_tbcl.setCellValueFactory(new PropertyValueFactory<>("maHangVe"));
         maGhe_tbcl.setCellValueFactory(new PropertyValueFactory<>("maGhe"));
         giaTien_tbcl.setCellValueFactory(new PropertyValueFactory<>("giaTien"));
+
+        // Add listener to the table view selection
+        ve_tableview.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                showTicketDetails(newValue);
+            }
+        });
+
+        // Set text fields to be non-editable
+        maGhe_txtfld.setEditable(false);
+        maVe_txtfld.setEditable(false);
+        thanhTien_txtfld.setEditable(false);
     }
 
     public void setFlightDetails(ChuyenBay flight) {
@@ -191,5 +209,11 @@ public class ManHinhDatVeController implements Initializable {
             e.printStackTrace();
         }
         return "Tên hạng vé";
+    }
+
+    private void showTicketDetails(Ve ve) {
+        maGhe_txtfld.setText(String.valueOf(ve.getMaGhe()));
+        maVe_txtfld.setText(ve.getMaVe());
+        thanhTien_txtfld.setText(String.valueOf(ve.getGiaTien()));
     }
 }
