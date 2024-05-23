@@ -9,12 +9,12 @@ public class Model {
     private AccountType loginAccountType;
     private String loggedInUserId;
 
-    private Model(){
+    private Model() {
         this.viewFactory = new ViewFactory();
         this.loginAccountType = AccountType.STAFF;
     }
 
-    public static synchronized Model getInstance(){
+    public static synchronized Model getInstance() {
         if (model == null){
             model = new Model();
         }

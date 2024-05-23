@@ -1,34 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: #ffffff;" stylesheets="@../../Styles/Admin/ThemHangVe.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.SuaHangVeController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="270.0" prefWidth="303.0" spacing="30.0" stylesheets="@../../Styles/Admin/ThemHangVe.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox alignment="CENTER_LEFT" layoutX="-1.0" layoutY="58.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="284.0" prefWidth="300.0" spacing="10.0" stylesheets="@../../Styles/Admin/ThemHangVe.css">
-         <children>
-            <Label styleClass="tittle-text" text="Mã hạng vé" />
-            <TextField fx:id="maHangVe_textfield" disable="true" editable="false" layoutX="30.0" layoutY="85.0" prefHeight="41.0" prefWidth="263.0" promptText="Mã hạng vé" />
-            <Label styleClass="tittle-text" text="Tên hạng vé" />
-            <TextField fx:id="tenHangVe_textfield" prefHeight="41.0" prefWidth="263.0" promptText="Tên hạng vé" />
-            <Label styleClass="tittle-text" text="Hệ số" />
-            <TextField fx:id="heSo_textfield" prefHeight="41.0" prefWidth="263.0" promptText="Hệ số" />
-         </children>
-         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
-      </VBox>
-      <Label layoutX="64.0" layoutY="28.0" styleClass="tittle" text="SỬA HẠNG VÉ" />
-      <Button fx:id="luuHangVe_btn" graphicTextGap="10.0" layoutX="106.0" layoutY="342.0" mnemonicParsing="false" onAction="#luuHangVe" prefHeight="34.0" prefWidth="94.0" text="Lưu">
-         <graphic>
-            <FontAwesomeIconView fill="WHITE" glyphName="SAVE" />
-         </graphic>
-      </Button>
+      <Label styleClass="tittle" text="Sửa hạng vé" />
+      <TextField prefHeight="41.0" prefWidth="263.0" promptText="Tên hạng vé" />
+      <TextField prefHeight="41.0" prefWidth="263.0" promptText="Hệ số" />
+      <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="73.0" text="Lưu" />
    </children>
-</AnchorPane>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>
+

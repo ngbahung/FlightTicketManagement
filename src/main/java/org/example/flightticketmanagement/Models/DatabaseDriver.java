@@ -4,10 +4,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseDriver {
-    private static final String user = "TIKIMANA";
+    private static final String user = "FLY";
     private static final String password = "password";
     private static final String port = "1521";
-    private static final String database = "TRINH";
+    private static final String database = "xe";
     private static final String url = "jdbc:oracle:thin:@localhost:" + port + ":" + database;
     public static Connection con;
 
@@ -19,5 +19,9 @@ public class DatabaseDriver {
             e.printStackTrace();
         }
         return con;
+    }
+
+    public static void main(String[] args) {
+        Connection c = getConnection();
     }
 }
