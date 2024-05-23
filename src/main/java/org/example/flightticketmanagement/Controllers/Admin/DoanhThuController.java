@@ -56,8 +56,6 @@ public class DoanhThuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         reportController = new ReportController();
-
-
         connect = DatabaseDriver.getConnection();
         DTNam_FillDataForComboBoxNam();
         DTThang_FillDataForComboBoxNam();
@@ -139,7 +137,7 @@ public class DoanhThuController implements Initializable {
                 ") " +
                 "SELECT" +
                 "    m.Thang, " +
-                "    NVL(b.DoanhThu, 0) AS doanhthu " +
+                "    NVL(b.DoanhThu, 0) AS Doanhthu " +
                 "FROM" +
                 "    Months m " +
                 "LEFT JOIN" +
