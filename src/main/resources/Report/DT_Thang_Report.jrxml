@@ -27,35 +27,35 @@
                 <staticText>
                     <reportElement x="20" y="14" width="368" height="43" forecolor="#FFFFFF" uuid="2a6734b4-90fe-4b30-880c-d4e15a93ac6e"/>
                     <textElement>
-                        <font fontName="Times New Roman" size="24" isBold="true"/>
+                        <font fontName="Arial" size="24" isBold="true"/>
                     </textElement>
                     <text><![CDATA[BÁO CÁO DOANH THU THÁNG]]></text>
                 </staticText>
                 <staticText>
                     <reportElement x="440" y="55" width="106" height="20" forecolor="#FFFFFF" uuid="a0020984-9d1d-407a-b3f3-41a91f9124cb"/>
                     <textElement textAlignment="Right">
-                        <font fontName="Times New Roman" size="14" isBold="false"/>
+                        <font fontName="Arial" size="14" isBold="false"/>
                     </textElement>
                     <text><![CDATA[TikeMana Airline]]></text>
                 </staticText>
                 <textField>
                     <reportElement x="90" y="50" width="176" height="30" forecolor="#FFFFFF" uuid="225e7217-223d-4b07-addb-e9db52271ce8"/>
                     <textElement textAlignment="Left">
-                        <font fontName="Times New Roman" size="24" isBold="true"/>
+                        <font fontName="Arial" size="24" isBold="true"/>
                     </textElement>
                     <textFieldExpression><![CDATA[$P{namBaoCao}]]></textFieldExpression>
                 </textField>
                 <textField>
                     <reportElement x="388" y="14" width="176" height="30" forecolor="#FFFFFF" uuid="979d3dfd-62c7-4709-ab71-05174f6ad91c"/>
                     <textElement textAlignment="Left">
-                        <font fontName="Times New Roman" size="24" isBold="true"/>
+                        <font fontName="Arial&#xD;&#xA;" size="24" isBold="true"/>
                     </textElement>
                     <textFieldExpression><![CDATA[$P{thangBaoCao}]]></textFieldExpression>
                 </textField>
                 <staticText>
                     <reportElement x="20" y="50" width="60" height="43" forecolor="#FFFFFF" uuid="3dbdb694-2462-4de6-98c7-370c36089322"/>
                     <textElement>
-                        <font fontName="Times New Roman" size="24" isBold="true"/>
+                        <font fontName="Arial" size="24" isBold="true"/>
                     </textElement>
                     <text><![CDATA[NĂM]]></text>
                 </staticText>
@@ -75,7 +75,7 @@
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="02efd415-35fa-4dfb-8bf7-8f308fc4d674"/>
                 </reportElement>
                 <textElement textAlignment="Center">
-                    <font fontName="Times New Roman" size="16" isBold="true"/>
+                    <font fontName="Arial" size="16" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Mã chuyến bay]]></text>
             </staticText>
@@ -84,7 +84,7 @@
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2738271c-f8ae-4a65-958f-ac05cab084f1"/>
                 </reportElement>
                 <textElement textAlignment="Center">
-                    <font fontName="Times New Roman" size="16" isBold="true"/>
+                    <font fontName="Arial" size="16" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Số vé bán được]]></text>
             </staticText>
@@ -93,7 +93,7 @@
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2e4ff9b6-820b-4d56-81ba-ad23af80ea3a"/>
                 </reportElement>
                 <textElement textAlignment="Center">
-                    <font fontName="Times New Roman" size="16" isBold="true"/>
+                    <font fontName="Arial" size="16" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Doanh thu]]></text>
             </staticText>
@@ -102,7 +102,7 @@
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7e42f5f1-f0d0-4029-b6ef-83e5a9258e8e"/>
                 </reportElement>
                 <textElement textAlignment="Center">
-                    <font fontName="Times New Roman" size="16" isBold="true"/>
+                    <font fontName="Arial" size="16" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Tỷ lệ]]></text>
             </staticText>
@@ -111,7 +111,7 @@
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7e42f5f1-f0d0-4029-b6ef-83e5a9258e8e"/>
                 </reportElement>
                 <textElement textAlignment="Center">
-                    <font fontName="Times New Roman" size="16" isBold="true"/>
+                    <font fontName="Arial" size="16" isBold="true"/>
                 </textElement>
                 <text><![CDATA[STT]]></text>
             </staticText>
@@ -126,8 +126,8 @@
                 <reportElement x="40" y="-2" width="140" height="20" uuid="c2f95ea4-ddbc-4369-91fa-4e0ca5153468">
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="02efd415-35fa-4dfb-8bf7-8f308fc4d674"/>
                 </reportElement>
-                <textElement textAlignment="Center">
-                    <font size="14"/>
+                <textElement textAlignment="Center" verticalAlignment="Bottom">
+                    <font fontName="Arial" size="14"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{maChuyenBay}]]></textFieldExpression>
             </textField>
@@ -135,8 +135,8 @@
                 <reportElement x="180" y="0" width="100" height="20" uuid="9f4c6d22-b5dd-427a-a0d5-f3e7be94df60">
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2738271c-f8ae-4a65-958f-ac05cab084f1"/>
                 </reportElement>
-                <textElement textAlignment="Center">
-                    <font size="14"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="Arial" size="14"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{soVeDaBan}]]></textFieldExpression>
             </textField>
@@ -145,7 +145,7 @@
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2e4ff9b6-820b-4d56-81ba-ad23af80ea3a"/>
                 </reportElement>
                 <textElement textAlignment="Center">
-                    <font size="14"/>
+                    <font fontName="Arial" size="14"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{doanhThu}]]></textFieldExpression>
             </textField>
@@ -154,7 +154,7 @@
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7e42f5f1-f0d0-4029-b6ef-83e5a9258e8e"/>
                 </reportElement>
                 <textElement textAlignment="Center">
-                    <font size="14"/>
+                    <font fontName="Arial" size="14"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{tyLe}]]></textFieldExpression>
             </textField>
@@ -162,8 +162,8 @@
                 <reportElement x="0" y="0" width="40" height="20" uuid="721264ca-d0db-4e51-9411-1be2c1901ec8">
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7e42f5f1-f0d0-4029-b6ef-83e5a9258e8e"/>
                 </reportElement>
-                <textElement textAlignment="Center">
-                    <font size="14"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="Arial" size="14"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{stt}]]></textFieldExpression>
             </textField>
@@ -177,7 +177,7 @@
             <textField>
                 <reportElement x="420" y="30" width="114" height="30" uuid="370f2dc7-4100-4af7-b272-f3a4b9dcb2a6"/>
                 <textElement>
-                    <font size="12" isItalic="true"/>
+                    <font fontName="Arial" size="12" isItalic="true"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$P{ngayLapBaoCao}]]></textFieldExpression>
             </textField>
