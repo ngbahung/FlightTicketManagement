@@ -53,7 +53,7 @@
          <columns>
             <TableColumn fx:id="veDD_maVe_tbcl" prefWidth="81.0" text="Mã vé"/>
             <TableColumn fx:id="veDD_sanBayDi_tbcl" prefWidth="88.0" text="Sân bay đi"/>
-            <TableColumn fx:id="veDD_sbden_tbcl" prefWidth="89.0" text="Sân bay đến"/>
+            <TableColumn fx:id="veDD_sanBayDen_tbcl" prefWidth="89.0" text="Sân bay đến"/>
             <TableColumn fx:id="veDD_ngayBay_tbcl" prefWidth="102.0" text="Ngày bay"/>
             <TableColumn fx:id="veDD_gioBay_tbcl" prefWidth="72.0" text="Giờ bay"/>
             <TableColumn fx:id="veDD_tenKH_tbcl" prefWidth="121.0" text="Tên khách hàng"/>
