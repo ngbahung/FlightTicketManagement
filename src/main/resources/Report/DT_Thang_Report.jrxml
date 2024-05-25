@@ -178,7 +178,7 @@
             </line>
             <pieChart>
                 <chart evaluationTime="Report">
-                    <reportElement x="0" y="20" width="554" height="274" uuid="2b5e1925-b09c-4f3a-b927-7084844b35a6"/>
+                    <reportElement x="0" y="20" width="554" height="274" uuid="fda43a51-5020-46a4-b2e5-6b61d9c1d1f6"/>
                     <chartTitle/>
                     <chartSubtitle/>
                     <chartLegend/>
@@ -186,7 +186,6 @@
                 <pieDataset>
                     <keyExpression><![CDATA[$F{maChuyenBay}]]></keyExpression>
                     <valueExpression><![CDATA[$F{doanhThu}]]></valueExpression>
-                    <labelExpression><![CDATA[$F{tyLe}]]></labelExpression>
                 </pieDataset>
                 <piePlot>
                     <plot/>

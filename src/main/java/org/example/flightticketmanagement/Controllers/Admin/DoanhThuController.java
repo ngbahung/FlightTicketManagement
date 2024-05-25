@@ -120,12 +120,8 @@ public class DoanhThuController implements Initializable {
     }
 
     public void DTNam_LoadTongDT() {
-        if (dtThang_cbbox_namSelection.getSelectionModel().isEmpty()) {
+        if (dtNam_cbbox_namSelection.getSelectionModel().isEmpty()) {
             alert.errorMessage("Vui lòng chọn năm cần thống kê");
-            return;
-        }
-        if (dtThang_cbbox_thangSelection.getSelectionModel().isEmpty()) {
-            alert.errorMessage("Vui lòng chọn tháng cần thống kê");
             return;
         }
 
