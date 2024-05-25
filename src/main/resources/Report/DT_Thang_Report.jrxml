@@ -15,15 +15,7 @@
     <field name="doanhThu" class="java.math.BigDecimal"/>
     <field name="tyLe" class="java.lang.Double"/>
     <background>
-        <band height="75">
-            <textField>
-                <reportElement x="369" y="45" width="186" height="30" uuid="94ce84ab-849f-4eb4-bb52-ce8bd4a1752b"/>
-                <textElement verticalAlignment="Middle">
-                    <font fontName="DejaVu Sans" size="12" isItalic="true"/>
-                </textElement>
-                <textFieldExpression><![CDATA[$P{ngayLapBaoCao}]]></textFieldExpression>
-            </textField>
-        </band>
+        <band height="34"/>
     </background>
     <title>
         <band height="72">
@@ -58,7 +50,7 @@
                     <text><![CDATA[NĂM]]></text>
                 </staticText>
                 <image>
-                    <reportElement x="20" y="497" width="134" height="31" uuid="7e84b637-6673-42cb-983a-128097fa08ed"/>
+                    <reportElement x="30" y="517" width="134" height="31" uuid="7e84b637-6673-42cb-983a-128097fa08ed"/>
                     <imageExpression><![CDATA["src/main/resources/Images/login/logo_TikeMana.png"]]></imageExpression>
                 </image>
             </frame>
@@ -120,7 +112,7 @@
         </band>
     </columnHeader>
     <detail>
-        <band height="30">
+        <band height="38">
             <textField textAdjust="StretchHeight">
                 <reportElement x="40" y="0" width="140" height="30" uuid="c2f95ea4-ddbc-4369-91fa-4e0ca5153468">
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="02efd415-35fa-4dfb-8bf7-8f308fc4d674"/>
@@ -172,10 +164,7 @@
         <band/>
     </columnFooter>
     <pageFooter>
-        <band height="295">
-            <line>
-                <reportElement positionType="FixRelativeToBottom" x="0" y="0" width="555" height="1" uuid="c22193ae-7699-4d90-b82d-6327dfe05849"/>
-            </line>
+        <band height="402">
             <pieChart>
                 <chart evaluationTime="Report">
                     <reportElement x="0" y="20" width="554" height="274" uuid="fda43a51-5020-46a4-b2e5-6b61d9c1d1f6"/>
@@ -192,6 +181,16 @@
                     <itemLabel/>
                 </piePlot>
             </pieChart>
+            <textField>
+                <reportElement x="360" y="360" width="186" height="30" uuid="94ce84ab-849f-4eb4-bb52-ce8bd4a1752b"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="12" isItalic="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{ngayLapBaoCao}]]></textFieldExpression>
+            </textField>
+            <line>
+                <reportElement positionType="FixRelativeToBottom" x="0" y="0" width="555" height="1" uuid="c22193ae-7699-4d90-b82d-6327dfe05849"/>
+            </line>
         </band>
     </pageFooter>
     <summary>
