@@ -139,6 +139,11 @@ public class LichSuDatVeController implements Initializable {
 
         // Thêm sự kiện cho nút làm mới
         refresh_btn.setOnAction(event -> {
+            // Xóa hết các lựa chọn và đặt lại giá trị mặc định
+            sanbaydi_menubtn.setText("Sân bay đi");
+            sanbayden_menubtn.setText("Sân bay đến");
+            ngay_datepicker.setValue(LocalDate.now());
+            // Load lại dữ liệu
             try {
                 loadData(null);
             } catch (SQLException e) {
@@ -148,6 +153,7 @@ public class LichSuDatVeController implements Initializable {
 
         sanbaydi_menubtn.setOnShowing(event -> updateSanBayMenuItems());
         sanbayden_menubtn.setOnShowing(event -> updateSanBayMenuItems());
+        ngay_datepicker.setValue(LocalDate.now());
     }
 
     private void setupTableViewColumns(TableColumn<CT_DatVe, String> maVeCol,
@@ -208,7 +214,7 @@ public class LichSuDatVeController implements Initializable {
 
         String queryVeDaDat = "SELECT * FROM CT_DATVE WHERE TrangThai = 1";
         if (date != null) {
-            queryVeDaDat += " AND DATE(NgayMuaVe) = ?";
+            queryVeDaDat += " AND TRUNC(NgayMuaVe) = ?";
         }
         prepare = connect.prepareStatement(queryVeDaDat);
         if (date != null) {
@@ -359,72 +365,86 @@ public class LichSuDatVeController implements Initializable {
         return "";
     }
 
-//    Tìm kiếm dữ liệu
-private void search() {
-    String sanBayDi = sanbaydi_menubtn.getText();
-    String sanBayDen = sanbayden_menubtn.getText();
-    
+    private void search() {
+        LocalDateTime selectedDate = ngay_datepicker.getValue().atStartOfDay();
+        String sanBayDi = sanbaydi_menubtn.getText();
+        String sanBayDen = sanbayden_menubtn.getText();
 
-    // Perform search based on the selected airports
-    // Example: You can perform database queries here to filter the data based on the selected airports
-    try {
-        // Clear previous data
         veDaDat_tbview.getItems().clear();
         phDC_tbview.getItems().clear();
 
-        // Example query to filter data based on selected airports
-        String query = "SELECT * FROM CT_DATVE CDV " +
-                "JOIN VE V ON CDV.MaVe = V.MaVe " +
-                "JOIN CHUYENBAY CB ON V.MaChuyenBay = CB.MaChuyenBay " +
-                "JOIN DUONGBAY DB ON CB.MaDuongBay = DB.MaDuongBay " +
-                "JOIN SANBAY SBDi ON DB.MaSanBayDi = SBDi.MaSanBay " +
-                "JOIN SANBAY SBDen ON DB.MaSanBayDen = SBDen.MaSanBay " +
-                "WHERE SBDi.TenSanBay = ? AND SBDen.TenSanBay = ?";
-        prepare = connect.prepareStatement(query);
-        prepare.setString(1, sanBayDi);
-        prepare.setString(2, sanBayDen);
-        result = prepare.executeQuery();
+        String baseQuery = "SELECT * FROM CT_DATVE WHERE TrangThai = ?";
+        StringBuilder conditions = new StringBuilder();
+        int parameterIndex = 2; // Initialize parameter index
 
-        // Populate TableView with filtered data
-        while (result.next()) {
-            Timestamp ngayMuaVeTimestamp = result.getTimestamp("NgayMuaVe");
-            LocalDateTime ngayMuaVe = (ngayMuaVeTimestamp != null) ? ngayMuaVeTimestamp.toLocalDateTime() : null;
-
-            Timestamp ngayThanhToanTimestamp = result.getTimestamp("NgayThanhToan");
-            LocalDateTime ngayThanhToan = (ngayThanhToanTimestamp != null) ? ngayThanhToanTimestamp.toLocalDateTime() : null;
-
-            CT_DatVe datVe = new CT_DatVe(
-                    result.getString("MaCT_DATVE"),
-                    result.getString("MaVe"),
-                    result.getString("MaKhachHang"),
-                    ngayMuaVe,
-                    ngayThanhToan,
-                    result.getString("TrangThai")
-            );
-
-            // Add CT_DatVe object to appropriate TableView
-            if (datVe.getTrangThai().equals("1")) {
-                veDaDat_tbview.getItems().add(datVe);
-            } else {
-                phDC_tbview.getItems().add(datVe);
-            }
+        // Build conditions based on user input
+        if (selectedDate != null) {
+            conditions.append(" AND MaVe IN (")
+                    .append("    SELECT V.MaVe ")
+                    .append("    FROM Ve V ")
+                    .append("    JOIN ChuyenBay CB ON V.MaChuyenBay = CB.MaChuyenBay ")
+                    .append("    WHERE TRUNC(CB.TGXP) = ?") // Simplified date comparison
+                    .append(")");
+            parameterIndex++; // Increment parameter index
         }
-    } catch (SQLException e) {
-        alert.errorMessage("Could not perform search.");
-    } finally {
-        // Close resources in finally block
+        if (!sanBayDi.equals("Sân bay đi")) {
+            conditions.append(" AND MaVe IN (SELECT V.MaVe FROM Ve V JOIN ChuyenBay CB ON V.MaChuyenBay = CB.MaChuyenBay JOIN DuongBay DB ON CB.MaDuongBay = DB.MaDuongBay JOIN SanBay SBDi ON DB.MaSanBayDi = SBDi.MaSanBay WHERE SBDi.TenSanBay = ?)");
+            parameterIndex++; // Increment parameter index
+        }
+        if (!sanBayDen.equals("Sân bay đến")) {
+            conditions.append(" AND MaVe IN (SELECT V.MaVe FROM Ve V JOIN ChuyenBay CB ON V.MaChuyenBay = CB.MaChuyenBay JOIN DuongBay DB ON CB.MaDuongBay = DB.MaDuongBay JOIN SanBay SBDen ON DB.MaSanBayDen = SBDen.MaSanBay WHERE SBDen.TenSanBay = ?)");
+            parameterIndex++; // Increment parameter index
+        }
+
+        String queryVeDaDat = baseQuery + conditions.toString();
+        String queryPhDC = baseQuery + conditions.toString();
+
         try {
-            if (result != null) {
-                result.close();
-            }
-            if (prepare != null) {
-                prepare.close();
-            }
-        } catch (SQLException ex) {
-            alert.errorMessage("Could not close result set or prepared statement.");
+            prepareAndExecuteQuery(queryVeDaDat, selectedDate, sanBayDi, sanBayDen, veDaDat_tbview, 1);
+            prepareAndExecuteQuery(queryPhDC, selectedDate, sanBayDi, sanBayDen, phDC_tbview, 0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Could not load data from the database.");
         }
     }
-}
+
+    private void prepareAndExecuteQuery(String query, LocalDateTime selectedDate, String sanBayDi, String sanBayDen, TableView<CT_DatVe> tableView, int trangThai) throws SQLException {
+        try (PreparedStatement prepare = connect.prepareStatement(query)) {
+            prepare.setInt(1, trangThai);
+
+            int paramIndex = 2;
+            if (selectedDate != null) {
+                prepare.setTimestamp(paramIndex++, Timestamp.valueOf(selectedDate));
+            }
+            if (!sanBayDi.equals("Sân bay đi")) {
+                prepare.setString(paramIndex++, sanBayDi);
+            }
+            if (!sanBayDen.equals("Sân bay đến")) {
+                prepare.setString(paramIndex++, sanBayDen);
+            }
+
+            try (ResultSet result = prepare.executeQuery()) {
+                while (result.next()) {
+                    Timestamp ngayMuaVeTimestamp = result.getTimestamp("NgayMuaVe");
+                    LocalDateTime ngayMuaVe = (ngayMuaVeTimestamp != null) ? ngayMuaVeTimestamp.toLocalDateTime() : null;
+
+                    Timestamp ngayThanhToanTimestamp = result.getTimestamp("NgayThanhToan");
+                    LocalDateTime ngayThanhToan = (ngayThanhToanTimestamp != null) ? ngayThanhToanTimestamp.toLocalDateTime() : null;
+
+                    CT_DatVe datVe = new CT_DatVe(
+                            result.getString("MaCT_DATVE"),
+                            result.getString("MaVe"),
+                            result.getString("MaKhachHang"),
+                            ngayMuaVe,
+                            ngayThanhToan,
+                            result.getString("TrangThai")
+                    );
+
+                    tableView.getItems().add(datVe);
+                }
+            }
+        }
+    }
 
     private void updateSanBayMenuItems() {
         // Clear the current items in the menu
