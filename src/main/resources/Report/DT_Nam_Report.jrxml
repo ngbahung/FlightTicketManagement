@@ -35,7 +35,7 @@
                 </textField>
                 <image>
                     <reportElement x="450" y="56" width="134" height="30" uuid="24d31d1a-fc34-432c-929b-fdca348d61d0"/>
-                    <imageExpression><![CDATA["FlightTicketManagement/src/main/resources/Images/login/logo_TikeMana.png"]]></imageExpression>
+                    <imageExpression><![CDATA["src/main/resources/Images/login/logo_TikeMana.png"]]></imageExpression>
                 </image>
             </frame>
         </band>
