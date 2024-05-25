@@ -71,15 +71,12 @@
       <artifactId>jasperreports</artifactId>
       <version>6.21.2</version>
     </dependency>
-
-    <!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports-fonts -->
     <dependency>
       <groupId>net.sf.jasperreports</groupId>
       <artifactId>jasperreports-fonts</artifactId>
-      <version>6.21.2</version>
+      <version>6.21.2</version> <!-- Hoặc phiên bản bạn đang sử dụng -->
     </dependency>
-
-  </dependencies>
+</dependencies>
   <build>
     <plugins>
       <plugin>
