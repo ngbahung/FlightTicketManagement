@@ -95,7 +95,7 @@ public class DoanhThuController implements Initializable {
                 listBaoCaoNam.clear();
                 while (result.next()) {
                     BigDecimal doanhThu = result.getBigDecimal("DoanhThu");
-                    Double tyLe = (doanhThu.divide(tongDoanhThuNam, 2, RoundingMode.HALF_UP)).setScale(2, RoundingMode.HALF_UP).doubleValue() * 100;
+                    Double tyLe = doanhThu.divide(tongDoanhThuNam, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.HALF_UP).doubleValue();
                     BaoCaoNam baoCaoNam = new BaoCaoNam(
                             result.getInt("Thang"),
                             result.getInt("SoChuyenBay"),
@@ -225,7 +225,7 @@ public class DoanhThuController implements Initializable {
                 int stt = 1;
                 while (result.next()) {
                     BigDecimal doanhThu = result.getBigDecimal("DoanhThu");
-                    Double tyLe = (doanhThu.divide(tongDoanhThuThang, 2, RoundingMode.HALF_UP)).setScale(2, RoundingMode.HALF_UP).doubleValue() * 100;
+                    Double tyLe = doanhThu.divide(tongDoanhThuThang, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.HALF_UP).doubleValue();;
                     BaoCaoThang baoCaoThang = new BaoCaoThang(
                             stt,
                             result.getString("MaChuyenBay"),

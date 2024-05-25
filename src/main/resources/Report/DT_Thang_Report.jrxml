@@ -50,7 +50,7 @@
                     <text><![CDATA[NĂM]]></text>
                 </staticText>
                 <image>
-                    <reportElement x="450" y="56" width="134" height="30" uuid="689518d9-e595-4c29-96b7-937c4cf0c8a4"/>
+                    <reportElement x="450" y="55" width="134" height="31" uuid="7e84b637-6673-42cb-983a-128097fa08ed"/>
                     <imageExpression><![CDATA["src/main/resources/Images/login/logo_TikeMana.png"]]></imageExpression>
                 </image>
             </frame>
