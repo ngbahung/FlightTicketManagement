@@ -37,12 +37,11 @@ public class HangVe {
         this.heSo = heSo;
     }
 
-    public Integer getTrangThai() {
+    public String getTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(Integer trangThai) {
+    public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
     }
 }
-

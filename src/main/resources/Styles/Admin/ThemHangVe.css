@@ -4,7 +4,7 @@
 
 .tittle {
     -fx-font-weight: bold;
-    -fx-font-size: 20;
+    -fx-font-size: 25;
     -fx-text-fill: #080C53;
 }
 
@@ -26,4 +26,11 @@
     -fx-cursor: hand;
     -fx-background-color: #00A4BD;
     -fx-text-fill: white;
+}
+
+.tittle-text {
+    -fx-font-size: 14;
+    -fx-text-fill: #101010;
+    -fx-font-weight: bold;
+
 }

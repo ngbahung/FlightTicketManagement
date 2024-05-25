@@ -17,6 +17,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.example.flightticketmanagement.Controllers.Admin.SuaPhanQuyenController;
+import org.example.flightticketmanagement.Controllers.Admin.ThemPhanQuyenController;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
 import org.example.flightticketmanagement.Models.TaiKhoan;
@@ -79,6 +81,7 @@ public class PhanQuyenController implements Initializable {
         xoa_btn.setOnAction(this::deleteSelectedAccounts);
         sua_btn.setOnAction(this::openEditForm);
         timkiem_btn.setOnAction(this::searchPhanQuyen);
+        them_btn.setOnAction(this::newPage);
     }
 
     private void searchPhanQuyen(ActionEvent event) {

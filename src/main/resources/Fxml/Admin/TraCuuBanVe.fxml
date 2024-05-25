@@ -3,14 +3,15 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
-<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="800.0" prefWidth="992.0" styleClass="background" stylesheets="@../../Styles/Admin/BanVe.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.BanVeController">
+<AnchorPane prefHeight="800.0" prefWidth="992.0" styleClass="background" stylesheets="@../../Styles/Admin/BanVe.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.TraCuuBanVeController">
    <AnchorPane layoutX="143.0" layoutY="54.0" prefHeight="75.0" prefWidth="706.0" styleClass="filter-pane">
       <effect>
          <DropShadow />
@@ -18,10 +19,20 @@
       <children>
          <HBox alignment="CENTER" layoutX="21.0" layoutY="14.0" prefHeight="47.0" prefWidth="665.0" spacing="50.0">
             <children>
-               <MFXTextField floatMode="DISABLED" floatingTextGap="2.0" prefWidth="140.0" promptText="Sân bay đi" />
-               <MFXTextField floatMode="DISABLED" prefWidth="140.0" promptText="Sân bay đến" />
-               <MFXDatePicker prefHeight="38.0" prefWidth="137.0" promptText="Chọn ngày" />
-               <MFXButton prefHeight="30.0" prefWidth="105.0" text="Tìm kiếm">
+               <MenuButton fx:id="sanbaydi_menubtn" mnemonicParsing="false" prefHeight="39.0" prefWidth="128.0" text="Sân bay đi">
+                 <items>
+                   <MenuItem mnemonicParsing="false" text="Action 1" />
+                   <MenuItem mnemonicParsing="false" text="Action 2" />
+                 </items>
+               </MenuButton>
+               <MenuButton fx:id="sanbayden_menubtn" mnemonicParsing="false" prefHeight="41.0" prefWidth="111.0" text="Sân bay đến">
+                  <items>
+                     <MenuItem mnemonicParsing="false" text="Action 1" />
+                     <MenuItem mnemonicParsing="false" text="Action 2" />
+                  </items>
+               </MenuButton>
+               <MFXDatePicker fx:id="ngay_datepicker" prefHeight="43.0" prefWidth="137.0" promptText="Chọn ngày" />
+               <MFXButton fx:id="timkiem_btn" prefHeight="30.0" prefWidth="53.0" text=" ">
                   <graphic>
                      <FontAwesomeIconView glyphName="SEARCH" size="20" />
                   </graphic>
@@ -30,18 +41,23 @@
          </HBox>
       </children>
    </AnchorPane>
-   <TableView layoutX="32.0" layoutY="177.0" prefHeight="530.0" prefWidth="929.0">
+   <TableView fx:id="chuyenBay_tableview" layoutX="32.0" layoutY="177.0" prefHeight="530.0" prefWidth="929.0">
       <columns>
-         <TableColumn prefWidth="98.66665267944336" text="Mã chuyến bay" />
-         <TableColumn prefWidth="81.0" text="Sân bay đi" />
-         <TableColumn prefWidth="90.0" text="Sân bay đến" />
-         <TableColumn prefWidth="94.0" text="Ngày bay" />
-         <TableColumn prefWidth="68.0" text="Giờ bay" />
-         <TableColumn prefWidth="113.0" text="Số ghế trống" />
-         <TableColumn text="Số ghế đặt" />
-         <TableColumn prefWidth="97.0" text="Số điểm dừng" />
-         <TableColumn prefWidth="116.0" text="Giá cơ bản" />
-         <TableColumn prefWidth="89.0" text="Chi tiết" />
+         <TableColumn fx:id="maChuyenBay_tbcolumn" prefWidth="98.66665267944336" text="Mã chuyến bay" visible="false" />
+         <TableColumn fx:id="sanBayDi_tbcolumn" prefWidth="96.0" text="Sân bay đi" />
+         <TableColumn fx:id="sanBayDen_tbcolumn" prefWidth="94.0" text="Sân bay đến" />
+         <TableColumn fx:id="ngayBay_tbcolumn" prefWidth="102.0" text="Ngày bay" />
+         <TableColumn fx:id="gioBay_tbcolumn" prefWidth="72.0" text="Giờ bay" />
+         <TableColumn fx:id="soGheTrong_tbcolumn" prefWidth="94.0" text="Số ghế trống" />
+         <TableColumn fx:id="soGhe_tbcoumn" prefWidth="68.0" text="Tổng ghế" />
+         <TableColumn fx:id="soDiemDung_tbcolumn" prefWidth="124.0" text="Số điểm dừng" />
+         <TableColumn fx:id="giaVe_tbcolumn" prefWidth="126.0" text="Giá cơ bản" />
+         <TableColumn fx:id="chiTiet_tbcl" prefWidth="145.0" text="Chi tiết" />
       </columns>
    </TableView>
+   <MFXButton fx:id="refresh_btn" layoutX="78.0" layoutY="79.0" text=" ">
+      <graphic>
+         <FontAwesomeIconView glyphName="REFRESH" size="30" />
+      </graphic>
+   </MFXButton>
 </AnchorPane>

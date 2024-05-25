@@ -154,8 +154,8 @@ public class ThemPhanQuyenController implements Initializable {
     }
 
     private String generateAccountID() {
-        String sql = "SELECT maTaiKhoan FROM TaiKhoan ORDER BY maTaiKhoan DESC FETCH FIRST 1 ROWS ONLY";
-        String maTaiKhoan = "MA000";
+        String sql = "SELECT maTaiKhoan FROM (SELECT maTaiKhoan FROM TaiKhoan ORDER BY maTaiKhoan DESC) WHERE ROWNUM = 1";
+        String maTaiKhoan = "1"; // Bắt đầu từ 1 nếu không có dữ liệu
         Connection tempConnect = null;
         PreparedStatement tempPrepare = null;
         ResultSet tempResult = null;
@@ -167,8 +167,8 @@ public class ThemPhanQuyenController implements Initializable {
 
             if (tempResult.next()) {
                 String lastID = tempResult.getString("maTaiKhoan");
-                int id = Integer.parseInt(lastID.substring(2)) + 1;
-                maTaiKhoan = String.format("MA%03d", id);
+                int id = Integer.parseInt(lastID) + 1; // Chỉ lấy phần số và tăng thêm 1
+                maTaiKhoan = Integer.toString(id); // Chuyển thành chuỗi mà không có số 0 ở đầu
             }
 
         } catch (SQLException e) {
@@ -184,6 +184,7 @@ public class ThemPhanQuyenController implements Initializable {
         }
         return maTaiKhoan;
     }
+
 
     private String getRoleCode(String role) {
         switch (role) {

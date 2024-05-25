@@ -68,7 +68,7 @@ public class ViewFactory {
     public AnchorPane getBanVeView() {
         if (banVeView == null){
             try {
-                banVeView = new FXMLLoader(getClass().getResource("/Fxml/Admin/BanVe.fxml")).load();
+                banVeView = new FXMLLoader(getClass().getResource("/Fxml/Admin/TraCuuBanVe.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -79,7 +79,7 @@ public class ViewFactory {
     public AnchorPane getLichSuView() {
         if (lichSuView == null){
             try {
-                lichSuView = new FXMLLoader(getClass().getResource("/Fxml/Admin/LichSu.fxml")).load();
+                lichSuView = new FXMLLoader(getClass().getResource("/Fxml/Admin/LichSuDatVe.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }

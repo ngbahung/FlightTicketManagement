@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="992.0" styleClass="background-color" stylesheets="@../../Styles/Admin/QuyDinh.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="992.0" styleClass="background-color" stylesheets="@../../Styles/Admin/QuyDinh.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.QuyDinhController">
    <children>
       <GridPane hgap="20.0" layoutX="38.0" layoutY="80.0" prefHeight="358.0" prefWidth="391.0" styleClass="grid-pane">
         <columnConstraints>
@@ -35,58 +35,78 @@
             <Label text="Thời gian dừng tối đa:" GridPane.rowIndex="3" />
             <Label text="Thời gian chậm nhất cho phép đặt vé:" GridPane.rowIndex="4" />
             <Label text="Thời gian chậm nhất cho phép hủy đặt vé:" GridPane.rowIndex="5" />
-            <TextField promptText="phút" GridPane.columnIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField promptText="phút" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextField promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextField fx:id="mintgbay_txf" disable="true" editable="false" promptText="phút" GridPane.columnIndex="1" />
+            <TextField fx:id="maxsbtg_txf" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="mintgdung_tfx" disable="true" editable="false" promptText="phút" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="maxtgdung_tfx" disable="true" editable="false" promptText="phút" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="mintgdatve_tfx" disable="true" editable="false" promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="mintghuyve_tfx" disable="true" editable="false" promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </children>
          <padding>
             <Insets left="20.0" right="20.0" />
          </padding>
       </GridPane>
-      <TableView layoutX="437.0" layoutY="80.0" prefHeight="358.0" prefWidth="509.0">
+      <TableView fx:id="sanbay_tbv" layoutX="437.0" layoutY="80.0" prefHeight="358.0" prefWidth="509.0">
         <columns>
-          <TableColumn prefWidth="52.6666259765625" text="STT" />
-          <TableColumn prefWidth="110.66659545898438" text="Mã sân bay" />
-            <TableColumn prefWidth="210.6666259765625" text="Tên sân bay" />
-            <TableColumn prefWidth="134.66668701171875" text="Tỉnh thành" />
+          <TableColumn fx:id="sttsanbay_col" prefWidth="32.0" text="STT" />
+          <TableColumn fx:id="idsanbay_col" prefWidth="73.0" text="Mã sân bay" />
+            <TableColumn fx:id="tensanbay_col" prefWidth="111.0" text="Tên sân bay" />
+            <TableColumn fx:id="vietTat_col" prefWidth="54.0" text="Viết tắt" />
+            <TableColumn fx:id="tinhthanh_col" prefWidth="110.0" text="Tỉnh thành" />
+            <TableColumn fx:id="status_col" prefWidth="124.0" text="Trạng thái" />
         </columns>
       </TableView>
-      <HBox alignment="CENTER_RIGHT" layoutX="606.0" layoutY="448.0" prefHeight="34.0" prefWidth="340.0" spacing="20.0">
+      <HBox alignment="CENTER_RIGHT" layoutX="516.0" layoutY="448.0" prefHeight="34.0" prefWidth="430.0" spacing="20.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="93.0" styleClass="button-row" text="Xóa" />
-            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="93.0" styleClass="button-row" text="Sửa" />
-            <Button layoutX="103.0" layoutY="10.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="93.0" styleClass="button-row" text="Thêm" />
+            <Button mnemonicParsing="false" onAction="#deactivateSelectedAirports" prefHeight="34.0" prefWidth="170.0" styleClass="button-row" text="Thay đổi trạng thái" fx:id="xoasanbay_btn" />
+            <Button fx:id="suasanbay_btn" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#editSelectedAirports" prefHeight="44.0" prefWidth="93.0" styleClass="button-row" text="Sửa" />
+            <Button fx:id="themsanbay_btn" layoutX="103.0" layoutY="10.0" mnemonicParsing="false" onAction="#addAirports" prefHeight="44.0" prefWidth="93.0" styleClass="button-row" text="Thêm" />
          </children>
       </HBox>
-      <TableView layoutX="38.0" layoutY="540.0" prefHeight="178.0" prefWidth="391.0">
+      <TableView fx:id="hangve_tbv" layoutX="38.0" layoutY="540.0" prefHeight="178.0" prefWidth="391.0">
          <columns>
-            <TableColumn prefWidth="51.0" text="STT" />
-            <TableColumn prefWidth="177.9999771118164" text="Tên hạng vé" />
-            <TableColumn prefWidth="159.3333740234375" text="Hệ số" />
+            <TableColumn fx:id="tenhangve_col" prefWidth="138.0" text="Tên hạng vé" />
+            <TableColumn fx:id="heso_col" prefWidth="104.66665649414062" text="Hệ số" />
+            <TableColumn fx:id="statusHangVe_col" prefWidth="143.33331298828125" text="Trạng thái" />
          </columns>
       </TableView>
-      <Button layoutX="162.0" layoutY="38.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="144.0" styleClass="sua-quy-dinh-btn" text="Sửa quy định" />
+      <Button fx:id="suaquydinh_btn" layoutX="162.0" layoutY="38.0" mnemonicParsing="false" onAction="#editParameter" prefHeight="15.0" prefWidth="144.0" styleClass="sua-quy-dinh-btn" text="Sửa quy định" />
       <HBox layoutX="650.0" layoutY="38.0" prefHeight="26.0" prefWidth="295.0" spacing="20.0">
          <children>
-            <TextField prefHeight="35.0" prefWidth="229.0" promptText="Tên sân bay" />
-            <FontAwesomeIconView glyphName="SEARCH" size="30" />
+            <TextField fx:id="searchsanbay_tfx" prefHeight="35.0" prefWidth="229.0" promptText="Tìm kiếm" />
+            <Button fx:id="searchSanBay_btn" mnemonicParsing="false">
+               <graphic>
+                  <FontAwesomeIconView glyphName="SEARCH" size="20" />
+               </graphic>
+            </Button>
          </children>
       </HBox>
-      <HBox alignment="CENTER_RIGHT" layoutX="107.0" layoutY="734.0" prefHeight="34.0" prefWidth="321.0" spacing="20.0">
+      <HBox alignment="CENTER_RIGHT" layoutX="37.0" layoutY="734.0" prefHeight="34.0" prefWidth="391.0" spacing="20.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="93.0" styleClass="button-row" text="Xóa" />
-            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="93.0" styleClass="button-row" text="Sửa" />
-            <Button layoutX="103.0" layoutY="10.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="93.0" styleClass="button-row" text="Thêm" />
+            <Button mnemonicParsing="false" onAction="#deactiveSelectedTicketClass" prefHeight="34.0" prefWidth="175.0" styleClass="button-row" text="Thay đổi trạng thái" fx:id="xoahangve_btn" />
+            <Button fx:id="suahangve_btn" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#editSelectedTicketClass" prefHeight="44.0" prefWidth="93.0" styleClass="button-row" text="Sửa" />
+            <Button fx:id="themhangve_btn" layoutX="103.0" layoutY="10.0" mnemonicParsing="false" onAction="#addHangVe" prefHeight="44.0" prefWidth="93.0" styleClass="button-row" text="Thêm" />
          </children>
       </HBox>
       <HBox layoutX="133.0" layoutY="497.0" prefHeight="26.0" prefWidth="295.0" spacing="20.0">
          <children>
-            <TextField prefHeight="35.0" prefWidth="229.0" promptText="Tên hạng vé" />
-            <FontAwesomeIconView glyphName="SEARCH" size="30" />
+            <TextField fx:id="searchhangve_tfx" prefHeight="35.0" prefWidth="229.0" promptText="Tên hạng vé" />
+            <Button fx:id="searchHangVe_btn" mnemonicParsing="false">
+               <graphic>
+                  <FontAwesomeIconView glyphName="SEARCH" size="20" />
+               </graphic>
+            </Button>
          </children>
       </HBox>
+      <Button fx:id="refreshSanBayData_btn" layoutX="606.0" layoutY="39.0" mnemonicParsing="false" onAction="#refreshAirportsData">
+         <graphic>
+            <FontAwesomeIconView glyphName="REFRESH" size="20" />
+         </graphic>
+      </Button>
+      <Button fx:id="refreshHangVeData_btn" layoutX="90.0" layoutY="497.0" mnemonicParsing="false" onAction="#refreshHangVeData">
+         <graphic>
+            <FontAwesomeIconView glyphName="REFRESH" size="20" />
+         </graphic>
+      </Button>
    </children>
 </AnchorPane>

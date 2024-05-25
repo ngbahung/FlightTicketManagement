@@ -1,32 +1,131 @@
-.text {
-    -fx-font-family: Inter;
+.button {
+    -fx-background-color: #605DEC; /* Button background color */
+    -fx-text-fill: white; /* Button text color */
+    -fx-border-color: black; /* Button border color */
+}
+
+.button:hover {
+    -fx-background-color: #4422ac; /* Hover background color */
+    -fx-text-fill: white; /* Hover text color */
+    -fx-border-color: black; /* Hover border color */
+}
+
+.button:pressed {
+    -fx-background-color: #4422ac; /* Pressed background color */
+    -fx-text-fill: white; /* Pressed text color */
+    -fx-border-color: white; /* Pressed border color */
+}
+
+#fromWhereMenuButton {
+    -fx-background-color: white; /* Background color for fromWhereMenuButton */
+}
+
+#whereToMenuButton {
+    -fx-background-color: white; /* Background color for whereToMenuButton */
+}
+
+#calendarButton {
+    -fx-background-color: white; /* Background color for calendarButton */
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+.context-menu {
+    -fx-pref-width: 200; /* Preferred width for context menu */
+    -fx-pref-height: 250; /* Preferred height for context menu */
+    -fx-font-size: 13; /* Font size for context menu */
+    -fx-background-radius: 10; /* Background radius for context menu */
+}
+
+#scrollPane {
+    -fx-background-color: white; /* Background color for scrollPane */
+    -fx-border-width: 0; /* Border width for scrollPane */
+    -fx-padding: 0; /* Padding for scrollPane */
+}
+
+#scrollPane .scroll-bar {
+    -fx-opacity: 0; /* Opacity for scroll bar */
+}
+
+#scrollPane:hover .scroll-bar {
+    -fx-opacity: 0; /* Hover opacity for scroll bar */
+}
+
+/* MiniContextMenu */
+
+#FlyXpertLabel {
+    -fx-text-fill: linear-gradient(to right, #15b2d1, #8f15e1); /* Text gradient for FlyXpertLabel */
+    -fx-font-size: 50; /* Font size for FlyXpertLabel */
+    -fx-font-family: System; /* Font family for FlyXpertLabel */
+    -fx-font-weight: bold; /* Font weight for FlyXpertLabel */
+}
+
+.label {
+    -fx-font-family: System; /* Font family for label */
+}
+
+/* Custom Styles */
+#custom {
+    -fx-font-size: 13; /* Font size for custom */
+    -fx-font-family: Inter; /* Font family for custom */
+}
+
+#custom_1 {
+    -fx-font-size: 14; /* Font size for custom_1 */
+    -fx-font-family: Inter; /* Font family for custom_1 */
+    -fx-background-color: #080C53; /* Background color for custom_1 */
+    -fx-text-fill: white; /* Text color for custom_1 */
+}
+
+.text .label .combo-box {
+    -fx-font-family: Inter; /* Font family for combo-box within text and label */
+    -fx-font-size: 14px; /* Font size for combo-box within text and label */
 }
 
 .table-view {
-    -fx-border-color: #080C53;
-    -fx-background-color: white;
-    -fx-border-width: 2;
-    -fx-border-radius: 10;
+    -fx-border-color: #080C53; /* Border color for table-view */
+    -fx-background-color: white; /* Background color for table-view */
+    -fx-border-width: 2; /* Border width for table-view */
+    -fx-border-radius: 10; /* Border radius for table-view */
 }
 
 .filter-pane {
-    -fx-background-color: #080C53;
-    -fx-background-radius: 20;
+    -fx-background-color: #080C53; /* Background color for filter-pane */
+    -fx-background-radius: 20; /* Background radius for filter-pane */
 }
-
 
 .background {
-    -fx-background-color: #ffffff;
-}
-
-
-/* Button */
-#custom_1 {
-    -fx-background-color: #080C53;
-    -fx-text-fill: white;
+    -fx-background-color: #ffffff; /* Background color for background */
 }
 
 #custom_2 {
-    -fx-background-color: #00A4BD;
-    -fx-text-fill: white;
+    -fx-background-color: #00A4BD; /* Background color for custom_2 */
+    -fx-text-fill: white; /* Text color for custom_2 */
+}
+
+/* Additional Button Styles */
+.button {
+    -fx-background-color: #605DEC; /* Button background color */
+    -fx-text-fill: white; /* Button text color */
+    -fx-border-color: black; /* Button border color */
+}
+
+.button:hover {
+    -fx-background-color: #4422ac; /* Hover background color */
+    -fx-text-fill: white; /* Hover text color */
+    -fx-border-color: black; /* Hover border color */
+}
+
+.button:pressed {
+    -fx-background-color: #4422ac; /* Pressed background color */
+    -fx-text-fill: white; /* Pressed text color */
+    -fx-border-color: white; /* Pressed border color */
+}
+
+#calendarButton {
+    -fx-background-color: white; /* Background color for calendarButton */
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-border-width: 0;
 }

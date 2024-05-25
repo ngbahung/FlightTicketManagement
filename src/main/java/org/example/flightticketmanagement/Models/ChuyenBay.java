@@ -1,6 +1,9 @@
 package org.example.flightticketmanagement.Models;
 
+import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChuyenBay {
     private String maChuyenBay;
@@ -11,6 +14,12 @@ public class ChuyenBay {
     private LocalDateTime thoiGianKetThuc ;
     private String trangThai;
     private Float giaVe;
+
+    // DATABASE TOOLS
+    private Connection connect;
+    private PreparedStatement prepare;
+    private Statement statement;
+    private ResultSet result;
 
     public ChuyenBay(String maChuyenBay, String maDuongBay, Integer soLuongGhe, Integer soChuyenBay, LocalDateTime thoiGianXuatPhat, LocalDateTime thoiGianKetThuc, String trangThai, Float giaVe) {
         this.maChuyenBay = maChuyenBay;
@@ -86,4 +95,5 @@ public class ChuyenBay {
     public void setGiaVe(Float giaVe) {
         this.giaVe = giaVe;
     }
+
 }
