@@ -159,8 +159,6 @@ public class LichChuyenBayController implements Initializable {
                 ChuyenBay chuyenBay = new ChuyenBay(
                         result.getString("MaChuyenBay"),
                         result.getString("MaDuongBay"),
-                        result.getInt("SoLuongGhe"),
-                        result.getInt("SoChuyenBay"),
                         result.getTimestamp("TGXP").toLocalDateTime(),
                         result.getTimestamp("TGKT").toLocalDateTime(),
                         result.getString("TrangThai"),
@@ -174,7 +172,6 @@ public class LichChuyenBayController implements Initializable {
             sanBayDen_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSanBayDen(cellData.getValue().getMaDuongBay())));
             ngayBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getThoiGianXuatPhat().toLocalDate().toString()));
             gioBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getThoiGianXuatPhat().toLocalTime().toString()));
-            soGhe_tbcoumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSoLuongGhe().toString()));
             soGheTrong_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGheTrong(cellData.getValue().getMaChuyenBay()).toString()));
             thoiGianBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(formatDuration(Duration.between(cellData.getValue().getThoiGianXuatPhat(), cellData.getValue().getThoiGianKetThuc()))));
             giaVe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGiaVe().toString()));
