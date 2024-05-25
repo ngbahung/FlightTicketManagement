@@ -1,21 +1,14 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
-import javafx.scene.chart.ScatterChart;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.BaoCaoNam;
-import org.example.flightticketmanagement.Models.DatabaseDriver;
+import org.example.flightticketmanagement.Models.BaoCaoThang;
 
-import javax.swing.*;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,13 +17,33 @@ public class ReportController {
     private final AlertMessage alert = new AlertMessage();
     public void PrintReportBaoCaoNam(Integer namBaoCao, List<BaoCaoNam> listBaoCaoNam) {
         try {
-            String fileJRXMLPath = "src/main/resources/Report/BaoCaoNam.jrxml";
-
+            String fileJRXMLPath = "src/main/resources/Report/DT_Nam_Report.jrxml";
+            String ngayLapBaoCao = LocalDateTime.now()+"";
             Map<String, Object> parameters = new HashMap<String, Object>();
             parameters.put("namBaoCao", namBaoCao);
-            parameters.put("ngayLapBaoCao", "Thứ 4 22/05/2024");
+            parameters.put("ngayLapBaoCao", ngayLapBaoCao);
 
             JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(listBaoCaoNam);
+
+            JasperReport report = JasperCompileManager.compileReport(fileJRXMLPath);
+
+            JasperPrint print = JasperFillManager.fillReport(report, parameters, dataSource);
+
+            JasperExportManager.exportReportToPdfFile(print, ChonDuongDanLuuFile());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void PrintReportBaoCaoThang(Integer namBaoCao,Integer thangBaoCao, List<BaoCaoThang> listBaoCaoThang){
+        try {
+            String fileJRXMLPath = "src/main/resources/Report/DT_Thang_Report.jrxml";
+            String ngayLapBaoCao = LocalDateTime.now()+"";
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put("namBaoCao", namBaoCao);
+            parameters.put("thangBaoCao", thangBaoCao);
+            parameters.put("ngayLapBaoCao", ngayLapBaoCao);
+
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(listBaoCaoThang);
 
             JasperReport report = JasperCompileManager.compileReport(fileJRXMLPath);
 
