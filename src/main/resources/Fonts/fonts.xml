@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fontFamilies>
+    <fontFamily name="VNARIAL">
+        <normal><![CDATA[Fonts/VNARIAL/arial.ttf]]></normal>
+        <bold><![CDATA[Fonts/VNARIAL/arialbd.ttf]]></bold>
+        <italic><![CDATA[Fonts/VNARIAL/ariali.ttf]]></italic>
+        <boldItalic><![CDATA[Fonts/VNARIAL/arialbi.ttf]]></boldItalic>
+        <pdfEncoding><![CDATA[Identity-H]]></pdfEncoding>
+        <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+        <exportFonts/>
+    </fontFamily>
+</fontFamilies>
