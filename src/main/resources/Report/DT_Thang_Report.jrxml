@@ -160,7 +160,21 @@
         </band>
     </detail>
     <columnFooter>
-        <band height="220">
+        <band height="67"/>
+    </columnFooter>
+    <pageFooter>
+        <band height="313">
+            <textField>
+                <reportElement x="340" y="272" width="215" height="30" uuid="94ce84ab-849f-4eb4-bb52-ce8bd4a1752b"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="12" isItalic="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{ngayLapBaoCao}]]></textFieldExpression>
+            </textField>
+            <image>
+                <reportElement x="0" y="270" width="185" height="34" uuid="a71565e8-04bc-4b8c-9914-23a9db18bce6"/>
+                <imageExpression><![CDATA["src/main/resources/Images/login/logo_TikeMana.png"]]></imageExpression>
+            </image>
             <pieChart>
                 <chart evaluationTime="Report">
                     <reportElement x="20" y="20" width="510" height="200" uuid="cc9dfe56-1b4b-4416-9d35-9bfc868a9bfc"/>
@@ -177,21 +191,6 @@
                     <itemLabel/>
                 </piePlot>
             </pieChart>
-        </band>
-    </columnFooter>
-    <pageFooter>
-        <band height="99">
-            <textField>
-                <reportElement x="340" y="52" width="215" height="30" uuid="94ce84ab-849f-4eb4-bb52-ce8bd4a1752b"/>
-                <textElement verticalAlignment="Middle">
-                    <font fontName="DejaVu Sans" size="12" isItalic="true"/>
-                </textElement>
-                <textFieldExpression><![CDATA[$P{ngayLapBaoCao}]]></textFieldExpression>
-            </textField>
-            <image>
-                <reportElement x="0" y="50" width="185" height="34" uuid="a71565e8-04bc-4b8c-9914-23a9db18bce6"/>
-                <imageExpression><![CDATA["src/main/resources/Images/login/logo_TikeMana.png"]]></imageExpression>
-            </image>
         </band>
     </pageFooter>
     <summary>
