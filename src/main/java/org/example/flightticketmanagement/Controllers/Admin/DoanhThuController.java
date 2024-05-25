@@ -137,7 +137,7 @@ public class DoanhThuController implements Initializable {
                 ") " +
                 "SELECT" +
                 "    m.Thang, " +
-                "    NVL(b.DoanhThu, 0) AS Doanhthu " +
+                "    NVL(b.DoanhThu, 0) AS DoanhThu " +
                 "FROM" +
                 "    Months m " +
                 "LEFT JOIN" +
