@@ -10,11 +10,11 @@ public class BaoCaoThang {
     private String maChuyenBay;
     private Integer soVeDaBan;
     private BigDecimal doanhThu;
-    private Float tyLe;
+    private Double tyLe;
     private Integer stt;
 
 
-    public BaoCaoThang(Integer stt, String maChuyenBay, Integer soVeDaBan, BigDecimal doanhThu, Float tyLe) {
+    public BaoCaoThang(Integer stt, String maChuyenBay, Integer soVeDaBan, BigDecimal doanhThu, Double tyLe) {
         this.stt = stt;
         this.maChuyenBay = maChuyenBay;
         this.soVeDaBan = soVeDaBan;
@@ -78,11 +78,11 @@ public class BaoCaoThang {
         this.doanhThu = doanhThu;
     }
 
-    public Float getTyLe() {
+    public Double getTyLe() {
         return tyLe;
     }
 
-    public void setTyLe(Float tyLe) {
+    public void setTyLe(Double tyLe) {
         this.tyLe = tyLe;
     }
 
