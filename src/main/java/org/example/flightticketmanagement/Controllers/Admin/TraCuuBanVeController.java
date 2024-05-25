@@ -61,8 +61,6 @@ public class TraCuuBanVeController implements Initializable {
     @FXML
     private MenuButton sanbaydi_menubtn;
 
-    @FXML
-    private TableColumn<ChuyenBay, String> soDiemDung_tbcolumn;
 
     @FXML
     private TableColumn<ChuyenBay, String> soGheTrong_tbcolumn;
@@ -164,7 +162,6 @@ public class TraCuuBanVeController implements Initializable {
             gioBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getThoiGianXuatPhat().toLocalTime().toString()));
             soGhe_tbcoumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSoLuongGhe().toString()));
             soGheTrong_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGheTrong(cellData.getValue().getMaChuyenBay()).toString()));
-            soDiemDung_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(Integer.toString(cellData.getValue().getSoChuyenBay() - 1)));
             giaVe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGiaVe().toString()));
             chiTiet_tbcl.setCellFactory(param -> new TableCell<>() {
                 private final Button detailButton = new Button("Xem chi tiết");

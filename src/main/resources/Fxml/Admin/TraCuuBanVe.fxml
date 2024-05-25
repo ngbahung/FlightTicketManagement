@@ -43,16 +43,15 @@
    </AnchorPane>
    <TableView fx:id="chuyenBay_tableview" layoutX="32.0" layoutY="177.0" prefHeight="530.0" prefWidth="929.0">
       <columns>
-         <TableColumn fx:id="maChuyenBay_tbcolumn" prefWidth="98.66665267944336" text="Mã chuyến bay" visible="false" />
+         <TableColumn fx:id="maChuyenBay_tbcolumn" prefWidth="98.66665267944336" text="Mã chuyến bay" />
          <TableColumn fx:id="sanBayDi_tbcolumn" prefWidth="96.0" text="Sân bay đi" />
          <TableColumn fx:id="sanBayDen_tbcolumn" prefWidth="94.0" text="Sân bay đến" />
          <TableColumn fx:id="ngayBay_tbcolumn" prefWidth="102.0" text="Ngày bay" />
          <TableColumn fx:id="gioBay_tbcolumn" prefWidth="72.0" text="Giờ bay" />
          <TableColumn fx:id="soGheTrong_tbcolumn" prefWidth="94.0" text="Số ghế trống" />
-         <TableColumn fx:id="soGhe_tbcoumn" prefWidth="68.0" text="Tổng ghế" />
-         <TableColumn fx:id="soDiemDung_tbcolumn" prefWidth="124.0" text="Số điểm dừng" />
-         <TableColumn fx:id="giaVe_tbcolumn" prefWidth="126.0" text="Giá cơ bản" />
-         <TableColumn fx:id="chiTiet_tbcl" prefWidth="145.0" text="Chi tiết" />
+         <TableColumn fx:id="soGhe_tbcoumn" prefWidth="97.0" text="Tổng ghế" />
+         <TableColumn fx:id="giaVe_tbcolumn" prefWidth="133.0" text="Giá cơ bản" />
+         <TableColumn fx:id="chiTiet_tbcl" prefWidth="135.0" text="Chi tiết" />
       </columns>
    </TableView>
    <MFXButton fx:id="refresh_btn" layoutX="78.0" layoutY="79.0" text=" ">

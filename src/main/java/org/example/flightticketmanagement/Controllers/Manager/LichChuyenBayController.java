@@ -54,9 +54,6 @@ public class LichChuyenBayController implements Initializable {
     private MFXTextField sanbaydi_txtfld;
 
     @FXML
-    private TableColumn<ChuyenBay, String> soDiemDung_tbcolumn;
-
-    @FXML
     private TableColumn<ChuyenBay, String> soGheTrong_tbcolumn;
 
     @FXML
@@ -179,7 +176,6 @@ public class LichChuyenBayController implements Initializable {
             gioBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getThoiGianXuatPhat().toLocalTime().toString()));
             soGhe_tbcoumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSoLuongGhe().toString()));
             soGheTrong_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGheTrong(cellData.getValue().getMaChuyenBay()).toString()));
-            soDiemDung_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(Integer.toString(cellData.getValue().getSoChuyenBay() - 1)));
             thoiGianBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(formatDuration(Duration.between(cellData.getValue().getThoiGianXuatPhat(), cellData.getValue().getThoiGianKetThuc()))));
             giaVe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGiaVe().toString()));
 

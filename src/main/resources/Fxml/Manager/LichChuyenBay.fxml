@@ -15,15 +15,14 @@
    <TableView fx:id="chuyenBay_tableview" layoutX="12.0" layoutY="155.0" prefHeight="530.0" prefWidth="974.0">
       <columns>
          <TableColumn fx:id="maChuyenBay_tbcolumn" prefWidth="115.0" text="Mã chuyến bay" />
-         <TableColumn fx:id="sanBayDi_tbcolumn" prefWidth="98.0" text="Sân bay đi" />
-         <TableColumn fx:id="sanBayDen_tbcolumn" prefWidth="94.0" text="Sân bay đến" />
-         <TableColumn fx:id="ngayBay_tbcolumn" prefWidth="112.0" text="Ngày bay" />
-         <TableColumn fx:id="gioBay_tbcolumn" prefWidth="98.0" text="Giờ bay" />
-         <TableColumn fx:id="soGheTrong_tbcolumn" prefWidth="90.0" text="Số ghế trống" />
-         <TableColumn fx:id="soGhe_tbcoumn" prefWidth="62.0" text="Số ghế" />
-         <TableColumn fx:id="soDiemDung_tbcolumn" prefWidth="94.0" text="Số điểm dừng" />
-         <TableColumn fx:id="thoiGianBay_tbcolumn" prefWidth="100.0" text="Thời gian bay" />
-         <TableColumn fx:id="giaVe_tbcolumn" prefWidth="108.0" text="Giá vé" />
+         <TableColumn fx:id="sanBayDi_tbcolumn" prefWidth="132.0" text="Sân bay đi" />
+         <TableColumn fx:id="sanBayDen_tbcolumn" prefWidth="121.0" text="Sân bay đến" />
+         <TableColumn fx:id="ngayBay_tbcolumn" prefWidth="97.0" text="Ngày bay" />
+         <TableColumn fx:id="gioBay_tbcolumn" prefWidth="96.0" text="Giờ bay" />
+         <TableColumn fx:id="soGheTrong_tbcolumn" prefWidth="101.0" text="Số ghế trống" />
+         <TableColumn fx:id="soGhe_tbcoumn" prefWidth="81.0" text="Số ghế" />
+         <TableColumn fx:id="thoiGianBay_tbcolumn" prefWidth="115.0" text="Thời gian bay" />
+         <TableColumn fx:id="giaVe_tbcolumn" prefWidth="109.0" text="Giá vé" />
       </columns>
    </TableView>
    <HBox alignment="CENTER" layoutX="34.0" layoutY="703.0" prefHeight="69.0" prefWidth="929.0" spacing="50.0" styleClass="background-color">
