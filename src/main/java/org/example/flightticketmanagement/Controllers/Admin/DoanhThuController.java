@@ -142,7 +142,7 @@ public class DoanhThuController implements Initializable {
                 "    m.Thang";
 
         try (PreparedStatement prepare = connect.prepareStatement(query)) {
-            prepare.setInt(1, DTT_namBaoCao);
+            prepare.setInt(1, DTN_namBaoCao);
             try (ResultSet result = prepare.executeQuery()) {
                 tongDoanhThuNam = BigDecimal.valueOf(0.0);
                 while (result.next()) {
