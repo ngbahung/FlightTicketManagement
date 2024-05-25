@@ -18,6 +18,7 @@ public class ReportController {
     public void PrintReportBaoCaoNam(Integer namBaoCao, List<BaoCaoNam> listBaoCaoNam) {
         try {
             String fileJRXMLPath = "src/main/resources/Report/DT_Nam_Report.jrxml";
+//            String fileJRXMLPath = "src/main/resources/Report/BaoCaoNam.jrxml";
             String ngayLapBaoCao = LocalDateTime.now()+"";
             Map<String, Object> parameters = new HashMap<String, Object>();
             parameters.put("namBaoCao", namBaoCao);
