@@ -28,13 +28,6 @@
                     </textElement>
                     <text><![CDATA[BÁO CÁO DOANH THU THÁNG]]></text>
                 </staticText>
-                <staticText>
-                    <reportElement x="419" y="55" width="156" height="20" forecolor="#FFFFFF" uuid="a0020984-9d1d-407a-b3f3-41a91f9124cb"/>
-                    <textElement textAlignment="Center" verticalAlignment="Middle">
-                        <font fontName="DejaVu Sans" size="14" isBold="false"/>
-                    </textElement>
-                    <text><![CDATA[TikeMana Airline]]></text>
-                </staticText>
                 <textField>
                     <reportElement x="90" y="56" width="176" height="30" forecolor="#FFFFFF" uuid="225e7217-223d-4b07-addb-e9db52271ce8"/>
                     <textElement textAlignment="Left" verticalAlignment="Middle">
@@ -56,6 +49,10 @@
                     </textElement>
                     <text><![CDATA[NĂM]]></text>
                 </staticText>
+                <image>
+                    <reportElement x="450" y="56" width="134" height="30" uuid="689518d9-e595-4c29-96b7-937c4cf0c8a4"/>
+                    <imageExpression><![CDATA["FlightTicketManagement/src/main/resources/Images/login/logo_TikeMana.png"]]></imageExpression>
+                </image>
             </frame>
         </band>
     </title>
