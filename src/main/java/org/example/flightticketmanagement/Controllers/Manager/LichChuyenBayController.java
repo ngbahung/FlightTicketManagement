@@ -173,8 +173,9 @@ public class LichChuyenBayController implements Initializable {
             ngayBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getThoiGianXuatPhat().toLocalDate().toString()));
             gioBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getThoiGianXuatPhat().toLocalTime().toString()));
             soGheTrong_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGheTrong(cellData.getValue().getMaChuyenBay()).toString()));
+            soGhe_tbcoumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGhe(cellData.getValue().getMaChuyenBay()).toString()));
             thoiGianBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(formatDuration(Duration.between(cellData.getValue().getThoiGianXuatPhat(), cellData.getValue().getThoiGianKetThuc()))));
-            giaVe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGiaVe().toString()));
+            giaVe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getGiaVe())));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -188,6 +189,7 @@ public class LichChuyenBayController implements Initializable {
             }
         }
     }
+
 
 
     private void handleSanBayDiMenuButtonClick(MouseEvent event) {
@@ -308,16 +310,56 @@ public class LichChuyenBayController implements Initializable {
     }
 
     private Integer getSoGheTrong(String maChuyenBay) {
-        String sql = "SELECT cb.SoLuongGhe - COUNT(v.MaVe) AS SoGheTrong FROM CHUYENBAY cb " +
-                "LEFT JOIN VE v ON cb.MaChuyenBay = v.MaChuyenBay " +
-                "WHERE cb.MaChuyenBay = ? " +
-                "GROUP BY cb.SoLuongGhe";
+        String totalSeatsQuery = "SELECT COUNT(*) AS TotalSeats FROM VE WHERE MaChuyenBay = ?";
+        String bookedSeatsQuery = "SELECT COUNT(*) AS BookedSeats " +
+                "FROM VE v " +
+                "JOIN CT_DATVE ct ON v.MaVe = ct.MaVe " +
+                "WHERE v.MaChuyenBay = ? AND ct.TrangThai IN (0, 1)";
+
+        int totalSeats = 0;
+        int bookedSeats = 0;
+
+        try (Connection conn = DatabaseDriver.getConnection();
+             PreparedStatement psTotal = conn.prepareStatement(totalSeatsQuery);
+             PreparedStatement psBooked = conn.prepareStatement(bookedSeatsQuery)) {
+
+            // Get total seats
+            psTotal.setString(1, maChuyenBay);
+            try (ResultSet rsTotal = psTotal.executeQuery()) {
+                if (rsTotal.next()) {
+                    totalSeats = rsTotal.getInt("TotalSeats");
+                }
+            }
+
+            // Get booked seats
+            psBooked.setString(1, maChuyenBay);
+            try (ResultSet rsBooked = psBooked.executeQuery()) {
+                if (rsBooked.next()) {
+                    bookedSeats = rsBooked.getInt("BookedSeats");
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Calculate available seats
+        return totalSeats - bookedSeats;
+    }
+
+
+
+    private Integer getSoGhe(String maChuyenBay) {
+        String sql = "SELECT COUNT(v.MaVe) AS SoGhe " +
+                "FROM VE v " +
+                "WHERE v.MaChuyenBay = ? " +
+                "GROUP BY v.MaChuyenBay";
         try (Connection conn = DatabaseDriver.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, maChuyenBay);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getInt("SoGheTrong");
+                    return rs.getInt("SoGhe");
                 }
             }
         } catch (SQLException e) {
@@ -325,6 +367,7 @@ public class LichChuyenBayController implements Initializable {
         }
         return 0; // Placeholder if not found
     }
+
 
     private String formatDuration(Duration duration) {
         long totalMinutes = duration.toMinutes();

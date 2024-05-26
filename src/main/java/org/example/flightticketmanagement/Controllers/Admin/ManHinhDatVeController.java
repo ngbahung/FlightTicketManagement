@@ -3,15 +3,21 @@ package org.example.flightticketmanagement.Controllers.Admin;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.ChuyenBay;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
 import org.example.flightticketmanagement.Models.Ve;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -29,10 +35,7 @@ public class ManHinhDatVeController implements Initializable {
     private MFXTextField cccd_txtfld;
 
     @FXML
-    private MFXButton datCho_btn;
-
-    @FXML
-    private MFXButton datVe_btn;
+    private MFXButton xemTruoc_btn;
 
     @FXML
     private MFXTextField email_txtfld;
@@ -115,9 +118,7 @@ public class ManHinhDatVeController implements Initializable {
         maVe_txtfld.setEditable(false);
         thanhTien_txtfld.setEditable(false);
 
-        // Set button action handlers
-        datCho_btn.setOnAction(e -> handleBooking(false));
-        datVe_btn.setOnAction(e -> handleBooking(true));
+        xemTruoc_btn.setOnAction(e -> showConfirmationDialog(true));
     }
 
     public void setFlightDetails(ChuyenBay flight) {
@@ -169,7 +170,11 @@ public class ManHinhDatVeController implements Initializable {
     }
 
     private void loadVeForFlight(String maChuyenBay) {
-        String sql = "SELECT VE.MAVE, VE.MACHUYENBAY, VE.MAHANGVE, VE.MAGHE, VE.GIATIEN FROM VE, CT_DATVE WHERE VE.MAVE = CT_DATVE.MAVE AND VE.MACHUYENBAY = ? AND CT_DATVE.TRANGTHAI = 0";
+        String sql = "SELECT VE.MAVE, VE.MACHUYENBAY, VE.MAHANGVE, VE.MAGHE, VE.GIATIEN \n" +
+                "FROM VE \n" +
+                "LEFT JOIN CT_DATVE ON VE.MAVE = CT_DATVE.MAVE \n" +
+                "WHERE VE.MACHUYENBAY = ? \n" +
+                "AND (CT_DATVE.TRANGTHAI NOT IN (0, 1) OR CT_DATVE.MAVE IS NULL)";
 
         try (PreparedStatement ps = connect.prepareStatement(sql)) {
             ps.setString(1, maChuyenBay);
@@ -220,22 +225,13 @@ public class ManHinhDatVeController implements Initializable {
         thanhTien_txtfld.setText(String.valueOf(ve.getGiaTien()));
     }
 
-    private void handleBooking(boolean isDatVe) {
-        if (validateInputs()) {
-            generateCustomerId();
-
-            // Further actions to handle the booking process (insert into database, etc.)
-            if (isDatVe) {
-                // Handle dat ve logic
-                insertBooking(true);
-            } else {
-                // Handle dat cho logic
-                insertBooking(false);
-            }
-        }
-    }
-
     private boolean validateInputs() {
+        // Kiểm tra xem có vé nào được chọn hay không
+        if (ve_tableview.getSelectionModel().getSelectedItem() == null) {
+            alert.errorMessage("Vui lòng chọn vé trước khi tiếp tục.");
+            return false;
+        }
+
         String hoten = hoten_txtfld.getText().trim();
         String cccd = cccd_txtfld.getText().trim();
         String email = email_txtfld.getText().trim();
@@ -265,114 +261,48 @@ public class ManHinhDatVeController implements Initializable {
         return true;
     }
 
-    private void generateCustomerId() {
-        String sql = "SELECT MAX(MAKHACHHANG) AS MaxMaKH\n" +
-                "FROM VE JOIN CT_DATVE ON VE.MAVE = CT_DATVE.MAVE";
-        try (PreparedStatement ps = connect.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                String maxMaKH = rs.getString("MaxMaKH");
-                if (maxMaKH != null) {
-                    int newMaKH = Integer.parseInt(maxMaKH.substring(2)) + 1;
-                    maKH_txtfld.setText(String.format("KH%03d", newMaKH));
-                } else {
-                    maKH_txtfld.setText("KH001");
-                }
+    // Phương thức hiển thị cửa sổ xác nhận
+    private void showConfirmationDialog(boolean isDatVe) {
+        if (validateInputs()) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Admin/XacNhanVe.fxml"));
+                Parent root = loader.load();
+                XacNhanVeController controller = loader.getController();
+
+                // Get the data from text fields
+                String maKH = maKH_txtfld.getText();
+                String hoten = hoten_txtfld.getText();
+                String cccd = cccd_txtfld.getText();
+                String email = email_txtfld.getText();
+                String sdt = sdt_txtfld.getText();
+                String diaChi = diaChi_txtfld.getText();
+                String maVe = maVe_txtfld.getText();
+                String maGhe = maGhe_txtfld.getText();
+                String thanhTien = thanhTien_txtfld.getText();
+                String maChuyenBay = maCB_txtfld.getText();
+                String sanBayDi = sanBayDi_txtfld.getText();
+                String sanBayDen = sanBayDen_txtfld.getText();
+                String ngayBay = ngayBay_txtfld.getText();
+                String gioBay = gioBay_txtfld.getText();
+
+                // Pass the data to XacNhanVeController
+                controller.initData(isDatVe, maKH, hoten, cccd, email, sdt, diaChi, maVe, maGhe, thanhTien, maChuyenBay, sanBayDi, sanBayDen, ngayBay, gioBay);
+
+                Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(new Scene(root));
+                stage.setTitle("Xác nhận thông tin");
+                stage.setOnHidden(event -> reloadFlightDetails()); // Reload flight details after closing
+                stage.showAndWait();
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            alert.errorMessage("Không thể tạo mã khách hàng mới.");
         }
     }
 
-    private void insertBooking(boolean isDatVe) {
-        String maKH = maKH_txtfld.getText().trim();
-        String hoten = hoten_txtfld.getText().trim();
-        String cccd = cccd_txtfld.getText().trim();
-        String email = email_txtfld.getText().trim();
-        String sdt = sdt_txtfld.getText().trim();
-        String diaChi = diaChi_txtfld.getText().trim();
-        String maVe = maVe_txtfld.getText().trim();
-
-        // Generate a new unique MaCT_DATVE
-        String maCT_DATVE = generateMaCT_DATVE();
-
-        // Get current timestamp for NgayMuaVe and NgayThanhToan
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String ngayMuaVe = now.format(formatter);
-        String ngayThanhToan = isDatVe ? now.format(formatter) : null;  // Set to current time if isDatVe, otherwise null
-
-        try {
-            // Insert customer into KHACHHANG table if not exists
-            String checkCustomerSql = "SELECT COUNT(*) FROM KHACHHANG WHERE MAKHACHHANG = ?";
-            try (PreparedStatement ps = connect.prepareStatement(checkCustomerSql)) {
-                ps.setString(1, maKH);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next() && rs.getInt(1) == 0) {
-                        String insertCustomerSql = "INSERT INTO KHACHHANG (MAKHACHHANG, HOTEN, CCCD, EMAIL, SDT, DIACHI) VALUES (?, ?, ?, ?, ?, ?)";
-                        try (PreparedStatement insertPs = connect.prepareStatement(insertCustomerSql)) {
-                            insertPs.setString(1, maKH);
-                            insertPs.setString(2, hoten);
-                            insertPs.setString(3, cccd);
-                            insertPs.setString(4, email);
-                            insertPs.setString(5, sdt);
-                            insertPs.setString(6, diaChi);
-                            insertPs.executeUpdate();
-                        }
-                    }
-                }
-            }
-
-            // Insert booking into CT_DATVE table
-            String insertBookingSql = "INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES (?, ?, ?, TO_TIMESTAMP(?, 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP(?, 'YYYY-MM-DD HH24:MI:SS'), ?)";
-            try (PreparedStatement ps = connect.prepareStatement(insertBookingSql)) {
-                ps.setString(1, maCT_DATVE);
-                ps.setString(2, maVe);
-                ps.setString(3, maKH);
-                ps.setString(4, ngayMuaVe);
-                ps.setString(5, ngayThanhToan);
-                ps.setInt(6, isDatVe ? 1 : 0);  // 1 for datVe, 0 for datCho
-                ps.executeUpdate();
-            }
-
-            alert.successMessage(isDatVe ? "Đặt vé thành công!" : "Đặt chỗ thành công!");
-
-            // Clear fields after successful booking
-            clearFields();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            alert.errorMessage("Có lỗi xảy ra khi đặt vé hoặc đặt chỗ.");
-        }
+    private void reloadFlightDetails() {
+        // Reload the data for the flight details and ticket list
+        String maChuyenBay = maCB_txtfld.getText();
+        loadVeForFlight(maChuyenBay);
     }
-
-    private String generateMaCT_DATVE() {
-        String sql = "SELECT MAX(MaCT_DATVE) AS MaxMaCT_DATVE FROM CT_DATVE";
-        try (PreparedStatement ps = connect.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                String maxMaCT_DATVE = rs.getString("MaxMaCT_DATVE");
-                if (maxMaCT_DATVE != null) {
-                    int newMaCT_DATVE = Integer.parseInt(maxMaCT_DATVE.substring(4)) + 1;
-                    return String.format("CTDV%03d", newMaCT_DATVE);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return "CTDV001";  // Default value if no existing records
-    }
-
-
-    private void clearFields() {
-        maKH_txtfld.clear();
-        hoten_txtfld.clear();
-        cccd_txtfld.clear();
-        email_txtfld.clear();
-        sdt_txtfld.clear();
-        diaChi_txtfld.clear();
-        maVe_txtfld.clear();
-        maGhe_txtfld.clear();
-        thanhTien_txtfld.clear();
-    }
-
 }
