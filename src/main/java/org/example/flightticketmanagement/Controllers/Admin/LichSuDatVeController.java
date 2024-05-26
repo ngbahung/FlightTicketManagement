@@ -4,6 +4,7 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuButton;
@@ -108,6 +109,12 @@ public class LichSuDatVeController implements Initializable {
     private TableColumn<CT_DatVe, Float> veDD_giaTien_tbcl;
 
     @FXML
+    private MFXButton xuatVe_btn;
+
+    @FXML
+    private MFXButton thanhToan_btn;
+
+    @FXML
     private TableView<CT_DatVe> veDaDat_tbview;
 
     private Connection connect;
@@ -136,6 +143,9 @@ public class LichSuDatVeController implements Initializable {
 
         // Thêm sự kiện cho nút tìm kiếm
         timkiem_btn.setOnAction(event -> search());
+        // Thêm sự kiện cho nút hủy vé hoặc phiếu đặt chỗ
+        huyVeorDatCho_btn.setOnAction(event -> cancelTicketOrReservation());
+
 
         // Thêm sự kiện cho nút làm mới
         refresh_btn.setOnAction(event -> {
@@ -154,6 +164,16 @@ public class LichSuDatVeController implements Initializable {
         sanbaydi_menubtn.setOnShowing(event -> updateSanBayMenuItems());
         sanbayden_menubtn.setOnShowing(event -> updateSanBayMenuItems());
         ngay_datepicker.setValue(LocalDate.now());
+        // Add listener to enable/disable thanhToan_btn based on selection in phDC_tbview
+        phDC_tbview.getSelectionModel().selectedItemProperty().addListener(
+                (ObservableValue<? extends CT_DatVe> observable, CT_DatVe oldValue, CT_DatVe newValue) -> {
+                    thanhToan_btn.setDisable(newValue == null);
+                }
+        );
+        thanhToan_btn.setDisable(true); // Initially disable the button
+
+        // Add event listener for the thanhToan_btn
+        thanhToan_btn.setOnAction(event -> handleThanhToan());
     }
 
     private void setupTableViewColumns(TableColumn<CT_DatVe, String> maVeCol,
@@ -483,6 +503,65 @@ public class LichSuDatVeController implements Initializable {
             MenuItem menuItem = new MenuItem(sanBay);
             menuItem.setOnAction(event -> sanbayden_menubtn.setText(sanBay));
             sanbayden_menubtn.getItems().add(menuItem);
+        }
+    }
+
+    private void cancelTicketOrReservation() {
+        CT_DatVe selectedVeDaDat = veDaDat_tbview.getSelectionModel().getSelectedItem();
+        CT_DatVe selectedPhDC = phDC_tbview.getSelectionModel().getSelectedItem();
+
+        if (selectedVeDaDat == null && selectedPhDC == null) {
+            alert.errorMessage("Vui lòng chọn một vé hoặc phiếu đặt chỗ để hủy.");
+            return;
+        }
+
+        String message = "Bạn có chắc chắn muốn hủy ";
+        CT_DatVe selected = null;
+        if (selectedVeDaDat != null) {
+            message += "vé này?";
+            selected = selectedVeDaDat;
+        } else {
+            message += "phiếu đặt chỗ này?";
+            selected = selectedPhDC;
+        }
+
+        boolean confirm = alert.confirmationMessage(message);
+        if (confirm) {
+            try {
+                String updateQuery = "UPDATE CT_DATVE SET TrangThai = 2 WHERE MaCT_DATVE = ?";
+                try (PreparedStatement prepare = connect.prepareStatement(updateQuery)) {
+                    prepare.setString(1, selected.getMaCT_DatVe());
+                    prepare.executeUpdate();
+                }
+                loadData(null); // Load lại dữ liệu
+            } catch (SQLException e) {
+                alert.errorMessage("Không thể hủy vé hoặc phiếu đặt chỗ.");
+            }
+        }
+    }
+
+    private void handleThanhToan() {
+        CT_DatVe selectedVe = phDC_tbview.getSelectionModel().getSelectedItem();
+
+        if (selectedVe == null) {
+            alert.errorMessage("Vui lòng chọn một phiếu đặt chỗ để thanh toán.");
+            return;
+        }
+
+        boolean confirm = alert.confirmationMessage("Bạn có chắc chắn muốn thanh toán phiếu đặt chỗ này?");
+        if (confirm) {
+            try {
+                String updateQuery = "UPDATE CT_DATVE SET TrangThai = 1, NgayThanhToan = ? WHERE MaCT_DATVE = ?";
+                try (PreparedStatement prepare = connect.prepareStatement(updateQuery)) {
+                    prepare.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
+                    prepare.setString(2, selectedVe.getMaCT_DatVe());
+                    prepare.executeUpdate();
+                }
+                loadData(null); // Reload data
+                alert.successMessage("Thanh toán thành công.");
+            } catch (SQLException e) {
+                alert.errorMessage("Không thể thanh toán phiếu đặt chỗ.");
+            }
         }
     }
 

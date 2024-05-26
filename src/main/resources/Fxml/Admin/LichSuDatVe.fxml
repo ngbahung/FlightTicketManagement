@@ -14,86 +14,89 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/BanVe.css"
-            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.flightticketmanagement.Controllers.Admin.LichSuDatVeController">
+<AnchorPane prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/BanVe.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.LichSuDatVeController">
    <AnchorPane layoutX="103.0" layoutY="25.0" prefHeight="75.0" prefWidth="706.0" styleClass="filter-pane">
       <effect>
-         <DropShadow/>
+         <DropShadow />
       </effect>
       <HBox alignment="CENTER" layoutX="-28.0" layoutY="17.0" prefHeight="47.0" prefWidth="665.0" spacing="50.0">
-         <MenuButton fx:id="sanbaydi_menubtn" mnemonicParsing="false" prefHeight="39.0" prefWidth="128.0"
-                     text="Sân bay đi">
+         <MenuButton fx:id="sanbaydi_menubtn" mnemonicParsing="false" prefHeight="39.0" prefWidth="128.0" text="Sân bay đi">
             <items>
-               <MenuItem mnemonicParsing="false" text="Action 1"/>
-               <MenuItem mnemonicParsing="false" text="Action 2"/>
+               <MenuItem mnemonicParsing="false" text="Action 1" />
+               <MenuItem mnemonicParsing="false" text="Action 2" />
             </items>
          </MenuButton>
-         <MenuButton fx:id="sanbayden_menubtn" mnemonicParsing="false" prefHeight="41.0" prefWidth="111.0"
-                     text="Sân bay đến">
+         <MenuButton fx:id="sanbayden_menubtn" mnemonicParsing="false" prefHeight="41.0" prefWidth="111.0" text="Sân bay đến">
             <items>
-               <MenuItem mnemonicParsing="false" text="Action 1"/>
-               <MenuItem mnemonicParsing="false" text="Action 2"/>
+               <MenuItem mnemonicParsing="false" text="Action 1" />
+               <MenuItem mnemonicParsing="false" text="Action 2" />
             </items>
          </MenuButton>
-         <MFXDatePicker fx:id="ngay_datepicker" prefHeight="43.0" prefWidth="137.0" promptText="Chọn ngày"/>
+         <MFXDatePicker fx:id="ngay_datepicker" prefHeight="43.0" prefWidth="137.0" promptText="Chọn ngày" />
          <MFXButton fx:id="timkiem_btn" prefHeight="30.0" prefWidth="53.0" text=" ">
             <graphic>
-               <FontAwesomeIconView glyphName="SEARCH" size="20"/>
+               <FontAwesomeIconView glyphName="SEARCH" size="20" />
             </graphic>
          </MFXButton>
       </HBox>
    </AnchorPane>
    <VBox layoutX="38.0" layoutY="121.0" prefHeight="319.0" prefWidth="916.0">
       <AnchorPane prefHeight="40.0" prefWidth="458.0" styleClass="table-label">
-         <Text layoutX="408.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="table-text"
-               text="VÉ ĐÃ ĐẶT"/>
+         <Text layoutX="408.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="table-text" text="VÉ ĐÃ ĐẶT" />
       </AnchorPane>
       <TableView fx:id="veDaDat_tbview" prefHeight="282.0" prefWidth="916.0">
          <columns>
-            <TableColumn fx:id="veDD_maVe_tbcl" prefWidth="81.0" text="Mã vé"/>
-            <TableColumn fx:id="veDD_sanBayDi_tbcl" prefWidth="88.0" text="Sân bay đi"/>
-            <TableColumn fx:id="veDD_sanBayDen_tbcl" prefWidth="89.0" text="Sân bay đến"/>
-            <TableColumn fx:id="veDD_ngayBay_tbcl" prefWidth="102.0" text="Ngày bay"/>
-            <TableColumn fx:id="veDD_gioBay_tbcl" prefWidth="72.0" text="Giờ bay"/>
-            <TableColumn fx:id="veDD_tenKH_tbcl" prefWidth="121.0" text="Tên khách hàng"/>
-            <TableColumn fx:id="veDD_sdt_tbcl" prefWidth="107.0" text="Số điện thoại"/>
-            <TableColumn fx:id="veDD_maGhe_tbcl" prefWidth="62.0" text="Mã ghế"/>
-            <TableColumn fx:id="veDD_hangVe_tbcl" prefWidth="64.0" text="Hạng vé"/>
-            <TableColumn fx:id="veDD_giaTien_tbcl" prefWidth="123.0" text="Giá tiền"/>
+            <TableColumn fx:id="veDD_maVe_tbcl" prefWidth="81.0" text="Mã vé" />
+            <TableColumn fx:id="veDD_sanBayDi_tbcl" prefWidth="88.0" text="Sân bay đi" />
+            <TableColumn fx:id="veDD_sanBayDen_tbcl" prefWidth="89.0" text="Sân bay đến" />
+            <TableColumn fx:id="veDD_ngayBay_tbcl" prefWidth="102.0" text="Ngày bay" />
+            <TableColumn fx:id="veDD_gioBay_tbcl" prefWidth="72.0" text="Giờ bay" />
+            <TableColumn fx:id="veDD_tenKH_tbcl" prefWidth="121.0" text="Tên khách hàng" />
+            <TableColumn fx:id="veDD_sdt_tbcl" prefWidth="107.0" text="Số điện thoại" />
+            <TableColumn fx:id="veDD_maGhe_tbcl" prefWidth="62.0" text="Mã ghế" />
+            <TableColumn fx:id="veDD_hangVe_tbcl" prefWidth="64.0" text="Hạng vé" />
+            <TableColumn fx:id="veDD_giaTien_tbcl" prefWidth="123.0" text="Giá tiền" />
          </columns>
       </TableView>
    </VBox>
-   <Separator layoutX="38.0" layoutY="454.0" prefHeight="0.0" prefWidth="916.0"/>
+   <Separator layoutX="38.0" layoutY="454.0" prefHeight="0.0" prefWidth="916.0" />
    <VBox layoutX="38.0" layoutY="457.0" prefHeight="319.0" prefWidth="916.0">
       <AnchorPane prefHeight="40.0" prefWidth="458.0" styleClass="table-label">
-         <Text layoutX="408.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="table-text"
-               text="PHIẾU ĐẶT CHỖ"/>
+         <Text layoutX="408.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="table-text" text="PHIẾU ĐẶT CHỖ" />
+         <MFXButton fx:id="thanhToan_btn" layoutX="800.0" layoutY="1.0" prefHeight="30.0" prefWidth="111.0" text="Thanh toán">
+            <graphic>
+               <FontAwesomeIconView glyphName="MONEY" size="20" />
+            </graphic>
+         </MFXButton>
       </AnchorPane>
       <TableView fx:id="phDC_tbview" prefHeight="282.0" prefWidth="916.0">
          <columns>
-            <TableColumn fx:id="phDC_maVe_tbcl" prefWidth="81.0" text="Mã vé"/>
-            <TableColumn fx:id="phDC_sanBayDi_tbcl" prefWidth="88.0" text="Sân bay đi"/>
-            <TableColumn fx:id="phDC_sanBayDen_tbcl" prefWidth="89.0" text="Sân bay đến"/>
-            <TableColumn fx:id="phDC_ngayBay_tbcl" prefWidth="102.0" text="Ngày bay"/>
-            <TableColumn fx:id="phDC_gioBay_tbcl" prefWidth="72.0" text="Giờ bay"/>
-            <TableColumn fx:id="phDC_tenKH_tbcl" prefWidth="121.0" text="Tên khách hàng"/>
-            <TableColumn fx:id="phDC_sdt_tbcl" prefWidth="107.0" text="Số điện thoại"/>
-            <TableColumn fx:id="phDC_maGhe_tbcl" prefWidth="62.0" text="Mã ghế"/>
-            <TableColumn fx:id="phDC_hangVe_tbcl" prefWidth="64.0" text="Hạng vé"/>
-            <TableColumn fx:id="phDC_giaTien_tbcl" prefWidth="123.0" text="Giá tiền"/>
+            <TableColumn fx:id="phDC_maVe_tbcl" prefWidth="81.0" text="Mã vé" />
+            <TableColumn fx:id="phDC_sanBayDi_tbcl" prefWidth="88.0" text="Sân bay đi" />
+            <TableColumn fx:id="phDC_sanBayDen_tbcl" prefWidth="89.0" text="Sân bay đến" />
+            <TableColumn fx:id="phDC_ngayBay_tbcl" prefWidth="102.0" text="Ngày bay" />
+            <TableColumn fx:id="phDC_gioBay_tbcl" prefWidth="72.0" text="Giờ bay" />
+            <TableColumn fx:id="phDC_tenKH_tbcl" prefWidth="121.0" text="Tên khách hàng" />
+            <TableColumn fx:id="phDC_sdt_tbcl" prefWidth="107.0" text="Số điện thoại" />
+            <TableColumn fx:id="phDC_maGhe_tbcl" prefWidth="62.0" text="Mã ghế" />
+            <TableColumn fx:id="phDC_hangVe_tbcl" prefWidth="64.0" text="Hạng vé" />
+            <TableColumn fx:id="phDC_giaTien_tbcl" prefWidth="123.0" text="Giá tiền" />
          </columns>
       </TableView>
    </VBox>
-   <MFXButton fx:id="huyVeorDatCho_btn" graphicTextGap="15.0" layoutX="824.0" layoutY="52.0" prefHeight="38.0"
-              prefWidth="144.0" text="Hủy vé/đặt chỗ">
+   <MFXButton fx:id="huyVeorDatCho_btn" graphicTextGap="15.0" layoutX="824.0" layoutY="52.0" prefHeight="38.0" prefWidth="144.0" text="Hủy vé/đặt chỗ">
       <graphic>
-         <FontAwesomeIconView glyphName="EXCLAMATION_TRIANGLE" size="20"/>
+         <FontAwesomeIconView glyphName="EXCLAMATION_TRIANGLE" size="20" />
       </graphic>
    </MFXButton>
    <MFXButton fx:id="refresh_btn" layoutX="31.0" layoutY="51.0" text=" ">
       <graphic>
-         <FontAwesomeIconView glyphName="REFRESH" size="30"/>
+         <FontAwesomeIconView glyphName="REFRESH" size="30" />
+      </graphic>
+   </MFXButton>
+   <MFXButton layoutX="833.0" layoutY="100.0" prefHeight="41.0" prefWidth="111.0" text="Xuất vé" fx:id="xuatVe_btn">
+      <graphic>
+         <FontAwesomeIconView glyphName="TICKET" size="20" />
       </graphic>
    </MFXButton>
 </AnchorPane>
