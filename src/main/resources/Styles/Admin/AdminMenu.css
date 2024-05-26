@@ -62,10 +62,12 @@
     -fx-text-fill: white;
 }
 
-.dang_xuat Button:pressed ,
-.menu_container Button:pressed {
-    -fx-cursor: hand;
+.dang_xuat Button:focused ,
+.menu_container Button:focused {
     -fx-background-color: #00A4BD;
     -fx-text-fill: white;
 }
+
+
+
 
