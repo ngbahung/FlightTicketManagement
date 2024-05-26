@@ -22,7 +22,14 @@
     -fx-font-size: 16;
     -fx-font-weight: bold;
     -fx-text-fill: #080C53;
+}
 
+.combo-box {
+    -fx-font-family: "Inter";
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-text-fill: #080C53;
+    -fx-background-radius: 6.25;
 }
 
 /* VBox */

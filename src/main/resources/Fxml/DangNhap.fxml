@@ -37,7 +37,7 @@
             <String fx:value="link-button" />
          </styleClass>
       </MFXButton>
-      <ChoiceBox fx:id="account_selector" layoutX="32.0" layoutY="235.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-border-color: #080C53;" />
+      <ChoiceBox fx:id="account_selector" layoutX="32.0" layoutY="235.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-border-color: #080C53;" styleClass="combo-box" />
       <Label layoutX="32.0" layoutY="204.0" styleClass="label-text" text="Loại tài khoản" />
    </AnchorPane>
 </AnchorPane>
