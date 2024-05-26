@@ -108,34 +108,37 @@
             <FontAwesomeIconView glyphName="REFRESH" size="20" />
          </graphic>
       </Button>
-      <TableView layoutX="38.0" layoutY="497.0" prefHeight="225.0" prefWidth="391.0">
+      <TableView fx:id="duongBay_tbv" layoutX="38.0" layoutY="497.0" prefHeight="225.0" prefWidth="493.0">
         <columns>
-          <TableColumn prefWidth="38.666690826416016" text="STT " />
-          <TableColumn prefWidth="90.66667938232422" text="Mã đường bay" />
-            <TableColumn prefWidth="125.33329772949219" text="Sân bay đi" />
-            <TableColumn prefWidth="130.00006103515625" text="Sân bay đến" />
+          <TableColumn fx:id="sttDuongBay_col" prefWidth="38.666690826416016" text="STT " />
+          <TableColumn fx:id="idDuongBay_col" prefWidth="90.66667938232422" text="Mã đường bay" />
+            <TableColumn fx:id="sanBayDi_col" prefWidth="71.0" text="Sân bay đi" />
+            <TableColumn fx:id="sanBayDen_col" prefWidth="82.0" text="Sân bay đến" />
+            <TableColumn fx:id="tenDuongBay_col" prefWidth="103.0" text="Tên đường bay" />
+            <TableColumn fx:id="statusDuongBay_col" prefWidth="102.0" text="Trạng thái" />
         </columns>
       </TableView>
       <HBox layoutX="133.0" layoutY="454.0" prefHeight="26.0" prefWidth="295.0" spacing="20.0">
          <children>
-            <TextField fx:id="searchhangve_tfx1" prefHeight="35.0" prefWidth="229.0" promptText="Tìm kiếm" />
-            <Button fx:id="searchHangVe_btn1" mnemonicParsing="false">
+            <TextField fx:id="searchDuongBay_textfield" prefHeight="35.0" prefWidth="229.0" promptText="Tìm kiếm" />
+            <Button fx:id="searchDuongBay_btn" mnemonicParsing="false">
                <graphic>
                   <FontAwesomeIconView glyphName="SEARCH" size="20" />
                </graphic>
             </Button>
          </children>
       </HBox>
-      <Button fx:id="refreshHangVeData_btn1" layoutX="89.0" layoutY="454.0" mnemonicParsing="false" onAction="#refreshHangVeData">
+      <Button fx:id="refreshDuongBayData_btn" layoutX="89.0" layoutY="454.0" mnemonicParsing="false" onAction="#refreshDuongBayData">
          <graphic>
             <FontAwesomeIconView glyphName="REFRESH" size="20" />
          </graphic>
       </Button>
-      <HBox layoutX="38.0" layoutY="735.0" prefHeight="34.0" prefWidth="262.0" spacing="20.0">
+      <HBox layoutX="38.0" layoutY="735.0" prefHeight="34.0" prefWidth="493.0" spacing="20.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="77.0" styleClass="button-row" text="Thêm" />
-            <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="67.0" styleClass="button-row" text="Xóa" />
-            <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="68.0" styleClass="button-row" text="Sửa" />
+            <Button fx:id="themDuongBay_btn" mnemonicParsing="false" onAction="#themDuongBay" prefHeight="31.0" prefWidth="77.0" styleClass="button-row" text="Thêm" />
+            <Button fx:id="suaDuongBay_btn" mnemonicParsing="false" onAction="#suaDuongBay" prefHeight="31.0" prefWidth="68.0" styleClass="button-row" text="Sửa" />
+            <Button fx:id="changeDuongBayStatus_btn" mnemonicParsing="false" onAction="#changeDuongBayStatus" styleClass="button-row" text="Thay đổi trạng thái" />
+            <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="67.0" styleClass="button-row" text="Xóa" fx:id="xoaDuongBay_btn" />
          </children>
       </HBox>
    </children>
