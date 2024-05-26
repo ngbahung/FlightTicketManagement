@@ -16,7 +16,7 @@ GRANT CONNECT, RESOURCE, DBA TO user2;
 
 -- Sử dụng Schema
 
-ALTER SESSION SET CURRENT_SCHEMA = fly_the_end8;
+ALTER SESSION SET CURRENT_SCHEMA = QLCBDEMO;
 
 
 -- create sequence
@@ -330,7 +330,7 @@ END;
 
 /* R5: Cập nhật doanh thu  tháng khi có thêm doanh thu chuyến bay.*/
 
-DROP TRIGGER Update_DoanhThu_Thang;
+--DROP TRIGGER Update_DoanhThu_Thang;
 
 CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang
 FOR INSERT OR update ON CT_DATVE
@@ -411,7 +411,7 @@ COMPOUND TRIGGER
 END Update_DoanhThu_Thang;
 
 
-DROP TRIGGER Update_DoanhThu_Thang_delete;
+--DROP TRIGGER Update_DoanhThu_Thang_delete;
 
 CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang_delete
 FOR delete ON CT_DATVE
@@ -476,7 +476,7 @@ END;
 
 /* R9: Mỗi vé phải đặt trước một khoảng thời gian nhất định trước khi máy bay xuất phát. */ 
 
-DROP TRIGGER trigger_CT_DATVE
+
 
 CREATE OR REPLACE TRIGGER trigger_CT_DATVE
 BEFORE INSERT OR update ON CT_DATVE
@@ -587,10 +587,6 @@ BEGIN
     END IF;
 END;
 /
-
-
-INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, SoChuyenBay, TGXP, TGKT, TrangThai, GiaVe)
-VALUES ('CB009', 'DB001', 1, TO_TIMESTAMP('2024-07-01 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-07-03 12:30:00', 'YYYY-MM-DD HH24:MI:SS'), 'ChuaDoi', 1000000);
 
 
 /* R25: sân bay đến và sân bay đi của đường bay không trùng nhau */
