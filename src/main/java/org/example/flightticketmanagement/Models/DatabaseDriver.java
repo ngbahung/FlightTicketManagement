@@ -4,7 +4,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseDriver {
-    private static final String user = "TIKEMANA1";
+    private static final String user = "qlcbdemo";
     private static final String password = "password";
     private static final String port = "1521";
     private static final String database = "orcl";
