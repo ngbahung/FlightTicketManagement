@@ -96,7 +96,7 @@ public class TraCuuBanVeController implements Initializable {
         chuyenBay_tableview.getItems().clear();  // Clear previous search results
 
         try {
-            StringBuilder query = new StringBuilder("SELECT * FROM CHUYENBAY");
+            StringBuilder query = new StringBuilder("SELECT * FROM CHUYENBAY WHERE TrangThai = 'ChuaBay'");
             boolean hasCondition = false;
 
             // Check if there are conditions to add to the WHERE clause

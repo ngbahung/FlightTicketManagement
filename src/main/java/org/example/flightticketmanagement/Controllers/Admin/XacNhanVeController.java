@@ -113,7 +113,7 @@ public class XacNhanVeController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         connect = DatabaseDriver.getConnection();
         setFieldsEditable(false);
-        generateCustomerId();
+        generateCustomerId(cccd_txtfld.getText());
         datVe_btn.setOnAction(e -> handleInsertBooking(true)); // for datVe (booking ticket)
         datCho_btn.setOnAction(e -> handleInsertBooking(false)); // for datCho (reserving seat)
     }
@@ -155,14 +155,14 @@ public class XacNhanVeController implements Initializable {
         gioBay_txtfld.setEditable(editable);
     }
 
-    private void generateCustomerId(String customerName) {
+    private void generateCustomerId(String cccd) {
         // SQL query to check if customer already exists
         String checkSql = "SELECT MAKHACHHANG FROM KHACHHANG WHERE CCCD = ?";
         // SQL query to get the maximum customer ID
         String maxIdSql = "SELECT MAX(MAKHACHHANG) AS MaxMaKH FROM KHACHHANG";
 
         try (PreparedStatement checkPs = connect.prepareStatement(checkSql)) {
-            checkPs.setString(1, customerName);
+            checkPs.setString(1, cccd);
             try (ResultSet checkRs = checkPs.executeQuery()) {
                 if (checkRs.next()) {
                     // Customer exists, set the existing ID
@@ -192,7 +192,7 @@ public class XacNhanVeController implements Initializable {
 
 
     private void handleInsertBooking(boolean isDatVe) {
-        generateCustomerId();
+        generateCustomerId(cccd_txtfld.getText());
         if (insertBooking(isDatVe)) {
             alert.successMessage(isDatVe ? "Đặt vé thành công!" : "Đặt chỗ thành công!");
             closeStage();
