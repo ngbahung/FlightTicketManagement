@@ -58,6 +58,14 @@
 .dang_xuat Button:hover ,
 .menu_container Button:hover {
     -fx-cursor: hand;
-    -fx-background-color: #a6adad;
+    -fx-background-color: #00A4BD;
     -fx-text-fill: white;
 }
+
+.dang_xuat Button:pressed ,
+.menu_container Button:pressed {
+    -fx-cursor: hand;
+    -fx-background-color: #00A4BD;
+    -fx-text-fill: white;
+}
+
