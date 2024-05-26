@@ -15,6 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
+import org.example.flightticketmanagement.Models.DuongBay;
 import org.example.flightticketmanagement.Models.HangVe;
 import org.example.flightticketmanagement.Models.SanBay;
 
@@ -116,6 +117,48 @@ public class QuyDinhController implements Initializable {
     @FXML
     private Button xoasanbay_btn;
 
+    @FXML
+    private Button xoaDuongBay_btn;
+
+    @FXML
+    private Button themDuongBay_btn;
+
+    @FXML
+    private Button suaDuongBay_btn;
+
+    @FXML
+    private TableColumn<?, ?> sttDuongBay_col;
+
+    @FXML
+    private Button searchDuongBay_btn;
+
+    @FXML
+    private TextField searchDuongBay_textfield;
+
+    @FXML
+    private TableColumn<DuongBay, Integer> statusDuongBay_col;
+
+    @FXML
+    private TableColumn<?, ?> sanBayDen_col;
+
+    @FXML
+    private TableColumn<?, ?> sanBayDi_col;
+
+    @FXML
+    private Button refreshDuongBayData_btn;
+
+    @FXML
+    private TableColumn<?, ?> idDuongBay_col;
+
+    @FXML
+    private TableColumn<?, ?> tenDuongBay_col;
+
+    @FXML
+    private TableView<DuongBay> duongBay_tbv;
+
+    @FXML
+    private Button changeDuongBayStatus_btn;
+
 
     private Connection connect;
     private PreparedStatement prepare;
@@ -126,13 +169,14 @@ public class QuyDinhController implements Initializable {
 
     private FilteredList<SanBay> filteredSanBayData;
     private FilteredList<HangVe> filteredHangVeData;
-
+    private FilteredList<DuongBay> filteredDuongBayData;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         showSanBayList();
         showHangVeList();
         loadThamSoData();
+        loadDuongBayData();
         suasanbay_btn.setOnAction(this::editSelectedAirports);
         xoasanbay_btn.setOnAction(this::deactivateSelectedAirports);
         searchSanBay_btn.setOnAction(this::searchSanBay);
@@ -142,6 +186,8 @@ public class QuyDinhController implements Initializable {
         suahangve_btn.setOnAction(this::editSelectedTicketClass);
         xoahangve_btn.setOnAction(this::deactiveSelectedTicketClass);
         suaquydinh_btn.setOnAction(this::editParameter);
+        searchDuongBay_btn.setOnAction(this::searchDuongBay);
+        refreshDuongBayData_btn.setOnAction(e -> loadDuongBayData());
     }
 
     private void showHangVeList() {
@@ -389,6 +435,11 @@ public class QuyDinhController implements Initializable {
         showHangVeList();
     }
 
+    @FXML
+    void refreshDuongBayData() {
+        loadDuongBayData();
+    }
+
     private void searchSanBay(ActionEvent e) {
         String keyword = searchsanbay_tfx.getText();
         if (keyword == null || keyword.isEmpty()) {
@@ -570,4 +621,193 @@ public class QuyDinhController implements Initializable {
             e.printStackTrace();
         }
     }
+
+
+    public void loadDuongBayData() {
+        ObservableList<DuongBay> duongBayList = FXCollections.observableArrayList();
+
+        String query = "SELECT DUONGBAY.MaDuongBay, "
+                + "S1.TenSanBay AS SanBayDi, "
+                + "S2.TenSanBay AS SanBayDen, "
+                + "DUONGBAY.TenDuongBay, DUONGBAY.TrangThai "
+                + "FROM DUONGBAY "
+                + "JOIN SANBAY S1 ON DUONGBAY.MaSanBayDi = S1.MaSanBay "
+                + "JOIN SANBAY S2 ON DUONGBAY.MaSanBayDen = S2.MaSanBay";
+
+        try {
+            connect = DatabaseDriver.getConnection();
+            statement = connect.createStatement();
+            result = statement.executeQuery(query);
+
+            int rowNum = 1;
+
+            while (result.next()) {
+                String maDuongBay = result.getString("MaDuongBay");
+                String tenSanBayDi = result.getString("SanBayDi");
+                String tenSanBayDen = result.getString("SanBayDen");
+                String tenDuongBay = result.getString("TenDuongBay");
+                int trangThai = result.getInt("TrangThai");
+
+                int soThuTu = rowNum++;
+
+                DuongBay duongBay = new DuongBay(maDuongBay, tenSanBayDi, tenSanBayDen, tenDuongBay, soThuTu, trangThai);
+                duongBayList.add(duongBay);
+            }
+
+            idDuongBay_col.setCellValueFactory(new PropertyValueFactory<>("maDuongBay"));
+            sanBayDi_col.setCellValueFactory(new PropertyValueFactory<>("tenSanBayDi"));
+            sanBayDen_col.setCellValueFactory(new PropertyValueFactory<>("tenSanBayDen"));
+            sttDuongBay_col.setCellValueFactory(new PropertyValueFactory<>("soThuTu"));
+            tenDuongBay_col.setCellValueFactory(new PropertyValueFactory<>("tenDuongBay"));
+
+            statusDuongBay_col.setCellValueFactory(new PropertyValueFactory<>("trangThai"));
+            statusDuongBay_col.setCellFactory(column -> new TableCell<DuongBay, Integer>() {
+                @Override
+                protected void updateItem(Integer item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) {
+                        setText(null);
+                    } else {
+                        if (item == 0) {
+                            setText("Ngưng hoạt động");
+                            setTextFill(javafx.scene.paint.Color.RED); // Set text color to red
+                        } else {
+                            setText("Hoạt động");
+                            setTextFill(javafx.scene.paint.Color.GREEN); // Set text color to green
+                        }
+                    }
+                }
+            });
+
+            duongBay_tbv.setItems(duongBayList);
+            filteredDuongBayData = new FilteredList<>(duongBayList, p -> true);
+            duongBay_tbv.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);  // Allow multiple selection
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+                if (connect != null) connect.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void searchDuongBay(ActionEvent e) {
+        String keyword = searchDuongBay_textfield.getText();
+        if (keyword == null || keyword.isEmpty()) {
+            duongBay_tbv.setItems(filteredDuongBayData);
+            return;
+        }
+
+        String lowerCaseFilter = keyword.toLowerCase();
+        filteredDuongBayData.setPredicate(duongBay -> {
+            if (duongBay.getMaDuongBay().toLowerCase().contains(lowerCaseFilter) ||
+                    duongBay.getTenDuongBay().toLowerCase().contains(lowerCaseFilter) ||
+                    duongBay.getTenSanBayDi().toLowerCase().contains(lowerCaseFilter) ||
+                    duongBay.getTenSanBayDen().toLowerCase().contains(lowerCaseFilter)) {
+                return true;
+            }
+            return false;
+        });
+
+        SortedList<DuongBay> sortedData = new SortedList<>(filteredDuongBayData);
+        sortedData.comparatorProperty().bind(duongBay_tbv.comparatorProperty());
+        duongBay_tbv.setItems(sortedData);
+    }
+
+    @FXML
+    void themDuongBay (ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/ThemDuongBay.fxml"));
+            Parent root = loader.load();
+            ThemDuongBayController themDuongBayController = loader.getController();
+            themDuongBayController.setParentController(this);  // Pass the instance of QuyDinhController
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Thêm Đường Bay");
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void suaDuongBay (ActionEvent event) {
+        DuongBay selectedDuongBay = duongBay_tbv.getSelectionModel().getSelectedItem();
+        if (selectedDuongBay == null) {
+            alert.errorMessage("Không chọn đường bay nào. Vui lòng chọn một đường bay để sửa.");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/SuaDuongBay.fxml"));
+            Parent root = loader.load();
+            SuaDuongBayController suaDuongBayController = loader.getController();
+            suaDuongBayController.setDuongBay(selectedDuongBay);  // Pass the selected ticket class to SuaHangVeController
+            suaDuongBayController.setParentController(this);  // Pass the instance of QuyDinhController
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Sửa Đường Bay");
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void changeDuongBayStatus (ActionEvent e){
+        ObservableList<DuongBay> selectedDuongBay = duongBay_tbv.getSelectionModel().getSelectedItems();
+
+        if (selectedDuongBay.isEmpty()) {
+            alert.errorMessage("Không chọn đường bay nào. Vui lòng chọn ít nhất một đường bay.");
+            return;
+        }
+
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Xác nhận cập nhật trạng thái");
+        confirmationAlert.setHeaderText("Bạn có muốn thay đổi trạng thái của các đường bay đã chọn?");
+        confirmationAlert.setContentText("Hành động này sẽ thay đổi trạng thái của đường bay từ 'Ngưng hoạt động' sang 'Đang hoạt động' và ngược lại.");
+
+        Optional<ButtonType> result = confirmationAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                connect = DatabaseDriver.getConnection();
+                prepare = connect.prepareStatement("UPDATE DUONGBAY SET TrangThai = ? WHERE MaDuongBay = ?");
+
+                for (DuongBay duongBay : selectedDuongBay) {
+                    int newStatus = duongBay.getTrangThai() == 0 ? 1 : 0;
+                    prepare.setInt(1, newStatus);
+                    prepare.setString(2, duongBay.getMaDuongBay());
+                    prepare.addBatch();
+                }
+
+                int[] results = prepare.executeBatch();
+                if (results.length > 0) {
+                    alert.successMessage("Trạng thái đường bay đã được cập nhật thành công.");
+                } else {
+                    alert.errorMessage("Không cập nhật được trạng thái đường bay đã chọn.");
+                }
+
+                loadDuongBayData();  // Refresh the table
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                alert.errorMessage("Lỗi khi đang cập nhật trạng thái đường bay. Vui lòng kiểm tra lại.");
+            } finally {
+                try {
+                    if (prepare != null) prepare.close();
+                    if (connect != null) connect.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
 }
