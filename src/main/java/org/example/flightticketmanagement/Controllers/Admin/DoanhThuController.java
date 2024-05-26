@@ -95,7 +95,7 @@ public class DoanhThuController implements Initializable {
                 listBaoCaoNam.clear();
                 while (result.next()) {
                     BigDecimal doanhThu = result.getBigDecimal("DoanhThu");
-                    Double tyLe = (doanhThu.divide(tongDoanhThuNam, 2, RoundingMode.HALF_UP).doubleValue()) * 100;
+                    Double tyLe = doanhThu.divide(tongDoanhThuNam, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.HALF_UP).doubleValue();
                     BaoCaoNam baoCaoNam = new BaoCaoNam(
                             result.getInt("Thang"),
                             result.getInt("SoChuyenBay"),
@@ -120,12 +120,8 @@ public class DoanhThuController implements Initializable {
     }
 
     public void DTNam_LoadTongDT() {
-        if (dtThang_cbbox_namSelection.getSelectionModel().isEmpty()) {
+        if (dtNam_cbbox_namSelection.getSelectionModel().isEmpty()) {
             alert.errorMessage("Vui lòng chọn năm cần thống kê");
-            return;
-        }
-        if (dtThang_cbbox_thangSelection.getSelectionModel().isEmpty()) {
-            alert.errorMessage("Vui lòng chọn tháng cần thống kê");
             return;
         }
 
@@ -146,7 +142,7 @@ public class DoanhThuController implements Initializable {
                 "    m.Thang";
 
         try (PreparedStatement prepare = connect.prepareStatement(query)) {
-            prepare.setInt(1, DTT_namBaoCao);
+            prepare.setInt(1, DTN_namBaoCao);
             try (ResultSet result = prepare.executeQuery()) {
                 tongDoanhThuNam = BigDecimal.valueOf(0.0);
                 while (result.next()) {
@@ -225,7 +221,7 @@ public class DoanhThuController implements Initializable {
                 int stt = 1;
                 while (result.next()) {
                     BigDecimal doanhThu = result.getBigDecimal("DoanhThu");
-                    Double tyLe = (doanhThu.divide(tongDoanhThuThang, 2, RoundingMode.HALF_UP).doubleValue()) * 100;
+                    Double tyLe = doanhThu.divide(tongDoanhThuThang, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.HALF_UP).doubleValue();;
                     BaoCaoThang baoCaoThang = new BaoCaoThang(
                             stt,
                             result.getString("MaChuyenBay"),
