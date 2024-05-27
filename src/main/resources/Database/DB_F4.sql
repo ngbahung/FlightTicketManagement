@@ -113,7 +113,7 @@ CREATE TABLE CHUYENBAY (
     MaDuongBay VARCHAR2(10) NOT null ,     
     TGXP TIMESTAMP,
     TGKT TIMESTAMP,
-    TrangThai VARCHAR2(50),
+    TrangThai number,
     GiaVe NUMBER(10,2),
     CONSTRAINT PK_CHUYENBAY PRIMARY KEY (MaChuyenBay)
 );
