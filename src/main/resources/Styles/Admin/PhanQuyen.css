@@ -21,6 +21,7 @@
     -fx-text-fill: #ffffff;
     -fx-font-weight: bold;
     -fx-background-radius: 10;
+    -fx-cursor: hand;
 }
 
 .mfx-button .mfx-ripple-generator {
@@ -62,6 +63,7 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-background-radius: 10;
+    -fx-cursor: hand;
 }
 
 /* Button Xóa */
@@ -72,6 +74,7 @@
     -fx-font-weight: bold;
     -fx-background-radius: 10;
     -fx-border-color: #080C53;
+    -fx-cursor: hand;
 }
 
 /* Button Sửa */
@@ -81,6 +84,20 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-background-radius: 10;
+    -fx-cursor: hand;
 }
+
+/* Xác nhận vé */
+#custom_xacnhanve {
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
+}
+
+#custom_thongtin {
+    -fx-font-weight: bold;
+    -fx-font-style: italic;
+    -fx-font-size: 14px;
+}
+
 
 

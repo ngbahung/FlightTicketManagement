@@ -5,6 +5,7 @@
 <?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
 <?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -19,7 +20,7 @@
          <FontAwesomeIconView fill="WHITE" glyphName="EDIT" size="20" />
       </graphic>
    </MFXButton>
-   <GridPane alignment="CENTER" hgap="6.0" layoutX="153.0" layoutY="174.0" prefHeight="292.0" prefWidth="751.0" vgap="15.0">
+   <GridPane alignment="CENTER" hgap="6.0" layoutX="326.0" layoutY="117.0" prefHeight="350.0" prefWidth="531.0" styleClass="grid-pane" vgap="15.0" AnchorPane.rightAnchor="135.0">
       <columnConstraints>
          <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="261.0" minWidth="10.0" prefWidth="161.0" />
          <ColumnConstraints hgrow="SOMETIMES" maxWidth="360.0" minWidth="10.0" prefWidth="243.0" />
@@ -47,6 +48,9 @@
       <MFXTextField id="custom" fx:id="sdt_txtfld" floatMode="DISABLED" prefHeight="29.0" prefWidth="290.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <MFXTextField id="custom" fx:id="email_txtfld" floatMode="DISABLED" prefHeight="29.0" prefWidth="293.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       <MFXTextField id="custom" fx:id="vaitro_txtfld" floatMode="DISABLED" prefHeight="29.0" prefWidth="290.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+      <padding>
+         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+      </padding>
    </GridPane>
    <Label fx:id="info_lbl" layoutX="483.0" layoutY="125.0" />
    <MFXButton id="custom_sua" fx:id="luu_btn" graphicTextGap="10.0" layoutX="671.0" layoutY="515.0" prefHeight="41.0" prefWidth="108.0" text="Lưu">

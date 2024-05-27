@@ -152,8 +152,7 @@ public class LichSuDatVeController implements Initializable {
             // Xóa hết các lựa chọn và đặt lại giá trị mặc định
             sanbaydi_menubtn.setText("Sân bay đi");
             sanbayden_menubtn.setText("Sân bay đến");
-            ngay_datepicker.setValue(LocalDate.now());
-            // Load lại dữ liệu
+            ngay_datepicker.setValue(null);
             try {
                 loadData(null);
             } catch (SQLException e) {
@@ -163,7 +162,7 @@ public class LichSuDatVeController implements Initializable {
 
         sanbaydi_menubtn.setOnShowing(event -> updateSanBayMenuItems());
         sanbayden_menubtn.setOnShowing(event -> updateSanBayMenuItems());
-        ngay_datepicker.setValue(LocalDate.now());
+
         // Add listener to enable/disable thanhToan_btn based on selection in phDC_tbview
         phDC_tbview.getSelectionModel().selectedItemProperty().addListener(
                 (ObservableValue<? extends CT_DatVe> observable, CT_DatVe oldValue, CT_DatVe newValue) -> {
@@ -386,7 +385,7 @@ public class LichSuDatVeController implements Initializable {
     }
 
     private void search() {
-        LocalDateTime selectedDate = ngay_datepicker.getValue().atStartOfDay();
+        LocalDateTime selectedDate = ngay_datepicker.getValue() != null ? ngay_datepicker.getValue().atStartOfDay() : null;
         String sanBayDi = sanbaydi_menubtn.getText();
         String sanBayDen = sanbayden_menubtn.getText();
 
@@ -395,7 +394,6 @@ public class LichSuDatVeController implements Initializable {
 
         String baseQuery = "SELECT * FROM CT_DATVE WHERE TrangThai = ?";
         StringBuilder conditions = new StringBuilder();
-        int parameterIndex = 2; // Initialize parameter index
 
         // Build conditions based on user input
         if (selectedDate != null) {
@@ -403,17 +401,14 @@ public class LichSuDatVeController implements Initializable {
                     .append("    SELECT V.MaVe ")
                     .append("    FROM Ve V ")
                     .append("    JOIN ChuyenBay CB ON V.MaChuyenBay = CB.MaChuyenBay ")
-                    .append("    WHERE TRUNC(CB.TGXP) = ?") // Simplified date comparison
+                    .append("    WHERE TRUNC(CB.TGXP) = ?")
                     .append(")");
-            parameterIndex++; // Increment parameter index
         }
-        if (!sanBayDi.equals("Sân bay đi")) {
+        if (!"Sân bay đi".equals(sanBayDi)) {
             conditions.append(" AND MaVe IN (SELECT V.MaVe FROM Ve V JOIN ChuyenBay CB ON V.MaChuyenBay = CB.MaChuyenBay JOIN DuongBay DB ON CB.MaDuongBay = DB.MaDuongBay JOIN SanBay SBDi ON DB.MaSanBayDi = SBDi.MaSanBay WHERE SBDi.TenSanBay = ?)");
-            parameterIndex++; // Increment parameter index
         }
-        if (!sanBayDen.equals("Sân bay đến")) {
+        if (!"Sân bay đến".equals(sanBayDen)) {
             conditions.append(" AND MaVe IN (SELECT V.MaVe FROM Ve V JOIN ChuyenBay CB ON V.MaChuyenBay = CB.MaChuyenBay JOIN DuongBay DB ON CB.MaDuongBay = DB.MaDuongBay JOIN SanBay SBDen ON DB.MaSanBayDen = SBDen.MaSanBay WHERE SBDen.TenSanBay = ?)");
-            parameterIndex++; // Increment parameter index
         }
 
         String queryVeDaDat = baseQuery + conditions.toString();
@@ -436,10 +431,10 @@ public class LichSuDatVeController implements Initializable {
             if (selectedDate != null) {
                 prepare.setTimestamp(paramIndex++, Timestamp.valueOf(selectedDate));
             }
-            if (!sanBayDi.equals("Sân bay đi")) {
+            if (!"Sân bay đi".equals(sanBayDi)) {
                 prepare.setString(paramIndex++, sanBayDi);
             }
-            if (!sanBayDen.equals("Sân bay đến")) {
+            if (!"Sân bay đến".equals(sanBayDen)) {
                 prepare.setString(paramIndex++, sanBayDen);
             }
 
@@ -465,6 +460,7 @@ public class LichSuDatVeController implements Initializable {
             }
         }
     }
+
 
     private void updateSanBayMenuItems() {
         // Clear the current items in the menu
@@ -528,17 +524,76 @@ public class LichSuDatVeController implements Initializable {
         boolean confirm = alert.confirmationMessage(message);
         if (confirm) {
             try {
-                String updateQuery = "UPDATE CT_DATVE SET TrangThai = 2 WHERE MaCT_DATVE = ?";
-                try (PreparedStatement prepare = connect.prepareStatement(updateQuery)) {
-                    prepare.setString(1, selected.getMaCT_DatVe());
-                    prepare.executeUpdate();
+                String maCTDatVe = selected.getMaCT_DatVe();
+
+                String selectQuery;
+                selectQuery = "SELECT V.MaChuyenBay, V.MaHangVe, V.MaGhe, V.GiaTien " +
+                            "FROM CT_DATVE CT " +
+                            "JOIN VE V ON CT.MaVe = V.MaVe " +
+                            "WHERE CT.MaCT_DATVE = ?";
+
+                String maChuyenBay = null, maHangVe = null;
+                int maGhe = 0;
+                float giaTien = 0;
+
+                try (PreparedStatement selectStmt = connect.prepareStatement(selectQuery)) {
+                    selectStmt.setString(1, maCTDatVe);
+                    ResultSet rs = selectStmt.executeQuery();
+                    if (rs.next()) {
+                        maChuyenBay = rs.getString("MaChuyenBay");
+                        maHangVe = rs.getString("MaHangVe");
+                        maGhe = rs.getInt("MaGhe");
+                        giaTien = rs.getFloat("GiaTien");
+                    }
                 }
-                loadData(null); // Load lại dữ liệu
+
+                // Tạo câu truy vấn để cập nhật trạng thái của CT_DATVE hoặc CT_DAT_CHO
+                String updateCTQuery;
+                updateCTQuery = "UPDATE CT_DATVE SET TrangThai = 2 WHERE MaCT_DATVE = ?";
+
+
+                try (PreparedStatement updateCTStmt = connect.prepareStatement(updateCTQuery)) {
+                    updateCTStmt.setString(1, maCTDatVe);
+                    updateCTStmt.executeUpdate();
+                }
+
+                // Tạo mã vé mới
+                String maVe = generateNewMaVe();
+
+                // Tạo câu truy vấn để chèn dữ liệu vào bảng VE
+                String insertQuery = "INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES (?, ?, ?, ?, ?)";
+                try (PreparedStatement insertStmt = connect.prepareStatement(insertQuery)) {
+                    insertStmt.setString(1, maVe);
+                    insertStmt.setString(2, maChuyenBay);
+                    insertStmt.setString(3, maHangVe);
+                    insertStmt.setInt(4, maGhe);
+                    insertStmt.setFloat(5, giaTien);
+                    insertStmt.executeUpdate();
+                }
+
+                loadData(null); // Reload the data
             } catch (SQLException e) {
                 alert.errorMessage("Không thể hủy vé hoặc phiếu đặt chỗ.");
             }
         }
     }
+
+    private String generateNewMaVe() {
+        String sql = "SELECT MAX(MaVe) AS MaxMaVe FROM VE";
+        try (PreparedStatement ps = connect.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                String maxMaVe = rs.getString("MaxMaVe");
+                if (maxMaVe != null) {
+                    int newMaVeNumber = Integer.parseInt(maxMaVe.substring(2)) + 1;
+                    return String.format("VE%03d", newMaVeNumber);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "VE001";
+    }
+
 
     private void handleThanhToan() {
         CT_DatVe selectedVe = phDC_tbview.getSelectionModel().getSelectedItem();

@@ -174,7 +174,7 @@ public class ManHinhDatVeController implements Initializable {
                 "FROM VE \n" +
                 "LEFT JOIN CT_DATVE ON VE.MAVE = CT_DATVE.MAVE \n" +
                 "WHERE VE.MACHUYENBAY = ? \n" +
-                "AND (CT_DATVE.TRANGTHAI NOT IN (0, 1) OR CT_DATVE.MAVE IS NULL)";
+                "AND (CT_DATVE.TRANGTHAI NOT IN (0, 1, 2) OR CT_DATVE.TRANGTHAI IS NULL)";
 
         try (PreparedStatement ps = connect.prepareStatement(sql)) {
             ps.setString(1, maChuyenBay);
@@ -202,9 +202,8 @@ public class ManHinhDatVeController implements Initializable {
     }
 
     private String getTenHangVe(String maHangVe) {
-        String sql = "SELECT HV.TENHANGVE FROM VE V " +
-                "JOIN HANGVE HV ON HV.MAHANGVE = V.MAHANGVE " +
-                "WHERE V.MAHANGVE = ?";
+        String sql = "SELECT HV.TENHANGVE FROM HANGVE HV " +
+                "WHERE HV.MAHANGVE = ?";
         try (Connection conn = DatabaseDriver.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, maHangVe);
@@ -294,6 +293,7 @@ public class ManHinhDatVeController implements Initializable {
                 stage.setTitle("Xác nhận thông tin");
                 stage.setOnHidden(event -> reloadFlightDetails()); // Reload flight details after closing
                 stage.showAndWait();
+                stage.close();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -304,5 +304,10 @@ public class ManHinhDatVeController implements Initializable {
         // Reload the data for the flight details and ticket list
         String maChuyenBay = maCB_txtfld.getText();
         loadVeForFlight(maChuyenBay);
+    }
+
+    private void closeStage() {
+        Stage stage = (Stage) xemTruoc_btn.getScene().getWindow();
+        stage.close();
     }
 }

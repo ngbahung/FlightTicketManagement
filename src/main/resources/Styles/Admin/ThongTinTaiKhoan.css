@@ -47,3 +47,10 @@
     -fx-font-weight: bold;
     -fx-background-radius: 10;
 }
+
+.grid-pane {
+    -fx-border-radius: 10;
+    -fx-border-color: #080C53;
+    -fx-border-width: 2;
+    -fx-font-weight: bold;
+}

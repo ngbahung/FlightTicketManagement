@@ -18,11 +18,10 @@ import org.example.flightticketmanagement.Models.DatabaseDriver;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
+import java.sql.Date;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 public class TraCuuBanVeController implements Initializable {
     @FXML
@@ -230,49 +229,32 @@ public class TraCuuBanVeController implements Initializable {
 
 
     private Integer getSoGheTrong(String maChuyenBay) {
-        String totalSeatsQuery = "SELECT COUNT(*) AS TotalSeats FROM VE WHERE MaChuyenBay = ?";
-        String bookedSeatsQuery = "SELECT COUNT(*) AS BookedSeats " +
-                "FROM VE v " +
-                "JOIN CT_DATVE ct ON v.MaVe = ct.MaVe " +
-                "WHERE v.MaChuyenBay = ? AND ct.TrangThai IN (0, 1)";
-
-        int totalSeats = 0;
-        int bookedSeats = 0;
-
+        String sql = "SELECT COUNT(VE.MAVE) AS SoGheTrong " +
+                "FROM VE " +
+                "LEFT JOIN CT_DATVE ON VE.MAVE = CT_DATVE.MAVE " +
+                "WHERE VE.MACHUYENBAY = ? " +
+                "AND (CT_DATVE.TRANGTHAI NOT IN (0, 1, 2) OR CT_DATVE.TRANGTHAI IS NULL)";
         try (Connection conn = DatabaseDriver.getConnection();
-             PreparedStatement psTotal = conn.prepareStatement(totalSeatsQuery);
-             PreparedStatement psBooked = conn.prepareStatement(bookedSeatsQuery)) {
-
-            // Get total seats
-            psTotal.setString(1, maChuyenBay);
-            try (ResultSet rsTotal = psTotal.executeQuery()) {
-                if (rsTotal.next()) {
-                    totalSeats = rsTotal.getInt("TotalSeats");
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, maChuyenBay);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("SoGheTrong");
                 }
             }
-
-            // Get booked seats
-            psBooked.setString(1, maChuyenBay);
-            try (ResultSet rsBooked = psBooked.executeQuery()) {
-                if (rsBooked.next()) {
-                    bookedSeats = rsBooked.getInt("BookedSeats");
-                }
-            }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        // Calculate available seats
-        return totalSeats - bookedSeats;
+        return 0;
     }
 
 
     private Integer getSoGhe(String maChuyenBay) {
-        String sql = "SELECT COUNT(v.MaVe) AS SoGhe " +
-                "FROM VE v " +
-                "WHERE v.MaChuyenBay = ? " +
-                "GROUP BY v.MaChuyenBay";
+        String sql = "SELECT COUNT(VE.MAVE) AS SoGhe " +
+                "FROM VE " +
+                "LEFT JOIN CT_DATVE ON VE.MAVE = CT_DATVE.MAVE " +
+                "WHERE VE.MACHUYENBAY = ? " +
+                "AND (CT_DATVE.TRANGTHAI IN (0, 1) OR CT_DATVE.TRANGTHAI IS NULL)";
         try (Connection conn = DatabaseDriver.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, maChuyenBay);
@@ -286,6 +268,7 @@ public class TraCuuBanVeController implements Initializable {
         }
         return 0; // Placeholder if not found
     }
+
 
     private void handleSanBayDiMenuButtonClick(MouseEvent event) {
         sanbaydi_menubtn.getItems().clear();
@@ -314,18 +297,69 @@ public class TraCuuBanVeController implements Initializable {
 
 
     private void handleSearch(ActionEvent event) {
+        // Lấy giá trị từ các thành phần giao diện
         String sanBayDi = sanbaydi_menubtn.getText().trim();
         String sanBayDen = sanbayden_menubtn.getText().trim();
         LocalDate ngayBay = ngay_datepicker.getValue();
 
-        if (!sanBayDi.equals("Chọn sân bay đi") || !sanBayDen.equals("Chọn sân bay đến") || ngayBay != null) {
-            loadData(
-                    sanBayDi.equals("Chọn sân bay đi") ? null : sanBayDi,
-                    sanBayDen.equals("Chọn sân bay đến") ? null : sanBayDen,
-                    ngayBay
-            );
-        } else {
+        // Kiểm tra nếu không có tiêu chí nào được chọn
+        if ("Chọn sân bay đi".equals(sanBayDi) && "Chọn sân bay đến".equals(sanBayDen) && ngayBay == null) {
             alert.errorMessage("Vui lòng chọn ít nhất một tiêu chí để tìm kiếm.");
+            return;
+        }
+
+        // Xóa dữ liệu cũ trong bảng
+        chuyenBay_tableview.getItems().clear();
+
+        // Tạo câu truy vấn cơ bản
+        StringBuilder query = new StringBuilder("SELECT * FROM CHUYENBAY WHERE 1=1");
+        List<Object> parameters = new ArrayList<>();
+
+        // Thêm điều kiện vào câu truy vấn dựa trên các tiêu chí
+        if (!"Chọn sân bay đi".equals(sanBayDi)) {
+            query.append(" AND MaDuongBay IN (SELECT MaDuongBay FROM DUONGBAY WHERE MaSanBayDi = (SELECT MaSanBay FROM SANBAY WHERE UPPER(TenSanBay) LIKE ?))");
+            parameters.add(sanBayDi.toUpperCase());
+        }
+        if (!"Chọn sân bay đến".equals(sanBayDen)) {
+            query.append(" AND MaDuongBay IN (SELECT MaDuongBay FROM DUONGBAY WHERE MaSanBayDen = (SELECT MaSanBay FROM SANBAY WHERE UPPER(TenSanBay) LIKE ?))");
+            parameters.add(sanBayDen.toUpperCase());
+        }
+        if (ngayBay != null) {
+            query.append(" AND TRUNC(TGXP) = ?");
+            parameters.add(Date.valueOf(ngayBay));
+        }
+
+        // Thực thi truy vấn và hiển thị kết quả
+        try (PreparedStatement prepare = connect.prepareStatement(query.toString())) {
+            for (int i = 0; i < parameters.size(); i++) {
+                prepare.setObject(i + 1, parameters.get(i));
+            }
+
+            try (ResultSet result = prepare.executeQuery()) {
+                while (result.next()) {
+                    ChuyenBay chuyenBay = new ChuyenBay(
+                            result.getString("MaChuyenBay"),
+                            result.getString("MaDuongBay"),
+                            result.getTimestamp("TGXP").toLocalDateTime(),
+                            result.getTimestamp("TGKT").toLocalDateTime(),
+                            result.getString("TrangThai"),
+                            result.getFloat("GiaVe")
+                    );
+                    chuyenBay_tableview.getItems().add(chuyenBay);
+                }
+
+                maChuyenBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMaChuyenBay()));
+                sanBayDi_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSanBayDi(cellData.getValue().getMaDuongBay())));
+                sanBayDen_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSanBayDen(cellData.getValue().getMaDuongBay())));
+                ngayBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getThoiGianXuatPhat().toLocalDate().toString()));
+                gioBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getThoiGianXuatPhat().toLocalTime().toString()));
+                soGheTrong_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGheTrong(cellData.getValue().getMaChuyenBay()).toString()));
+                soGhe_tbcoumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGhe(cellData.getValue().getMaChuyenBay()).toString()));
+                giaVe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getGiaVe())));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Error occurred while loading data from the database.");
         }
     }
 

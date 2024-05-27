@@ -11,10 +11,7 @@ import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -215,9 +212,8 @@ public class XacNhanVeController implements Initializable {
 
         // Get current timestamp for NgayMuaVe and NgayThanhToan
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String ngayMuaVe = now.format(formatter);
-        String ngayThanhToan = isDatVe ? now.format(formatter) : null;  // Set to current time if isDatVe, otherwise null
+        Timestamp ngayMuaVe = Timestamp.valueOf(now);
+        Timestamp ngayThanhToan = isDatVe ? Timestamp.valueOf(now) : null;  // Set to current time if isDatVe, otherwise null
 
         try {
             // Insert customer into KHACHHANG table if not exists
@@ -242,16 +238,16 @@ public class XacNhanVeController implements Initializable {
 
             // Insert booking into CT_DATVE table
             String insertBookingSql = "INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) " +
-                    "VALUES (?, ?, ?, TO_TIMESTAMP(?, 'YYYY-MM-DD HH24:MI:SS'), ?, ?)";
+                    "VALUES (?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps = connect.prepareStatement(insertBookingSql)) {
                 ps.setString(1, maCT_DATVE);
                 ps.setString(2, maVe);
                 ps.setString(3, maKH);
-                ps.setString(4, ngayMuaVe);
+                ps.setTimestamp(4, ngayMuaVe);
                 if (ngayThanhToan == null) {
                     ps.setNull(5, java.sql.Types.TIMESTAMP);
                 } else {
-                    ps.setString(5, ngayThanhToan);
+                    ps.setTimestamp(5, ngayThanhToan);
                 }
                 ps.setInt(6, isDatVe ? 1 : 0); // 1 for datVe, 0 for datCho
                 ps.executeUpdate();

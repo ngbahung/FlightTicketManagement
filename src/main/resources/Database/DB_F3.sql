@@ -102,6 +102,7 @@ CREATE TABLE DUONGBAY (
     MaSanBayDen VARCHAR2(10) NOT NULL,   
     TenDuongBay VARCHAR2(30) NOT NULL,
     DoDaiDuongBay NUMBER,
+    TrangThai VARCHAR2(20),  -- Thêm cột trạng thái để chạy quy định
     CONSTRAINT PK_DUONGBAY PRIMARY KEY (MaDuongBay)
 );
 
