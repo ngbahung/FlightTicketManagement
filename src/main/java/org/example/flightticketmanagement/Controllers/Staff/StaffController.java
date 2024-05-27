@@ -15,7 +15,8 @@ public class StaffController implements Initializable {
         Model.getInstance().getViewFactory().getStaffSelectedMenuItem().addListener((observableValue, oldVal, newVal)-> {
             switch (newVal){
                 case BANVE -> staff_parent.setCenter(Model.getInstance().getViewFactory().getBanVeView());
-                case DATCHO -> staff_parent.setCenter(Model.getInstance().getViewFactory().getDatChoView());
+                case LICHSU -> staff_parent.setCenter(Model.getInstance().getViewFactory().getLichSuView());
+                case TAIKHOAN -> staff_parent.setCenter(Model.getInstance().getViewFactory().getTaiKhoanView());
                 default -> staff_parent.setCenter(Model.getInstance().getViewFactory().getLichCBStaView());
             }
         });

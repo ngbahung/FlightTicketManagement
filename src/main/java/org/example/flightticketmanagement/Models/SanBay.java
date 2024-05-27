@@ -6,13 +6,15 @@ public class SanBay {
     private String tenVietTat;
     private String diaChi;
     private Integer trangThai;
+    private Integer soThuTu;
 
-    public SanBay(String maSanBay, String tenSanBay, String tenVietTat, String diaChi, Integer trangThai) {
+    public SanBay(String maSanBay, String tenSanBay, String tenVietTat, String diaChi, Integer trangThai, Integer soThuTu) {
         this.maSanBay = maSanBay;
         this.tenSanBay = tenSanBay;
         this.tenVietTat = tenVietTat;
         this.diaChi = diaChi;
         this.trangThai = trangThai;
+        this.soThuTu = soThuTu;
     }
 
     public String getMaSanBay() {
@@ -53,5 +55,13 @@ public class SanBay {
 
     public void setTrangThai(Integer trangThai) {
         this.trangThai = trangThai;
+    }
+
+    public Integer getSoThuTu() {
+        return soThuTu;
+    }
+
+    public void setSoThuTu(Integer soThuTu) {
+        this.soThuTu = soThuTu;
     }
 }

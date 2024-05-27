@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
+<?import java.lang.String?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.LichSuDatVeController">
+   <AnchorPane layoutX="78.0" layoutY="25.0" prefHeight="75.0" prefWidth="689.0" styleClass="filter-pane">
+      <effect>
+         <DropShadow />
+      </effect>
+      <HBox alignment="CENTER" layoutX="32.0" layoutY="14.0" prefHeight="47.0" prefWidth="665.0" spacing="10.0">
+         <MenuButton fx:id="sanbaydi_menubtn" mnemonicParsing="false" prefHeight="39.0" prefWidth="183.0" text="Sân bay đi">
+            <items>
+               <MenuItem mnemonicParsing="false" text="Action 1" />
+               <MenuItem mnemonicParsing="false" text="Action 2" />
+            </items>
+            <styleClass>
+               <String fx:value="custom-menubutton" />
+               <String fx:value="arrow" />
+            </styleClass>
+         </MenuButton>
+         <MenuButton fx:id="sanbayden_menubtn" mnemonicParsing="false" prefHeight="41.0" prefWidth="195.0" text="Sân bay đến">
+            <items>
+               <MenuItem mnemonicParsing="false" text="Action 1" />
+               <MenuItem mnemonicParsing="false" text="Action 2" />
+            </items>
+            <styleClass>
+               <String fx:value="custom-menubutton" />
+               <String fx:value="arrow" />
+            </styleClass>
+         </MenuButton>
+         <MFXDatePicker fx:id="ngay_datepicker" prefHeight="43.0" prefWidth="186.0" promptText="Chọn ngày">
+            <font>
+               <Font name="System Bold" size="13.0" />
+            </font></MFXDatePicker>
+         <MFXButton id="custom_2" fx:id="timkiem_btn" prefHeight="30.0" prefWidth="53.0" text=" ">
+            <graphic>
+               <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20" />
+            </graphic>
+         </MFXButton>
+      </HBox>
+   </AnchorPane>
+   <VBox layoutX="5.0" layoutY="121.0" prefHeight="319.0" prefWidth="986.0">
+      <AnchorPane prefHeight="40.0" prefWidth="458.0">
+         <Text id="custom" layoutX="408.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="table-text" text="VÉ ĐÃ ĐẶT" />
+         <styleClass>
+            <String fx:value="table-label" />
+            <String fx:value="custom-tableview" />
+            <String fx:value="column-header-background" />
+            <String fx:value="column-header" />
+            <String fx:value="filler" />
+            <String fx:value="table-row-cell" />
+            <String fx:value="table-cell" />
+            <String fx:value="resize-line" />
+         </styleClass>
+      </AnchorPane>
+      <TableView fx:id="veDaDat_tbview" prefHeight="268.0" prefWidth="954.0">
+         <columns>
+            <TableColumn fx:id="veDD_maVe_tbcl" prefWidth="81.0" text="Mã vé" />
+            <TableColumn fx:id="veDD_sanBayDi_tbcl" prefWidth="88.0" text="Sân bay đi" />
+            <TableColumn fx:id="veDD_sanBayDen_tbcl" prefWidth="89.0" text="Sân bay đến" />
+            <TableColumn fx:id="veDD_ngayBay_tbcl" prefWidth="102.0" text="Ngày bay" />
+            <TableColumn fx:id="veDD_gioBay_tbcl" prefWidth="72.0" text="Giờ bay" />
+            <TableColumn fx:id="veDD_tenKH_tbcl" prefWidth="121.0" text="Tên khách hàng" />
+            <TableColumn fx:id="veDD_sdt_tbcl" prefWidth="107.0" text="Số điện thoại" />
+            <TableColumn fx:id="veDD_maGhe_tbcl" prefWidth="62.0" text="Mã ghế" />
+            <TableColumn fx:id="veDD_hangVe_tbcl" prefWidth="122.0" text="Hạng vé" />
+            <TableColumn fx:id="veDD_giaTien_tbcl" prefWidth="132.0" text="Giá tiền" />
+         </columns>
+         <styleClass>
+            <String fx:value="column-header" />
+            <String fx:value="column-header-background" />
+            <String fx:value="custom-tableview" />
+            <String fx:value="filler" />
+            <String fx:value="resize-line" />
+            <String fx:value="table-cell" />
+            <String fx:value="table-row-cell" />
+         </styleClass>
+      </TableView>
+   </VBox>
+   <Separator layoutX="38.0" layoutY="454.0" prefHeight="0.0" prefWidth="916.0" />
+   <VBox layoutY="457.0" prefHeight="319.0" prefWidth="992.0">
+      <AnchorPane prefHeight="40.0" prefWidth="458.0">
+         <Text id="custom" layoutX="408.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="table-text" text="PHIẾU ĐẶT CHỖ" />
+         <MFXButton id="custom_2" fx:id="thanhToan_btn" layoutX="767.0" layoutY="1.0" prefHeight="30.0" prefWidth="144.0" text="Thanh toán">
+            <graphic>
+               <FontAwesomeIconView fill="WHITE" glyphName="MONEY" size="20" />
+            </graphic>
+         </MFXButton>
+         <styleClass>
+            <String fx:value="table-label" />
+            <String fx:value="custom-tableview" />
+            <String fx:value="column-header-background" />
+            <String fx:value="column-header" />
+            <String fx:value="filler" />
+            <String fx:value="table-row-cell" />
+            <String fx:value="table-cell" />
+            <String fx:value="resize-line" />
+         </styleClass>
+      </AnchorPane>
+      <TableView fx:id="phDC_tbview" prefHeight="282.0" prefWidth="916.0">
+         <columns>
+            <TableColumn fx:id="phDC_maVe_tbcl" prefWidth="81.0" text="Mã vé" />
+            <TableColumn fx:id="phDC_sanBayDi_tbcl" prefWidth="88.0" text="Sân bay đi" />
+            <TableColumn fx:id="phDC_sanBayDen_tbcl" prefWidth="89.0" text="Sân bay đến" />
+            <TableColumn fx:id="phDC_ngayBay_tbcl" prefWidth="102.0" text="Ngày bay" />
+            <TableColumn fx:id="phDC_gioBay_tbcl" prefWidth="72.0" text="Giờ bay" />
+            <TableColumn fx:id="phDC_tenKH_tbcl" prefWidth="121.0" text="Tên khách hàng" />
+            <TableColumn fx:id="phDC_sdt_tbcl" prefWidth="107.0" text="Số điện thoại" />
+            <TableColumn fx:id="phDC_maGhe_tbcl" prefWidth="62.0" text="Mã ghế" />
+            <TableColumn fx:id="phDC_hangVe_tbcl" text="Hạng vé" />
+            <TableColumn fx:id="phDC_giaTien_tbcl" prefWidth="126.0" text="Giá tiền" />
+         </columns>
+         <styleClass>
+            <String fx:value="column-header" />
+            <String fx:value="column-header-background" />
+            <String fx:value="custom-tableview" />
+            <String fx:value="filler" />
+            <String fx:value="resize-line" />
+            <String fx:value="table-cell" />
+            <String fx:value="table-row-cell" />
+         </styleClass>
+      </TableView>
+   </VBox>
+   <MFXButton id="custom_1" fx:id="huyVeorDatCho_btn" graphicTextGap="15.0" layoutX="791.0" layoutY="52.0" prefHeight="38.0" prefWidth="177.0" text="Hủy vé/đặt chỗ" textFill="RED">
+      <graphic>
+         <FontAwesomeIconView fill="RED" glyphName="EXCLAMATION_TRIANGLE" size="20" />
+      </graphic>
+   </MFXButton>
+   <MFXButton id="custom_2" fx:id="refresh_btn" layoutX="14.0" layoutY="44.0" text=" ">
+      <graphic>
+         <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" size="30" />
+      </graphic>
+   </MFXButton>
+   <MFXButton id="custom_2" layoutX="833.0" layoutY="100.0" prefHeight="41.0" prefWidth="111.0" text="Xuất vé" fx:id="xuatVe_btn">
+      <graphic>
+         <FontAwesomeIconView fill="WHITE" glyphName="TICKET" size="20" />
+      </graphic>
+   </MFXButton>
+</AnchorPane>

@@ -17,7 +17,7 @@ public class AlertMessage {
     }
 
     public void successMessage(String message) {
-        alert = new Alert(Alert.AlertType.INFORMATION);
+        alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Information Message");
         alert.setHeaderText(null);
         alert.setContentText(message);
@@ -26,7 +26,7 @@ public class AlertMessage {
 
     public boolean confirmationMessage(String message) {
 
-        alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Message");
         alert.setHeaderText(null);
         alert.setContentText(message);

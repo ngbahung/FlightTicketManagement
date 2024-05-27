@@ -4,9 +4,9 @@ public class HangVe {
     private String maHangVe;
     private String tenHangVe;
     private Float heSo;
-    private String trangThai;
+    private Integer trangThai;
 
-    public HangVe(String maHangVe, String tenHangVe, Float heSo, String trangThai) {
+    public HangVe(String maHangVe, String tenHangVe, Float heSo, Integer trangThai) {
         this.maHangVe = maHangVe;
         this.tenHangVe = tenHangVe;
         this.heSo = heSo;
@@ -37,11 +37,12 @@ public class HangVe {
         this.heSo = heSo;
     }
 
-    public String getTrangThai() {
+    public Integer getTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(String trangThai) {
+    public void setTrangThai(Integer trangThai) {
         this.trangThai = trangThai;
     }
 }
+

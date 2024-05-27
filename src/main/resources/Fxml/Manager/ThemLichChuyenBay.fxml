@@ -5,14 +5,11 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
 
 <AnchorPane prefHeight="600.0" prefWidth="1000.0" styleClass="background-color" stylesheets="@../../Styles/Manager/ThemChuyenBay.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Fxml.Manager.ThemChuyenBay">
    <children>
@@ -57,21 +54,6 @@
             <Insets left="20.0" right="20.0" />
          </padding>
       </GridPane>
-      <TableView layoutX="148.0" layoutY="378.0" prefHeight="200.0" prefWidth="513.0">
-         <columns>
-            <TableColumn prefWidth="50.0" text="STT" />
-            <TableColumn prefWidth="166.0" text="Sân bay trung gian" />
-            <TableColumn prefWidth="145.3333740234375" text="Thời gian dừng" />
-            <TableColumn prefWidth="144.6666259765625" text="Ghi chú" />
-         </columns>
-      </TableView>
-      <VBox alignment="CENTER" layoutX="693.0" layoutY="378.0" prefHeight="200.0" prefWidth="99.0" spacing="30.0">
-         <children>
-            <MFXButton id="custom" buttonType="RAISED" depthLevel="LEVEL1" prefHeight="38.0" prefWidth="99.0" text="Thêm SBTG" />
-            <MFXButton id="custom" buttonType="RAISED" depthLevel="LEVEL1" layoutX="10.0" layoutY="10.0" prefHeight="38.0" prefWidth="130.0" text="Sửa SBTG" />
-            <MFXButton id="custom" buttonType="RAISED" depthLevel="LEVEL1" layoutX="10.0" layoutY="48.0" prefHeight="38.0" prefWidth="130.0" text="Xóa SBTG" />
-         </children>
-      </VBox>
       <MFXButton id="custom-2" buttonType="RAISED" depthLevel="LEVEL1" layoutX="848.0" layoutY="525.0" prefHeight="41.0" prefWidth="99.0" text="Lưu" />
    </children>
 </AnchorPane>

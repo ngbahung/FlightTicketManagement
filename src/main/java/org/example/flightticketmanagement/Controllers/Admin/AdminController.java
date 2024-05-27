@@ -16,9 +16,10 @@ public class AdminController implements Initializable {
             switch (newVal){
                 case LICHCHUYENBAY -> admin_parent.setCenter(Model.getInstance().getViewFactory().getLichChuyenBayView());
                 case BANVE -> admin_parent.setCenter(Model.getInstance().getViewFactory().getBanVeView());
-                case DATCHO -> admin_parent.setCenter(Model.getInstance().getViewFactory().getDatChoView());
+                case LICHSU -> admin_parent.setCenter(Model.getInstance().getViewFactory().getLichSuView());
                 case DOANHTHU -> admin_parent.setCenter(Model.getInstance().getViewFactory().getDoanhThuView());
                 case SUAQUYDINH -> admin_parent.setCenter(Model.getInstance().getViewFactory().getSuaQuyDinhView());
+                case TAIKHOAN -> admin_parent.setCenter(Model.getInstance().getViewFactory().getTaiKhoanView());
                 default -> admin_parent.setCenter(Model.getInstance().getViewFactory().getPhanQuyenView());
             }
         });

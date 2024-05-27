@@ -1,7 +1,7 @@
 
 .text {
     -fx-font-family: Inter;
-    -fx-font-size: 16;
+    -fx-font-size: 14;
 }
 
 /*Table View*/
@@ -11,6 +11,7 @@
     -fx-border-color: #080C53;
     -fx-border-radius: 10;
     -fx-border-width: 2;
+    -fx-font-size: 14;
 }
 
 /* mfx-button */
@@ -20,6 +21,7 @@
     -fx-text-fill: #ffffff;
     -fx-font-weight: bold;
     -fx-background-radius: 10;
+    -fx-cursor: hand;
 }
 
 .mfx-button .mfx-ripple-generator {
@@ -50,6 +52,10 @@
     -mfx-ripple-color: #00A4BD;
 }
 
+#custom {
+    -fx-font-size: 14;
+}
+
 /* Button Thêm */
 #custom_them {
     -fx-background-color: black;
@@ -57,6 +63,7 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-background-radius: 10;
+    -fx-cursor: hand;
 }
 
 /* Button Xóa */
@@ -67,6 +74,7 @@
     -fx-font-weight: bold;
     -fx-background-radius: 10;
     -fx-border-color: #080C53;
+    -fx-cursor: hand;
 }
 
 /* Button Sửa */
@@ -76,6 +84,20 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-background-radius: 10;
+    -fx-cursor: hand;
 }
+
+/* Xác nhận vé */
+#custom_xacnhanve {
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
+}
+
+#custom_thongtin {
+    -fx-font-weight: bold;
+    -fx-font-style: italic;
+    -fx-font-size: 14px;
+}
+
 
 

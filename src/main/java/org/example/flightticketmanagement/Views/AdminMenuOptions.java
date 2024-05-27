@@ -4,7 +4,8 @@ public enum AdminMenuOptions {
     PHANQUYEN,
     LICHCHUYENBAY,
     BANVE,
-    DATCHO,
+    LICHSU,
     DOANHTHU,
-    SUAQUYDINH
+    SUAQUYDINH,
+    TAIKHOAN
 }

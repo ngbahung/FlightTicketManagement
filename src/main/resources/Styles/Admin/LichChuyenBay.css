@@ -2,12 +2,22 @@
     -fx-font-family: Inter;
 }
 
+#custom {
+    -fx-text-fill: #080C53;
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+}
 .table-view {
     -fx-background-color: white;
     -fx-border-color: #080C53;
     -fx-border-width: 2;
     -fx-border-radius: 10;
-    -fx-font-size: 12;
+    -fx-font-size: 13;
+}
+
+.filter-pane {
+    -fx-background-color: #080C53;
+    -fx-background-radius: 20;
 }
 
 
@@ -16,7 +26,7 @@
     -fx-background-color:  #080C53;
     -fx-text-fill: white;
     -fx-border-radius: 20;
-    -fx-font-size: 16;
+    -fx-font-size: 13;
     -fx-font-family: Inter;
     -fx-background-radius: 20;
 }
@@ -36,4 +46,126 @@
 #custom_2 {
     -fx-background-color: #00A4BD;
     -fx-text-fill: white;
+}
+
+/* Menu button */
+/* styles.css */
+.custom-menubutton {
+    -fx-background-color: linear-gradient(to bottom, #f5f5f5, #e8e8e8);
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #b3b3b3;
+    -fx-border-width: 1;
+    -fx-padding: 5 10;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+
+.custom-menubutton:hover {
+    -fx-background-color: linear-gradient(to bottom, #e8e8e8, #dcdcdc);
+}
+
+.custom-menubutton:focused {
+    -fx-background-color: linear-gradient(to bottom, #e0e0e0, #cfcfcf);
+    -fx-border-color: #6a6a6a;
+}
+
+.custom-menubutton .arrow {
+    -fx-background-color: #333;
+}
+
+.custom-menubutton .arrow:hover {
+    -fx-background-color: #666;
+}
+
+.custom-menubutton .arrow:focused {
+    -fx-background-color: #444;
+}
+
+/* Table view */
+/* tableview-styles.css */
+.custom-tableview {
+    -fx-background-color: #f4f4f4;
+    -fx-border-color: transparent;
+    -fx-table-cell-border-color: transparent;
+    -fx-padding: 10;
+}
+
+.custom-tableview .column-header-background {
+    -fx-background-color: #0078d7;
+}
+
+.custom-tableview .column-header, .custom-tableview .filler {
+    -fx-size: 40;
+    -fx-padding: 0;
+    -fx-border-color: transparent;
+    -fx-background-color: #0078d7;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: center-left;
+}
+
+.custom-tableview .table-row-cell {
+    -fx-background-color: #ffffff;
+    -fx-border-color: transparent;
+    -fx-padding: 5;
+}
+
+.custom-tableview .table-row-cell:even {
+    -fx-background-color: #dbdbdb;
+}
+
+.custom-tableview .table-row-cell:selected {
+    -fx-background-color: #d0e7ff;
+    -fx-text-fill: black;
+}
+
+.custom-tableview .table-cell {
+    -fx-padding: 0;
+    -fx-border-color: transparent;
+    -fx-font-size: 12px;
+}
+
+.custom-tableview .table-cell:selected {
+    -fx-background-color: #00A4BD;
+    -fx-text-fill: black;
+}
+
+.custom-tableview .column-header .label {
+    -fx-text-fill: white;
+}
+
+.custom-tableview .resize-line {
+    -fx-stroke: white;
+}
+
+/* Grid Pane */
+/* Tùy chỉnh GridPane */
+.custom-gridpane {
+    -fx-background-color: #f4f4f4;
+    -fx-padding: 10;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+}
+
+
+/* Tùy chỉnh các label trong GridPane */
+.custom-gridpane .label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-padding: 0;
+}
+
+/* Tùy chỉnh các text field trong GridPane */
+.custom-gridpane .text-field {
+    -fx-font-size: 12px;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-padding: 0;
 }
