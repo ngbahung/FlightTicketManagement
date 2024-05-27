@@ -1,4 +1,4 @@
-﻿ -- Tạo Schema
+ -- Tạo Schema
 
 alter session set "_ORACLE_SCRIPT"=true;
 
@@ -102,6 +102,7 @@ CREATE TABLE DUONGBAY (
     MaSanBayDen VARCHAR2(10) NOT NULL,   
     TenDuongBay VARCHAR2(30) NOT NULL,
     DoDaiDuongBay NUMBER,
+    trangthai NUMBER,
     CONSTRAINT PK_DUONGBAY PRIMARY KEY (MaDuongBay)
 );
 
@@ -696,26 +697,26 @@ VALUES ('SBD007', 'Pleiku', 'PXU', 'Gia Lai', 1);
 
 -- TABLE: DUONGBAY
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay)
-VALUES ('DB001', 'SBD002', 'SBD001', 'HAN-SGN', 1200);
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
+VALUES ('DB001', 'SBD002', 'SBD001', 'HAN-SGN', 1200,1);
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay)
-VALUES ('DB002', 'SBD002', 'SBD003', 'HAN-VCL', 9800);
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
+VALUES ('DB002', 'SBD002', 'SBD003', 'HAN-VCL', 9800,1);
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay)
-VALUES ('DB003', 'SBD003', 'SBD002', 'VCL-HAN', 9800);
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
+VALUES ('DB003', 'SBD003', 'SBD002', 'VCL-HAN', 9800,1);
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay)
-VALUES ('DB004', 'SBD002', 'SBD005','HAN-DAD', 6700);
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
+VALUES ('DB004', 'SBD002', 'SBD005','HAN-DAD', 6700,1);
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay)
-VALUES ('DB005', 'SBD002', 'SBD006','HAN-UIH', 9800);
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
+VALUES ('DB005', 'SBD002', 'SBD006','HAN-UIH', 9800,1);
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay)
-VALUES ('DB006', 'SBD006', 'SBD002', 'UIH-HAN', 9800);
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
+VALUES ('DB006', 'SBD006', 'SBD002', 'UIH-HAN', 9800,1);
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay)
-VALUES ('DB007', 'SBD003', 'SBD004','VCL-PQC', 9800);
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
+VALUES ('DB007', 'SBD003', 'SBD004','VCL-PQC', 9800,1);
 
 
 
