@@ -751,19 +751,11 @@ INSERT INTO HANGVE (MaHangVe, TenHangVe, HeSo, TrangThai)
 VALUES ('HV001', 'Phổ Thông', 1, 1);
 
 INSERT INTO HANGVE (MaHangVe, TenHangVe, HeSo, TrangThai)
-VALUES ('HV002', 'Phòng Đặc Biệt', 1.5, 1);
-
-INSERT INTO HANGVE (MaHangVe, TenHangVe, HeSo, TrangThai)
 VALUES ('HV003', 'Thương Gia', 2.0, 1);
 
 INSERT INTO HANGVE (MaHangVe, TenHangVe, HeSo, TrangThai)
 VALUES ('HV004', 'Hạng Nhất', 2.5,  1);
 
-INSERT INTO HANGVE (MaHangVe, TenHangVe, HeSo, TrangThai)
-VALUES ('HV005', 'Ghế Trẻ Em', 0.5,  1);
-
-INSERT INTO HANGVE (MaHangVe, TenHangVe, HeSo, TrangThai)
-VALUES ('HV006', 'Ghế Phụ', 0.2,  1);
 
 
 
