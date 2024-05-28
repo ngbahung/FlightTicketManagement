@@ -100,15 +100,13 @@ public class ManHinhDatVeController implements Initializable {
         connect = DatabaseDriver.getConnection();
 
         // Thiết lập các cột của TableView
-        mave_tbcl.setCellValueFactory(new PropertyValueFactory<>("maVe"));
-        hangVe_tbcl.setCellValueFactory(new PropertyValueFactory<>("maHangVe"));
-        maGhe_tbcl.setCellValueFactory(new PropertyValueFactory<>("maGhe"));
-        giaTien_tbcl.setCellValueFactory(new PropertyValueFactory<>("giaTien"));
+        hangVe_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenHangVe(cellData.getValue().getMaHangVe())));
+        giaTien_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getGiaTien())));
 
         // Add listener to the table view selection
         ve_tableview.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                showTicketDetails(newValue);
+                generateTicketDetails(newValue);
             }
         });
 
@@ -118,7 +116,12 @@ public class ManHinhDatVeController implements Initializable {
         maVe_txtfld.setEditable(false);
         thanhTien_txtfld.setEditable(false);
 
-        xemTruoc_btn.setOnAction(e -> showConfirmationDialog(true));
+        xemTruoc_btn.setOnAction(e -> {
+            if (validateInputs()) {
+                saveTicketToDatabase();
+                showConfirmationDialog(true);
+            }
+        });
     }
 
     public void setFlightDetails(ChuyenBay flight) {
@@ -170,12 +173,13 @@ public class ManHinhDatVeController implements Initializable {
     }
 
     private void loadVeForFlight(String maChuyenBay) {
-        String sql = "SELECT VE.MAVE, VE.MACHUYENBAY, VE.MAHANGVE, VE.MAGHE, VE.GIATIEN \n" +
-                "FROM VE \n" +
-                "LEFT JOIN CT_DATVE ON VE.MAVE = CT_DATVE.MAVE \n" +
-                "WHERE VE.MACHUYENBAY = ? \n" +
-                "AND (CT_DATVE.TRANGTHAI NOT IN (0, 1, 2) OR CT_DATVE.TRANGTHAI IS NULL)";
-
+        String sql = "SELECT VE.MAVE, VE.MACHUYENBAY, VE.MAHANGVE, VE.MAGHE, VE.GIATIEN, HV.TENHANGVE " +
+                "FROM VE " +
+                "LEFT JOIN CT_DATVE ON VE.MAVE = CT_DATVE.MAVE " +
+                "JOIN HANGVE HV ON VE.MAHANGVE = HV.MAHANGVE " +
+                "JOIN CT_HANGVE CHV ON HV.MAHANGVE = CHV.MAHANGVE AND VE.MACHUYENBAY = CHV.MACHUYENBAY " +
+                "WHERE VE.MACHUYENBAY = ? " +
+                "AND CHV.soGheTrong > 0";
         try (PreparedStatement ps = connect.prepareStatement(sql)) {
             ps.setString(1, maChuyenBay);
             result = ps.executeQuery();
@@ -218,10 +222,32 @@ public class ManHinhDatVeController implements Initializable {
         return "Tên hạng vé";
     }
 
-    private void showTicketDetails(Ve ve) {
-        maGhe_txtfld.setText(String.valueOf(ve.getMaGhe()));
-        maVe_txtfld.setText(ve.getMaVe());
+    private void generateTicketDetails(Ve ve) {
+        maVe_txtfld.setText(generateMaVe());
+        maGhe_txtfld.setText(generateMaGhe(ve.getMaHangVe()));
         thanhTien_txtfld.setText(String.valueOf(ve.getGiaTien()));
+    }
+
+    private String generateMaVe() {
+        String sql = "SELECT MAX(MAVE) AS MAVE FROM VE";
+        try (PreparedStatement ps = connect.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                String maxMaCT_DATVE = rs.getString("MAVE");
+                if (maxMaCT_DATVE != null) {
+                    int newMaCT_DATVE = Integer.parseInt(maxMaCT_DATVE.substring(4)) + 1;
+                    return String.format("VE%03d", newMaCT_DATVE);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "VE001";
+    }
+
+    private String generateMaGhe(String maHangVe) {
+        // Logic to generate a seat code based on the seat class
+        // This is a simplified example and should be adjusted to your actual requirements
+        return "GHE-" + maHangVe + "-" + (int)(Math.random() * 1000);
     }
 
     private boolean validateInputs() {
@@ -258,6 +284,35 @@ public class ManHinhDatVeController implements Initializable {
         }
 
         return true;
+    }
+
+    // Phương thức lưu thông tin vé vào cơ sở dữ liệu
+    private void saveTicketToDatabase() {
+        Ve selectedVe = ve_tableview.getSelectionModel().getSelectedItem();
+        String maChuyenBay = maCB_txtfld.getText();
+        String maHangVe = selectedVe.getMaHangVe();
+        int maGhe = selectedVe.getMaGhe();
+        float giaTien = selectedVe.getGiaTien();
+
+        String sql = "INSERT INTO VE (MAVE, MACHUYENBAY, MAHANGVE, MAGHE, GIATIEN) VALUES (?, ?, ?, ?, ?)";
+
+        try (PreparedStatement ps = connect.prepareStatement(sql)) {
+            ps.setString(1, maVe_txtfld.getText());
+            ps.setString(2, maChuyenBay);
+            ps.setString(3, maHangVe);
+            ps.setInt(4, maGhe);
+            ps.setFloat(5, giaTien);
+
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Ticket saved successfully.");
+            } else {
+                alert.errorMessage("Failed to save ticket.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Error occurred while saving ticket to the database.");
+        }
     }
 
     // Phương thức hiển thị cửa sổ xác nhận
@@ -304,10 +359,5 @@ public class ManHinhDatVeController implements Initializable {
         // Reload the data for the flight details and ticket list
         String maChuyenBay = maCB_txtfld.getText();
         loadVeForFlight(maChuyenBay);
-    }
-
-    private void closeStage() {
-        Stage stage = (Stage) xemTruoc_btn.getScene().getWindow();
-        stage.close();
     }
 }

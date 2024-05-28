@@ -229,11 +229,7 @@ public class TraCuuBanVeController implements Initializable {
 
 
     private Integer getSoGheTrong(String maChuyenBay) {
-        String sql = "SELECT COUNT(VE.MAVE) AS SoGheTrong " +
-                "FROM VE " +
-                "LEFT JOIN CT_DATVE ON VE.MAVE = CT_DATVE.MAVE " +
-                "WHERE VE.MACHUYENBAY = ? " +
-                "AND (CT_DATVE.TRANGTHAI NOT IN (0, 1, 2) OR CT_DATVE.TRANGTHAI IS NULL)";
+        String sql = "SELECT SUM(SoGheTrong) AS SoGheTrong FROM CT_HANGVE WHERE MaChuyenBay = ?";
         try (Connection conn = DatabaseDriver.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, maChuyenBay);
@@ -250,11 +246,7 @@ public class TraCuuBanVeController implements Initializable {
 
 
     private Integer getSoGhe(String maChuyenBay) {
-        String sql = "SELECT COUNT(VE.MAVE) AS SoGhe " +
-                "FROM VE " +
-                "LEFT JOIN CT_DATVE ON VE.MAVE = CT_DATVE.MAVE " +
-                "WHERE VE.MACHUYENBAY = ? " +
-                "AND (CT_DATVE.TRANGTHAI IN (0, 1) OR CT_DATVE.TRANGTHAI IS NULL)";
+        String sql = "SELECT SUM(SoGheTrong + SoGheDat) AS SoGhe FROM CT_HANGVE WHERE MaChuyenBay = ?";
         try (Connection conn = DatabaseDriver.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, maChuyenBay);
@@ -266,7 +258,7 @@ public class TraCuuBanVeController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0; // Placeholder if not found
+        return 0;
     }
 
 
