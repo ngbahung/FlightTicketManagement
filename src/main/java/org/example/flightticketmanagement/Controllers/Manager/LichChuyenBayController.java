@@ -5,13 +5,17 @@ import io.github.palexdev.materialfx.controls.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.ChuyenBay;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.sql.Date;
@@ -47,12 +51,6 @@ public class LichChuyenBayController implements Initializable {
     private TableColumn<ChuyenBay, String> sanBayDi_tbcolumn;
 
     @FXML
-    private MFXTextField sanbayden_txtfld;
-
-    @FXML
-    private MFXTextField sanbaydi_txtfld;
-
-    @FXML
     private TableColumn<ChuyenBay, String> soGheTrong_tbcolumn;
 
     @FXML
@@ -86,8 +84,33 @@ public class LichChuyenBayController implements Initializable {
     private MFXButton refresh_btn;
 
     @FXML
-    void newPage(ActionEvent event) {
-        // Handle new page event
+    void themLichChuyenBay(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/manager/ThemLichChuyenBay.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Thêm Lịch Chuyến Bay");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            alert.errorMessage("Unable to open the new page.");
+        }
+    }
+
+    @FXML
+    void suaLichChuyenBay(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/manager/SuaLichChuyenBay.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Thêm Lịch Chuyến Bay");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            alert.errorMessage("Unable to open the new page.");
+        }
     }
 
     private Connection connect;

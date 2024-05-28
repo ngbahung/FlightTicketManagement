@@ -549,7 +549,7 @@ public class LichSuDatVeController implements Initializable {
 
                 // Tạo câu truy vấn để cập nhật trạng thái của CT_DATVE hoặc CT_DAT_CHO
                 String updateCTQuery;
-                updateCTQuery = "UPDATE CT_DATVE SET TrangThai = 2 WHERE MaCT_DATVE = ?";
+                updateCTQuery = "UPDATE CT_DATVE SET TrangThai = 2, NgayThanhToan = NULL WHERE MaCT_DATVE = ?";
 
 
                 try (PreparedStatement updateCTStmt = connect.prepareStatement(updateCTQuery)) {
