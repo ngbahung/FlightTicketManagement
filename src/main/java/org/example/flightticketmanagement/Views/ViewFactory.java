@@ -33,7 +33,7 @@ public class ViewFactory {
     private AnchorPane lichCBStaView;
 
     public ViewFactory(){
-        this.loginAccountType = AccountType.STAFF;
+        this.loginAccountType = AccountType.ADMIN;
         this.adminSelectedMenuItem = new SimpleObjectProperty<>();
         this.managerSelectedMenuItem = new SimpleObjectProperty<>();
         this.staffSelectedMenuItem = new SimpleObjectProperty<>();

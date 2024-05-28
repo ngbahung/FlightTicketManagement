@@ -20,7 +20,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ResourceBundle;
 
-public class ThemHangVe_ChuyenBayController implements Initializable {
+public class ThemHangVe_ChuyenBay_2Controller implements Initializable {
     @FXML
     private MFXComboBox<HangVe> hangVe_combox;
 
@@ -34,7 +34,7 @@ public class ThemHangVe_ChuyenBayController implements Initializable {
     private ResultSet result;
 
     private final AlertMessage alert = new AlertMessage();
-    private ThemLichChuyenBayController parentController;
+    private SuaLichChuyenBayController parentController;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -43,7 +43,6 @@ public class ThemHangVe_ChuyenBayController implements Initializable {
         hangVe_combox.setItems(hangVeList);
         setupHangVeComboBoxConverter(hangVeList);
         luuHangVe_btn.setOnAction(event -> luuHangVe());
-
     }
 
     public ObservableList<HangVe> getHangVeList() {
@@ -72,7 +71,7 @@ public class ThemHangVe_ChuyenBayController implements Initializable {
         return hangVeList;
     }
 
-    public void setParentController(ThemLichChuyenBayController parentController) {
+    public void setParentController(SuaLichChuyenBayController parentController) {
         this.parentController = parentController;
     }
 
@@ -120,6 +119,4 @@ public class ThemHangVe_ChuyenBayController implements Initializable {
         Stage stage = (Stage) luuHangVe_btn.getScene().getWindow();
         stage.close();
     }
-
-
 }

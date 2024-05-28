@@ -54,3 +54,9 @@
     -fx-border-width: 2;
     -fx-font-weight: bold;
 }
+
+/* Hạng vé */
+#custom_hv{
+    -fx-font-size: 13;
+    -fx-font-weight: bold;
+}

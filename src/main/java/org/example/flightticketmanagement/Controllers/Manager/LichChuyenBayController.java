@@ -3,6 +3,7 @@ package org.example.flightticketmanagement.Controllers.Manager;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -60,9 +61,6 @@ public class LichChuyenBayController implements Initializable {
     private MFXButton sua_btn;
 
     @FXML
-    private MFXButton tailenExel_btn;
-
-    @FXML
     private MFXButton them_btn;
 
     @FXML
@@ -100,18 +98,45 @@ public class LichChuyenBayController implements Initializable {
 
     @FXML
     void suaLichChuyenBay(ActionEvent event) {
+        ChuyenBay selectedChuyenBay = chuyenBay_tableview.getSelectionModel().getSelectedItem();
+        if (selectedChuyenBay == null) {
+            // Thông báo cho người dùng nếu không có dòng nào được chọn
+            alert.errorMessage("Vui lòng chọn một chuyến bay để sửa.");
+            return;
+        }
+
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/manager/SuaLichChuyenBay.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
+            SuaLichChuyenBayController controller = fxmlLoader.getController();
+
+            // Truyền dữ liệu của chuyến bay đã chọn tới SuaLichChuyenBayController
+            controller.setData(selectedChuyenBay);
+
             Stage stage = new Stage();
             stage.setScene(scene);
-            stage.setTitle("Thêm Lịch Chuyến Bay");
+            stage.setTitle("Sửa Lịch Chuyến Bay");
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            alert.errorMessage("Unable to open the new page.");
+            alert.errorMessage("Không thể mở trang mới.");
         }
     }
+
+    @FXML
+    void thongBaoRangBuocDuLieu(ActionEvent event) {
+        ObservableList<ChuyenBay> selectedFlights = chuyenBay_tableview.getSelectionModel().getSelectedItems();
+
+        if (selectedFlights.isEmpty()) {
+            alert.errorMessage("Vui lòng chọn ít nhất một chuyến bay để xóa.");
+            return;
+        }
+
+        for (ChuyenBay flight : selectedFlights) {
+            alert.errorMessage("Không thể xóa vì ràng buộc dữ liệu.");
+        }
+    }
+
 
     private Connection connect;
     private PreparedStatement prepare;
