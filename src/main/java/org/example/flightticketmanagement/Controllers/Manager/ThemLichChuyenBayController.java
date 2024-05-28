@@ -235,7 +235,7 @@ public class ThemLichChuyenBayController implements Initializable {
 
 
     public String getTenHangVe(String maHangVe){
-        String query = "SELECT HV.TenHangVe FROM HANGVE HV JOIN CT_HANGVE CTHV ON HV.MaHangVe = CTHV.MaHangVe WHERE CTHV.MaHangVe = ?";
+        String query = "SELECT TenHangVe FROM HANGVE WHERE MaHangVe = ?";
         try {
             prepare = connect.prepareStatement(query);
             prepare.setString(1, maHangVe);
