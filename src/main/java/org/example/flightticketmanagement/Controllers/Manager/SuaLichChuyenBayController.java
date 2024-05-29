@@ -221,9 +221,8 @@ public class SuaLichChuyenBayController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        // Khởi tạo kết nối đến cơ sở dữ liệu
         connect = DatabaseDriver.getConnection();
+
         populateTenDuongBayComboBox();
         populateTimeComboBox(gioBay_combobox);
         populateTimeComboBox(gioHaCanh_combobox);
@@ -232,7 +231,6 @@ public class SuaLichChuyenBayController implements Initializable {
         gioHaCanh_combobox.valueProperty().addListener((obs, oldVal, newVal) -> tinhThoiGianBay());
         ngayBay_datepicker.valueProperty().addListener((obs, oldVal, newVal) -> tinhThoiGianBay());
         ngayHaCanh_datepicker.valueProperty().addListener((obs, oldVal, newVal) -> tinhThoiGianBay());
-
 
         tenHangVe_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenHangVe(cellData.getValue().getMaHangVe())));
         soLuongGhe_tbcl.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getSoGheTrong()).asObject());

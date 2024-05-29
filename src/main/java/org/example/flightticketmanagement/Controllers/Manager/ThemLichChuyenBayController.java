@@ -74,6 +74,74 @@ public class ThemLichChuyenBayController implements Initializable {
     @FXML
     private MFXButton xoaHangVe_btn;
 
+
+    @FXML
+    void xoaHangVe() {
+        CT_HangVe selectedHangVe = hangVe_tableview.getSelectionModel().getSelectedItem();
+
+        if (selectedHangVe != null) {
+            boolean confirmed = alert.confirmationMessage("Bạn có chắc chắn muốn xóa hạng vé này?");
+
+            if (confirmed) {
+                hangVe_tableview.getItems().remove(selectedHangVe);
+                alert.successMessage("Hạng vé đã được xóa thành công.");
+            }
+        } else {
+            alert.errorMessage("Vui lòng chọn một hạng vé để xóa.");
+        }
+    }
+
+
+    @FXML
+    void luuButtonClicked() {
+        try {
+            // Lấy thông tin từ các trường nhập liệu
+            String maChuyenBay = maChuyenBay_txtfld.getText();
+            String maDuongBay = maDuongBay_txtfld.getText();
+            LocalDateTime thoiGianXuatPhat = LocalDateTime.of(ngayBay_datepicker.getValue(),
+                    LocalTime.parse(gioBay_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
+            LocalDateTime thoiGianHaCanh = LocalDateTime.of(ngayHaCanh_datepicker.getValue(),
+                    LocalTime.parse(gioHaCanh_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
+            double giaVe = Double.parseDouble(gia_txtfld.getText());
+
+            // Tạo câu lệnh SQL để chèn dữ liệu vào bảng CHUYENBAY
+            String insertChuyenBayQuery = "INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe) " +
+                    "VALUES (?, ?, ?, ?, 0, ?)";
+            PreparedStatement insertChuyenBayStatement = connect.prepareStatement(insertChuyenBayQuery);
+            insertChuyenBayStatement.setString(1, maChuyenBay);
+            insertChuyenBayStatement.setString(2, maDuongBay);
+            insertChuyenBayStatement.setTimestamp(3, Timestamp.valueOf(thoiGianXuatPhat));
+            insertChuyenBayStatement.setTimestamp(4, Timestamp.valueOf(thoiGianHaCanh));
+            insertChuyenBayStatement.setDouble(5, giaVe);
+
+            // Thực thi câu lệnh SQL chèn dữ liệu vào bảng CHUYENBAY
+            insertChuyenBayStatement.executeUpdate();
+
+            // Tạo các câu lệnh SQL để chèn dữ liệu vào bảng CT_HANGVE và thực thi chúng
+            for (CT_HangVe ctHangVe : hangVe_tableview.getItems()) {
+                String insertCTHangVeQuery = "INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) " +
+                        "VALUES (?, ?, ?, 0)";
+                PreparedStatement insertCTHangVeStatement = connect.prepareStatement(insertCTHangVeQuery);
+                insertCTHangVeStatement.setString(1, maChuyenBay);
+                insertCTHangVeStatement.setString(2, ctHangVe.getMaHangVe());
+                insertCTHangVeStatement.setInt(3, ctHangVe.getSoGheTrong());
+
+                // Thực thi câu lệnh SQL chèn dữ liệu vào bảng CT_HANGVE
+                insertCTHangVeStatement.executeUpdate();
+            }
+
+            // Hiển thị thông báo thành công
+            alert.successMessage("Dữ liệu đã được lưu xuống cơ sở dữ liệu thành công.");
+            if (parentController != null) {
+                parentController.layDuLieu(null, null, null);
+            }
+            closeStage();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Đã xảy ra lỗi khi lưu dữ liệu xuống cơ sở dữ liệu.");
+        }
+    }
+
     private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
@@ -89,7 +157,7 @@ public class ThemLichChuyenBayController implements Initializable {
 
 
     @FXML
-    private void openThemHangVeChuyenBay() {
+    void moThemHangVeChuyenBay() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Manager/ThemHangVe_ChuyenBay.fxml"));
             Parent root = loader.load();
@@ -122,13 +190,13 @@ public class ThemLichChuyenBayController implements Initializable {
             }
         });
 
-        initializeAutoGenerateMaChuyenBay();
+        generateMaChuyenBay();
 
         for (ComboBox<String> stringComboBox : Arrays.asList(gioBay_combobox, gioHaCanh_combobox)) {
-            stringComboBox.valueProperty().addListener((obs, oldVal, newVal) -> calculateFlightDuration());
+            stringComboBox.valueProperty().addListener((obs, oldVal, newVal) -> tinhThoiGianBay());
         }
-        ngayBay_datepicker.valueProperty().addListener((obs, oldVal, newVal) -> calculateFlightDuration());
-        ngayHaCanh_datepicker.valueProperty().addListener((obs, oldVal, newVal) -> calculateFlightDuration());
+        ngayBay_datepicker.valueProperty().addListener((obs, oldVal, newVal) -> tinhThoiGianBay());
+        ngayHaCanh_datepicker.valueProperty().addListener((obs, oldVal, newVal) -> tinhThoiGianBay());
 
         // Initialize table columns
         tenHangVe_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenHangVe(cellData.getValue().getMaHangVe())));
@@ -136,11 +204,9 @@ public class ThemLichChuyenBayController implements Initializable {
 
         // Initialize the TableView with an empty ObservableList
         hangVe_tableview.setItems(FXCollections.observableArrayList());
-        xoaHangVe_btn.setOnAction(event -> deleteSelectedHangVe());
-
     }
 
-    private void initializeAutoGenerateMaChuyenBay() {
+    private void generateMaChuyenBay() {
         String generatedCode = generateNewMaChuyenBay();
         maChuyenBay_txtfld.setText(generatedCode);
     }
@@ -199,7 +265,7 @@ public class ThemLichChuyenBayController implements Initializable {
         }
     }
 
-    private void calculateFlightDuration() {
+    private void tinhThoiGianBay() {
         if (ngayBay_datepicker.getValue() != null && ngayHaCanh_datepicker.getValue() != null &&
                 gioBay_combobox.getValue() != null && gioHaCanh_combobox.getValue() != null) {
             LocalDateTime departure = LocalDateTime.of(ngayBay_datepicker.getValue(),
@@ -216,7 +282,7 @@ public class ThemLichChuyenBayController implements Initializable {
         return maChuyenBay_txtfld.getText();
     }
 
-    public void addCT_HangVeToTable(CT_HangVe ctHangVe) {
+    public void themCT_HangVeToTable(CT_HangVe ctHangVe) {
         ObservableList<CT_HangVe> ctHangVeList = hangVe_tableview.getItems();
         boolean found = false;
 
@@ -239,8 +305,6 @@ public class ThemLichChuyenBayController implements Initializable {
         hangVe_tableview.setItems(ctHangVeList);
     }
 
-
-
     public String getTenHangVe(String maHangVe){
         String query = "SELECT TenHangVe FROM HANGVE WHERE MaHangVe = ?";
         try {
@@ -257,75 +321,8 @@ public class ThemLichChuyenBayController implements Initializable {
         return null;
     }
 
-
-    private void deleteSelectedHangVe() {
-        CT_HangVe selectedHangVe = hangVe_tableview.getSelectionModel().getSelectedItem();
-
-        if (selectedHangVe != null) {
-            boolean confirmed = alert.confirmationMessage("Bạn có chắc chắn muốn xóa hạng vé này?");
-
-            if (confirmed) {
-                hangVe_tableview.getItems().remove(selectedHangVe);
-                alert.successMessage("Hạng vé đã được xóa thành công.");
-            }
-        } else {
-            alert.errorMessage("Vui lòng chọn một hạng vé để xóa.");
-        }
-    }
-
-    @FXML
-    void luuButtonClicked() {
-        try {
-            // Lấy thông tin từ các trường nhập liệu
-            String maChuyenBay = maChuyenBay_txtfld.getText();
-            String maDuongBay = maDuongBay_txtfld.getText();
-            LocalDateTime thoiGianXuatPhat = LocalDateTime.of(ngayBay_datepicker.getValue(),
-                    LocalTime.parse(gioBay_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
-            LocalDateTime thoiGianHaCanh = LocalDateTime.of(ngayHaCanh_datepicker.getValue(),
-                    LocalTime.parse(gioHaCanh_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
-            double giaVe = Double.parseDouble(gia_txtfld.getText());
-
-            // Tạo câu lệnh SQL để chèn dữ liệu vào bảng CHUYENBAY
-            String insertChuyenBayQuery = "INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe) " +
-                    "VALUES (?, ?, ?, ?, 0, ?)";
-            PreparedStatement insertChuyenBayStatement = connect.prepareStatement(insertChuyenBayQuery);
-            insertChuyenBayStatement.setString(1, maChuyenBay);
-            insertChuyenBayStatement.setString(2, maDuongBay);
-            insertChuyenBayStatement.setTimestamp(3, Timestamp.valueOf(thoiGianXuatPhat));
-            insertChuyenBayStatement.setTimestamp(4, Timestamp.valueOf(thoiGianHaCanh));
-            insertChuyenBayStatement.setDouble(5, giaVe);
-
-            // Thực thi câu lệnh SQL chèn dữ liệu vào bảng CHUYENBAY
-            insertChuyenBayStatement.executeUpdate();
-
-            // Tạo các câu lệnh SQL để chèn dữ liệu vào bảng CT_HANGVE và thực thi chúng
-            for (CT_HangVe ctHangVe : hangVe_tableview.getItems()) {
-                String insertCTHangVeQuery = "INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) " +
-                        "VALUES (?, ?, ?, 0)";
-                PreparedStatement insertCTHangVeStatement = connect.prepareStatement(insertCTHangVeQuery);
-                insertCTHangVeStatement.setString(1, maChuyenBay);
-                insertCTHangVeStatement.setString(2, ctHangVe.getMaHangVe());
-                insertCTHangVeStatement.setInt(3, ctHangVe.getSoGheTrong());
-
-                // Thực thi câu lệnh SQL chèn dữ liệu vào bảng CT_HANGVE
-                insertCTHangVeStatement.executeUpdate();
-            }
-
-            // Hiển thị thông báo thành công
-            alert.successMessage("Dữ liệu đã được lưu xuống cơ sở dữ liệu thành công.");
-            if (parentController != null) {
-                parentController.layDuLieu(null, null, null);
-            }
-            closeStage();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            alert.errorMessage("Đã xảy ra lỗi khi lưu dữ liệu xuống cơ sở dữ liệu.");
-        }
-    }
-
     private void closeStage() {
         Stage stage = (Stage) luu_btn.getScene().getWindow();
         stage.close();
     }
-
 }

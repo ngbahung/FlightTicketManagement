@@ -30,6 +30,32 @@ public class ThemHangVe_ChuyenBayController implements Initializable {
     @FXML
     private MFXTextField soLuongGhe_txtfld;
 
+
+    @FXML
+    void luuHangVe() {
+        HangVe selectedHangVe = hangVe_combox.getValue();
+        if (selectedHangVe == null || soLuongGhe_txtfld.getText().isEmpty()) {
+            alert.errorMessage("Please select a class and enter the number of seats.");
+            return;
+        }
+
+        String maHangVe = selectedHangVe.getMaHangVe();
+        String maChuyenBay = parentController.getGeneratedMaChuyenBay();
+        Integer soGheTrong = Integer.parseInt(soLuongGhe_txtfld.getText());
+
+        CT_HangVe ctHangVe = new CT_HangVe(maChuyenBay, maHangVe, soGheTrong, 0);
+
+        parentController.themCT_HangVeToTable(ctHangVe);
+
+        // Clear the selection of hangVe_combox
+        hangVe_combox.getSelectionModel().clearSelection();
+
+        // Close the current window
+        Stage stage = (Stage) luuHangVe_btn.getScene().getWindow();
+        stage.close();
+    }
+
+
     private Connection connect;
     private ResultSet result;
 
@@ -41,9 +67,7 @@ public class ThemHangVe_ChuyenBayController implements Initializable {
         connect = DatabaseDriver.getConnection();
         ObservableList<HangVe> hangVeList = getHangVeList();
         hangVe_combox.setItems(hangVeList);
-        setupHangVeComboBoxConverter(hangVeList);
-        luuHangVe_btn.setOnAction(event -> luuHangVe());
-
+        chuyenDoiHangVeCombobox(hangVeList);
     }
 
     public ObservableList<HangVe> getHangVeList() {
@@ -76,7 +100,7 @@ public class ThemHangVe_ChuyenBayController implements Initializable {
         this.parentController = parentController;
     }
 
-    private void setupHangVeComboBoxConverter(ObservableList<HangVe> hangVeList) {
+    private void chuyenDoiHangVeCombobox(ObservableList<HangVe> hangVeList) {
         hangVe_combox.setConverter(new StringConverter<HangVe>() {
             @Override
             public String toString(HangVe hangVe) {
@@ -95,30 +119,6 @@ public class ThemHangVe_ChuyenBayController implements Initializable {
                         .orElse(null);
             }
         });
-    }
-
-
-    private void luuHangVe() {
-        HangVe selectedHangVe = hangVe_combox.getValue();
-        if (selectedHangVe == null || soLuongGhe_txtfld.getText().isEmpty()) {
-            alert.errorMessage("Please select a class and enter the number of seats.");
-            return;
-        }
-
-        String maHangVe = selectedHangVe.getMaHangVe();
-        String maChuyenBay = parentController.getGeneratedMaChuyenBay();
-        Integer soGheTrong = Integer.parseInt(soLuongGhe_txtfld.getText());
-
-        CT_HangVe ctHangVe = new CT_HangVe(maChuyenBay, maHangVe, soGheTrong, 0);
-
-        parentController.addCT_HangVeToTable(ctHangVe);
-
-        // Clear the selection of hangVe_combox
-        hangVe_combox.getSelectionModel().clearSelection();
-
-        // Close the current window
-        Stage stage = (Stage) luuHangVe_btn.getScene().getWindow();
-        stage.close();
     }
 
 
