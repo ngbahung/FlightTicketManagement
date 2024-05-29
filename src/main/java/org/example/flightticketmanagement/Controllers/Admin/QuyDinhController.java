@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
@@ -324,6 +325,7 @@ public class QuyDinhController implements Initializable {
             themSanBayController.setParentController(this);  // Pass the instance of QuyDinhController
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
+            stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/Admin/logo.png"))));
             stage.setTitle("Thêm Sân Bay");
             stage.show();
 
@@ -343,6 +345,7 @@ public class QuyDinhController implements Initializable {
             themHangVeController.setParentController(this);  // Pass the instance of QuyDinhController
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
+            stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/Admin/logo.png"))));
             stage.setTitle("Thêm Hạng Vé");
             stage.show();
 
@@ -417,6 +420,7 @@ public class QuyDinhController implements Initializable {
             suaSanBayController.setParentController(this);  // Pass the instance of QuyDinhController
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
+            stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/Admin/logo.png"))));
             stage.setTitle("Sửa Sân Bay");
             stage.show();
 
@@ -549,6 +553,7 @@ public class QuyDinhController implements Initializable {
             suaHangVeController.setParentController(this);  // Pass the instance of QuyDinhController
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
+            stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/Admin/logo.png"))));
             stage.setTitle("Sửa Hạng Vé");
             stage.show();
 
@@ -614,6 +619,7 @@ public class QuyDinhController implements Initializable {
             suaThamSoQuyDinhController.setParentController(this);  // Pass the instance of QuyDinhController
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
+            stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/Admin/logo.png"))));
             stage.setTitle("Sửa Tham Số Quy Định");
             stage.show();
 
@@ -728,6 +734,7 @@ public class QuyDinhController implements Initializable {
             themDuongBayController.setParentController(this);  // Pass the instance of QuyDinhController
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
+            stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/Admin/logo.png"))));
             stage.setTitle("Thêm Đường Bay");
             stage.show();
 
@@ -752,6 +759,7 @@ public class QuyDinhController implements Initializable {
             suaDuongBayController.setParentController(this);  // Pass the instance of QuyDinhController
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
+            stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/Admin/logo.png"))));
             stage.setTitle("Sửa Đường Bay");
             stage.show();
 

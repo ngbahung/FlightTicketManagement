@@ -557,43 +557,12 @@ public class LichSuDatVeController implements Initializable {
                     updateCTStmt.executeUpdate();
                 }
 
-                // Tạo mã vé mới
-                String maVe = generateNewMaVe();
-
-                // Tạo câu truy vấn để chèn dữ liệu vào bảng VE
-                String insertQuery = "INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES (?, ?, ?, ?, ?)";
-                try (PreparedStatement insertStmt = connect.prepareStatement(insertQuery)) {
-                    insertStmt.setString(1, maVe);
-                    insertStmt.setString(2, maChuyenBay);
-                    insertStmt.setString(3, maHangVe);
-                    insertStmt.setInt(4, maGhe);
-                    insertStmt.setFloat(5, giaTien);
-                    insertStmt.executeUpdate();
-                }
-
                 loadData(null); // Reload the data
             } catch (SQLException e) {
                 alert.errorMessage("Không thể hủy vé hoặc phiếu đặt chỗ.");
             }
         }
     }
-
-    private String generateNewMaVe() {
-        String sql = "SELECT MAX(MaVe) AS MaxMaVe FROM VE";
-        try (PreparedStatement ps = connect.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                String maxMaVe = rs.getString("MaxMaVe");
-                if (maxMaVe != null) {
-                    int newMaVeNumber = Integer.parseInt(maxMaVe.substring(2)) + 1;
-                    return String.format("VE%03d", newMaVeNumber);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return "VE001";
-    }
-
 
     private void handleThanhToan() {
         CT_DatVe selectedVe = phDC_tbview.getSelectionModel().getSelectedItem();

@@ -61,7 +61,7 @@
           <TableColumn fx:id="soLuongGhe_tbcl" prefWidth="128.0" text="Số lượng ghế" />
         </columns>
       </TableView>
-      <MFXButton id="custom-2" fx:id="themHangVe_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="288.0" layoutY="418.0" onAction="#openThemHangVeChuyenBay" prefHeight="41.0" prefWidth="99.0" text="Thêm hạng vé" />
-      <MFXButton id="custom-2" buttonType="RAISED" depthLevel="LEVEL1" layoutX="288.0" layoutY="477.0" prefHeight="41.0" prefWidth="99.0" text="Xóa hạng vé" fx:id="xoaHangVe_btn" />
+      <MFXButton id="custom-2" fx:id="themHangVe_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="288.0" layoutY="418.0" onAction="#moThemHangVeChuyenBay" prefHeight="41.0" prefWidth="99.0" text="Thêm hạng vé" />
+      <MFXButton id="custom-2" buttonType="RAISED" depthLevel="LEVEL1" layoutX="288.0" layoutY="477.0" onAction="#xoaHangVe" prefHeight="41.0" prefWidth="99.0" text="Xóa hạng vé" fx:id="xoaHangVe_btn" />
    </children>
 </AnchorPane>
