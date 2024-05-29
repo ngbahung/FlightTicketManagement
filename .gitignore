@@ -37,4 +37,3 @@ build/
 ### Mac OS ###
 .DS_Store
 src/main/java/org/example/flightticketmanagement/Models/DatabaseDriver.java
-src/main/resources/Database/DB_F4.sql
