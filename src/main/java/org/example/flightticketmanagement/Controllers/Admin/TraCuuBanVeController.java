@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
@@ -410,6 +411,7 @@ public class TraCuuBanVeController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle("Chi Tiết Chuyến Bay");
             stage.setScene(new Scene(root));
+            stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/Admin/logo.png"))));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

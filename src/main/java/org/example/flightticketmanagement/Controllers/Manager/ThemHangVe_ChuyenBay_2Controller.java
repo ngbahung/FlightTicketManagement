@@ -110,7 +110,7 @@ public class ThemHangVe_ChuyenBay_2Controller implements Initializable {
 
         CT_HangVe ctHangVe = new CT_HangVe(maChuyenBay, maHangVe, soGheTrong, 0);
 
-        parentController.addCT_HangVeToTable(ctHangVe);
+        parentController.themCT_HangVeTable(ctHangVe);
 
         // Clear the selection of hangVe_combox
         hangVe_combox.getSelectionModel().clearSelection();

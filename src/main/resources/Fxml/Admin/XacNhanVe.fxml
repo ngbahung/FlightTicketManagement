@@ -33,14 +33,14 @@
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CCCD" GridPane.rowIndex="2" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Số điện thoại" GridPane.rowIndex="3" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email" GridPane.rowIndex="4" />
-            <MFXTextField fx:id="hoten_txtfld" floatMode="DISABLED" prefHeight="29.0" prefWidth="320.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <MFXTextField fx:id="cccd_txtfld" floatMode="DISABLED" prefHeight="27.0" prefWidth="319.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <MFXTextField fx:id="sdt_txtfld" floatMode="DISABLED" prefHeight="25.0" prefWidth="318.0" textLimit="10" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <MFXTextField fx:id="email_txtfld" floatMode="DISABLED" prefHeight="30.0" prefWidth="318.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <MFXTextField fx:id="hoten_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="29.0" prefWidth="320.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <MFXTextField fx:id="cccd_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="27.0" prefWidth="319.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <MFXTextField fx:id="sdt_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="25.0" prefWidth="318.0" textLimit="10" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <MFXTextField fx:id="email_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="30.0" prefWidth="318.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Địa chỉ" GridPane.rowIndex="5" />
-            <MFXTextField fx:id="diaChi_txtfld" floatMode="DISABLED" prefHeight="29.0" prefWidth="317.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <MFXTextField fx:id="diaChi_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="29.0" prefWidth="317.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã khách hàng" visible="false" />
-            <MFXTextField fx:id="maKH_txtfld" floatMode="DISABLED" prefHeight="11.0" prefWidth="320.0" visible="false" GridPane.columnIndex="1" />
+            <MFXTextField fx:id="maKH_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="11.0" prefWidth="320.0" visible="false" GridPane.columnIndex="1" />
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -83,12 +83,12 @@
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sân bay đến" GridPane.rowIndex="2" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày bay" GridPane.rowIndex="3" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Giờ bay" GridPane.rowIndex="4" />
-            <MFXTextField fx:id="sanBayDi_txtfld" floatMode="DISABLED" prefHeight="29.0" prefWidth="320.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <MFXTextField fx:id="sanBayDen_txtfld" floatMode="DISABLED" prefHeight="27.0" prefWidth="319.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <MFXTextField fx:id="ngayBay_txtfld" floatMode="DISABLED" prefHeight="25.0" prefWidth="318.0" textLimit="10" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <MFXTextField fx:id="gioBay_txtfld" floatMode="DISABLED" prefHeight="30.0" prefWidth="318.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <MFXTextField fx:id="sanBayDi_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="29.0" prefWidth="320.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <MFXTextField fx:id="sanBayDen_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="27.0" prefWidth="319.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <MFXTextField fx:id="ngayBay_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="25.0" prefWidth="318.0" textLimit="10" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <MFXTextField fx:id="gioBay_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="30.0" prefWidth="318.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã chuyến bay" />
-            <MFXTextField fx:id="maChuyenBay_txtfld" floatMode="DISABLED" prefHeight="11.0" prefWidth="320.0" GridPane.columnIndex="1" />
+            <MFXTextField fx:id="maChuyenBay_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="11.0" prefWidth="320.0" GridPane.columnIndex="1" />
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -107,10 +107,10 @@
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã ghế" GridPane.rowIndex="1" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Thành tiền" GridPane.rowIndex="2" />
-            <MFXTextField fx:id="maGhe_txtfld" floatMode="DISABLED" prefHeight="29.0" prefWidth="320.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <MFXTextField fx:id="thanhTien_txtfld" floatMode="DISABLED" prefHeight="27.0" prefWidth="319.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <MFXTextField fx:id="maGhe_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="29.0" prefWidth="320.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <MFXTextField fx:id="thanhTien_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="27.0" prefWidth="319.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã vé" />
-            <MFXTextField fx:id="maVe_txtfld" floatMode="DISABLED" prefHeight="11.0" prefWidth="320.0" GridPane.columnIndex="1" />
+            <MFXTextField fx:id="maVe_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="11.0" prefWidth="320.0" GridPane.columnIndex="1" />
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

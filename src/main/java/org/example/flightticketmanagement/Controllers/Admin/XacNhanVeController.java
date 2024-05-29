@@ -189,6 +189,9 @@ public class XacNhanVeController implements Initializable {
         generateCustomerId(cccd_txtfld.getText());
         if (insertBooking(isDatVe)) {
             alert.successMessage(isDatVe ? "Đặt vé thành công!" : "Đặt chỗ thành công!");
+            if (manHinhDatVeController != null) {
+                manHinhDatVeController.closeStage();
+            }
             closeStage();
         } else {
             alert.errorMessage("Có lỗi xảy ra khi đặt vé hoặc đặt chỗ.");

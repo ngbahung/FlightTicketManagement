@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
@@ -349,6 +350,7 @@ public class ManHinhDatVeController implements Initializable {
                 Stage stage = new Stage();
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.setScene(new Scene(root));
+                stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/Admin/logo.png"))));
                 stage.setTitle("Xác nhận thông tin");
                 stage.setOnHidden(event -> reloadFlightDetails()); // Reload flight details after closing
                 stage.showAndWait();

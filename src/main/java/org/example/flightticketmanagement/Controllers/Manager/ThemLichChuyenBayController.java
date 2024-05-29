@@ -13,15 +13,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.CT_HangVe;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
-import org.example.flightticketmanagement.Models.HangVe;
 
 import java.net.URL;
 import java.sql.*;
-import java.text.NumberFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -81,6 +80,13 @@ public class ThemLichChuyenBayController implements Initializable {
 
     private final AlertMessage alert = new AlertMessage();
 
+    // Reference to the parent controller
+    private LichChuyenBayController parentController;
+
+    public void setParentController(LichChuyenBayController parentController) {
+        this.parentController = parentController;
+    }
+
 
     @FXML
     private void openThemHangVeChuyenBay() {
@@ -89,6 +95,7 @@ public class ThemLichChuyenBayController implements Initializable {
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Thêm Hạng Vé - Chuyến Bay");
+            stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/Admin/logo.png"))));
             stage.setScene(new Scene(root));
 
             ThemHangVe_ChuyenBayController controller = loader.getController();
@@ -306,11 +313,19 @@ public class ThemLichChuyenBayController implements Initializable {
 
             // Hiển thị thông báo thành công
             alert.successMessage("Dữ liệu đã được lưu xuống cơ sở dữ liệu thành công.");
+            if (parentController != null) {
+                parentController.layDuLieu(null, null, null);
+            }
+            closeStage();
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Đã xảy ra lỗi khi lưu dữ liệu xuống cơ sở dữ liệu.");
         }
     }
 
+    private void closeStage() {
+        Stage stage = (Stage) luu_btn.getScene().getWindow();
+        stage.close();
+    }
 
 }

@@ -16,6 +16,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.Admin.SuaPhanQuyenController;
 import org.example.flightticketmanagement.Controllers.Admin.ThemPhanQuyenController;
@@ -117,6 +118,7 @@ public class PhanQuyenController implements Initializable {
             controller.setParentController(this);  // Pass the instance of PhanQuyenController
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
+            stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/Admin/logo.png"))));
             stage.setTitle("Thêm Phân Quyền");
             stage.show();
         } catch (Exception e) {
@@ -245,6 +247,7 @@ public class PhanQuyenController implements Initializable {
             controller.setParentController(this);
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
+            stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/Admin/logo.png"))));
             stage.setTitle("Sửa Phân Quyền");
             stage.show();
         } catch (Exception e) {
