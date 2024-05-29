@@ -173,13 +173,12 @@ public class ManHinhDatVeController implements Initializable {
     }
 
     private void loadVeForFlight(String maChuyenBay) {
-        String sql = "SELECT VE.MAVE, VE.MACHUYENBAY, VE.MAHANGVE, VE.MAGHE, VE.GIATIEN, HV.TENHANGVE " +
-                "FROM VE " +
-                "LEFT JOIN CT_DATVE ON VE.MAVE = CT_DATVE.MAVE " +
-                "JOIN HANGVE HV ON VE.MAHANGVE = HV.MAHANGVE " +
-                "JOIN CT_HANGVE CHV ON HV.MAHANGVE = CHV.MAHANGVE AND VE.MACHUYENBAY = CHV.MACHUYENBAY " +
-                "WHERE VE.MACHUYENBAY = ? " +
-                "AND CHV.soGheTrong > 0";
+        String sql = "SELECT DISTINCT hv.TENHANGVE, hv.MAHANGVE, (cb.GiaVe * hv.HeSo) AS GiaTien " +
+                "FROM CT_HANGVE ct " +
+                "JOIN HANGVE hv ON ct.MaHangVe = hv.MaHangVe " +
+                "JOIN CHUYENBAY cb ON ct.MaChuyenBay = cb.MaChuyenBay " +
+                "WHERE ct.MaChuyenBay = ? AND ct.SoGheTrong > 0";
+
         try (PreparedStatement ps = connect.prepareStatement(sql)) {
             ps.setString(1, maChuyenBay);
             result = ps.executeQuery();
@@ -188,22 +187,24 @@ public class ManHinhDatVeController implements Initializable {
 
             while (result.next()) {
                 Ve ve = new Ve(
-                        result.getString("MAVE"),
-                        result.getString("MACHUYENBAY"),
+                        null, // MaVe will be generated
+                        maChuyenBay,
                         result.getString("MAHANGVE"),
-                        result.getInt("MAGHE"),
-                        result.getFloat("GIATIEN")
+                        0, // MaGhe will be generated
+                        result.getFloat("GiaTien") // Calculated GiaTien
                 );
                 ve_tableview.getItems().add(ve);
             }
 
             hangVe_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenHangVe(cellData.getValue().getMaHangVe())));
+            giaTien_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getGiaTien())));
 
         } catch (SQLException e) {
             e.printStackTrace();
-            alert.errorMessage("Error occurred while loading tickets for the flight.");
+            alert.errorMessage("Error occurred while loading ticket classes for the flight.");
         }
     }
+
 
     private String getTenHangVe(String maHangVe) {
         String sql = "SELECT HV.TENHANGVE FROM HANGVE HV " +
@@ -232,10 +233,10 @@ public class ManHinhDatVeController implements Initializable {
         String sql = "SELECT MAX(MAVE) AS MAVE FROM VE";
         try (PreparedStatement ps = connect.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
-                String maxMaCT_DATVE = rs.getString("MAVE");
-                if (maxMaCT_DATVE != null) {
-                    int newMaCT_DATVE = Integer.parseInt(maxMaCT_DATVE.substring(4)) + 1;
-                    return String.format("VE%03d", newMaCT_DATVE);
+                String maxMaVe = rs.getString("MAVE");
+                if (maxMaVe != null) {
+                    int newMaVe = Integer.parseInt(maxMaVe.substring(2)) + 1;
+                    return String.format("VE%03d", newMaVe);
                 }
             }
         } catch (SQLException e) {
@@ -243,6 +244,7 @@ public class ManHinhDatVeController implements Initializable {
         }
         return "VE001";
     }
+
 
     private String generateMaGhe(String maHangVe) {
         // Logic to generate a seat code based on the seat class
@@ -315,13 +317,15 @@ public class ManHinhDatVeController implements Initializable {
         }
     }
 
-    // Phương thức hiển thị cửa sổ xác nhận
     private void showConfirmationDialog(boolean isDatVe) {
         if (validateInputs()) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Admin/XacNhanVe.fxml"));
                 Parent root = loader.load();
                 XacNhanVeController controller = loader.getController();
+
+                // Pass the reference of this controller
+                controller.setManHinhDatVeController(this);
 
                 // Get the data from text fields
                 String maKH = maKH_txtfld.getText();
@@ -355,9 +359,16 @@ public class ManHinhDatVeController implements Initializable {
         }
     }
 
+
     private void reloadFlightDetails() {
         // Reload the data for the flight details and ticket list
         String maChuyenBay = maCB_txtfld.getText();
         loadVeForFlight(maChuyenBay);
     }
+
+    public void closeStage() {
+        Stage stage = (Stage) maKH_txtfld.getScene().getWindow();
+        stage.close();
+    }
+
 }

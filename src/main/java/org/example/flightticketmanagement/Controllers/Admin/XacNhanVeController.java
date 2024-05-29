@@ -13,7 +13,6 @@ import org.example.flightticketmanagement.Models.DatabaseDriver;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -69,6 +68,13 @@ public class XacNhanVeController implements Initializable {
     @FXML
     private MFXButton datVe_btn;
 
+    // DATABASE TOOLS
+    private Connection connect;
+    private PreparedStatement prepare;
+    private ResultSet result;
+
+    private final AlertMessage alert = new AlertMessage();
+
     @FXML
     private void handleSuaButtonAction() {
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -77,7 +83,8 @@ public class XacNhanVeController implements Initializable {
         confirmationAlert.setContentText("Bạn có chắc chắn muốn hủy thao tác này không?");
         Optional<ButtonType> result = confirmationAlert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            Stage stage = (Stage) huy_btn.getScene().getWindow();
+            deleteBooking();
+            Stage stage = (Stage) sua_btn.getScene().getWindow();
             stage.close();
         }
         closeStage();
@@ -91,25 +98,32 @@ public class XacNhanVeController implements Initializable {
         confirmationAlert.setContentText("Bạn có chắc chắn muốn hủy thao tác này không?");
         Optional<ButtonType> result = confirmationAlert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
+            clearFields();
+            deleteBooking();
+            if (manHinhDatVeController != null) {
+                manHinhDatVeController.closeStage();
+            }
             Stage stage = (Stage) huy_btn.getScene().getWindow();
             stage.close();
         }
-        clearFields();
     }
 
-    // DATABASE TOOLS
-    private Connection connect;
-    private PreparedStatement prepare;
-    private ResultSet result;
 
-    private final AlertMessage alert = new AlertMessage();
+
 
     private boolean isDatVe;
+
+    private ManHinhDatVeController manHinhDatVeController;
+
+
+    public void setManHinhDatVeController(ManHinhDatVeController controller) {
+        this.manHinhDatVeController = controller;
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         connect = DatabaseDriver.getConnection();
-        setFieldsEditable(false);
         generateCustomerId(cccd_txtfld.getText());
         datVe_btn.setOnAction(e -> handleInsertBooking(true)); // for datVe (booking ticket)
         datCho_btn.setOnAction(e -> handleInsertBooking(false)); // for datCho (reserving seat)
@@ -133,23 +147,6 @@ public class XacNhanVeController implements Initializable {
         sanBayDen_txtfld.setText(sanBayDen);
         ngayBay_txtfld.setText(ngayBay);
         gioBay_txtfld.setText(gioBay);
-    }
-
-    private void setFieldsEditable(boolean editable) {
-        maKH_txtfld.setEditable(editable);
-        hoten_txtfld.setEditable(editable);
-        cccd_txtfld.setEditable(editable);
-        email_txtfld.setEditable(editable);
-        sdt_txtfld.setEditable(editable);
-        diaChi_txtfld.setEditable(editable);
-        maVe_txtfld.setEditable(editable);
-        maGhe_txtfld.setEditable(editable);
-        thanhTien_txtfld.setEditable(editable);
-        maChuyenBay_txtfld.setEditable(editable);
-        sanBayDi_txtfld.setEditable(editable);
-        sanBayDen_txtfld.setEditable(editable);
-        ngayBay_txtfld.setEditable(editable);
-        gioBay_txtfld.setEditable(editable);
     }
 
     private void generateCustomerId(String cccd) {
@@ -275,6 +272,19 @@ public class XacNhanVeController implements Initializable {
         }
         return "CTDV001";  // Default value if no existing records
     }
+
+    private void deleteBooking() {
+        String maVe = maVe_txtfld.getText().trim();
+        String deleteBookingSql = "DELETE FROM VE WHERE MAVE = ?";
+        try (PreparedStatement ps = connect.prepareStatement(deleteBookingSql)) {
+            ps.setString(1, maVe);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Có lỗi xảy ra khi xóa vé.");
+        }
+    }
+
 
     private void closeStage() {
         Stage stage = (Stage) datVe_btn.getScene().getWindow();
