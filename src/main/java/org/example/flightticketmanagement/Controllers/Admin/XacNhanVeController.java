@@ -98,7 +98,6 @@ public class XacNhanVeController implements Initializable {
         confirmationAlert.setContentText("Bạn có chắc chắn muốn hủy thao tác này không?");
         Optional<ButtonType> result = confirmationAlert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            clearFields();
             deleteBooking();
             if (manHinhDatVeController != null) {
                 manHinhDatVeController.closeStage();
@@ -237,24 +236,6 @@ public class XacNhanVeController implements Initializable {
         }
     }
 
-
-
-    private String generateMaCT_DATVE() {
-        String sql = "SELECT MAX(MaCT_DATVE) AS MaxMaCT_DATVE FROM CT_DATVE";
-        try (PreparedStatement ps = connect.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                String maxMaCT_DATVE = rs.getString("MaxMaCT_DATVE");
-                if (maxMaCT_DATVE != null) {
-                    int newMaCT_DATVE = Integer.parseInt(maxMaCT_DATVE.substring(4)) + 1;
-                    return String.format("CTDV%03d", newMaCT_DATVE);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return "CTDV001";  // Default value if no existing records
-    }
-
     private void deleteBooking() {
         String maVe = maVe_txtfld.getText().trim();
         String deleteBookingSql = "DELETE FROM VE WHERE MAVE = ?";
@@ -271,17 +252,5 @@ public class XacNhanVeController implements Initializable {
     private void closeStage() {
         Stage stage = (Stage) datVe_btn.getScene().getWindow();
         stage.close();
-    }
-
-    private void clearFields() {
-        maKH_txtfld.clear();
-        hoten_txtfld.clear();
-        cccd_txtfld.clear();
-        email_txtfld.clear();
-        sdt_txtfld.clear();
-        diaChi_txtfld.clear();
-        maVe_txtfld.clear();
-        maGhe_txtfld.clear();
-        thanhTien_txtfld.clear();
     }
 }
