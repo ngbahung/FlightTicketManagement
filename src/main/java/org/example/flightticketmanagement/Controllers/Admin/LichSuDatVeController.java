@@ -524,40 +524,9 @@ public class LichSuDatVeController implements Initializable {
         boolean confirm = alert.confirmationMessage(message);
         if (confirm) {
             try {
-                String maCTDatVe = selected.getMaCT_DatVe();
-
-                String selectQuery;
-                selectQuery = "SELECT V.MaChuyenBay, V.MaHangVe, V.MaGhe, V.GiaTien " +
-                            "FROM CT_DATVE CT " +
-                            "JOIN VE V ON CT.MaVe = V.MaVe " +
-                            "WHERE CT.MaCT_DATVE = ?";
-
-                String maChuyenBay = null, maHangVe = null;
-                int maGhe = 0;
-                float giaTien = 0;
-
-                try (PreparedStatement selectStmt = connect.prepareStatement(selectQuery)) {
-                    selectStmt.setString(1, maCTDatVe);
-                    ResultSet rs = selectStmt.executeQuery();
-                    if (rs.next()) {
-                        maChuyenBay = rs.getString("MaChuyenBay");
-                        maHangVe = rs.getString("MaHangVe");
-                        maGhe = rs.getInt("MaGhe");
-                        giaTien = rs.getFloat("GiaTien");
-                    }
-                }
-
-                // Tạo câu truy vấn để cập nhật trạng thái của CT_DATVE hoặc CT_DAT_CHO
-                String updateCTQuery;
-                updateCTQuery = "UPDATE CT_DATVE SET TrangThai = 2, NgayThanhToan = NULL WHERE MaCT_DATVE = ?";
-
-
-                try (PreparedStatement updateCTStmt = connect.prepareStatement(updateCTQuery)) {
-                    updateCTStmt.setString(1, maCTDatVe);
-                    updateCTStmt.executeUpdate();
-                }
-
-                loadData(null); // Reload the data
+                callUpdateTicketStatusProcedure(selected.getMaCT_DatVe(), 2);  // Call the procedure with status 2 (cancel)
+                loadData(null);  // Reload the data
+                alert.successMessage("Hủy vé hoặc phiếu đặt chỗ thành công.");
             } catch (SQLException e) {
                 alert.errorMessage("Không thể hủy vé hoặc phiếu đặt chỗ.");
             }
@@ -575,17 +544,34 @@ public class LichSuDatVeController implements Initializable {
         boolean confirm = alert.confirmationMessage("Bạn có chắc chắn muốn thanh toán phiếu đặt chỗ này?");
         if (confirm) {
             try {
-                String updateQuery = "UPDATE CT_DATVE SET TrangThai = 1, NgayThanhToan = ? WHERE MaCT_DATVE = ?";
-                try (PreparedStatement prepare = connect.prepareStatement(updateQuery)) {
-                    prepare.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
-                    prepare.setString(2, selectedVe.getMaCT_DatVe());
-                    prepare.executeUpdate();
-                }
-                loadData(null); // Reload data
+                callUpdateTicketStatusProcedure(selectedVe.getMaCT_DatVe(), 1);  // Call the procedure with status 1 (confirm)
+                loadData(null);  // Reload data
                 alert.successMessage("Thanh toán thành công.");
             } catch (SQLException e) {
                 alert.errorMessage("Không thể thanh toán phiếu đặt chỗ.");
             }
+        }
+    }
+
+    private void callUpdateTicketStatusProcedure(String maCT_DATVE, int trangThai) throws SQLException {
+        String sql = "{call update_ticket_status(?, ?)}";  // SQL to call the stored procedure
+        try (CallableStatement callableStatement = connect.prepareCall(sql)) {
+            callableStatement.setString(1, maCT_DATVE);
+            callableStatement.setInt(2, trangThai);
+            callableStatement.execute();
+        }
+    }
+
+    private void callUpdateRouteDetailsProcedure(String maDuongBay, String maSanBayDi, String maSanBayDen, String tenDuongBay, int doDaiDuongBay, int trangThai) throws SQLException {
+        String sql = "{call update_route_details(?, ?, ?, ?, ?, ?)}";
+        try (CallableStatement callableStatement = connect.prepareCall(sql)) {
+            callableStatement.setString(1, maDuongBay);
+            callableStatement.setString(2, maSanBayDi);
+            callableStatement.setString(3, maSanBayDen);
+            callableStatement.setString(4, tenDuongBay);
+            callableStatement.setInt(5, doDaiDuongBay);
+            callableStatement.setInt(6, trangThai);
+            callableStatement.execute();
         }
     }
 

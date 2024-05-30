@@ -207,50 +207,28 @@ public class XacNhanVeController implements Initializable {
         String diaChi = diaChi_txtfld.getText().trim();
         String maVe = maVe_txtfld.getText().trim();
 
-        // Generate a new unique MaCT_DATVE
-        String maCT_DATVE = generateMaCT_DATVE();
-
         // Get current timestamp for NgayMuaVe and NgayThanhToan
         LocalDateTime now = LocalDateTime.now();
         Timestamp ngayMuaVe = Timestamp.valueOf(now);
         Timestamp ngayThanhToan = isDatVe ? Timestamp.valueOf(now) : null;  // Set to current time if isDatVe, otherwise null
 
         try {
-            // Insert customer into KHACHHANG table if not exists
-            String checkCustomerSql = "SELECT COUNT(*) FROM KHACHHANG WHERE MAKHACHHANG = ?";
-            try (PreparedStatement ps = connect.prepareStatement(checkCustomerSql)) {
-                ps.setString(1, maKH);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next() && rs.getInt(1) == 0) {
-                        String insertCustomerSql = "INSERT INTO KHACHHANG (MAKHACHHANG, HOTEN, CCCD, EMAIL, SDT, DIACHI) VALUES (?, ?, ?, ?, ?, ?)";
-                        try (PreparedStatement insertPs = connect.prepareStatement(insertCustomerSql)) {
-                            insertPs.setString(1, maKH);
-                            insertPs.setString(2, hoten);
-                            insertPs.setString(3, cccd);
-                            insertPs.setString(4, email);
-                            insertPs.setString(5, sdt);
-                            insertPs.setString(6, diaChi);
-                            insertPs.executeUpdate();
-                        }
-                    }
-                }
-            }
-
-            // Insert booking into CT_DATVE table
-            String insertBookingSql = "INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) " +
-                    "VALUES (?, ?, ?, ?, ?, ?)";
-            try (PreparedStatement ps = connect.prepareStatement(insertBookingSql)) {
-                ps.setString(1, maCT_DATVE);
-                ps.setString(2, maVe);
-                ps.setString(3, maKH);
-                ps.setTimestamp(4, ngayMuaVe);
+            String callProcedureSql = "{CALL SellTicket(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+            try (CallableStatement cs = connect.prepareCall(callProcedureSql)) {
+                cs.setString(1, maKH);
+                cs.setString(2, hoten);
+                cs.setString(3, cccd);
+                cs.setString(4, email);
+                cs.setString(5, sdt);
+                cs.setString(6, diaChi);
+                cs.setString(7, maVe);
+                cs.setTimestamp(8, ngayMuaVe);
                 if (ngayThanhToan == null) {
-                    ps.setNull(5, java.sql.Types.TIMESTAMP);
+                    cs.setNull(9, java.sql.Types.TIMESTAMP);
                 } else {
-                    ps.setTimestamp(5, ngayThanhToan);
+                    cs.setTimestamp(9, ngayThanhToan);
                 }
-                ps.setInt(6, isDatVe ? 1 : 0); // 1 for datVe, 0 for datCho
-                ps.executeUpdate();
+                cs.execute();
                 return true; // Booking successful
             }
         } catch (SQLException e) {
@@ -258,6 +236,7 @@ public class XacNhanVeController implements Initializable {
             return false; // Booking failed
         }
     }
+
 
 
     private String generateMaCT_DATVE() {
