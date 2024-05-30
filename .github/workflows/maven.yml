@@ -25,6 +25,10 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '17'
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
