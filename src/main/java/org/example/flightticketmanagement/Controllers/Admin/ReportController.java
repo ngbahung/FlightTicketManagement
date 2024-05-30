@@ -54,6 +54,26 @@ public class ReportController {
             e.printStackTrace();
         }
     }
+    public void PrintVe(Integer namBaoCao,Integer thangBaoCao, List<BaoCaoThang> listBaoCaoThang){
+        try {
+            String fileJRXMLPath = "src/main/resources/Report/XuatVe.jrxml";
+            String ngayLapBaoCao = LocalDateTime.now()+"";
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put("namBaoCao", namBaoCao);
+            parameters.put("thangBaoCao", thangBaoCao);
+            parameters.put("ngayLapBaoCao", ngayLapBaoCao);
+
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(listBaoCaoThang);
+
+            JasperReport report = JasperCompileManager.compileReport(fileJRXMLPath);
+
+            JasperPrint print = JasperFillManager.fillReport(report, parameters, dataSource);
+
+            JasperExportManager.exportReportToPdfFile(print, ChonDuongDanLuuFile());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public String ChonDuongDanLuuFile() {
         FileChooser fileChooser = new FileChooser();

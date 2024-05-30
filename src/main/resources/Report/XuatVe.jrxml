@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="XuatVe" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c368610e-5bee-4e75-8f1e-ecda64380534">
+    <property name="ireport.zoom" value="1.0"/>
+    <property name="ireport.x" value="47"/>
+    <property name="ireport.y" value="451"/>
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+    <style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false"/>
+    <style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false"/>
+    <style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true"/>
+    <style name="Detail" mode="Transparent" fontName="Times New Roman"/>
+    <style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+        <conditionalStyle>
+            <conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+            <style mode="Opaque" backcolor="#F0EFEF"/>
+        </conditionalStyle>
+    </style>
+    <subDataset name="PieChartDataset" uuid="21b70311-b650-4678-a39c-887917366bf0"/>
+    <parameter name="maVe" class="java.lang.String"/>
+    <parameter name="hangVe" class="java.lang.String"/>
+    <parameter name="maGhe" class="java.lang.String"/>
+    <parameter name="gioBay" class="java.lang.String"/>
+    <parameter name="ngayBay" class="java.lang.String"/>
+    <parameter name="sanBayDi" class="java.lang.String"/>
+    <parameter name="sanBayDen" class="java.lang.String"/>
+    <parameter name="hoTen" class="java.lang.String"/>
+    <parameter name="sdt" class="java.lang.String"/>
+    <parameter name="giaVe" class="java.lang.String"/>
+    <queryString>
+        <![CDATA[]]>
+    </queryString>
+    <background>
+        <band height="270" splitType="Stretch">
+            <frame>
+                <reportElement mode="Opaque" x="-20" y="230" width="842" height="40" forecolor="#006699" backcolor="#31BFEB" uuid="32c3bada-b06d-4c16-a465-07e8cb680403">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                </reportElement>
+                <image>
+                    <reportElement x="20" y="5" width="260" height="30" uuid="6efc878d-be92-4557-9f03-0ba32bade3c9"/>
+                    <imageExpression><![CDATA["src/main/resources/Images/login/logo_TikeMana.png"]]></imageExpression>
+                </image>
+            </frame>
+            <staticText>
+                <reportElement x="0" y="20" width="130" height="30" forecolor="#0C556E" uuid="c1b6f3dc-2738-4c5d-bd2c-8206f2599fa1"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="18" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Mã vé:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="80" y="20" width="150" height="30" forecolor="#0C556E" uuid="e135eb74-6435-43a4-b911-0e1cc58c28e4"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="14" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{maVe}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="0" y="60" width="130" height="30" forecolor="#0C556E" uuid="ed85a102-e0f6-4be3-81e5-6ec9fbae0783"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="18" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Hạng vé:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="110" y="60" width="150" height="30" forecolor="#0C556E" uuid="5ec4f230-5f8c-46b8-84e1-a6705dfe0dd8"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="14" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{hangVe}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="0" y="100" width="130" height="30" forecolor="#0C556E" uuid="a45ba407-3d41-4ab3-a0b1-609b623637cd"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="18" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Mã ghế:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="100" y="100" width="150" height="30" forecolor="#0C556E" uuid="204806f3-6474-49a9-937f-05a795fb9549"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="14" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{maGhe}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="0" y="140" width="130" height="30" forecolor="#0C556E" uuid="8e41f244-0293-455f-9924-9f9642c46347"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="18" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Giờ bay:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="100" y="140" width="150" height="30" forecolor="#0C556E" uuid="05d784dd-dea6-45b0-88f2-6bca8a2b6592"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="14" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{gioBay}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="0" y="180" width="130" height="30" forecolor="#0C556E" uuid="0805c842-ab57-41a8-9a8c-5dd5825c55ef"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="18" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Ngày bay:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="120" y="180" width="150" height="30" forecolor="#0C556E" uuid="86dcc1eb-be2e-4d0d-846b-c99087b2fe8c"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="14" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{ngayBay}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="310" y="20" width="130" height="30" forecolor="#0C556E" uuid="acb26302-4ff9-4672-913a-e9d9da2b78bb"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="18" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Sân bay đi]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="300" y="50" width="150" height="60" forecolor="#0C556E" uuid="c8e1a2c9-e36c-4650-8b9b-c24e9c71be3b"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="14" isBold="true" isItalic="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{sanBayDi}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="310" y="110" width="130" height="30" forecolor="#0C556E" uuid="70a2cdd5-821b-4892-abc3-1c70bbc2cce0"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="18" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Sân bay đến]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="300" y="140" width="150" height="60" forecolor="#0C556E" uuid="e99e73b7-7cc7-4452-b104-bc35b63205da"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="14" isBold="true" isItalic="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{sanBayDen}]]></textFieldExpression>
+            </textField>
+            <line>
+                <reportElement x="470" y="11" width="1" height="208" forecolor="#0C556E" uuid="cc493633-99f5-49ef-bb59-6bd061a8db20"/>
+            </line>
+            <staticText>
+                <reportElement x="480" y="20" width="130" height="30" forecolor="#0C556E" uuid="20a9c30c-be91-4c0d-8248-9f0c49045eb5"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="18" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Họ tên:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="570" y="20" width="232" height="30" forecolor="#0C556E" uuid="9681577f-d92a-4c73-98f1-a663fa36aae6"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="14" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{hoTen}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="480" y="60" width="130" height="30" forecolor="#0C556E" uuid="1f1e3c22-1185-4c75-b012-3cb1616a9631"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="18" isBold="true"/>
+                </textElement>
+                <text><![CDATA[SDT:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="540" y="60" width="262" height="30" forecolor="#0C556E" uuid="01d0fddd-762c-4872-b83e-9ec8f4c1c8ae"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="14" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{sdt}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="480" y="130" width="130" height="30" forecolor="#0C556E" uuid="662efe10-7cb4-426d-94dc-33b3bfc2a7fe"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="18" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Giá vé:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="560" y="130" width="203" height="30" forecolor="#0C556E" uuid="0439adf3-024b-42c2-8fc4-548a563459eb"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="14" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{giaVe}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="750" y="130" width="52" height="30" forecolor="#0C556E" uuid="007193c1-ce02-4212-9401-629459434a5b"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[VND]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="530" y="205" width="272" height="30" forecolor="#0C556E" uuid="600103d6-212c-4a25-9d17-e2b380dbd829"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+            </textField>
+        </band>
+    </background>
+    <title>
+        <band height="116" splitType="Stretch">
+            <frame>
+                <reportElement mode="Opaque" x="-20" y="-20" width="842" height="100" forecolor="#006699" backcolor="#31BFEB" uuid="83f5e806-cc04-4161-87a9-07633f604bc1">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                </reportElement>
+                <staticText>
+                    <reportElement style="Title" x="10" y="10" width="520" height="65" forecolor="#0C556E" uuid="f5cd9ee0-5caa-4e48-8946-c7e84d82a845"/>
+                    <textElement textAlignment="Left">
+                        <font fontName="DejaVu Sans" size="54" isBold="true" isItalic="true"/>
+                    </textElement>
+                    <text><![CDATA[TikemanaAirlines]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement style="SubTitle" x="653" y="110" width="169" height="29" forecolor="#31BFEB" uuid="0dae0af3-dd1d-4b42-b346-386af21f0689"/>
+                    <box>
+                        <pen lineColor="#EDF2F2"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="DejaVu Sans" size="22" isBold="true" isItalic="true"/>
+                    </textElement>
+                    <text><![CDATA[Flight Ticket]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement style="SubTitle" x="650" y="110" width="169" height="29" forecolor="#0C556E" uuid="d6d342fd-babf-423c-872e-3ed9588bc9c0"/>
+                    <box>
+                        <pen lineColor="#EDF2F2"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="DejaVu Sans" size="22" isBold="true" isItalic="true"/>
+                    </textElement>
+                    <text><![CDATA[Flight Ticket]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement style="Title" x="20" y="10" width="510" height="65" forecolor="#FFFFFF" uuid="42cc7f21-f7bd-4404-bd74-f030541fd7b4"/>
+                    <textElement textAlignment="Left">
+                        <font fontName="DejaVu Sans" size="54" isBold="true" isItalic="true"/>
+                    </textElement>
+                    <text><![CDATA[TikemanaAirlines]]></text>
+                </staticText>
+            </frame>
+        </band>
+    </title>
+    <pageHeader>
+        <band splitType="Stretch"/>
+    </pageHeader>
+    <columnHeader>
+        <band height="14" splitType="Stretch">
+            <frame>
+                <reportElement x="227" y="0" width="575" height="14" uuid="2a3d298d-90eb-4db1-919a-c9b2ed28c222"/>
+            </frame>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="15" splitType="Stretch">
+            <line>
+                <reportElement positionType="FixRelativeToBottom" x="227" y="14" width="575" height="1" uuid="ad4e998c-7071-4467-b7fa-4441cc53d3f6"/>
+            </line>
+            <frame>
+                <reportElement x="227" y="0" width="575" height="14" uuid="822bafe9-34ee-4b4f-aa76-3eae029c4911"/>
+            </frame>
+        </band>
+    </detail>
+    <columnFooter>
+        <band height="7" splitType="Stretch">
+            <line>
+                <reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="c23ffbf7-1928-41f8-ade3-5930d9a4871d"/>
+                <graphicElement>
+                    <pen lineWidth="0.5" lineColor="#999999"/>
+                </graphicElement>
+            </line>
+        </band>
+    </columnFooter>
+    <pageFooter>
+        <band height="16" splitType="Stretch">
+            <frame>
+                <reportElement mode="Opaque" x="2" y="0" width="800" height="16" forecolor="#D0B48E" backcolor="#31BFEB" uuid="6f4fe8ef-88ca-4d5d-b46a-054826bb7893"/>
+            </frame>
+        </band>
+    </pageFooter>
+    <summary>
+        <band splitType="Stretch"/>
+    </summary>
+</jasperReport>
