@@ -620,8 +620,27 @@ public class LichSuDatVeController implements Initializable {
         }
     }
     private void xuatVe(){
-        
+        CT_DatVe selectedVeDaDat = veDaDat_tbview.getSelectionModel().getSelectedItem();
+        if (selectedVeDaDat == null) {
+            alert.errorMessage("Vui lòng chọn một vé để xuất vé.");
+            return;
+        }
+
+        String maVe = selectedVeDaDat.getMaVe();
+        String tenKhachHang = getTenKhachHang(selectedVeDaDat.getMaKhachHang());
+        String SDT = getSDT(selectedVeDaDat.getMaKhachHang());
+        String maGhe = getMaGhe(maVe);
+        String hangVe = getTenHangVe(maVe);
+        String giaVe = getGiaTien(maVe)+"";
+        String sanBayDi = getSanBayDi(maVe);
+        String sanBayDen = getSanBayDen(maVe);
+        String ngayBay = Timestamp.valueOf(LocalDateTime.parse(getNgayBay(maVe), formatter))+"";
+        String gioBay = Timestamp.valueOf(LocalDateTime.parse(getGioBay(maVe), formatter))+"";
+        ReportController report = new ReportController();
+        report.PrintVe(maVe, tenKhachHang,  SDT,  maGhe,  hangVe,  giaVe,  sanBayDi,  sanBayDen,  ngayBay,  gioBay);
+        // Thực hiện các thao tác cần thiết với các giá trị này, ví dụ: in ra console hoặc thực hiện các xử lý khác
     }
+
 
 }
 
