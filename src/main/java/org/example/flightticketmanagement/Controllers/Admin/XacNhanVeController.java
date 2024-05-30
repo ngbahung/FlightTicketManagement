@@ -186,7 +186,8 @@ public class XacNhanVeController implements Initializable {
 
     private void handleInsertBooking(boolean isDatVe) {
         generateCustomerId(cccd_txtfld.getText());
-        if (insertBooking(isDatVe)) {
+        int trangThai = isDatVe ? 1 : 0;
+        if (insertBooking(isDatVe, trangThai, maChuyenBay_txtfld.getText().trim(), maGhe_txtfld.getText().trim())) {
             alert.successMessage(isDatVe ? "Đặt vé thành công!" : "Đặt chỗ thành công!");
             if (manHinhDatVeController != null) {
                 manHinhDatVeController.closeStage();
@@ -197,7 +198,8 @@ public class XacNhanVeController implements Initializable {
         }
     }
 
-    private boolean insertBooking(boolean isDatVe) {
+
+    private boolean insertBooking(boolean isDatVe, int trangThai, String maChuyenBay, String maHangVe) {
         String maKH = maKH_txtfld.getText().trim();
         String hoten = hoten_txtfld.getText().trim();
         String cccd = cccd_txtfld.getText().trim();
@@ -206,13 +208,12 @@ public class XacNhanVeController implements Initializable {
         String diaChi = diaChi_txtfld.getText().trim();
         String maVe = maVe_txtfld.getText().trim();
 
-        // Get current timestamp for NgayMuaVe and NgayThanhToan
         LocalDateTime now = LocalDateTime.now();
         Timestamp ngayMuaVe = Timestamp.valueOf(now);
-        Timestamp ngayThanhToan = isDatVe ? Timestamp.valueOf(now) : null;  // Set to current time if isDatVe, otherwise null
+        Timestamp ngayThanhToan = isDatVe ? Timestamp.valueOf(now) : null;
 
         try {
-            String callProcedureSql = "{CALL SellTicket(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+            String callProcedureSql = "{CALL SellTicket(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
             try (CallableStatement cs = connect.prepareCall(callProcedureSql)) {
                 cs.setString(1, maKH);
                 cs.setString(2, hoten);
@@ -227,14 +228,53 @@ public class XacNhanVeController implements Initializable {
                 } else {
                     cs.setTimestamp(9, ngayThanhToan);
                 }
+                cs.setInt(10, trangThai);
                 cs.execute();
-                return true; // Booking successful
+            }
+
+            // Gọi hàm update_ticket_status sau khi SellTicket
+            String maCT_DATVE = getMaCT_DATVEByMaVe(maVe); // Hàm này cần được tạo để lấy MaCT_DATVE từ MaVe
+            callUpdateTicketStatus(maCT_DATVE, trangThai);
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Có lỗi xảy ra khi đặt vé hoặc đặt chỗ.");
+            return false;
+        }
+    }
+
+    private String getMaCT_DATVEByMaVe(String maVe) {
+        String maCT_DATVE = null;
+        String query = "SELECT MaCT_DATVE FROM CT_DATVE WHERE MaVe = ?";
+        try (PreparedStatement ps = connect.prepareStatement(query)) {
+            ps.setString(1, maVe);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    maCT_DATVE = rs.getString("MaCT_DATVE");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false; // Booking failed
+            alert.errorMessage("Có lỗi xảy ra khi lấy MaCT_DATVE.");
+        }
+        return maCT_DATVE;
+    }
+
+    private void callUpdateTicketStatus(String maCT_DATVE, int trangThai) {
+        try {
+            String callProcedureSql = "{CALL update_ticket_status(?, ?)}";
+            try (CallableStatement cs = connect.prepareCall(callProcedureSql)) {
+                cs.setString(1, maCT_DATVE);
+                cs.setInt(2, trangThai);
+                cs.execute();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Có lỗi xảy ra khi cập nhật trạng thái vé.");
         }
     }
+
 
     private void deleteBooking() {
         String maVe = maVe_txtfld.getText().trim();
