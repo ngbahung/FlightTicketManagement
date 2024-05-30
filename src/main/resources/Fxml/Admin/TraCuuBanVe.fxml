@@ -54,7 +54,7 @@
          </MFXButton>
       </children>
    </AnchorPane>
-   <TableView fx:id="chuyenBay_tableview" layoutX="-3.0" layoutY="177.0" prefHeight="530.0" prefWidth="995.0">
+   <TableView fx:id="chuyenBay_tableview" layoutX="20.0" layoutY="177.0" prefHeight="530.0" prefWidth="943.0">
       <columns>
          <TableColumn fx:id="maChuyenBay_tbcolumn" prefWidth="98.66665267944336" text="Mã chuyến bay" />
          <TableColumn fx:id="sanBayDi_tbcolumn" prefWidth="96.0" text="Sân bay đi" />

@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
@@ -95,7 +96,7 @@ public class TraCuuBanVeController implements Initializable {
         chuyenBay_tableview.getItems().clear();  // Clear previous search results
 
         try {
-            StringBuilder query = new StringBuilder("SELECT * FROM CHUYENBAY WHERE TrangThai = 'ChuaBay'");
+            StringBuilder query = new StringBuilder("SELECT * FROM CHUYENBAY WHERE TrangThai = 0");
             boolean hasCondition = false;
 
             // Check if there are conditions to add to the WHERE clause
@@ -229,11 +230,7 @@ public class TraCuuBanVeController implements Initializable {
 
 
     private Integer getSoGheTrong(String maChuyenBay) {
-        String sql = "SELECT COUNT(VE.MAVE) AS SoGheTrong " +
-                "FROM VE " +
-                "LEFT JOIN CT_DATVE ON VE.MAVE = CT_DATVE.MAVE " +
-                "WHERE VE.MACHUYENBAY = ? " +
-                "AND (CT_DATVE.TRANGTHAI NOT IN (0, 1, 2) OR CT_DATVE.TRANGTHAI IS NULL)";
+        String sql = "SELECT SUM(SoGheTrong) AS SoGheTrong FROM CT_HANGVE WHERE MaChuyenBay = ?";
         try (Connection conn = DatabaseDriver.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, maChuyenBay);
@@ -250,11 +247,7 @@ public class TraCuuBanVeController implements Initializable {
 
 
     private Integer getSoGhe(String maChuyenBay) {
-        String sql = "SELECT COUNT(VE.MAVE) AS SoGhe " +
-                "FROM VE " +
-                "LEFT JOIN CT_DATVE ON VE.MAVE = CT_DATVE.MAVE " +
-                "WHERE VE.MACHUYENBAY = ? " +
-                "AND (CT_DATVE.TRANGTHAI IN (0, 1) OR CT_DATVE.TRANGTHAI IS NULL)";
+        String sql = "SELECT SUM(SoGheTrong + SoGheDat) AS SoGhe FROM CT_HANGVE WHERE MaChuyenBay = ?";
         try (Connection conn = DatabaseDriver.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, maChuyenBay);
@@ -266,7 +259,7 @@ public class TraCuuBanVeController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0; // Placeholder if not found
+        return 0;
     }
 
 
@@ -418,6 +411,7 @@ public class TraCuuBanVeController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle("Chi Tiết Chuyến Bay");
             stage.setScene(new Scene(root));
+            stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/Admin/logo.png"))));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

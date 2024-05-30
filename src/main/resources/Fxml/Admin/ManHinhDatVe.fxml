@@ -108,8 +108,8 @@
          </AnchorPane>
          <TableView fx:id="ve_tableview" prefHeight="308.0" prefWidth="487.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css">
             <columns>
-               <TableColumn fx:id="mave_tbcl" prefWidth="79.0" text="Mã vé" />
-               <TableColumn fx:id="maGhe_tbcl" prefWidth="92.0" text="Mã ghế" />
+               <TableColumn fx:id="mave_tbcl" prefWidth="79.0" text="Mã vé" visible="false" />
+               <TableColumn fx:id="maGhe_tbcl" prefWidth="92.0" text="Mã ghế" visible="false" />
                <TableColumn fx:id="hangVe_tbcl" prefWidth="158.0" text="Hạng vé" />
                <TableColumn fx:id="giaTien_tbcl" prefWidth="148.0" text="Giá tiền" />
             </columns>

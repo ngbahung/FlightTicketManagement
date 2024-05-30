@@ -6,6 +6,8 @@ public class HangVe {
     private Float heSo;
     private Integer trangThai;
 
+    public HangVe(){}
+
     public HangVe(String maHangVe, String tenHangVe, Float heSo, Integer trangThai) {
         this.maHangVe = maHangVe;
         this.tenHangVe = tenHangVe;

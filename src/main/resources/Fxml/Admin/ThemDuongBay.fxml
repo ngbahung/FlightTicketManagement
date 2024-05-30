@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import javafx.scene.control.Label?>
@@ -34,6 +35,9 @@
          </children>
       </GridPane>
       <Label layoutX="100.0" layoutY="22.0" styleClass="tittle" text="THÊM ĐƯỜNG BAY" />
-      <MFXButton fx:id="luuDuongBay_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="176.0" layoutY="261.0" prefHeight="30.0" prefWidth="85.0" text="Lưu" />
+      <MFXButton fx:id="luuDuongBay_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="176.0" layoutY="261.0" prefHeight="30.0" prefWidth="85.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css" text="Lưu">
+         <graphic>
+            <FontAwesomeIconView fill="WHITE" glyphName="SAVE" size="20" />
+         </graphic></MFXButton>
    </children>
 </AnchorPane>

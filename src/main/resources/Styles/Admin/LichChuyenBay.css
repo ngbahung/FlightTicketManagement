@@ -87,9 +87,12 @@
 /* tableview-styles.css */
 .custom-tableview {
     -fx-background-color: #f4f4f4;
-    -fx-border-color: transparent;
-    -fx-table-cell-border-color: transparent;
+    -fx-border-color: #ddd;
+    -fx-table-cell-border-color: #ddd;
+    -fx-border-radius: 8;
     -fx-padding: 10;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 0, 0);
 }
 
 .custom-tableview .column-header-background {
@@ -104,16 +107,22 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-alignment: center-left;
+    -fx-border-radius: 8 8 0 0;
 }
 
 .custom-tableview .table-row-cell {
     -fx-background-color: #ffffff;
     -fx-border-color: transparent;
     -fx-padding: 5;
+    -fx-border-radius: 5;
 }
 
 .custom-tableview .table-row-cell:even {
     -fx-background-color: #dbdbdb;
+}
+
+.custom-tableview .table-row-cell:hover {
+    -fx-background-color: #e8f4ff;
 }
 
 .custom-tableview .table-row-cell:selected {

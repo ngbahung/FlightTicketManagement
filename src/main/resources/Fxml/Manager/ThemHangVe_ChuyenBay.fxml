@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="302.0" prefWidth="435.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Manager.ThemHangVe_ChuyenBayController">
+   <children>
+      <Label layoutX="141.0" layoutY="34.0" text="CHỌN HẠNG VÉ">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font></Label>
+      <GridPane hgap="10.0" layoutX="24.0" layoutY="78.0" prefHeight="141.0" prefWidth="360.0" stylesheets="@../../Styles/Admin/ThongTinTaiKhoan.css" vgap="30.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="137.0" minWidth="10.0" prefWidth="77.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="192.0" minWidth="10.0" prefWidth="165.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label id="custom_hv" text="Hạng vé:" />
+            <MFXComboBox id="custom_hv" fx:id="hangVe_combox" minHeight="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="193.0" GridPane.columnIndex="1" />
+            <Label id="custom_hv" text="Số lượng ghế:" GridPane.rowIndex="1" />
+            <MFXTextField id="custom_hv" fx:id="soLuongGhe_txtfld" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="192.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+         </children>
+         <styleClass>
+            <String fx:value="grid-pane" />
+            <String fx:value="text" />
+         </styleClass>
+         <padding>
+            <Insets bottom="30.0" left="10.0" right="10.0" top="30.0" />
+         </padding>
+      </GridPane>
+      <MFXButton fx:id="luuHangVe_btn" layoutX="165.0" layoutY="236.0" onAction="#luuHangVe" prefHeight="44.0" prefWidth="107.0" stylesheets="@../../Styles/Admin/ThongTinTaiKhoan.css" text="Lưu">
+         <graphic>
+            <FontAwesomeIconView fill="WHITE" glyphName="SAVE" size="20" />
+         </graphic></MFXButton>
+   </children>
+</AnchorPane>

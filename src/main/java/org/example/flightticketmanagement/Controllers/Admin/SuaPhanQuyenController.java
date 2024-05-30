@@ -49,7 +49,10 @@ public class SuaPhanQuyenController implements Initializable {
 
     public void setSelectedTaiKhoan(TaiKhoan taiKhoan) {
         this.selectedTaiKhoan = taiKhoan;
-        populateFields();
+        // Đảm bảo rằng populateRoleComboBox đã hoàn thành trước khi gọi populateFields
+        if (!roleMap.isEmpty()) {
+            populateFields();
+        }
     }
 
     public void setParentController(PhanQuyenController parentController) {
@@ -63,8 +66,23 @@ public class SuaPhanQuyenController implements Initializable {
             ten_txtfld.setText(selectedTaiKhoan.getTen());
             email_txtfld.setText(selectedTaiKhoan.getEmail());
             matKhau_txtfld.setText(selectedTaiKhoan.getPassword());
-            vaiTro_combobox.setValue(roleMap.get(selectedTaiKhoan.getMaQuyen()));
+            vaiTro_combobox.getSelectionModel().selectItem(selectedTaiKhoan.getMaQuyen());
+            vaiTro_combobox.setValue(getRoleName(selectedTaiKhoan.getMaQuyen()));
+
+            // Lắng nghe sự thay đổi của ComboBox để cập nhật roleMap
+            vaiTro_combobox.valueProperty().addListener((observable, oldValue, newValue) -> {
+                selectedTaiKhoan.setMaQuyen(roleMap.get(newValue));  // Cập nhật MaQuyen dựa trên giá trị mới
+            });
         }
+    }
+
+    private String getRoleName(String maQuyen) {
+        for (Map.Entry<String, String> entry : roleMap.entrySet()) {
+            if (entry.getValue().equals(maQuyen)) {
+                return entry.getKey();  // Trả về TenQuyen tương ứng với MaQuyen
+            }
+        }
+        return null;
     }
 
     private void populateRoleComboBox() {
@@ -75,7 +93,7 @@ public class SuaPhanQuyenController implements Initializable {
             while (result.next()) {
                 String maQuyen = result.getString("MaQuyen");
                 String tenQuyen = result.getString("TenQuyen");
-                roleMap.put(maQuyen, tenQuyen);
+                roleMap.put(tenQuyen, maQuyen);
                 vaiTro_combobox.getItems().add(tenQuyen);
             }
 
@@ -92,6 +110,7 @@ public class SuaPhanQuyenController implements Initializable {
         String email = email_txtfld.getText();
         String matKhau = matKhau_txtfld.getText();
         String vaiTro = vaiTro_combobox.getValue();
+        String maQuyen = roleMap.get(vaiTro);
 
         if (ten.isEmpty() || email.isEmpty() || matKhau.isEmpty() || vaiTro.isEmpty()) {
             alert.errorMessage("Vui lòng điền đầy đủ thông tin.");
@@ -106,7 +125,7 @@ public class SuaPhanQuyenController implements Initializable {
             prepare.setString(1, ten);
             prepare.setString(2, email);
             prepare.setString(3, matKhau);
-            prepare.setString(4, vaiTro);
+            prepare.setString(4, maQuyen);
             prepare.setString(5, maTaiKhoan);
 
             int rowsUpdated = prepare.executeUpdate();

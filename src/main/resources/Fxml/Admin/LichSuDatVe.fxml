@@ -22,7 +22,7 @@
          <DropShadow />
       </effect>
       <HBox alignment="CENTER" layoutX="32.0" layoutY="14.0" prefHeight="47.0" prefWidth="665.0" spacing="10.0">
-         <MenuButton fx:id="sanbaydi_menubtn" mnemonicParsing="false" prefHeight="39.0" prefWidth="183.0" text="Sân bay đi">
+         <MenuButton fx:id="sanbaydi_menubtn"  mnemonicParsing="false" prefHeight="39.0" prefWidth="183.0" text="Sân bay đi">
             <items>
                <MenuItem mnemonicParsing="false" text="Action 1" />
                <MenuItem mnemonicParsing="false" text="Action 2" />
@@ -46,16 +46,21 @@
             <font>
                <Font name="System Bold" size="13.0" />
             </font></MFXDatePicker>
-         <MFXButton id="custom_2" fx:id="timkiem_btn" prefHeight="30.0" prefWidth="53.0" text=" ">
+         <MFXButton id="custom_2" fx:id="timkiem_btn" onAction="#search" prefHeight="30.0" prefWidth="53.0" text=" ">
             <graphic>
                <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20" />
             </graphic>
          </MFXButton>
       </HBox>
    </AnchorPane>
-   <VBox layoutX="5.0" layoutY="121.0" prefHeight="319.0" prefWidth="986.0">
-      <AnchorPane prefHeight="40.0" prefWidth="458.0">
+   <VBox layoutX="11.0" layoutY="121.0" prefHeight="334.0" prefWidth="964.0">
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="66.0" prefWidth="965.0">
          <Text id="custom" layoutX="408.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="table-text" text="VÉ ĐÃ ĐẶT" />
+         <MFXButton id="custom_2" layoutX="842.0" layoutY="14.0" prefHeight="30.0" prefWidth="111.0" text="Xuất vé" fx:id="xuatVe_btn">
+            <graphic>
+               <FontAwesomeIconView fill="WHITE" glyphName="TICKET" size="20" />
+            </graphic>
+         </MFXButton>
          <styleClass>
             <String fx:value="table-label" />
             <String fx:value="custom-tableview" />
@@ -67,7 +72,7 @@
             <String fx:value="resize-line" />
          </styleClass>
       </AnchorPane>
-      <TableView fx:id="veDaDat_tbview" prefHeight="268.0" prefWidth="954.0">
+      <TableView fx:id="veDaDat_tbview" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="268.0" prefWidth="966.0">
          <columns>
             <TableColumn fx:id="veDD_maVe_tbcl" prefWidth="81.0" text="Mã vé" />
             <TableColumn fx:id="veDD_sanBayDi_tbcl" prefWidth="88.0" text="Sân bay đi" />
@@ -92,10 +97,10 @@
       </TableView>
    </VBox>
    <Separator layoutX="38.0" layoutY="454.0" prefHeight="0.0" prefWidth="916.0" />
-   <VBox layoutY="457.0" prefHeight="319.0" prefWidth="992.0">
-      <AnchorPane prefHeight="40.0" prefWidth="458.0">
+   <VBox layoutX="10.0" layoutY="457.0" prefHeight="319.0" prefWidth="966.0">
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="969.0">
          <Text id="custom" layoutX="408.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="table-text" text="PHIẾU ĐẶT CHỖ" />
-         <MFXButton id="custom_2" fx:id="thanhToan_btn" layoutX="767.0" layoutY="1.0" prefHeight="30.0" prefWidth="144.0" text="Thanh toán">
+         <MFXButton id="custom_2" fx:id="thanhToan_btn" disable="true" layoutX="813.0" layoutY="17.0" onAction="#handleThanhToan" prefHeight="30.0" prefWidth="144.0" text="Thanh toán">
             <graphic>
                <FontAwesomeIconView fill="WHITE" glyphName="MONEY" size="20" />
             </graphic>
@@ -111,7 +116,7 @@
             <String fx:value="resize-line" />
          </styleClass>
       </AnchorPane>
-      <TableView fx:id="phDC_tbview" prefHeight="282.0" prefWidth="916.0">
+      <TableView fx:id="phDC_tbview" prefHeight="255.0" prefWidth="966.0">
          <columns>
             <TableColumn fx:id="phDC_maVe_tbcl" prefWidth="81.0" text="Mã vé" />
             <TableColumn fx:id="phDC_sanBayDi_tbcl" prefWidth="88.0" text="Sân bay đi" />
@@ -135,7 +140,7 @@
          </styleClass>
       </TableView>
    </VBox>
-   <MFXButton id="custom_1" fx:id="huyVeorDatCho_btn" graphicTextGap="15.0" layoutX="791.0" layoutY="52.0" prefHeight="38.0" prefWidth="177.0" text="Hủy vé/đặt chỗ" textFill="RED">
+   <MFXButton id="custom_1" fx:id="huyVeorDatCho_btn" graphicTextGap="15.0" layoutX="791.0" layoutY="52.0" onAction="#cancelTicketOrReservation" prefHeight="38.0" prefWidth="177.0" text="Hủy vé/đặt chỗ" textFill="RED">
       <graphic>
          <FontAwesomeIconView fill="RED" glyphName="EXCLAMATION_TRIANGLE" size="20" />
       </graphic>
@@ -143,11 +148,6 @@
    <MFXButton id="custom_2" fx:id="refresh_btn" layoutX="14.0" layoutY="44.0" text=" ">
       <graphic>
          <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" size="30" />
-      </graphic>
-   </MFXButton>
-   <MFXButton id="custom_2" layoutX="833.0" layoutY="100.0" prefHeight="41.0" prefWidth="111.0" text="Xuất vé" fx:id="xuatVe_btn">
-      <graphic>
-         <FontAwesomeIconView fill="WHITE" glyphName="TICKET" size="20" />
       </graphic>
    </MFXButton>
 </AnchorPane>
