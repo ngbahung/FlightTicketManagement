@@ -146,7 +146,7 @@ public class LichSuDatVeController implements Initializable {
         // Thêm sự kiện cho nút hủy vé hoặc phiếu đặt chỗ
         huyVeorDatCho_btn.setOnAction(event -> cancelTicketOrReservation());
 
-
+        xuatVe_btn.setOnMouseClicked(mouseEvent -> xuatVe());
         // Thêm sự kiện cho nút làm mới
         refresh_btn.setOnAction(event -> {
             // Xóa hết các lựa chọn và đặt lại giá trị mặc định
@@ -618,6 +618,9 @@ public class LichSuDatVeController implements Initializable {
                 alert.errorMessage("Không thể thanh toán phiếu đặt chỗ.");
             }
         }
+    }
+    private void xuatVe(){
+        
     }
 
 }
