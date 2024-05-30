@@ -232,9 +232,14 @@ public class XacNhanVeController implements Initializable {
                 cs.execute();
             }
 
-            // Gọi hàm update_ticket_status sau khi SellTicket
-            String maCT_DATVE = getMaCT_DATVEByMaVe(maVe); // Hàm này cần được tạo để lấy MaCT_DATVE từ MaVe
-            callUpdateTicketStatus(maCT_DATVE, trangThai);
+            // Retrieve MaCT_DATVE after SellTicket
+            String maCT_DATVE = getMaCT_DATVEByMaVe(maVe);
+            if (maCT_DATVE != null) {
+                // Call update_ticket_status procedure
+                callUpdateTicketStatus(maCT_DATVE, trangThai);
+            } else {
+                throw new SQLException("Failed to retrieve MaCT_DATVE.");
+            }
 
             return true;
         } catch (SQLException e) {
@@ -261,19 +266,15 @@ public class XacNhanVeController implements Initializable {
         return maCT_DATVE;
     }
 
-    private void callUpdateTicketStatus(String maCT_DATVE, int trangThai) {
-        try {
-            String callProcedureSql = "{CALL update_ticket_status(?, ?)}";
-            try (CallableStatement cs = connect.prepareCall(callProcedureSql)) {
-                cs.setString(1, maCT_DATVE);
-                cs.setInt(2, trangThai);
-                cs.execute();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            alert.errorMessage("Có lỗi xảy ra khi cập nhật trạng thái vé.");
+    private void callUpdateTicketStatus(String maCT_DATVE, int trangThai) throws SQLException {
+        String callUpdateStatusSql = "{CALL update_ticket_status(?, ?)}";
+        try (CallableStatement cs = connect.prepareCall(callUpdateStatusSql)) {
+            cs.setString(1, maCT_DATVE);
+            cs.setInt(2, trangThai);
+            cs.execute();
         }
     }
+
 
 
     private void deleteBooking() {
