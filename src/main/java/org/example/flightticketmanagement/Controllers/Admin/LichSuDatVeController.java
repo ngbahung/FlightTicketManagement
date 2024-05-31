@@ -205,6 +205,7 @@ public class LichSuDatVeController implements Initializable {
                 loadData(null);  // Reload the data
                 alert.successMessage("Hủy vé hoặc phiếu đặt chỗ thành công.");
             } catch (SQLException e) {
+                e.printStackTrace();
                 alert.errorMessage("Không thể hủy vé hoặc phiếu đặt chỗ.");
             }
         }
@@ -234,6 +235,12 @@ public class LichSuDatVeController implements Initializable {
             alert.errorMessage("Could not load data from the database.");
         }
 
+        // Thêm sự kiện cho nút tìm kiếm
+        timkiem_btn.setOnAction(event -> search());
+        // Thêm sự kiện cho nút hủy vé hoặc phiếu đặt chỗ
+        huyVeorDatCho_btn.setOnAction(event -> cancelTicketOrReservation());
+
+        xuatVe_btn.setOnMouseClicked(mouseEvent -> xuatVe());
         // Thêm sự kiện cho nút làm mới
         refresh_btn.setOnAction(event -> {
             // Xóa hết các lựa chọn và đặt lại giá trị mặc định
@@ -249,12 +256,17 @@ public class LichSuDatVeController implements Initializable {
 
         sanbaydi_menubtn.setOnShowing(event -> updateSanBayMenuItems());
         sanbayden_menubtn.setOnShowing(event -> updateSanBayMenuItems());
+
         // Add listener to enable/disable thanhToan_btn based on selection in phDC_tbview
         phDC_tbview.getSelectionModel().selectedItemProperty().addListener(
                 (ObservableValue<? extends CT_DatVe> observable, CT_DatVe oldValue, CT_DatVe newValue) -> {
                     thanhToan_btn.setDisable(newValue == null);
                 }
         );
+        thanhToan_btn.setDisable(true); // Initially disable the button
+
+        // Add event listener for the thanhToan_btn
+        thanhToan_btn.setOnAction(event -> handleThanhToan());
     }
 
     private void setupTableViewColumns(TableColumn<CT_DatVe, String> maVeCol,
@@ -427,6 +439,18 @@ public class LichSuDatVeController implements Initializable {
             }
         } catch (SQLException e) {
             alert.errorMessage("Could not retrieve price from the database.");
+        } finally {
+            // Đóng result và prepare trong khối finally
+            try {
+                if (result != null) {
+                    result.close();
+                }
+                if (prepare != null) {
+                    prepare.close();
+                }
+            } catch (SQLException ex) {
+                alert.errorMessage("Could not close result set or prepared statement.");
+            }
         }
         return 0;
     }
@@ -453,8 +477,6 @@ public class LichSuDatVeController implements Initializable {
         }
         return "";
     }
-
-
 
     private void prepareAndExecuteQuery(String query, LocalDateTime selectedDate, String sanBayDi, String sanBayDen, TableView<CT_DatVe> tableView, int trangThai) throws SQLException {
         try (PreparedStatement prepare = connect.prepareStatement(query)) {
@@ -500,9 +522,11 @@ public class LichSuDatVeController implements Initializable {
             callableStatement.setString(1, maCT_DATVE);
             callableStatement.setInt(2, trangThai);
             callableStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Có lỗi xảy ra khi cập nhật trạng thái vé.");
         }
     }
-
 
     private void updateSanBayMenuItems() {
         // Clear the current items in the menu
@@ -543,6 +567,29 @@ public class LichSuDatVeController implements Initializable {
             sanbayden_menubtn.getItems().add(menuItem);
         }
     }
+
+    private void xuatVe(){
+        CT_DatVe selectedVeDaDat = veDaDat_tbview.getSelectionModel().getSelectedItem();
+        if (selectedVeDaDat == null) {
+            alert.errorMessage("Vui lòng chọn một vé để xuất vé.");
+            return;
+        }
+
+        String maVe = selectedVeDaDat.getMaVe();
+        String tenKhachHang = getTenKhachHang(selectedVeDaDat.getMaKhachHang());
+        String SDT = getSDT(selectedVeDaDat.getMaKhachHang());
+        String maGhe = getMaGhe(maVe);
+        String hangVe = getTenHangVe(maVe);
+        String giaVe = getGiaTien(maVe)+"";
+        String sanBayDi = getSanBayDi(maVe);
+        String sanBayDen = getSanBayDen(maVe);
+        String ngayBay = Timestamp.valueOf(LocalDateTime.parse(getNgayBay(maVe), formatter))+"";
+        String gioBay = Timestamp.valueOf(LocalDateTime.parse(getGioBay(maVe), formatter))+"";
+        ReportController report = new ReportController();
+        report.PrintVe(maVe, tenKhachHang,  SDT,  maGhe,  hangVe,  giaVe,  sanBayDi,  sanBayDen,  ngayBay,  gioBay);
+        // Thực hiện các thao tác cần thiết với các giá trị này, ví dụ: in ra console hoặc thực hiện các xử lý khác
+    }
+
 }
 
 
