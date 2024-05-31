@@ -117,100 +117,6 @@ public class LichSuDatVeController implements Initializable {
     @FXML
     private TableView<CT_DatVe> veDaDat_tbview;
 
-    @FXML
-    void search() {
-        LocalDateTime selectedDate = ngay_datepicker.getValue() != null ? ngay_datepicker.getValue().atStartOfDay() : null;
-        String sanBayDi = sanbaydi_menubtn.getText();
-        String sanBayDen = sanbayden_menubtn.getText();
-
-        veDaDat_tbview.getItems().clear();
-        phDC_tbview.getItems().clear();
-
-        String baseQuery = "SELECT * FROM CT_DATVE WHERE TrangThai = ?";
-        StringBuilder conditions = new StringBuilder();
-
-        // Build conditions based on user input
-        if (selectedDate != null) {
-            conditions.append(" AND MaVe IN (")
-                    .append("    SELECT V.MaVe ")
-                    .append("    FROM Ve V ")
-                    .append("    JOIN ChuyenBay CB ON V.MaChuyenBay = CB.MaChuyenBay ")
-                    .append("    WHERE TRUNC(CB.TGXP) = ?")
-                    .append(")");
-        }
-        if (!"Sân bay đi".equals(sanBayDi)) {
-            conditions.append(" AND MaVe IN (SELECT V.MaVe FROM Ve V JOIN ChuyenBay CB ON V.MaChuyenBay = CB.MaChuyenBay JOIN DuongBay DB ON CB.MaDuongBay = DB.MaDuongBay JOIN SanBay SBDi ON DB.MaSanBayDi = SBDi.MaSanBay WHERE SBDi.TenSanBay = ?)");
-        }
-        if (!"Sân bay đến".equals(sanBayDen)) {
-            conditions.append(" AND MaVe IN (SELECT V.MaVe FROM Ve V JOIN ChuyenBay CB ON V.MaChuyenBay = CB.MaChuyenBay JOIN DuongBay DB ON CB.MaDuongBay = DB.MaDuongBay JOIN SanBay SBDen ON DB.MaSanBayDen = SBDen.MaSanBay WHERE SBDen.TenSanBay = ?)");
-        }
-
-        String queryVeDaDat = baseQuery + conditions.toString();
-        String queryPhDC = baseQuery + conditions.toString();
-
-        try {
-            prepareAndExecuteQuery(queryVeDaDat, selectedDate, sanBayDi, sanBayDen, veDaDat_tbview, 1);
-            prepareAndExecuteQuery(queryPhDC, selectedDate, sanBayDi, sanBayDen, phDC_tbview, 0);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            alert.errorMessage("Could not load data from the database.");
-        }
-    }
-
-    @FXML
-    void handleThanhToan() {
-        CT_DatVe selectedVe = phDC_tbview.getSelectionModel().getSelectedItem();
-
-        if (selectedVe == null) {
-            alert.errorMessage("Vui lòng chọn một phiếu đặt chỗ để thanh toán.");
-            return;
-        }
-
-        boolean confirm = alert.confirmationMessage("Bạn có chắc chắn muốn thanh toán phiếu đặt chỗ này?");
-        if (confirm) {
-            try {
-                callUpdateTicketStatusProcedure(selectedVe.getMaCT_DatVe(), 1);  // Call the procedure with status 1 (confirm)
-                loadData(null);  // Reload data
-                alert.successMessage("Thanh toán thành công.");
-            } catch (SQLException e) {
-                alert.errorMessage("Không thể thanh toán phiếu đặt chỗ.");
-            }
-        }
-    }
-
-    @FXML
-    void cancelTicketOrReservation() {
-        CT_DatVe selectedVeDaDat = veDaDat_tbview.getSelectionModel().getSelectedItem();
-        CT_DatVe selectedPhDC = phDC_tbview.getSelectionModel().getSelectedItem();
-
-        if (selectedVeDaDat == null && selectedPhDC == null) {
-            alert.errorMessage("Vui lòng chọn một vé hoặc phiếu đặt chỗ để hủy.");
-            return;
-        }
-
-        String message = "Bạn có chắc chắn muốn hủy ";
-        CT_DatVe selected = null;
-        if (selectedVeDaDat != null) {
-            message += "vé này?";
-            selected = selectedVeDaDat;
-        } else {
-            message += "phiếu đặt chỗ này?";
-            selected = selectedPhDC;
-        }
-
-        boolean confirm = alert.confirmationMessage(message);
-        if (confirm) {
-            try {
-                callUpdateTicketStatusProcedure(selected.getMaCT_DatVe(), 2);  // Call the procedure with status 2 (cancel)
-                loadData(null);  // Reload the data
-                alert.successMessage("Hủy vé hoặc phiếu đặt chỗ thành công.");
-            } catch (SQLException e) {
-                e.printStackTrace();
-                alert.errorMessage("Không thể hủy vé hoặc phiếu đặt chỗ.");
-            }
-        }
-    }
-
     private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
@@ -235,6 +141,12 @@ public class LichSuDatVeController implements Initializable {
             alert.errorMessage("Could not load data from the database.");
         }
 
+        // Thêm sự kiện cho nút tìm kiếm
+        timkiem_btn.setOnAction(event -> search());
+        // Thêm sự kiện cho nút hủy vé hoặc phiếu đặt chỗ
+        huyVeorDatCho_btn.setOnAction(event -> cancelTicketOrReservation());
+
+        xuatVe_btn.setOnMouseClicked(mouseEvent -> xuatVe());
         // Thêm sự kiện cho nút làm mới
         refresh_btn.setOnAction(event -> {
             // Xóa hết các lựa chọn và đặt lại giá trị mặc định
@@ -250,12 +162,17 @@ public class LichSuDatVeController implements Initializable {
 
         sanbaydi_menubtn.setOnShowing(event -> updateSanBayMenuItems());
         sanbayden_menubtn.setOnShowing(event -> updateSanBayMenuItems());
+
         // Add listener to enable/disable thanhToan_btn based on selection in phDC_tbview
         phDC_tbview.getSelectionModel().selectedItemProperty().addListener(
                 (ObservableValue<? extends CT_DatVe> observable, CT_DatVe oldValue, CT_DatVe newValue) -> {
                     thanhToan_btn.setDisable(newValue == null);
                 }
         );
+        thanhToan_btn.setDisable(true); // Initially disable the button
+
+        // Add event listener for the thanhToan_btn
+        thanhToan_btn.setOnAction(event -> handleThanhToan());
     }
 
     private void setupTableViewColumns(TableColumn<CT_DatVe, String> maVeCol,
@@ -428,6 +345,18 @@ public class LichSuDatVeController implements Initializable {
             }
         } catch (SQLException e) {
             alert.errorMessage("Could not retrieve price from the database.");
+        } finally {
+            // Đóng result và prepare trong khối finally
+            try {
+                if (result != null) {
+                    result.close();
+                }
+                if (prepare != null) {
+                    prepare.close();
+                }
+            } catch (SQLException ex) {
+                alert.errorMessage("Could not close result set or prepared statement.");
+            }
         }
         return 0;
     }
@@ -455,7 +384,44 @@ public class LichSuDatVeController implements Initializable {
         return "";
     }
 
+    private void search() {
+        LocalDateTime selectedDate = ngay_datepicker.getValue() != null ? ngay_datepicker.getValue().atStartOfDay() : null;
+        String sanBayDi = sanbaydi_menubtn.getText();
+        String sanBayDen = sanbayden_menubtn.getText();
 
+        veDaDat_tbview.getItems().clear();
+        phDC_tbview.getItems().clear();
+
+        String baseQuery = "SELECT * FROM CT_DATVE WHERE TrangThai = ?";
+        StringBuilder conditions = new StringBuilder();
+
+        // Build conditions based on user input
+        if (selectedDate != null) {
+            conditions.append(" AND MaVe IN (")
+                    .append("    SELECT V.MaVe ")
+                    .append("    FROM Ve V ")
+                    .append("    JOIN ChuyenBay CB ON V.MaChuyenBay = CB.MaChuyenBay ")
+                    .append("    WHERE TRUNC(CB.TGXP) = ?")
+                    .append(")");
+        }
+        if (!"Sân bay đi".equals(sanBayDi)) {
+            conditions.append(" AND MaVe IN (SELECT V.MaVe FROM Ve V JOIN ChuyenBay CB ON V.MaChuyenBay = CB.MaChuyenBay JOIN DuongBay DB ON CB.MaDuongBay = DB.MaDuongBay JOIN SanBay SBDi ON DB.MaSanBayDi = SBDi.MaSanBay WHERE SBDi.TenSanBay = ?)");
+        }
+        if (!"Sân bay đến".equals(sanBayDen)) {
+            conditions.append(" AND MaVe IN (SELECT V.MaVe FROM Ve V JOIN ChuyenBay CB ON V.MaChuyenBay = CB.MaChuyenBay JOIN DuongBay DB ON CB.MaDuongBay = DB.MaDuongBay JOIN SanBay SBDen ON DB.MaSanBayDen = SBDen.MaSanBay WHERE SBDen.TenSanBay = ?)");
+        }
+
+        String queryVeDaDat = baseQuery + conditions.toString();
+        String queryPhDC = baseQuery + conditions.toString();
+
+        try {
+            prepareAndExecuteQuery(queryVeDaDat, selectedDate, sanBayDi, sanBayDen, veDaDat_tbview, 1);
+            prepareAndExecuteQuery(queryPhDC, selectedDate, sanBayDi, sanBayDen, phDC_tbview, 0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Could not load data from the database.");
+        }
+    }
 
     private void prepareAndExecuteQuery(String query, LocalDateTime selectedDate, String sanBayDi, String sanBayDen, TableView<CT_DatVe> tableView, int trangThai) throws SQLException {
         try (PreparedStatement prepare = connect.prepareStatement(query)) {
@@ -492,15 +458,6 @@ public class LichSuDatVeController implements Initializable {
                     tableView.getItems().add(datVe);
                 }
             }
-        }
-    }
-
-    private void callUpdateTicketStatusProcedure(String maCT_DATVE, int trangThai) throws SQLException {
-        String sql = "{call update_ticket_status(?, ?)}";  // SQL to call the stored procedure
-        try (CallableStatement callableStatement = connect.prepareCall(sql)) {
-            callableStatement.setString(1, maCT_DATVE);
-            callableStatement.setInt(2, trangThai);
-            callableStatement.execute();
         }
     }
 
@@ -544,6 +501,147 @@ public class LichSuDatVeController implements Initializable {
             sanbayden_menubtn.getItems().add(menuItem);
         }
     }
+
+    private void cancelTicketOrReservation() {
+        CT_DatVe selectedVeDaDat = veDaDat_tbview.getSelectionModel().getSelectedItem();
+        CT_DatVe selectedPhDC = phDC_tbview.getSelectionModel().getSelectedItem();
+
+        if (selectedVeDaDat == null && selectedPhDC == null) {
+            alert.errorMessage("Vui lòng chọn một vé hoặc phiếu đặt chỗ để hủy.");
+            return;
+        }
+
+        String message = "Bạn có chắc chắn muốn hủy ";
+        CT_DatVe selected = null;
+        if (selectedVeDaDat != null) {
+            message += "vé này?";
+            selected = selectedVeDaDat;
+        } else {
+            message += "phiếu đặt chỗ này?";
+            selected = selectedPhDC;
+        }
+
+        boolean confirm = alert.confirmationMessage(message);
+        if (confirm) {
+            try {
+                String maCTDatVe = selected.getMaCT_DatVe();
+
+                String selectQuery;
+                selectQuery = "SELECT V.MaChuyenBay, V.MaHangVe, V.MaGhe, V.GiaTien " +
+                            "FROM CT_DATVE CT " +
+                            "JOIN VE V ON CT.MaVe = V.MaVe " +
+                            "WHERE CT.MaCT_DATVE = ?";
+
+                String maChuyenBay = null, maHangVe = null;
+                int maGhe = 0;
+                float giaTien = 0;
+
+                try (PreparedStatement selectStmt = connect.prepareStatement(selectQuery)) {
+                    selectStmt.setString(1, maCTDatVe);
+                    ResultSet rs = selectStmt.executeQuery();
+                    if (rs.next()) {
+                        maChuyenBay = rs.getString("MaChuyenBay");
+                        maHangVe = rs.getString("MaHangVe");
+                        maGhe = rs.getInt("MaGhe");
+                        giaTien = rs.getFloat("GiaTien");
+                    }
+                }
+
+                // Tạo câu truy vấn để cập nhật trạng thái của CT_DATVE hoặc CT_DAT_CHO
+                String updateCTQuery;
+                updateCTQuery = "UPDATE CT_DATVE SET TrangThai = 2 WHERE MaCT_DATVE = ?";
+
+
+                try (PreparedStatement updateCTStmt = connect.prepareStatement(updateCTQuery)) {
+                    updateCTStmt.setString(1, maCTDatVe);
+                    updateCTStmt.executeUpdate();
+                }
+
+                // Tạo mã vé mới
+                String maVe = generateNewMaVe();
+
+                // Tạo câu truy vấn để chèn dữ liệu vào bảng VE
+                String insertQuery = "INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES (?, ?, ?, ?, ?)";
+                try (PreparedStatement insertStmt = connect.prepareStatement(insertQuery)) {
+                    insertStmt.setString(1, maVe);
+                    insertStmt.setString(2, maChuyenBay);
+                    insertStmt.setString(3, maHangVe);
+                    insertStmt.setInt(4, maGhe);
+                    insertStmt.setFloat(5, giaTien);
+                    insertStmt.executeUpdate();
+                }
+
+                loadData(null); // Reload the data
+            } catch (SQLException e) {
+                alert.errorMessage("Không thể hủy vé hoặc phiếu đặt chỗ.");
+            }
+        }
+    }
+
+    private String generateNewMaVe() {
+        String sql = "SELECT MAX(MaVe) AS MaxMaVe FROM VE";
+        try (PreparedStatement ps = connect.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                String maxMaVe = rs.getString("MaxMaVe");
+                if (maxMaVe != null) {
+                    int newMaVeNumber = Integer.parseInt(maxMaVe.substring(2)) + 1;
+                    return String.format("VE%03d", newMaVeNumber);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "VE001";
+    }
+
+
+    private void handleThanhToan() {
+        CT_DatVe selectedVe = phDC_tbview.getSelectionModel().getSelectedItem();
+
+        if (selectedVe == null) {
+            alert.errorMessage("Vui lòng chọn một phiếu đặt chỗ để thanh toán.");
+            return;
+        }
+
+        boolean confirm = alert.confirmationMessage("Bạn có chắc chắn muốn thanh toán phiếu đặt chỗ này?");
+        if (confirm) {
+            try {
+                String updateQuery = "UPDATE CT_DATVE SET TrangThai = 1, NgayThanhToan = ? WHERE MaCT_DATVE = ?";
+                try (PreparedStatement prepare = connect.prepareStatement(updateQuery)) {
+                    prepare.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
+                    prepare.setString(2, selectedVe.getMaCT_DatVe());
+                    prepare.executeUpdate();
+                }
+                loadData(null); // Reload data
+                alert.successMessage("Thanh toán thành công.");
+            } catch (SQLException e) {
+                alert.errorMessage("Không thể thanh toán phiếu đặt chỗ.");
+            }
+        }
+    }
+    private void xuatVe(){
+        CT_DatVe selectedVeDaDat = veDaDat_tbview.getSelectionModel().getSelectedItem();
+        if (selectedVeDaDat == null) {
+            alert.errorMessage("Vui lòng chọn một vé để xuất vé.");
+            return;
+        }
+
+        String maVe = selectedVeDaDat.getMaVe();
+        String tenKhachHang = getTenKhachHang(selectedVeDaDat.getMaKhachHang());
+        String SDT = getSDT(selectedVeDaDat.getMaKhachHang());
+        String maGhe = getMaGhe(maVe);
+        String hangVe = getTenHangVe(maVe);
+        String giaVe = getGiaTien(maVe)+"";
+        String sanBayDi = getSanBayDi(maVe);
+        String sanBayDen = getSanBayDen(maVe);
+        String ngayBay = Timestamp.valueOf(LocalDateTime.parse(getNgayBay(maVe), formatter))+"";
+        String gioBay = Timestamp.valueOf(LocalDateTime.parse(getGioBay(maVe), formatter))+"";
+        ReportController report = new ReportController();
+        report.PrintVe(maVe, tenKhachHang,  SDT,  maGhe,  hangVe,  giaVe,  sanBayDi,  sanBayDen,  ngayBay,  gioBay);
+        // Thực hiện các thao tác cần thiết với các giá trị này, ví dụ: in ra console hoặc thực hiện các xử lý khác
+    }
+
+
 }
 
 

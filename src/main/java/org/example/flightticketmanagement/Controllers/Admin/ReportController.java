@@ -54,6 +54,33 @@ public class ReportController {
             e.printStackTrace();
         }
     }
+    public void PrintVe(String maVe, String tenKhachHang, String SDT, String maGhe, String hangVe, String giaVe, String sanBayDi, String sanBayDen, String ngayBay, String gioBay){
+        try {
+            String fileJRXMLPath = "src/main/resources/Report/XuatVe.jrxml";
+            String ngayLapBaoCao = LocalDateTime.now()+"";
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put("maVe", maVe);
+            parameters.put("hangVe", hangVe);
+            parameters.put("ngayLapBaoCao", ngayLapBaoCao);
+            parameters.put("maGhe", maGhe);
+            parameters.put("gioBay", gioBay);
+            parameters.put("ngayBay",ngayBay);
+            parameters.put("sanBayDi", sanBayDi);
+            parameters.put("sanBayDen", sanBayDen);
+            parameters.put("hoTen", tenKhachHang);
+            parameters.put("sdt", SDT);
+            parameters.put("giaVe", giaVe);
+
+
+            JasperReport report = JasperCompileManager.compileReport(fileJRXMLPath);
+
+            JasperPrint print = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
+
+            JasperExportManager.exportReportToPdfFile(print, ChonDuongDanLuuFile());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public String ChonDuongDanLuuFile() {
         FileChooser fileChooser = new FileChooser();
