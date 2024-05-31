@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ComboBox?>
@@ -8,6 +9,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -53,15 +55,27 @@
             <Insets left="10.0" right="10.0" />
          </padding>
       </GridPane>
-      <MFXButton id="custom-2" fx:id="luu_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="616.0" layoutY="477.0" onAction="#luuButtonClicked" prefHeight="41.0" prefWidth="99.0" text="Lưu" />
+      <MFXButton id="custom-2" fx:id="luu_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="616.0" layoutY="477.0" onAction="#luuButtonClicked" prefHeight="41.0" prefWidth="99.0" text="Lưu">
+         <graphic>
+            <FontAwesomeIconView fill="WHITE" glyphName="SAVE" size="20" />
+         </graphic>
+         <effect>
+            <DropShadow height="37.13" radius="16.9625" spread="0.17" width="32.72" />
+         </effect></MFXButton>
       <Label layoutX="317.0" layoutY="20.0" text="SỬA LỊCH CHUYẾN BAY" />
       <TableView fx:id="hangVe_tableview" layoutX="28.0" layoutY="318.0" prefHeight="200.0" prefWidth="245.0">
          <columns>
             <TableColumn fx:id="tenHangVe_tbcl" prefWidth="112.0" text="Tên hạng vé" />
-            <TableColumn fx:id="soLuongGhe_tbcl" prefWidth="128.0" text="Số lượng ghế" />
+            <TableColumn fx:id="soLuongGhe_tbcl" prefWidth="128.0" text="Số lượng ghế trống" />
          </columns>
       </TableView>
-      <MFXButton id="custom-2" fx:id="themHangVe_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="288.0" layoutY="418.0" onAction="#moThemHangVeChuyenBay" prefHeight="41.0" prefWidth="99.0" text="Thêm hạng vé" />
-      <MFXButton id="custom-2" buttonType="RAISED" depthLevel="LEVEL1" layoutX="288.0" layoutY="477.0" onAction="#xoaHangVe" prefHeight="41.0" prefWidth="99.0" text="Xóa hạng vé" fx:id="xoaHangVe_btn" />
+      <MFXButton id="custom-2" fx:id="themHangVe_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="288.0" layoutY="418.0" onAction="#moThemHangVeChuyenBay" prefHeight="41.0" prefWidth="127.0" text="Thêm hạng vé">
+         <graphic>
+            <FontAwesomeIconView fill="#fff1f1" glyphName="PLUS" size="20" />
+         </graphic></MFXButton>
+      <MFXButton id="custom-2" buttonType="RAISED" depthLevel="LEVEL1" layoutX="289.0" layoutY="477.0" onAction="#xoaHangVe" prefHeight="41.0" prefWidth="127.0" text="Xóa hạng vé" fx:id="xoaHangVe_btn">
+         <graphic>
+            <FontAwesomeIconView fill="WHITE" glyphName="TRASH" size="20" />
+         </graphic></MFXButton>
    </children>
 </AnchorPane>

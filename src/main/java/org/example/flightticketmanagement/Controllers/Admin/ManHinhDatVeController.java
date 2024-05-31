@@ -226,7 +226,7 @@ public class ManHinhDatVeController implements Initializable {
 
     private void generateTicketDetails(Ve ve) {
         maVe_txtfld.setText(generateMaVe());
-        maGhe_txtfld.setText(generateMaGhe(ve.getMaHangVe()));
+        maGhe_txtfld.setText(generateMaGhe());
         thanhTien_txtfld.setText(String.valueOf(ve.getGiaTien()));
     }
 
@@ -247,10 +247,18 @@ public class ManHinhDatVeController implements Initializable {
     }
 
 
-    private String generateMaGhe(String maHangVe) {
-        // Logic to generate a seat code based on the seat class
-        // This is a simplified example and should be adjusted to your actual requirements
-        return "GHE-" + maHangVe + "-" + (int)(Math.random() * 1000);
+    private String generateMaGhe() {
+        String sql = "SELECT MAX(MAGHE) AS MAGHE FROM VE";
+        try (PreparedStatement ps = connect.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                int maxMaGhe = rs.getInt("MAGHE");
+                int newMaGhe = maxMaGhe + 1;
+                return String.valueOf(newMaGhe);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "1";
     }
 
     private boolean validateInputs() {
@@ -294,7 +302,7 @@ public class ManHinhDatVeController implements Initializable {
         Ve selectedVe = ve_tableview.getSelectionModel().getSelectedItem();
         String maChuyenBay = maCB_txtfld.getText();
         String maHangVe = selectedVe.getMaHangVe();
-        int maGhe = selectedVe.getMaGhe();
+        String maGhe = generateMaGhe();
         float giaTien = selectedVe.getGiaTien();
 
         String sql = "INSERT INTO VE (MAVE, MACHUYENBAY, MAHANGVE, MAGHE, GIATIEN) VALUES (?, ?, ?, ?, ?)";
@@ -303,7 +311,7 @@ public class ManHinhDatVeController implements Initializable {
             ps.setString(1, maVe_txtfld.getText());
             ps.setString(2, maChuyenBay);
             ps.setString(3, maHangVe);
-            ps.setInt(4, maGhe);
+            ps.setString(4, maGhe); // Lưu mã ghế tự tạo
             ps.setFloat(5, giaTien);
 
             int affectedRows = ps.executeUpdate();

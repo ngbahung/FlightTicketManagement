@@ -2,6 +2,7 @@
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
 <?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.scene.control.Label?>
@@ -19,7 +20,7 @@
             <Font size="36.0" />
          </font>
       </Label>
-      <GridPane alignment="CENTER" hgap="6.0" vgap="15.0">
+      <GridPane alignment="CENTER" hgap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="284.0" prefWidth="331.0" vgap="15.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="162.0" minWidth="10.0" prefWidth="121.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="10.0" prefWidth="215.0" />
@@ -30,17 +31,23 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <MFXTextField id="phanquyen" fx:id="ten_txtfld" floatMode="DISABLED" prefHeight="50.0" prefWidth="260.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-         <MFXPasswordField id="phanquyen" fx:id="matKhau_txtfld" floatMode="DISABLED" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="214.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-         <MFXComboBox id="phanquyen" fx:id="vaiTro_combobox" floatMode="DISABLED" prefHeight="50.0" prefWidth="260.0" selectable="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+         <MFXPasswordField id="phanquyen" fx:id="matKhau_txtfld" floatMode="DISABLED" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="214.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+         <MFXComboBox id="phanquyen" fx:id="vaiTro_combobox" floatMode="DISABLED" prefHeight="50.0" prefWidth="260.0" selectable="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
          <Label text="Mã tài khoản" />
          <Label text="Tên" GridPane.rowIndex="1" />
-         <Label text="Email" GridPane.rowIndex="2" />
-         <Label text="Mật khẩu" GridPane.rowIndex="3" />
-         <Label text="Vai trò" GridPane.rowIndex="4" />
+         <Label text="Email" GridPane.rowIndex="3" />
+         <Label text="Mật khẩu" GridPane.rowIndex="4" />
+         <Label text="Vai trò" GridPane.rowIndex="6" />
          <MFXTextField id="phanquyen" fx:id="maTaiKhoan_txtfld" floatMode="DISABLED" prefHeight="50.0" prefWidth="260.0" GridPane.columnIndex="1" />
-         <MFXTextField id="phanquyen" fx:id="email_txtfld" floatMode="DISABLED" prefHeight="50.0" prefWidth="260.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         <MFXTextField id="phanquyen" fx:id="email_txtfld" floatMode="DISABLED" prefHeight="50.0" prefWidth="260.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         <MFXTextField id="phanquyen" fx:id="sdt_txtfld" floatMode="DISABLED" prefHeight="50.0" prefWidth="260.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         <MFXDatePicker id="phanquyen" fx:id="ngay_datepicker" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="213.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+         <Label text="Ngày tạo" GridPane.rowIndex="5" />
+         <Label text="Số điện thoại" GridPane.rowIndex="2" />
       </GridPane>
       <MFXButton id="custom_them" fx:id="luu_btn" onAction="#updateAccount" prefHeight="39.0" prefWidth="115.0" text="Lưu" />
    </VBox>

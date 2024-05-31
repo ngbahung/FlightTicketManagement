@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
@@ -50,5 +51,8 @@
            <MFXTextField id="phanquyen" fx:id="email_txtfld" floatMode="DISABLED" prefHeight="50.0" prefWidth="260.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
        </GridPane>
    </VBox>
-   <MFXButton id="custom_them" fx:id="them_btn" layoutX="143.0" layoutY="426.0" onAction="#addAccount" prefHeight="39.0" prefWidth="115.0" text="Thêm" />
+   <MFXButton id="custom_them" fx:id="them_btn" layoutX="143.0" layoutY="426.0" onAction="#addAccount" prefHeight="39.0" prefWidth="115.0" text="Thêm">
+      <graphic>
+         <FontAwesomeIconView fill="WHITE" glyphName="PLUS" size="20" />
+      </graphic></MFXButton>
 </AnchorPane>

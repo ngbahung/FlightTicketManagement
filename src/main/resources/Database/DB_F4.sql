@@ -147,7 +147,6 @@ CREATE TABLE VE (
 
 
 /* TABLE 7: CT_HANGVE */
-
 CREATE TABLE CT_HANGVE (
     MaChuyenBay VARCHAR2(10) NOT NULL,
     MaHangVe VARCHAR2(10) NOT NULL,
@@ -311,102 +310,145 @@ END;
 
 DROP TRIGGER Update_DoanhThu_Thang;
 
-CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang
-FOR INSERT OR update ON CT_DATVE
-COMPOUND TRIGGER
+ CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang
+               FOR INSERT OR update ON CT_DATVE
+     COMPOUND TRIGGER
      v_nam NUMBER;
-     v_thang NUMBER; 
-     giave NUMBER;
-     v_dem NUMBER;
-     v_dem_nam NUMBER;
-     v_machuyenbay VARCHAR2(10);
-     v_countMaChuyenBay NUMBER;
+ v_thang NUMBER;
+ giave NUMBER;
+ v_dem NUMBER;
+ v_dem_nam NUMBER;
+ v_machuyenbay VARCHAR2(10);
+ v_countMaChuyenBay NUMBER;
+ CheckExist NUMBER := 0 ;
+ v_count NUMBER;
 
-     BEFORE STATEMENT IS
-     BEGIN
-       NULL;
-     END BEFORE STATEMENT;
-   
-     BEFORE EACH ROW IS
-     BEGIN
-       
-      IF (:NEW.NgayThanhToan = NULL) THEN
-        BEGIN
-            SELECT 0,0 INTO v_nam,V_THANG
-            FROM dual;
-        END;
-      ELSE
-      begin
-          SELECT EXTRACT(YEAR FROM :NEW.NgayThanhToan), EXTRACT(MONTH FROM :NEW.NgayThanhToan) INTO v_nam,v_thang
-          FROM dual;
-          
-          SELECT Giatien INTO giave 
-          FROM VE v
-          WHERE V.MaVE = :NEW.MaVE;
 
-          SELECT Machuyenbay INTO v_machuyenbay 
-          FROM ve 
-          WHERE Ve.MaVE = :NEW.MAVE;
-        END;
-        END IF;
-      
-     END BEFORE EACH ROW;
-   
-     
-     AFTER EACH ROW IS
-     BEGIN
-       NULL;
-     END AFTER EACH ROW;
-   
-    
-     AFTER STATEMENT IS
-     BEGIN  
-      IF (v_nam > 0 AND v_thang > 0) THEN
-      BEGIN     
-        SELECT COUNT(*) INTO v_dem
-        FROM baocaothang 
-        WHERE thang = v_thang AND nam = v_nam;
-        
-        SELECT COUNT(*) INTO v_dem_nam
-        FROM baocaonam 
-        WHERE nam = v_nam;
-        
-        SELECT COUNT(*) INTO v_countMaChuyenBay
-        FROM BAOCAOTHANG 
-        WHERE machuyenbay = v_machuyenbay;
+ BEFORE STATEMENT IS
+ BEGIN
+     NULL;
+ END BEFORE STATEMENT;
 
-        IF (v_dem > 0) THEN     
-           begin    
-               IF (v_countMaChuyenBay > 0 ) THEN 
-                 begin
-                     UPDATE BAOCAOTHANG
-                     SET DoanhThu = DoanhThu + GiaVe,
-                         SoVeDaBan = SoVeDaBan + 1
-                     WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;            
-                 END;
-                 ELSE 
-                      BEGIN
-                          INSERT INTO BAOCAOTHANG ( MaChuyenBay, SoVeDaBan, DoanhThu, Thang, Nam)
-                          VALUES (v_machuyenbay, 1, giave, v_thang, v_nam);      
-                      END;
-               END IF;
-           END;
-        ELSE  
-            BEGIN                
-              INSERT INTO BAOCAOTHANG ( MaChuyenBay, SoVeDaBan, DoanhThu, Thang, Nam)
-              VALUES (v_machuyenbay, 1, giave, v_thang, v_nam);             
-            END;
-        END IF;      
-    
-        UPDATE baocaonam 
-        SET doanhthu = doanhthu + GIAVE
-        WHERE nam = v_nam AND thang = v_thang;
+ BEFORE EACH ROW IS
+ BEGIN
 
-      END;
-      END IF;
-     END AFTER STATEMENT;
+     IF (:NEW.NgayThanhToan = NULL) THEN
+ BEGIN
+ SELECT 0,0 INTO v_nam,V_THANG
+ FROM dual;
+ END;
+ ELSE
+ begin
+ SELECT EXTRACT(YEAR FROM :NEW.NgayThanhToan), EXTRACT(MONTH FROM :NEW.NgayThanhToan) INTO v_nam,v_thang
+ FROM dual;
 
-END Update_DoanhThu_Thang;
+ SELECT Giatien INTO giave
+ FROM VE v
+ WHERE V.MaVE = :NEW.MaVE;
+
+ SELECT Machuyenbay INTO v_machuyenbay
+ FROM ve
+ WHERE Ve.MaVE = :NEW.MAVE;
+ END;
+ END IF;
+
+ IF (:NEW.TrangThai = 2) THEN
+ BEGIN
+     CheckExist := 1;
+ END;
+ END IF;
+
+ END BEFORE EACH ROW;
+
+
+ AFTER EACH ROW IS
+ BEGIN
+     NULL;
+ END AFTER EACH ROW;
+
+
+ AFTER STATEMENT IS
+ BEGIN
+     IF (v_nam > 0 AND v_thang > 0 AND CheckExist = 0) THEN
+ BEGIN
+ SELECT COUNT(*) INTO v_dem
+ FROM baocaothang
+ WHERE thang = v_thang AND nam = v_nam;
+
+ SELECT COUNT(*) INTO v_dem_nam
+ FROM baocaonam
+ WHERE nam = v_nam;
+
+ SELECT COUNT(*) INTO v_countMaChuyenBay
+ FROM BAOCAOTHANG
+ WHERE machuyenbay = v_machuyenbay;
+
+ IF (v_dem > 0) THEN
+ begin
+     IF (v_countMaChuyenBay > 0 ) THEN
+ begin
+ UPDATE BAOCAOTHANG
+ SET DoanhThu = DoanhThu + GiaVe,
+     SoVeDaBan = SoVeDaBan + 1
+ WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
+ END;
+ ELSE
+ BEGIN
+ INSERT INTO BAOCAOTHANG ( MaChuyenBay, SoVeDaBan, DoanhThu, Thang, Nam)
+ VALUES (v_machuyenbay, 1, giave, v_thang, v_nam);
+ END;
+ END IF;
+ END;
+ ELSE
+ BEGIN
+ INSERT INTO BAOCAOTHANG ( MaChuyenBay, SoVeDaBan, DoanhThu, Thang, Nam)
+ VALUES (v_machuyenbay, 1, giave, v_thang, v_nam);
+ END;
+ END IF;
+
+ UPDATE baocaonam
+ SET doanhthu = doanhthu + GIAVE
+ WHERE nam = v_nam AND thang = v_thang;
+
+ END;
+ END IF;
+
+ ----
+    IF (CheckExist = 1 ) THEN
+ BEGIN
+ SELECT sovedaban INTO v_count
+ FROM BAOCAOTHANG
+ WHERE thang = v_thang AND nam = v_nam AND machuyenbay = v_machuyenbay ;
+
+ IF (v_count > 1 ) THEN
+ begin
+ UPDATE BAOCAOTHANG
+ SET DoanhThu = DoanhThu - GiaVe,
+     SoVeDaBan = SoVeDaBan - 1
+ WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
+
+ UPDATE BAOCAONAM
+ SET doanhthu = doanhthu - giave
+ WHERE nam = v_nam AND thang = v_thang;
+ END;
+ ELSE
+ BEGIN
+ UPDATE BAOCAONAM
+ SET doanhthu = doanhthu - giave, SOCHUYENBAY = SOCHUYENBAY - 1
+ WHERE nam = v_nam AND thang = v_thang;
+
+ DELETE FROM baocaothang
+ WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
+
+ END;
+ END IF;
+ END;
+ END IF;
+
+
+ END AFTER STATEMENT;
+
+ END Update_DoanhThu_Thang;
 
 SELECT * FROM ve;
 
@@ -663,6 +705,26 @@ BEGIN
 END;
 /
 
+/* R15 */
+ DROP TRIGGER check_SL_GheTrong;
+
+ CREATE OR REPLACE TRIGGER check_SL_GheTrong
+               BEFORE INSERT ON CT_DATVE
+                          FOR EACH ROW
+DECLARE
+    v_soghetrong CT_HANGVE.SOGHETRONG%TYPE;
+ BEGIN
+
+ SELECT soghetrong INTO v_soghetrong
+ FROM CT_HANGVE cthv, ve v
+ WHERE v.MaVE = :NEW.MaVe AND v.machuyenbay = cthv.machuyenbay AND v.MAHANGVE = cthv.MAHANGVE;
+
+
+ IF (v_SoGheTrong = 0) THEN
+        RAISE_APPLICATION_ERROR(-20009, 'Hết vé trống');
+ END IF;
+ END;
+
 
 
 
@@ -902,3 +964,110 @@ DELETE FROM QUYEN;
 DELETE FROM THAMSO;
 
 */
+
+
+
+-- PROCEDURE
+-- XACNHANVECONTROLLER
+ DROP PROCEDURE SellTicket;
+ SHOW ERRORS PROCEDURE SellTicket;
+
+ drop PROCEDURE SellTicket;
+ CREATE OR REPLACE PROCEDURE SellTicket(
+    p_maKH IN VARCHAR2,
+    p_hoten IN VARCHAR2,
+    p_cccd IN VARCHAR2,
+    p_email IN VARCHAR2,
+    p_sdt IN VARCHAR2,
+    p_diaChi IN VARCHAR2,
+    p_maVe IN VARCHAR2,
+    p_ngayMuaVe IN TIMESTAMP,
+    p_ngayThanhToan IN TIMESTAMP,
+    p_trangThai IN INTEGER
+) AS
+    v_customerExists INTEGER;
+ v_newMaCT_DATVE VARCHAR2(10);
+ BEGIN
+ -- Check if customer exists
+ SELECT COUNT(*) INTO v_customerExists
+ FROM KHACHHANG
+ WHERE MAKHACHHANG = p_maKH;
+
+ -- If customer does not exist, insert into KHACHHANG
+ IF v_customerExists = 0 THEN
+ INSERT INTO KHACHHANG (MAKHACHHANG, HOTEN, CCCD, EMAIL, SDT, DIACHI)
+ VALUES (p_maKH, p_hoten, p_cccd, p_email, p_sdt, p_diaChi);
+ END IF;
+
+    -- Generate new MaCT_DATVE
+ SELECT 'CTDV' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(MaCT_DATVE, 5))), 0) + 1, 3, '0') INTO v_newMaCT_DATVE
+ FROM CT_DATVE;
+
+ -- Insert booking into CT_DATVE
+ INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
+ VALUES (v_newMaCT_DATVE, p_maVe, p_maKH, p_ngayMuaVe, p_ngayThanhToan, p_trangThai);
+
+ COMMIT;
+ EXCEPTION
+    WHEN OTHERS THEN
+ ROLLBACK;
+ RAISE;
+ END SellTicket;
+ /
+
+
+
+
+
+ drop PROCEDURE update_ticket_status;
+-- CANCELLTICKET VÀ THANHTOAN
+ CREATE OR REPLACE PROCEDURE update_ticket_status(
+    p_maCT_DATVE IN VARCHAR2,
+    p_trangThai IN INT
+) AS
+    v_maChuyenBay VARCHAR2(10);
+ v_maHangVe VARCHAR2(10);
+ v_oldTrangThai INT;
+ BEGIN
+ -- Fetch the current status of the ticket
+ SELECT TrangThai INTO v_oldTrangThai
+ FROM CT_DATVE
+ WHERE MaCT_DATVE = p_maCT_DATVE;
+
+ -- Update the status of the ticket in CT_DATVE
+ UPDATE CT_DATVE
+ SET TrangThai = p_trangThai,
+     NgayThanhToan = CASE WHEN p_trangThai IN (1, 2) THEN SYSDATE ELSE NULL END
+ WHERE MaCT_DATVE = p_maCT_DATVE;
+
+ -- Fetch related MaChuyenBay and MaHangVe
+ SELECT V.MaChuyenBay, V.MaHangVe INTO v_maChuyenBay, v_maHangVe
+ FROM VE V
+          JOIN CT_DATVE CDV ON V.MaVe = CDV.MaVe
+ WHERE CDV.MaCT_DATVE = p_maCT_DATVE;
+
+ -- Adjust the available seats in CT_HANGVE
+ IF p_trangThai = 1 THEN
+        IF v_oldTrangThai != 0 THEN
+            -- If old status is not 0, decrement available seats and increment booked seats
+ UPDATE CT_HANGVE
+ SET SoGheTrong = SoGheTrong - 1,
+     SoGheDat = SoGheDat + 1
+ WHERE MaChuyenBay = v_maChuyenBay AND MaHangVe = v_maHangVe;
+ END IF;
+ ELSIF p_trangThai = 2 THEN
+        -- If ticket is cancelled, increment available seats and decrement booked seats
+ UPDATE CT_HANGVE
+ SET SoGheTrong = SoGheTrong + 1,
+     SoGheDat = SoGheDat - 1
+ WHERE MaChuyenBay = v_maChuyenBay AND MaHangVe = v_maHangVe;
+ END IF;
+
+ COMMIT;
+ EXCEPTION
+    WHEN OTHERS THEN
+        -- Handle exceptions
+ ROLLBACK;
+ RAISE;
+ END;
+ /
