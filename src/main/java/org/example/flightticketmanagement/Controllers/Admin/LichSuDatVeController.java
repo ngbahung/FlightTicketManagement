@@ -247,7 +247,6 @@ public class LichSuDatVeController implements Initializable {
                 alert.errorMessage("Could not load data from the database.");
             }
         });
-
         sanbaydi_menubtn.setOnShowing(event -> updateSanBayMenuItems());
         sanbayden_menubtn.setOnShowing(event -> updateSanBayMenuItems());
         // Add listener to enable/disable thanhToan_btn based on selection in phDC_tbview
@@ -256,6 +255,7 @@ public class LichSuDatVeController implements Initializable {
                     thanhToan_btn.setDisable(newValue == null);
                 }
         );
+        xuatVe_btn.setOnMouseClicked(mouseEvent -> xuatVe());
     }
 
     private void setupTableViewColumns(TableColumn<CT_DatVe, String> maVeCol,
@@ -543,6 +543,26 @@ public class LichSuDatVeController implements Initializable {
             menuItem.setOnAction(event -> sanbayden_menubtn.setText(sanBay));
             sanbayden_menubtn.getItems().add(menuItem);
         }
+    }
+    private void xuatVe(){
+        CT_DatVe selectedVeDaDat = veDaDat_tbview.getSelectionModel().getSelectedItem();
+        if (selectedVeDaDat == null) {
+            alert.errorMessage("Vui lòng chọn một vé để xuất vé.");
+            return;
+        }
+
+        String maVe = selectedVeDaDat.getMaVe();
+        String tenKhachHang = getTenKhachHang(selectedVeDaDat.getMaKhachHang());
+        String SDT = getSDT(selectedVeDaDat.getMaKhachHang());
+        String maGhe = getMaGhe(maVe);
+        String hangVe = getTenHangVe(maVe);
+        String giaVe = getGiaTien(maVe)+"";
+        String sanBayDi = getSanBayDi(maVe);
+        String sanBayDen = getSanBayDen(maVe);
+        String ngayBay = Timestamp.valueOf(LocalDateTime.parse(getNgayBay(maVe), formatter))+"";
+        String gioBay = Timestamp.valueOf(LocalDateTime.parse(getGioBay(maVe), formatter))+"";
+        ReportController report = new ReportController();
+        report.PrintVe(maVe, tenKhachHang,  SDT,  maGhe,  hangVe,  giaVe,  sanBayDi,  sanBayDen,  ngayBay,  gioBay);
     }
 }
 
