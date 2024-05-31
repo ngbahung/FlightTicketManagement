@@ -113,13 +113,19 @@ public class QuyDinhController implements Initializable {
     private TableColumn<?, ?> vietTat_col;
 
     @FXML
+    private Button xoaDuongBay_btn;
+
+    @FXML
+    private Button xoaHangVe_btn;
+
+    @FXML
+    private Button xoaSanBay_btn;
+
+    @FXML
     private Button xoahangve_btn;
 
     @FXML
     private Button xoasanbay_btn;
-
-    @FXML
-    private Button xoaDuongBay_btn;
 
     @FXML
     private Button themDuongBay_btn;
