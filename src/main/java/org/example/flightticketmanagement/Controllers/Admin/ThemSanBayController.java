@@ -43,11 +43,6 @@ public class ThemSanBayController implements Initializable {
 
     public void setParentController(QuyDinhController parentController) {
         this.parentController = parentController;
-
-        // Add listener for tenVietTat_txf to convert input to uppercase
-        tenVietTatNew_textfield.textProperty().addListener((observable, oldValue, newValue) -> {
-            tenVietTatNew_textfield.setText(newValue.toUpperCase());
-        });
     }
 
     @FXML
