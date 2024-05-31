@@ -26,6 +26,7 @@ import org.example.flightticketmanagement.Models.TaiKhoan;
 
 import java.net.URL;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -179,11 +180,10 @@ public class PhanQuyenController implements Initializable {
         }
     }
 
-    // Connect to the database TaiKhoan and Quyen to display in the table
     public void ketnoiPhanQuyen() {
         ObservableList<TaiKhoan> taiKhoanList = FXCollections.observableArrayList();
 
-        String sql = "SELECT TaiKhoan.maTaiKhoan, TaiKhoan.ten, TaiKhoan.email, TaiKhoan.password, Quyen.tenQuyen " +
+        String sql = "SELECT TaiKhoan.maTaiKhoan, TaiKhoan.ten, TaiKhoan.sdt, TaiKhoan.email, TaiKhoan.password, TaiKhoan.created, Quyen.tenQuyen " +
                 "FROM TaiKhoan " +
                 "JOIN Quyen ON TaiKhoan.maQuyen = Quyen.maQuyen";
 
@@ -195,11 +195,13 @@ public class PhanQuyenController implements Initializable {
             while (result.next()) {
                 String maTaiKhoan = result.getString("maTaiKhoan");
                 String ten = result.getString("ten");
+                String sdt = result.getString("sdt");
                 String email = result.getString("email");
                 String password = result.getString("password");
+                LocalDateTime created = result.getTimestamp("created") != null ? result.getTimestamp("created").toLocalDateTime() : null;
                 String loaiTaiKhoan = result.getString("tenQuyen");
 
-                TaiKhoan taiKhoan = new TaiKhoan(maTaiKhoan, ten, "", email, password, null, loaiTaiKhoan);
+                TaiKhoan taiKhoan = new TaiKhoan(maTaiKhoan, ten, sdt, email, password, created, loaiTaiKhoan);
                 taiKhoanList.add(taiKhoan);
             }
 

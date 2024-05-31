@@ -1,4 +1,4 @@
-# Flight Ticket Management
+# Flight Ticket Management - TIKEMANA
 <div align="center">
     <img src="https://github.com/ngbahung/FlightTicketManagement/assets/121794416/db3944c1-d893-44be-8581-a0f410db7b18" width="">
 </div>
@@ -24,7 +24,7 @@
 - [Tham khảo](#acknowledgments)
 
 ### 📝 Giới thiệu chung
-TikeMana là một **java project** liên quan đến **Đồ án môn học học kỳ 2 năm 2024** của trường [University of Information Technology](https://cis.asu.edu.eg/) 
+TikeMana là một **java project** liên quan đến **Đồ án môn học học kỳ 2 năm 2024** của trường [University of Information Technology](https://daa.uit.edu.vn/) 
 hiểu cách áp dụng **Java** với **Oracle**.
 
 #### App desktop bao gồm: 
