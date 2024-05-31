@@ -235,8 +235,14 @@ public class XacNhanVeController implements Initializable {
             // Retrieve MaCT_DATVE after SellTicket
             String maCT_DATVE = getMaCT_DATVEByMaVe(maVe);
             if (maCT_DATVE != null) {
-                // Call update_ticket_status procedure
-                callUpdateTicketStatus(maCT_DATVE, trangThai);
+                try {
+                    // Call update_ticket_status procedure
+                    callUpdateTicketStatus(maCT_DATVE, trangThai);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    alert.errorMessage("Có lỗi xảy ra khi cập nhật trạng thái vé.");
+                    return false;
+                }
             } else {
                 throw new SQLException("Failed to retrieve MaCT_DATVE.");
             }

@@ -205,6 +205,7 @@ public class LichSuDatVeController implements Initializable {
                 loadData(null);  // Reload the data
                 alert.successMessage("Hủy vé hoặc phiếu đặt chỗ thành công.");
             } catch (SQLException e) {
+                e.printStackTrace();
                 alert.errorMessage("Không thể hủy vé hoặc phiếu đặt chỗ.");
             }
         }
