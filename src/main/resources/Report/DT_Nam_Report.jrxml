@@ -126,10 +126,25 @@
         </band>
     </detail>
     <columnFooter>
-        <band height="49"/>
+        <band height="20"/>
     </columnFooter>
     <pageFooter>
-        <band height="342">
+        <band height="59">
+            <textField>
+                <reportElement x="343" y="12" width="213" height="30" uuid="370f2dc7-4100-4af7-b272-f3a4b9dcb2a6"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="12" isItalic="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{ngayLapBaoCao}]]></textFieldExpression>
+            </textField>
+            <image>
+                <reportElement x="0" y="10" width="185" height="34" uuid="bf392332-5b6e-4220-8ad3-b7dac5412c17"/>
+                <imageExpression><![CDATA["src/main/resources/Images/login/logo_TikeMana.png"]]></imageExpression>
+            </image>
+        </band>
+    </pageFooter>
+    <summary>
+        <band height="260">
             <barChart>
                 <chart evaluationTime="Report">
                     <reportElement x="20" y="10" width="510" height="250" uuid="894ea18c-c1d7-4024-a6a2-2f2b5d886817"/>
@@ -155,20 +170,6 @@
                     </valueAxisFormat>
                 </barPlot>
             </barChart>
-            <textField>
-                <reportElement x="340" y="302" width="213" height="30" uuid="370f2dc7-4100-4af7-b272-f3a4b9dcb2a6"/>
-                <textElement verticalAlignment="Middle">
-                    <font fontName="DejaVu Sans" size="12" isItalic="true"/>
-                </textElement>
-                <textFieldExpression><![CDATA[$P{ngayLapBaoCao}]]></textFieldExpression>
-            </textField>
-            <image>
-                <reportElement x="0" y="300" width="185" height="34" uuid="bf392332-5b6e-4220-8ad3-b7dac5412c17"/>
-                <imageExpression><![CDATA["src/main/resources/Images/login/logo_TikeMana.png"]]></imageExpression>
-            </image>
         </band>
-    </pageFooter>
-    <summary>
-        <band/>
     </summary>
 </jasperReport>

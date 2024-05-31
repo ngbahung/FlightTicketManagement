@@ -189,7 +189,7 @@ public class LichSuDatVeController implements Initializable {
         }
 
         String message = "Bạn có chắc chắn muốn hủy ";
-        CT_DatVe selected = null;
+        CT_DatVe selected;
         if (selectedVeDaDat != null) {
             message += "vé này?";
             selected = selectedVeDaDat;
@@ -217,6 +217,7 @@ public class LichSuDatVeController implements Initializable {
 
     private final AlertMessage alert = new AlertMessage();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
