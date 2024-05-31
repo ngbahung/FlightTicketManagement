@@ -16,7 +16,7 @@ GRANT CONNECT, RESOURCE, DBA TO user2;
 
 -- Sử dụng Schema
 
-ALTER SESSION SET CURRENT_SCHEMA = fly_the_end9;
+ALTER SESSION SET CURRENT_SCHEMA = FLIGHTTICKET1;
 
 
 -- create sequence
@@ -284,6 +284,7 @@ ADD CONSTRAINT Check_NgayThanhToan_VE CHECK (NgayMuaVe <= NgayThanhToan);
 
 
 /* R3:Tổng giá tiền thanh toán = giá vé x hệ số */ 
+drop TRIGGER Tienthanhtoan_VE;
 
 CREATE OR REPLACE TRIGGER Tienthanhtoan_VE
 AFTER INSERT OR UPDATE ON VE
@@ -813,19 +814,11 @@ INSERT INTO HANGVE (MaHangVe, TenHangVe, HeSo, TrangThai)
 VALUES ('HV001', 'Phổ Thông', 1, 1);
 
 INSERT INTO HANGVE (MaHangVe, TenHangVe, HeSo, TrangThai)
-VALUES ('HV002', 'Phòng Đặc Biệt', 1.5, 1);
-
-INSERT INTO HANGVE (MaHangVe, TenHangVe, HeSo, TrangThai)
 VALUES ('HV003', 'Thương Gia', 2.0, 1);
 
 INSERT INTO HANGVE (MaHangVe, TenHangVe, HeSo, TrangThai)
 VALUES ('HV004', 'Hạng Nhất', 2.5,  1);
 
-INSERT INTO HANGVE (MaHangVe, TenHangVe, HeSo, TrangThai)
-VALUES ('HV005', 'Ghế Trẻ Em', 0.5,  1);
-
-INSERT INTO HANGVE (MaHangVe, TenHangVe, HeSo, TrangThai)
-VALUES ('HV006', 'Ghế Phụ', 0.2,  1);
 
 
 

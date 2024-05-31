@@ -86,6 +86,8 @@ public class LichChuyenBayController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/manager/ThemLichChuyenBay.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
+            ThemLichChuyenBayController controller = fxmlLoader.getController();
+            controller.setLichChuyenBayController(this);
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/Admin/logo.png"))));
@@ -214,7 +216,7 @@ public class LichChuyenBayController implements Initializable {
         LocalDate ngayBay = ngay_datepicker.getValue();
 
         // Kiểm tra nếu không có tiêu chí nào được chọn
-        if ("Chọn sân bay đi".equals(sanBayDi) && "Chọn sân bay đến".equals(sanBayDen) && ngayBay == null) {
+        if ("Sân bay đi".equals(sanBayDi) && "Sân bay đến".equals(sanBayDen) && ngayBay == null) {
             alert.errorMessage("Vui lòng chọn ít nhất một tiêu chí để tìm kiếm.");
             return;
         }
@@ -268,6 +270,11 @@ public class LichChuyenBayController implements Initializable {
                 soGhe_tbcoumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGhe(cellData.getValue().getMaChuyenBay()).toString()));
                 thoiGianBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(dinhDangKhoangThoiGian(Duration.between(cellData.getValue().getThoiGianXuatPhat(), cellData.getValue().getThoiGianKetThuc()))));
                 giaVe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getGiaVe())));
+
+                // Check if the TableView is empty after the search
+                if (chuyenBay_tableview.getItems().isEmpty()) {
+                    alert.errorMessage("Không tìm thấy chuyến bay phù hợp.");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

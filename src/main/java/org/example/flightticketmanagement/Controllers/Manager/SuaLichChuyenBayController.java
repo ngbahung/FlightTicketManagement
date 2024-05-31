@@ -74,6 +74,8 @@ public class SuaLichChuyenBayController implements Initializable {
     @FXML
     private MFXButton luu_btn;
 
+    private int MIN_FLIGHT_HOURS;
+
     @FXML
     void moThemHangVeChuyenBay() {
         try {
@@ -135,6 +137,38 @@ public class SuaLichChuyenBayController implements Initializable {
     @FXML
     void luuButtonClicked() {
         try {
+            // Check if all the required fields are filled
+            if (maChuyenBay_txtfld.getText().isEmpty() || maDuongBay_txtfld.getText().isEmpty() ||
+                    ngayBay_datepicker.getValue() == null || ngayHaCanh_datepicker.getValue() == null ||
+                    gioBay_combobox.getValue() == null || gioHaCanh_combobox.getValue() == null ||
+                    gia_txtfld.getText().isEmpty()) {
+                alert.errorMessage("Please fill in all information.");
+                return;
+            }
+
+            // Check if the flight date is less than or equal to the landing date
+            if (ngayBay_datepicker.getValue().isAfter(ngayHaCanh_datepicker.getValue())) {
+                alert.errorMessage("The flight date must be less than or equal to the landing date.");
+                return;
+            }
+
+            // Check if the flight duration is within the minimum and maximum flight hours
+            LocalDateTime departure = LocalDateTime.of(ngayBay_datepicker.getValue(),
+                    LocalTime.parse(gioBay_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
+            LocalDateTime arrival = LocalDateTime.of(ngayHaCanh_datepicker.getValue(),
+                    LocalTime.parse(gioHaCanh_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
+            Duration duration = Duration.between(departure, arrival);
+            long flightHours = duration.toHours();
+            if (flightHours < MIN_FLIGHT_HOURS) {
+                alert.errorMessage("The flight duration must be between " + MIN_FLIGHT_HOURS + " hours.");
+                return;
+            }
+
+            // Check if there is at least one ticket class information added
+            if (hangVe_tableview.getItems().isEmpty()) {
+                alert.errorMessage("Please add at least one ticket class information.");
+                return;
+            }
             // Lấy thông tin từ các trường nhập liệu
             String maChuyenBay = maChuyenBay_txtfld.getText();
             String maDuongBay = maDuongBay_txtfld.getText();
@@ -226,6 +260,17 @@ public class SuaLichChuyenBayController implements Initializable {
         populateTenDuongBayComboBox();
         populateTimeComboBox(gioBay_combobox);
         populateTimeComboBox(gioHaCanh_combobox);
+
+        // Retrieve MIN_FLIGHT_HOURS from the THAMSO table
+        String query = "SELECT GiaTri FROM THAMSO WHERE MaThuocTinh = 'TGBTT'";
+        try (PreparedStatement ps = connect.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                MIN_FLIGHT_HOURS = rs.getInt("GiaTri");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Could not retrieve flight duration from the database");
+        }
 
         gioBay_combobox.valueProperty().addListener((obs, oldVal, newVal) -> tinhThoiGianBay());
         gioHaCanh_combobox.valueProperty().addListener((obs, oldVal, newVal) -> tinhThoiGianBay());

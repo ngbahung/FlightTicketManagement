@@ -74,6 +74,15 @@ public class ThemLichChuyenBayController implements Initializable {
     @FXML
     private MFXButton xoaHangVe_btn;
 
+    private int MIN_FLIGHT_HOURS;
+    // Reference to the parent controller
+    private LichChuyenBayController parentController;
+
+    public void setParentController(LichChuyenBayController parentController) {
+        this.parentController = parentController;
+    }
+
+
 
     @FXML
     void xoaHangVe() {
@@ -95,6 +104,40 @@ public class ThemLichChuyenBayController implements Initializable {
     @FXML
     void luuButtonClicked() {
         try {
+
+            // Check if all the required fields are filled
+            if (maChuyenBay_txtfld.getText().isEmpty() || maDuongBay_txtfld.getText().isEmpty() ||
+                    ngayBay_datepicker.getValue() == null || ngayHaCanh_datepicker.getValue() == null ||
+                    gioBay_combobox.getValue() == null || gioHaCanh_combobox.getValue() == null ||
+                    gia_txtfld.getText().isEmpty()) {
+                alert.errorMessage("Hãy điền đủ thông tin.");
+                return;
+            }
+
+            // Check if the flight date is less than or equal to the landing date
+            if (ngayBay_datepicker.getValue().isAfter(ngayHaCanh_datepicker.getValue())) {
+                alert.errorMessage("Ngày xuất phát không thể sau ngày hạ cánh.");
+                return;
+            }
+
+            // Check if the flight duration is within the minimum and maximum flight hours
+            LocalDateTime departure = LocalDateTime.of(ngayBay_datepicker.getValue(),
+                    LocalTime.parse(gioBay_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
+            LocalDateTime arrival = LocalDateTime.of(ngayHaCanh_datepicker.getValue(),
+                    LocalTime.parse(gioHaCanh_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
+            Duration duration = Duration.between(departure, arrival);
+            long flightHours = duration.toHours();
+
+            if (flightHours < MIN_FLIGHT_HOURS) {
+                alert.errorMessage("Độ dài chuyến bay phải lớn hơn " + MIN_FLIGHT_HOURS + " giờ.");
+                return;
+            }
+
+            // Check if there is at least one ticket class information added
+            if (hangVe_tableview.getItems().isEmpty()) {
+                alert.errorMessage("Vui lòng thêm ít nhất một hạng vé cho chuyến bay.");
+                return;
+            }
             // Lấy thông tin từ các trường nhập liệu
             String maChuyenBay = maChuyenBay_txtfld.getText();
             String maDuongBay = maDuongBay_txtfld.getText();
@@ -135,10 +178,18 @@ public class ThemLichChuyenBayController implements Initializable {
             if (parentController != null) {
                 parentController.layDuLieu(null, null, null);
             }
+            refreshTableView();
             closeStage();
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Đã xảy ra lỗi khi lưu dữ liệu xuống cơ sở dữ liệu.");
+        }
+    }
+
+    private void refreshTableView() {
+        // Fetch the updated data from the database
+        if (parentController != null) {
+            parentController.layDuLieu(null, null, null);
         }
     }
 
@@ -148,12 +199,7 @@ public class ThemLichChuyenBayController implements Initializable {
 
     private final AlertMessage alert = new AlertMessage();
 
-    // Reference to the parent controller
-    private LichChuyenBayController parentController;
 
-    public void setParentController(LichChuyenBayController parentController) {
-        this.parentController = parentController;
-    }
 
 
     @FXML
@@ -182,6 +228,17 @@ public class ThemLichChuyenBayController implements Initializable {
         populateTenDuongBayComboBox();
         populateTimeComboBox(gioBay_combobox);
         populateTimeComboBox(gioHaCanh_combobox);
+
+        // Retrieve MIN_FLIGHT_HOURS from the THAMSO table
+        String query = "SELECT GiaTri FROM THAMSO WHERE MaThuocTinh = 'TGBTT'";
+        try (PreparedStatement ps = connect.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                MIN_FLIGHT_HOURS = rs.getInt("GiaTri");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Could not fetch the minimum flight hours.");
+        }
 
         tenDuongBay_combobox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -324,5 +381,9 @@ public class ThemLichChuyenBayController implements Initializable {
     private void closeStage() {
         Stage stage = (Stage) luu_btn.getScene().getWindow();
         stage.close();
+    }
+
+    public void setLichChuyenBayController(LichChuyenBayController parentController) {
+        this.parentController = parentController;
     }
 }
