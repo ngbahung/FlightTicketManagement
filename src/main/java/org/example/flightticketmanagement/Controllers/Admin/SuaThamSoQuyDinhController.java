@@ -8,7 +8,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
-import org.example.flightticketmanagement.Models.ThamSo;
 
 import java.net.URL;
 import java.sql.*;
@@ -40,11 +39,8 @@ public class SuaThamSoQuyDinhController implements Initializable {
     private QuyDinhController parentController;
 
     private Connection connect;
-    private PreparedStatement prepare;
     private Statement statement;
     private ResultSet result;
-
-    private ThamSo thamSo;
 
     private final AlertMessage alert = new AlertMessage();
 
@@ -140,11 +136,6 @@ public class SuaThamSoQuyDinhController implements Initializable {
         Stage stage = (Stage) luuThamSo_btn.getScene().getWindow();
         stage.close();
     }
-
-//    public void setThamSo(ThamSo thamSo) {
-//        this.thamSo = thamSo;
-//        populateFields();
-//    }
 
     private void populateFields() {
         String query = "SELECT * FROM THAMSO";

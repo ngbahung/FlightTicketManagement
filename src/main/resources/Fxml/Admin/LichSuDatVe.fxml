@@ -46,7 +46,7 @@
             <font>
                <Font name="System Bold" size="13.0" />
             </font></MFXDatePicker>
-         <MFXButton id="custom_2" fx:id="timkiem_btn" onAction="#search" prefHeight="30.0" prefWidth="53.0" text=" ">
+         <MFXButton id="custom_2" onAction="#search" prefHeight="30.0" prefWidth="53.0" text=" ">
             <graphic>
                <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20" />
             </graphic>
@@ -56,7 +56,7 @@
    <VBox layoutX="11.0" layoutY="121.0" prefHeight="334.0" prefWidth="964.0">
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="66.0" prefWidth="965.0">
          <Text id="custom" layoutX="408.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="table-text" text="VÉ ĐÃ ĐẶT" />
-         <MFXButton id="custom_2" layoutX="842.0" layoutY="14.0" onMouseClicked="#xuatVe" prefHeight="30.0" prefWidth="111.0" text="Xuất vé" fx:id="xuatVe_btn">
+         <MFXButton id="custom_2" layoutX="842.0" layoutY="14.0" onMouseClicked="#xuatVe" prefHeight="30.0" prefWidth="111.0" text="Xuất vé">
             <graphic>
                <FontAwesomeIconView fill="WHITE" glyphName="TICKET" size="20" />
             </graphic>
@@ -140,7 +140,7 @@
          </styleClass>
       </TableView>
    </VBox>
-   <MFXButton id="custom_1" fx:id="huyVeorDatCho_btn" graphicTextGap="15.0" layoutX="791.0" layoutY="52.0" onAction="#cancelTicketOrReservation" prefHeight="38.0" prefWidth="177.0" text="Hủy vé/đặt chỗ" textFill="RED">
+   <MFXButton id="custom_1" graphicTextGap="15.0" layoutX="791.0" layoutY="52.0" onAction="#cancelTicketOrReservation" prefHeight="38.0" prefWidth="177.0" text="Hủy vé/đặt chỗ" textFill="RED">
       <graphic>
          <FontAwesomeIconView fill="RED" glyphName="EXCLAMATION_TRIANGLE" size="20" />
       </graphic>

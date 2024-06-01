@@ -1,7 +1,6 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
 import io.github.palexdev.materialfx.controls.*;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.stage.Stage;
@@ -45,7 +44,7 @@ public class SuaPhanQuyenController implements Initializable {
 
 
     @FXML
-    void updateAccount(ActionEvent event) {
+    void updateAccount() {
         String maTaiKhoan = maTaiKhoan_txtfld.getText();
         String ten = ten_txtfld.getText();
         String sdt = sdt_txtfld.getText();
@@ -126,9 +125,7 @@ public class SuaPhanQuyenController implements Initializable {
             String tenVaiTro = getRoleName(selectedTaiKhoan.getMaQuyen());
             vaiTro_combobox.setValue(tenVaiTro);
             vaiTro_combobox.getSelectionModel().selectItem(selectedTaiKhoan.getMaQuyen());
-            vaiTro_combobox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                selectedTaiKhoan.setMaQuyen(roleMap.get(newValue));
-            });
+            vaiTro_combobox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> selectedTaiKhoan.setMaQuyen(roleMap.get(newValue)));
         }
     }
 

@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -65,12 +64,6 @@ public class QuyDinhController implements Initializable {
     private TableView<SanBay> sanbay_tbv;
 
     @FXML
-    private Button searchHangVe_btn;
-
-    @FXML
-    private Button searchSanBay_btn;
-
-    @FXML
     private TextField searchhangve_tfx;
 
     @FXML
@@ -86,25 +79,10 @@ public class QuyDinhController implements Initializable {
     private TableColumn<?, ?> sttsanbay_col;
 
     @FXML
-    private Button suahangve_btn;
-
-    @FXML
-    private Button suaquydinh_btn;
-
-    @FXML
-    private Button suasanbay_btn;
-
-    @FXML
     private TableColumn<?, ?> tenhangve_col;
 
     @FXML
     private TableColumn<?, ?> tensanbay_col;
-
-    @FXML
-    private Button themhangve_btn;
-
-    @FXML
-    private Button themsanbay_btn;
 
     @FXML
     private TableColumn<?, ?> tinhthanh_col;
@@ -113,31 +91,7 @@ public class QuyDinhController implements Initializable {
     private TableColumn<?, ?> vietTat_col;
 
     @FXML
-    private Button xoaDuongBay_btn;
-
-    @FXML
-    private Button xoaHangVe_btn;
-
-    @FXML
-    private Button xoaSanBay_btn;
-
-    @FXML
-    private Button xoahangve_btn;
-
-    @FXML
-    private Button xoasanbay_btn;
-
-    @FXML
-    private Button themDuongBay_btn;
-
-    @FXML
-    private Button suaDuongBay_btn;
-
-    @FXML
     private TableColumn<?, ?> sttDuongBay_col;
-
-    @FXML
-    private Button searchDuongBay_btn;
 
     @FXML
     private TextField searchDuongBay_textfield;
@@ -184,16 +138,8 @@ public class QuyDinhController implements Initializable {
         showHangVeList();
         loadThamSoData();
         loadDuongBayData();
-        suasanbay_btn.setOnAction(this::editSelectedAirports);
-        xoasanbay_btn.setOnAction(this::deactivateSelectedAirports);
-        searchSanBay_btn.setOnAction(this::searchSanBay);
-        searchHangVe_btn.setOnAction(this::searchHangVe);
         refreshSanBayData_btn.setOnAction(e -> showSanBayList());
         refreshHangVeData_btn.setOnAction(e -> showHangVeList());
-        suahangve_btn.setOnAction(this::editSelectedTicketClass);
-        xoahangve_btn.setOnAction(this::deactiveSelectedTicketClass);
-        suaquydinh_btn.setOnAction(this::editParameter);
-        searchDuongBay_btn.setOnAction(this::searchDuongBay);
         refreshDuongBayData_btn.setOnAction(e -> loadDuongBayData());
     }
 
@@ -221,7 +167,7 @@ public class QuyDinhController implements Initializable {
             heso_col.setCellValueFactory(new PropertyValueFactory<>("heSo"));
             statusHangVe_col.setCellValueFactory(new PropertyValueFactory<>("trangThai"));
 
-            statusHangVe_col.setCellFactory(column -> new TableCell<HangVe, Integer>() {
+            statusHangVe_col.setCellFactory(column -> new TableCell<>() {
                 @Override
                 protected void updateItem(Integer item, boolean empty) {
                     super.updateItem(item, empty);
@@ -287,7 +233,7 @@ public class QuyDinhController implements Initializable {
             vietTat_col.setCellValueFactory(new PropertyValueFactory<>("tenVietTat"));
 
             status_col.setCellValueFactory(new PropertyValueFactory<>("trangThai"));
-            status_col.setCellFactory(column -> new TableCell<SanBay, Integer>() {
+            status_col.setCellFactory(column -> new TableCell<>() {
                 @Override
                 protected void updateItem(Integer item, boolean empty) {
                     super.updateItem(item, empty);
@@ -323,7 +269,7 @@ public class QuyDinhController implements Initializable {
     }
 
     @FXML
-    void addAirports(ActionEvent event) {
+    void addAirports() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/ThemSanBay.fxml"));
             Parent root = loader.load();
@@ -343,7 +289,7 @@ public class QuyDinhController implements Initializable {
     }
 
     @FXML
-    void addHangVe(ActionEvent event) {
+    void addHangVe() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/ThemHangVe.fxml"));
             Parent root = loader.load();
@@ -361,7 +307,7 @@ public class QuyDinhController implements Initializable {
     }
 
     @FXML
-    void deactivateSelectedAirports(ActionEvent event) {
+    void deactivateSelectedAirports() {
         ObservableList<SanBay> selectedAirports = sanbay_tbv.getSelectionModel().getSelectedItems();
 
         if (selectedAirports.isEmpty()) {
@@ -411,7 +357,7 @@ public class QuyDinhController implements Initializable {
     }
 
     @FXML
-    void editSelectedAirports(ActionEvent event) {
+    void editSelectedAirports() {
         SanBay selectedAirport = sanbay_tbv.getSelectionModel().getSelectedItem();
         if (selectedAirport == null) {
             alert.errorMessage("Không chọn sân bay nào. Vui lòng chọn một sân bay để sửa.");
@@ -450,7 +396,8 @@ public class QuyDinhController implements Initializable {
         loadDuongBayData();
     }
 
-    private void searchSanBay(ActionEvent e) {
+    @FXML
+    void searchSanBay() {
         String keyword = searchsanbay_tfx.getText();
         if (keyword == null || keyword.isEmpty()) {
             sanbay_tbv.setItems(filteredSanBayData);
@@ -458,21 +405,17 @@ public class QuyDinhController implements Initializable {
         }
 
         String lowerCaseFilter = keyword.toLowerCase();
-        filteredSanBayData.setPredicate(sanBay -> {
-            if (sanBay.getMaSanBay().toLowerCase().contains(lowerCaseFilter) ||
-                    sanBay.getTenSanBay().toLowerCase().contains(lowerCaseFilter) ||
-                    sanBay.getDiaChi().toLowerCase().contains(lowerCaseFilter)) {
-                return true;
-            }
-            return false;
-        });
+        filteredSanBayData.setPredicate(sanBay -> sanBay.getMaSanBay().toLowerCase().contains(lowerCaseFilter) ||
+                sanBay.getTenSanBay().toLowerCase().contains(lowerCaseFilter) ||
+                sanBay.getDiaChi().toLowerCase().contains(lowerCaseFilter));
 
         SortedList<SanBay> sortedData = new SortedList<>(filteredSanBayData);
         sortedData.comparatorProperty().bind(sanbay_tbv.comparatorProperty());
         sanbay_tbv.setItems(sortedData);
     }
 
-    private void searchHangVe(ActionEvent e) {
+    @FXML
+    void searchHangVe() {
         String keyword = searchhangve_tfx.getText();
         if (keyword == null || keyword.isEmpty()) {
             hangve_tbv.setItems(filteredHangVeData);
@@ -480,13 +423,8 @@ public class QuyDinhController implements Initializable {
         }
 
         String lowerCaseFilter = keyword.toLowerCase();
-        filteredHangVeData.setPredicate(hangVe -> {
-            if (hangVe.getMaHangVe().toLowerCase().contains(lowerCaseFilter) ||
-                    hangVe.getTenHangVe().toLowerCase().contains(lowerCaseFilter)) {
-                return true;
-            }
-            return false;
-        });
+        filteredHangVeData.setPredicate(hangVe -> hangVe.getMaHangVe().toLowerCase().contains(lowerCaseFilter) ||
+                hangVe.getTenHangVe().toLowerCase().contains(lowerCaseFilter));
 
         SortedList<HangVe> sortedData = new SortedList<>(filteredHangVeData);
         sortedData.comparatorProperty().bind(hangve_tbv.comparatorProperty());
@@ -494,7 +432,26 @@ public class QuyDinhController implements Initializable {
     }
 
     @FXML
-    void deactiveSelectedTicketClass(ActionEvent event) {
+    void searchDuongBay() {
+        String keyword = searchDuongBay_textfield.getText();
+        if (keyword == null || keyword.isEmpty()) {
+            duongBay_tbv.setItems(filteredDuongBayData);
+            return;
+        }
+
+        String lowerCaseFilter = keyword.toLowerCase();
+        filteredDuongBayData.setPredicate(duongBay -> duongBay.getMaDuongBay().toLowerCase().contains(lowerCaseFilter) ||
+                duongBay.getTenDuongBay().toLowerCase().contains(lowerCaseFilter) ||
+                duongBay.getTenSanBayDi().toLowerCase().contains(lowerCaseFilter) ||
+                duongBay.getTenSanBayDen().toLowerCase().contains(lowerCaseFilter));
+
+        SortedList<DuongBay> sortedData = new SortedList<>(filteredDuongBayData);
+        sortedData.comparatorProperty().bind(duongBay_tbv.comparatorProperty());
+        duongBay_tbv.setItems(sortedData);
+    }
+
+    @FXML
+    void deactiveSelectedTicketClass() {
         ObservableList<HangVe> selectedTicketClasses = hangve_tbv.getSelectionModel().getSelectedItems();
 
         if (selectedTicketClasses.isEmpty()) {
@@ -544,7 +501,7 @@ public class QuyDinhController implements Initializable {
     }
 
     @FXML
-    void editSelectedTicketClass(ActionEvent event) {
+    void editSelectedTicketClass() {
         HangVe selectedTicketClass = hangve_tbv.getSelectionModel().getSelectedItem();
         if (selectedTicketClass == null) {
             alert.errorMessage("Không chọn hạng vé nào. Vui lòng chọn một hạng vé để sửa.");
@@ -617,7 +574,7 @@ public class QuyDinhController implements Initializable {
     }
 
     @FXML
-    void editParameter(ActionEvent event) {
+    void editParameter() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/SuaThamSo.fxml"));
             Parent root = loader.load();
@@ -633,7 +590,6 @@ public class QuyDinhController implements Initializable {
             e.printStackTrace();
         }
     }
-
 
     public void loadDuongBayData() {
         ObservableList<DuongBay> duongBayList = FXCollections.observableArrayList();
@@ -673,7 +629,7 @@ public class QuyDinhController implements Initializable {
             tenDuongBay_col.setCellValueFactory(new PropertyValueFactory<>("tenDuongBay"));
 
             statusDuongBay_col.setCellValueFactory(new PropertyValueFactory<>("trangThai"));
-            statusDuongBay_col.setCellFactory(column -> new TableCell<DuongBay, Integer>() {
+            statusDuongBay_col.setCellFactory(column -> new TableCell<>() {
                 @Override
                 protected void updateItem(Integer item, boolean empty) {
                     super.updateItem(item, empty);
@@ -708,31 +664,8 @@ public class QuyDinhController implements Initializable {
         }
     }
 
-    private void searchDuongBay(ActionEvent e) {
-        String keyword = searchDuongBay_textfield.getText();
-        if (keyword == null || keyword.isEmpty()) {
-            duongBay_tbv.setItems(filteredDuongBayData);
-            return;
-        }
-
-        String lowerCaseFilter = keyword.toLowerCase();
-        filteredDuongBayData.setPredicate(duongBay -> {
-            if (duongBay.getMaDuongBay().toLowerCase().contains(lowerCaseFilter) ||
-                    duongBay.getTenDuongBay().toLowerCase().contains(lowerCaseFilter) ||
-                    duongBay.getTenSanBayDi().toLowerCase().contains(lowerCaseFilter) ||
-                    duongBay.getTenSanBayDen().toLowerCase().contains(lowerCaseFilter)) {
-                return true;
-            }
-            return false;
-        });
-
-        SortedList<DuongBay> sortedData = new SortedList<>(filteredDuongBayData);
-        sortedData.comparatorProperty().bind(duongBay_tbv.comparatorProperty());
-        duongBay_tbv.setItems(sortedData);
-    }
-
     @FXML
-    void themDuongBay (ActionEvent event) {
+    void themDuongBay () {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/ThemDuongBay.fxml"));
             Parent root = loader.load();
@@ -750,7 +683,7 @@ public class QuyDinhController implements Initializable {
     }
 
     @FXML
-    void suaDuongBay (ActionEvent event) {
+    void suaDuongBay () {
         DuongBay selectedDuongBay = duongBay_tbv.getSelectionModel().getSelectedItem();
         if (selectedDuongBay == null) {
             alert.errorMessage("Không chọn đường bay nào. Vui lòng chọn một đường bay để sửa.");
@@ -775,7 +708,7 @@ public class QuyDinhController implements Initializable {
     }
 
     @FXML
-    void changeDuongBayStatus (ActionEvent e){
+    void changeDuongBayStatus (){
         ObservableList<DuongBay> selectedDuongBay = duongBay_tbv.getSelectionModel().getSelectedItems();
 
         if (selectedDuongBay.isEmpty()) {

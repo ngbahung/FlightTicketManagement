@@ -3,8 +3,6 @@ package org.example.flightticketmanagement.Controllers.Manager;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -240,12 +238,7 @@ public class ThemLichChuyenBayController implements Initializable {
             alert.errorMessage("Could not fetch the minimum flight hours.");
         }
 
-        tenDuongBay_combobox.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                maDuongBay_txtfld.setText(getMaDuongBayByTen(newValue));
-            }
-        });
+        tenDuongBay_combobox.valueProperty().addListener((observableValue, oldValue, newValue) -> maDuongBay_txtfld.setText(getMaDuongBayByTen(newValue)));
 
         generateMaChuyenBay();
 

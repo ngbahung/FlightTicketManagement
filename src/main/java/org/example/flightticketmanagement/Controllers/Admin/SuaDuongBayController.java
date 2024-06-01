@@ -86,15 +86,13 @@ public class SuaDuongBayController implements Initializable {
         sanBayDen_cbx.getItems().addAll(sanBayList);
 
         sanBayDi_cbx.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            String selectedSanBayDi = newValue.toString();
-            String tenVietTatDi = getTenVietTat(selectedSanBayDi);
+            String tenVietTatDi = getTenVietTat(newValue);
             System.out.println("TenVietTat for SanBayDi: " + tenVietTatDi);
             updateTenDuongBay();
         });
 
         sanBayDen_cbx.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            String selectedSanBayDen = newValue.toString();
-            String tenVietTatDen = getTenVietTat(selectedSanBayDen);
+            String tenVietTatDen = getTenVietTat(newValue);
             System.out.println("TenVietTat for SanBayDen: " + tenVietTatDen);
             updateTenDuongBay();
         });
@@ -163,7 +161,7 @@ public class SuaDuongBayController implements Initializable {
 
     private void updateTenDuongBay() {
         if (sanBayDi_cbx.getValue() != null && sanBayDen_cbx.getValue() != null) {
-            String tenDuongBay = getTenVietTat(sanBayDi_cbx.getValue().toString()) + "-" + getTenVietTat(sanBayDen_cbx.getValue().toString());
+            String tenDuongBay = getTenVietTat(sanBayDi_cbx.getValue()) + "-" + getTenVietTat(sanBayDen_cbx.getValue());
             tenDuongBay_txf.setText(tenDuongBay);
         }
     }
