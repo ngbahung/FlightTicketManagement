@@ -502,45 +502,6 @@ public class QuyDinhController implements Initializable {
             return;
         }
 
-        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmationAlert.setTitle("Xác nhận cập nhật trạng thái");
-        confirmationAlert.setHeaderText("Bạn có muốn thay đổi trạng thái của các hạng vé đã chọn?");
-        confirmationAlert.setContentText("Hành động này sẽ thay đổi trạng thái của hạng vé từ 'Ngưng hoạt động' sang 'Đang hoạt động' và ngược lại.");
-
-        Optional<ButtonType> result = confirmationAlert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            try {
-                connect = DatabaseDriver.getConnection();
-                prepare = connect.prepareStatement("UPDATE HANGVE SET TrangThai = ? WHERE MaHangVe = ?");
-
-                for (HangVe hangVe : selectedTicketClasses) {
-                    int newStatus = hangVe.getTrangThai() == 0 ? 1 : 0;
-                    prepare.setInt(1, newStatus);
-                    prepare.setString(2, hangVe.getMaHangVe());
-                    prepare.addBatch();
-                }
-
-                int[] results = prepare.executeBatch();
-                if (results.length > 0) {
-                    alert.successMessage("Trạng thái hạng vé đã được cập nhật thành công.");
-                } else {
-                    alert.errorMessage("Không cập nhật được trạng thái hạng vé đã chọn.");
-                }
-
-                showHangVeList();  // Refresh the table
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-                alert.errorMessage("Lỗi khi đang cập nhật trạng thái hạng vé. Vui lòng kiểm tra lại.");
-            } finally {
-                try {
-                    if (prepare != null) prepare.close();
-                    if (connect != null) connect.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     @FXML
