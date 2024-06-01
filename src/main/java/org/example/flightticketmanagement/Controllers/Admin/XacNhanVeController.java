@@ -70,8 +70,6 @@ public class XacNhanVeController implements Initializable {
 
     // DATABASE TOOLS
     private Connection connect;
-    private PreparedStatement prepare;
-    private ResultSet result;
 
     private final AlertMessage alert = new AlertMessage();
 
@@ -108,10 +106,6 @@ public class XacNhanVeController implements Initializable {
     }
 
 
-
-
-    private boolean isDatVe;
-
     private ManHinhDatVeController manHinhDatVeController;
 
 
@@ -128,10 +122,9 @@ public class XacNhanVeController implements Initializable {
         datCho_btn.setOnAction(e -> handleInsertBooking(false)); // for datCho (reserving seat)
     }
 
-    public void initData(boolean isDatVe, String maKH, String hoten, String cccd, String email, String sdt,
+    public void initData(String maKH, String hoten, String cccd, String email, String sdt,
                          String diaChi, String maVe, String maGhe, String thanhTien, String maChuyenBay,
                          String sanBayDi, String sanBayDen, String ngayBay, String gioBay) {
-        this.isDatVe = isDatVe;
         maKH_txtfld.setText(maKH);
         hoten_txtfld.setText(hoten);
         cccd_txtfld.setText(cccd);

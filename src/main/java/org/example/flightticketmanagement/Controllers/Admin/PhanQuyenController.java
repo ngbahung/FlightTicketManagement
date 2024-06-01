@@ -18,8 +18,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.example.flightticketmanagement.Controllers.Admin.SuaPhanQuyenController;
-import org.example.flightticketmanagement.Controllers.Admin.ThemPhanQuyenController;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
 import org.example.flightticketmanagement.Models.TaiKhoan;
@@ -70,8 +68,6 @@ public class PhanQuyenController implements Initializable {
     // DATABASE TOOLS
     private Connection connect;
     private PreparedStatement prepare;
-    private Statement statement;
-    private ResultSet result;
 
     private final AlertMessage alert = new AlertMessage();
     private FilteredList<TaiKhoan> filteredData;
@@ -94,16 +90,11 @@ public class PhanQuyenController implements Initializable {
         }
 
         String lowerCaseFilter = filterText.toLowerCase();
-        filteredData.setPredicate(taiKhoan -> {
-            if (taiKhoan.getTen().toLowerCase().contains(lowerCaseFilter) ||
-                    taiKhoan.getEmail().toLowerCase().contains(lowerCaseFilter) ||
-                    taiKhoan.getMaTaiKhoan().toLowerCase().contains(lowerCaseFilter) ||
-                    taiKhoan.getPassword().toLowerCase().contains(lowerCaseFilter) ||
-                    taiKhoan.getMaQuyen().toLowerCase().contains(lowerCaseFilter)) {
-                return true;
-            }
-            return false;
-        });
+        filteredData.setPredicate(taiKhoan -> taiKhoan.getTen().toLowerCase().contains(lowerCaseFilter) ||
+                taiKhoan.getEmail().toLowerCase().contains(lowerCaseFilter) ||
+                taiKhoan.getMaTaiKhoan().toLowerCase().contains(lowerCaseFilter) ||
+                taiKhoan.getPassword().toLowerCase().contains(lowerCaseFilter) ||
+                taiKhoan.getMaQuyen().toLowerCase().contains(lowerCaseFilter));
 
         SortedList<TaiKhoan> sortedData = new SortedList<>(filteredData);
         sortedData.comparatorProperty().bind(phanQuyen_table.comparatorProperty());
@@ -183,14 +174,15 @@ public class PhanQuyenController implements Initializable {
     public void ketnoiPhanQuyen() {
         ObservableList<TaiKhoan> taiKhoanList = FXCollections.observableArrayList();
 
-        String sql = "SELECT TaiKhoan.maTaiKhoan, TaiKhoan.ten, TaiKhoan.sdt, TaiKhoan.email, TaiKhoan.password, TaiKhoan.created, Quyen.tenQuyen " +
-                "FROM TaiKhoan " +
-                "JOIN Quyen ON TaiKhoan.maQuyen = Quyen.maQuyen";
+        String sql = "{call GET_TAIKHOAN_PHANQUYEN(?)}";
 
         try {
             connect = DatabaseDriver.getConnection();
-            statement = connect.createStatement();
-            result = statement.executeQuery(sql);
+            CallableStatement callableStatement = connect.prepareCall(sql);
+            callableStatement.registerOutParameter(1, Types.REF_CURSOR);
+            callableStatement.execute();
+
+            ResultSet result = (ResultSet) callableStatement.getObject(1);
 
             while (result.next()) {
                 String maTaiKhoan = result.getString("maTaiKhoan");
@@ -218,16 +210,9 @@ public class PhanQuyenController implements Initializable {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (result != null) result.close();
-                if (statement != null) statement.close();
-                if (connect != null) connect.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
+
 
     public void refreshTable() {
         ketnoiPhanQuyen();

@@ -3,14 +3,12 @@ package org.example.flightticketmanagement.Controllers.Manager;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.ChuyenBay;
@@ -60,19 +58,7 @@ public class LichChuyenBayController implements Initializable {
     private TableColumn<ChuyenBay, String> soGhe_tbcoumn;
 
     @FXML
-    private MFXButton sua_btn;
-
-    @FXML
-    private MFXButton them_btn;
-
-    @FXML
     private TableColumn<ChuyenBay, String> thoiGianBay_tbcolumn;
-
-    @FXML
-    private MFXButton timkiem_btn;
-
-    @FXML
-    private MFXButton xoa_btn;
 
     @FXML
     private MenuButton sanbayden_menubtn;
@@ -84,7 +70,7 @@ public class LichChuyenBayController implements Initializable {
     private MFXButton refresh_btn;
 
     @FXML
-    void themLichChuyenBay(ActionEvent event) {
+    void themLichChuyenBay() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/manager/ThemLichChuyenBay.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
@@ -102,7 +88,7 @@ public class LichChuyenBayController implements Initializable {
     }
 
     @FXML
-    void suaLichChuyenBay(ActionEvent event) {
+    void suaLichChuyenBay() {
         ChuyenBay selectedChuyenBay = chuyenBay_tableview.getSelectionModel().getSelectedItem();
         if (selectedChuyenBay == null) {
             // Thông báo cho người dùng nếu không có dòng nào được chọn
@@ -130,24 +116,19 @@ public class LichChuyenBayController implements Initializable {
     }
 
     @FXML
-    void xoaLichChuyenBay(ActionEvent event) {
+    void xoaLichChuyenBay() {
         ObservableList<ChuyenBay> selectedFlights = chuyenBay_tableview.getSelectionModel().getSelectedItems();
 
         if (selectedFlights.isEmpty()) {
             alert.errorMessage("Vui lòng chọn ít nhất một chuyến bay để xóa.");
-            return;
         }
 
         // INSERT PROC XÓA CHUYẾN BAY
 
-
-        for (ChuyenBay flight : selectedFlights) {
-            alert.errorMessage("Không thể xóa vì ràng buộc dữ liệu.");
-        }
     }
 
     @FXML
-    private void xuLyTimKiemButton(ActionEvent event) {
+    private void xuLyTimKiemButton() {
         // Lấy giá trị từ các thành phần giao diện
         String sanBayDi = sanbaydi_menubtn.getText().trim();
         String sanBayDen = sanbayden_menubtn.getText().trim();
@@ -181,7 +162,7 @@ public class LichChuyenBayController implements Initializable {
             parameters.add(Date.valueOf(ngayBay));
         }
 
-        String finalQuery = baseQuery + conditions.toString();
+        String finalQuery = baseQuery + conditions;
 
         try {
             prepareAndExecuteQuery(finalQuery, parameters, chuyenBay_tableview);
@@ -194,10 +175,7 @@ public class LichChuyenBayController implements Initializable {
         }
     }
 
-
     private Connection connect;
-    private PreparedStatement prepare;
-    private ResultSet result;
 
     private final AlertMessage alert = new AlertMessage();
 
@@ -213,7 +191,6 @@ public class LichChuyenBayController implements Initializable {
             ngay_datepicker.setValue(null);
             layDuLieu(null, null, null);
         });
-        voHieuTimKiemButton();
     }
     public void layDuLieu(String sanBayDi, String sanBayDen, LocalDate ngayBay) {
         chuyenBay_tableview.getItems().clear();  // Xóa kết quả tìm kiếm trước đó
@@ -246,12 +223,12 @@ public class LichChuyenBayController implements Initializable {
         }
 
         try {
-            prepare = connect.prepareStatement(baseQuery);
+            PreparedStatement prepare = connect.prepareStatement(baseQuery);
             for (int i = 0; i < parameters.size(); i++) {
                 prepare.setObject(i + 1, parameters.get(i));
             }
 
-            result = prepare.executeQuery();
+            ResultSet result = prepare.executeQuery();
 
             while (result.next()) {
                 ChuyenBay chuyenBay = new ChuyenBay(
@@ -340,64 +317,56 @@ public class LichChuyenBayController implements Initializable {
         }
     }
 
-    private void voHieuTimKiemButton() {
-        timkiem_btn.setDisable(
-                sanbaydi_menubtn.getText().equals("Chọn sân bay đi") &&
-                        sanbayden_menubtn.getText().equals("Chọn sân bay đến") &&
-                        ngay_datepicker.getValue() == null
-        );
-    }
-
     private String getSanBayDi(String maDuongBay) {
-        try (Connection conn = DatabaseDriver.getConnection();
-             CallableStatement cs = conn.prepareCall("{call GET_SANBAYDI(?, ?)}")) {
-            cs.setString(1, maDuongBay);
-            cs.registerOutParameter(2, Types.VARCHAR);
-            cs.execute();
-            return cs.getString(2);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return "N/A";
+        String sanBayDi = "";
+        try (CallableStatement statement = connect.prepareCall("{call GET_SANBAYDI(?, ?)}")) {
+            statement.setString(1, maDuongBay);
+            statement.registerOutParameter(2, Types.VARCHAR);
+            statement.execute();
+            return statement.getString(2);
+        } catch (Exception e) {
+            sanBayDi = "";
         }
+        return sanBayDi;
     }
 
     private String getSanBayDen(String maDuongBay) {
-        try (Connection conn = DatabaseDriver.getConnection();
-             CallableStatement cs = conn.prepareCall("{call GET_SANBAYDEN(?, ?)}")) {
-            cs.setString(1, maDuongBay);
-            cs.registerOutParameter(2, Types.VARCHAR);
-            cs.execute();
-            return cs.getString(2);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return "N/A";
+        String sanBayDen ="";
+        try (CallableStatement statement = connect.prepareCall("{call GET_SANBAYDEN(?, ?)}")) {
+            statement.setString(1, maDuongBay);
+            statement.registerOutParameter(2, Types.VARCHAR);
+            statement.execute();
+            return statement.getString(2);
+        } catch (Exception e) {
+            sanBayDen = "";
         }
+        return sanBayDen;
     }
 
     private Integer getSoGheTrong(String maChuyenBay) {
-        try (Connection conn = DatabaseDriver.getConnection();
-             CallableStatement cs = conn.prepareCall("{call GET_SOGHETRONG(?, ?)}")) {
-            cs.setString(1, maChuyenBay);
-            cs.registerOutParameter(2, Types.INTEGER);
-            cs.execute();
-            return cs.getInt(2);
-        } catch (SQLException e) {
+        int soGheTrong = 0;
+        try (CallableStatement statement = connect.prepareCall("{call GET_SOGHETRONG(?, ?)}")) {
+            statement.setString(1, maChuyenBay);
+            statement.registerOutParameter(2, Types.INTEGER);
+            statement.execute();
+            return statement.getInt(2);
+        } catch (Exception e) {
             e.printStackTrace();
-            return 0;
         }
+        return soGheTrong;
     }
 
     private Integer getSoGhe(String maChuyenBay) {
-        try (Connection conn = DatabaseDriver.getConnection();
-             CallableStatement cs = conn.prepareCall("{call GET_SOGHE(?, ?)}")) {
-            cs.setString(1, maChuyenBay);
-            cs.registerOutParameter(2, Types.INTEGER);
-            cs.execute();
-            return cs.getInt(2);
-        } catch (SQLException e) {
+        int soGhe = 0;
+        try (CallableStatement statement = connect.prepareCall("{call GET_SOGHE(?, ?)}")) {
+            statement.setString(1, maChuyenBay);
+            statement.registerOutParameter(2, Types.INTEGER);
+            statement.execute();
+            return statement.getInt(2);
+        } catch (Exception e) {
             e.printStackTrace();
-            return 0;
         }
+        return soGhe;
     }
 
     private String dinhDangKhoangThoiGian(Duration duration) {
