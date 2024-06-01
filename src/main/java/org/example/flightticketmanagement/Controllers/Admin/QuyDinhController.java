@@ -21,6 +21,7 @@ import org.example.flightticketmanagement.Models.HangVe;
 import org.example.flightticketmanagement.Models.SanBay;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
 import java.util.Optional;
@@ -501,6 +502,44 @@ public class QuyDinhController implements Initializable {
             alert.errorMessage("Không chọn hạng vé nào. Vui lòng chọn ít nhất một hạng vé.");
             return;
         }
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Xác nhận xóa hạng vé");
+        confirmationAlert.setHeaderText("Bạn có muốn xóa hạng vé đã chọn?");
+        confirmationAlert.setContentText("Hành động này sẽ thay đổi danh sách hạng vé của bạn");
+
+        Optional<ButtonType> result = confirmationAlert.showAndWait();
+        String query = "DELETE FROM HangVe WHERE MaHangVe = ?";
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                connect = DatabaseDriver.getConnection();
+                prepare = connect.prepareStatement(query);
+
+                for ( HangVe hangVe : selectedTicketClasses) {
+                    prepare.setString(1, hangVe.getMaHangVe());
+                    prepare.addBatch();
+                }
+
+                int[] results = prepare.executeBatch();
+                if (results.length > 0) {
+                    alert.successMessage("Hạng vé đã được xóa thành công.");
+                } else {
+                    alert.errorMessage("Không xóa được hạng vé đã chọn.");
+                }
+
+                showHangVeList(); // Refresh the table
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                alert.errorMessage("Lỗi khi đang xóa hạng vé. Vui lòng kiểm tra lại.");
+            } finally {
+                try {
+                    if (prepare != null) prepare.close();
+                    if (connect != null) connect.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
     }
 
@@ -743,6 +782,7 @@ public class QuyDinhController implements Initializable {
             alert.errorMessage("Không chọn đường bay nào. Vui lòng chọn ít nhất một đường bay.");
             return;
         }
+        
 
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setTitle("Xác nhận cập nhật trạng thái");
