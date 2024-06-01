@@ -231,7 +231,7 @@ public class SuaLichChuyenBayController implements Initializable {
             }
 
             // Hiển thị thông báo thành công
-            alert.successMessage("Dữ liệu đã được lưu xuống cơ sở dữ liệu thành công.");
+            alert.successMessage("Dữ liệu đã được lưu xuống cơ sở dữ liệu thành công");
             if (parentController != null) {
                 parentController.layDuLieu(null, null, null);
             }
@@ -287,22 +287,29 @@ public class SuaLichChuyenBayController implements Initializable {
         maDuongBay_txtfld.setText(chuyenBay.getMaDuongBay());
         // Thực hiện truy vấn SQL để lấy tên đường bay từ bảng DUONGBAY
         String tenDuongBay = getTenDuongBay(chuyenBay.getMaDuongBay());
-        tenDuongBay_combobox.setValue(tenDuongBay); // Sử dụng setValue() thay vì valueProperty().setValue()
+        tenDuongBay_combobox.setValue(tenDuongBay);
 
-        // Thiết lập ngày và giờ xuất phát
         LocalDateTime thoiGianXuatPhat = chuyenBay.getThoiGianXuatPhat();
         if (thoiGianXuatPhat != null) {
             ngayBay_datepicker.setValue(thoiGianXuatPhat.toLocalDate());
-            gioBay_combobox.getItems().add(thoiGianXuatPhat.toLocalTime().toString());
-            gioBay_combobox.getSelectionModel().select(0);
+            gioBay_combobox.getItems().clear(); // Clear previous items
+            gioBay_combobox.getItems().add(thoiGianXuatPhat.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+            gioBay_combobox.getSelectionModel().selectFirst(); // Select the first item
+        } else {
+            ngayBay_datepicker.setValue(null);
+            gioBay_combobox.getItems().clear();
         }
 
         // Thiết lập ngày và giờ hạ cánh
         LocalDateTime thoiGianKetThuc = chuyenBay.getThoiGianKetThuc();
         if (thoiGianKetThuc != null) {
             ngayHaCanh_datepicker.setValue(thoiGianKetThuc.toLocalDate());
-            gioHaCanh_combobox.getItems().add(thoiGianKetThuc.toLocalTime().toString());
-            gioHaCanh_combobox.getSelectionModel().select(0);
+            gioHaCanh_combobox.getItems().clear(); // Clear previous items
+            gioHaCanh_combobox.getItems().add(thoiGianKetThuc.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+            gioHaCanh_combobox.getSelectionModel().selectFirst(); // Select the first item
+        } else {
+            ngayHaCanh_datepicker.setValue(null);
+            gioHaCanh_combobox.getItems().clear();
         }
 
         gia_txtfld.setText(String.valueOf(chuyenBay.getGiaVe()));

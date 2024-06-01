@@ -47,7 +47,7 @@
                   </font></MFXDatePicker>
             </children>
          </HBox>
-         <MFXButton id="custom_2" fx:id="timkiem_btn" layoutX="703.0" layoutY="26.0" prefHeight="30.0" prefWidth="53.0" text=" ">
+         <MFXButton id="custom_2" fx:id="timkiem_btn" layoutX="703.0" layoutY="26.0" onAction="#handleSearch" prefHeight="30.0" prefWidth="53.0" text=" ">
             <graphic>
                <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20" />
             </graphic>
@@ -76,7 +76,7 @@
          <String fx:value="table-row-cell" />
       </styleClass>
    </TableView>
-   <MFXButton id="custom_2" fx:id="refresh_btn" layoutX="78.0" layoutY="79.0" text=" ">
+   <MFXButton id="custom_2" fx:id="refresh_btn" layoutX="78.0" layoutY="79.0" onAction="#handleRefresh" text=" ">
       <graphic>
          <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" size="30" />
       </graphic>

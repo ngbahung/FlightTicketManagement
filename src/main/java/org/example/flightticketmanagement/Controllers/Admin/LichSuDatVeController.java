@@ -17,6 +17,7 @@ import org.example.flightticketmanagement.Models.DatabaseDriver;
 
 import java.net.URL;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -131,12 +132,7 @@ public class LichSuDatVeController implements Initializable {
 
         // Build conditions based on user input
         if (selectedDate != null) {
-            conditions.append(" AND MaVe IN (")
-                    .append("    SELECT V.MaVe ")
-                    .append("    FROM Ve V ")
-                    .append("    JOIN ChuyenBay CB ON V.MaChuyenBay = CB.MaChuyenBay ")
-                    .append("    WHERE TRUNC(CB.TGXP) = ?")
-                    .append(")");
+            conditions.append(" AND MaVe IN (SELECT V.MaVe FROM Ve V JOIN ChuyenBay CB ON V.MaChuyenBay = CB.MaChuyenBay WHERE TRUNC(CB.TGXP) = ?)");
         }
         if (!"Sân bay đi".equals(sanBayDi)) {
             conditions.append(" AND MaVe IN (SELECT V.MaVe FROM Ve V JOIN ChuyenBay CB ON V.MaChuyenBay = CB.MaChuyenBay JOIN DuongBay DB ON CB.MaDuongBay = DB.MaDuongBay JOIN SanBay SBDi ON DB.MaSanBayDi = SBDi.MaSanBay WHERE SBDi.TenSanBay = ?)");
@@ -145,12 +141,11 @@ public class LichSuDatVeController implements Initializable {
             conditions.append(" AND MaVe IN (SELECT V.MaVe FROM Ve V JOIN ChuyenBay CB ON V.MaChuyenBay = CB.MaChuyenBay JOIN DuongBay DB ON CB.MaDuongBay = DB.MaDuongBay JOIN SanBay SBDen ON DB.MaSanBayDen = SBDen.MaSanBay WHERE SBDen.TenSanBay = ?)");
         }
 
-        String queryVeDaDat = baseQuery + conditions.toString();
-        String queryPhDC = baseQuery + conditions.toString();
+        String finalQuery = baseQuery + conditions.toString();
 
         try {
-            prepareAndExecuteQuery(queryVeDaDat, selectedDate, sanBayDi, sanBayDen, veDaDat_tbview, 1);
-            prepareAndExecuteQuery(queryPhDC, selectedDate, sanBayDi, sanBayDen, phDC_tbview, 0);
+            prepareAndExecuteQuery(finalQuery, selectedDate, sanBayDi, sanBayDen, veDaDat_tbview, 1);
+            prepareAndExecuteQuery(finalQuery, selectedDate, sanBayDi, sanBayDen, phDC_tbview, 0);
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Could not load data from the database.");
@@ -211,12 +206,58 @@ public class LichSuDatVeController implements Initializable {
         }
     }
 
+    @FXML
+    private void xuatVe(){
+        CT_DatVe selectedVeDaDat = veDaDat_tbview.getSelectionModel().getSelectedItem();
+        if (selectedVeDaDat == null) {
+            alert.errorMessage("Vui lòng chọn một vé để xuất vé.");
+            return;
+        }
+
+        String maVe = selectedVeDaDat.getMaVe();
+        String tenKhachHang = "";
+        try {
+            tenKhachHang = getTenKhachHang(selectedVeDaDat.getMaKhachHang());
+        } catch (Exception e) {
+            e.printStackTrace();
+            alert.errorMessage("Không thể lấy tên khách hàng.");
+        }
+
+        String SDT = getSDT(selectedVeDaDat.getMaKhachHang());
+        String maGhe = getMaGhe(maVe);
+        String hangVe = getTenHangVe(maVe);
+        String giaVe = getGiaTien(maVe)+"";
+        String sanBayDi = getSanBayDi(maVe);
+        String sanBayDen = getSanBayDen(maVe);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");// dd-MM--yyyy
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+
+        String ngayBay = "";
+        String gioBay = "";
+
+        Timestamp ngayBayTimestamp = getNgayBay(maVe);
+        Timestamp gioBayTimestamp = getGioBay(maVe);
+
+        if (ngayBayTimestamp != null) {
+            ngayBay = dateFormat.format(ngayBayTimestamp);
+        }
+
+        if (gioBayTimestamp != null) {
+            gioBay = timeFormat.format(gioBayTimestamp);
+        }
+
+        ReportController report = new ReportController();
+        report.PrintVe(maVe, tenKhachHang,  SDT,  maGhe,  hangVe,  giaVe,  sanBayDi,  sanBayDen,  ngayBay,  gioBay);
+        // Thực hiện các thao tác cần thiết với các giá trị này, ví dụ: in ra console hoặc thực hiện các xử lý khác
+    }
+
+
     private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
 
     private final AlertMessage alert = new AlertMessage();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
 
     @Override
@@ -236,13 +277,6 @@ public class LichSuDatVeController implements Initializable {
             alert.errorMessage("Could not load data from the database.");
         }
 
-        // Thêm sự kiện cho nút tìm kiếm
-        timkiem_btn.setOnAction(event -> search());
-        // Thêm sự kiện cho nút hủy vé hoặc phiếu đặt chỗ
-        huyVeorDatCho_btn.setOnAction(event -> cancelTicketOrReservation());
-
-        xuatVe_btn.setOnMouseClicked(mouseEvent -> xuatVe());
-        // Thêm sự kiện cho nút làm mới
         refresh_btn.setOnAction(event -> {
             // Xóa hết các lựa chọn và đặt lại giá trị mặc định
             sanbaydi_menubtn.setText("Sân bay đi");
@@ -264,10 +298,6 @@ public class LichSuDatVeController implements Initializable {
                     thanhToan_btn.setDisable(newValue == null);
                 }
         );
-        thanhToan_btn.setDisable(true); // Initially disable the button
-
-        // Add event listener for the thanhToan_btn
-        thanhToan_btn.setOnAction(event -> handleThanhToan());
     }
 
     private void setupTableViewColumns(TableColumn<CT_DatVe, String> maVeCol,
@@ -289,13 +319,16 @@ public class LichSuDatVeController implements Initializable {
         sanBayDenCol.setCellValueFactory(cellData -> new SimpleStringProperty(getSanBayDen(cellData.getValue().getMaVe())));
 
         ngayBayCol.setCellValueFactory(cellData -> {
-            String dateString = getNgayBay(cellData.getValue().getMaVe());
-            return new SimpleStringProperty(parseLocalDate(dateString).orElse(""));
+            Timestamp ngayBayTimestamp = getNgayBay(cellData.getValue().getMaVe());
+            LocalDate ngayBayDate = (ngayBayTimestamp != null) ? ngayBayTimestamp.toLocalDateTime().toLocalDate() : null;
+            return new SimpleStringProperty(parseLocalDate(ngayBayDate).orElse(""));
         });
 
+
         gioBayCol.setCellValueFactory(cellData -> {
-            String timeString = getGioBay(cellData.getValue().getMaVe());
-            return new SimpleStringProperty(parseLocalTime(timeString).orElse(""));
+            Timestamp gioBayTimestamp = getGioBay(cellData.getValue().getMaVe());
+            LocalDateTime gioBayDateTime = (gioBayTimestamp != null) ? gioBayTimestamp.toLocalDateTime() : null;
+            return new SimpleStringProperty(parseLocalDateTime(gioBayDateTime).orElse(""));
         });
 
         giaTienCol.setCellValueFactory(cellData -> {
@@ -304,19 +337,22 @@ public class LichSuDatVeController implements Initializable {
         });
     }
 
-    private Optional<String> parseLocalDate(String dateString) {
+    private Optional<String> parseLocalDate(LocalDate date) {
         try {
-            LocalDate date = LocalDate.parse(dateString, formatter);
-            return Optional.of(date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            return Optional.of(date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         } catch (Exception e) {
             return Optional.empty();
         }
     }
 
-    private Optional<String> parseLocalTime(String timeString) {
+
+    private Optional<String> parseLocalDateTime(LocalDateTime dateTime) {
         try {
-            LocalTime time = LocalTime.parse(timeString, formatter);
-            return Optional.of(time.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+            if (dateTime != null) {
+                return Optional.of(dateTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+            } else {
+                return Optional.empty();
+            }
         } catch (Exception e) {
             return Optional.empty();
         }
@@ -385,105 +421,137 @@ public class LichSuDatVeController implements Initializable {
         }
     }
 
-    private String getTenKhachHang(String maKhachHang) {
-        return getStringFromDB("SELECT HOTEN FROM KHACHHANG WHERE MAKHACHHANG = ?", maKhachHang, "HOTEN");
-    }
-
-    private String getSanBayDi(String maVe) {
-        return getStringFromDB("SELECT SBDi.TenSanBay FROM Ve V " +
-                "JOIN CHUYENBAY CB ON V.MaChuyenBay = CB.MaChuyenBay " +
-                "JOIN DUONGBAY DB ON CB.MaDuongBay = DB.MaDuongBay " +
-                "JOIN SANBAY SBDi ON DB.MaSanBayDi = SBDi.MaSanBay " +
-                "JOIN SANBAY SBDen ON DB.MaSanBayDen = SBDen.MaSanBay " +
-                "WHERE V.MAVE = ?", maVe, "TenSanBay");
-    }
-
-    private String getSanBayDen(String maVe) {
-        return getStringFromDB("SELECT SBDen.TenSanBay FROM Ve V " +
-                "JOIN CHUYENBAY CB ON V.MaChuyenBay = CB.MaChuyenBay " +
-                "JOIN DUONGBAY DB ON CB.MaDuongBay = DB.MaDuongBay " +
-                "JOIN SANBAY SBDi ON DB.MaSanBayDi = SBDi.MaSanBay " +
-                "JOIN SANBAY SBDen ON DB.MaSanBayDen = SBDen.MaSanBay " +
-                "WHERE V.MAVE = ?", maVe, "TenSanBay");
-    }
-
-    private String getNgayBay(String ma) {
-        return getStringFromDB("SELECT CB.TGXP FROM CT_DATVE CDV " +
-                "JOIN Ve V ON CDV.MaVe = V.MaVe " +
-                "JOIN CHUYENBAY CB ON V.MaChuyenBay = CB.MaChuyenBay " +
-                "WHERE CDV.MaVe = ?", ma, "TGXP");
-    }
-
-    private String getGioBay(String ma) {
-        return getStringFromDB("SELECT CB.TGXP FROM CT_DATVE CDV " +
-                "JOIN Ve V ON CDV.MaVe = V.MaVe " +
-                "JOIN CHUYENBAY CB ON V.MaChuyenBay = CB.MaChuyenBay " +
-                "WHERE CDV.MaVe = ?", ma, "TGXP");
-    }
-
-    private String getSDT(String maKhachHang) {
-        return getStringFromDB("SELECT SDT FROM KHACHHANG WHERE MAKHACHHANG = ?", maKhachHang, "SDT");
-    }
-
-    private String getMaGhe(String maVe) {
-        return getStringFromDB("SELECT MaGhe FROM VE WHERE MAVE = ?", maVe, "MaGhe");
-    }
-
-    private float getGiaTien(String maVe) {
-        try {
-            String query = "SELECT GiaTien FROM VE WHERE MAVE = ?";
-            prepare = connect.prepareStatement(query);
-            prepare.setString(1, maVe);
-            result = prepare.executeQuery();
-            if (result.next()) {
-                return result.getFloat("GiaTien");
-            }
-        } catch (SQLException e) {
-            alert.errorMessage("Could not retrieve price from the database.");
-        } finally {
-            // Đóng result và prepare trong khối finally
-            try {
-                if (result != null) {
-                    result.close();
-                }
-                if (prepare != null) {
-                    prepare.close();
-                }
-            } catch (SQLException ex) {
-                alert.errorMessage("Could not close result set or prepared statement.");
-            }
+    // Lấy tên khách hàng từ mã khách hàng
+    public String getTenKhachHang(String p_MaKhachHang) {
+        String tenKhachHang = "";
+        try (CallableStatement statement = connect.prepareCall("{call GET_TEN_KHACH_HANG(?, ?)}")) {
+            statement.setString(1, p_MaKhachHang);
+            statement.registerOutParameter(2, Types.VARCHAR);
+            statement.execute();
+            tenKhachHang = statement.getString(2);
+        } catch (Exception e) {
+            tenKhachHang = "";
         }
-        return 0;
+        return tenKhachHang;
     }
 
-    // Trong phương thức getTenHangVe
-    private String getTenHangVe(String maHangVe) {
-        return getStringFromDB("SELECT HV.TenHangVe FROM HANGVE HV " +
-                "JOIN VE V ON HV.MaHangVe = V.MaHangVe " +
-                "WHERE V.MAVE = ?", maHangVe, "TenHangVe");
-    }
-
-
-    // Trong phương thức getStringFromDB
-    private String getStringFromDB(String query, String param, String columnName) {
-        try (PreparedStatement prepare = connect.prepareStatement(query)) {
-            prepare.setString(1, param);
-            try (ResultSet result = prepare.executeQuery()) {
-                if (result.next()) {
-                    return result.getString(columnName);
-                }
-            }
-        } catch (SQLException e) {
-            alert.errorMessage("Could not retrieve data from the database.");
+    // Lấy sân bay đi từ mã vé
+    public String getSanBayDi(String p_MaVe) {
+        String sanBayDi = "";
+        try (CallableStatement statement = connect.prepareCall("{call GET_SAN_BAY_DI(?, ?)}")) {
+            statement.setString(1, p_MaVe);
+            statement.registerOutParameter(2, Types.VARCHAR);
+            statement.execute();
+            sanBayDi = statement.getString(2);
+        } catch (Exception e) {
+            sanBayDi = "";
         }
-        return "";
+        return sanBayDi;
+    }
+
+    // Lấy sân bay đến từ mã vé
+    public String getSanBayDen(String p_MaVe)  {
+        String sanBayDen = "";
+        try (CallableStatement statement = connect.prepareCall("{call GET_SAN_BAY_DEN(?, ?)}")) {
+            statement.setString(1, p_MaVe);
+            statement.registerOutParameter(2, Types.VARCHAR);
+            statement.execute();
+            sanBayDen = statement.getString(2);
+        } catch (Exception e) {
+            sanBayDen = "";
+        }
+        return sanBayDen;
+    }
+
+    // Lấy ngày bay từ mã vé
+    public Timestamp getNgayBay(String p_MaVe) {
+        Timestamp ngayBay = null;
+        try (CallableStatement statement = connect.prepareCall("{call GET_NGAY_BAY(?, ?)}")) {
+            statement.setString(1, p_MaVe);
+            statement.registerOutParameter(2, Types.TIMESTAMP);
+            statement.execute();
+            ngayBay = statement.getTimestamp(2);
+        } catch (Exception e) {
+            ngayBay = null;
+        }
+        return ngayBay;
+    }
+
+    // Lấy giờ bay từ mã vé
+    public Timestamp getGioBay(String p_MaVe)  {
+        Timestamp gioBay = null;
+        try (CallableStatement statement = connect.prepareCall("{call GET_GIO_BAY(?, ?)}")) {
+            statement.setString(1, p_MaVe);
+            statement.registerOutParameter(2, Types.TIMESTAMP);
+            statement.execute();
+            gioBay = statement.getTimestamp(2);
+        } catch (Exception e) {
+            gioBay = null;
+        }
+        return gioBay;
+    }
+
+    // Lấy số điện thoại từ mã khách hàng
+    public String getSDT(String p_MaKhachHang) {
+        String sdt = "";
+        try (CallableStatement statement = connect.prepareCall("{call GET_SDT(?, ?)}")) {
+            statement.setString(1, p_MaKhachHang);
+            statement.registerOutParameter(2, Types.VARCHAR);
+            statement.execute();
+            sdt = statement.getString(2);
+        } catch (Exception e) {
+            sdt = "";
+        }
+        return sdt;
+    }
+
+    // Lấy mã ghế từ mã vé
+    public String getMaGhe(String p_MaVe)  {
+        String maGhe = "";
+        try (CallableStatement statement = connect.prepareCall("{call GET_MA_GHE(?, ?)}")) {
+            statement.setString(1, p_MaVe);
+            statement.registerOutParameter(2, Types.VARCHAR);
+            statement.execute();
+            maGhe = statement.getString(2);
+        } catch (Exception e) {
+            maGhe = "";
+        }
+        return maGhe;
+    }
+
+    // Lấy giá tiền từ mã vé
+    public float getGiaTien(String p_MaVe)  {
+        float giaTien = 0;
+        try (CallableStatement statement = connect.prepareCall("{call GET_GIA_TIEN(?, ?)}")) {
+            statement.setString(1, p_MaVe);
+            statement.registerOutParameter(2, Types.FLOAT);
+            statement.execute();
+            giaTien = statement.getFloat(2);
+        } catch (Exception e) {
+            giaTien = 0;
+        }
+        return giaTien;
+    }
+
+    // Lấy tên hạng vé từ mã hạng vé
+    public String getTenHangVe(String p_MaVe) {
+        String tenHangVe = "";
+        try (CallableStatement statement = connect.prepareCall("{call GET_TEN_HANG_VE(?, ?)}")) {
+            statement.setString(1, p_MaVe);
+            statement.registerOutParameter(2, Types.VARCHAR);
+            statement.execute();
+            tenHangVe = statement.getString(2);
+        } catch (Exception e) {
+            tenHangVe = "";
+        }
+        return tenHangVe;
     }
 
     private void prepareAndExecuteQuery(String query, LocalDateTime selectedDate, String sanBayDi, String sanBayDen, TableView<CT_DatVe> tableView, int trangThai) throws SQLException {
         try (PreparedStatement prepare = connect.prepareStatement(query)) {
             prepare.setInt(1, trangThai);
-
             int paramIndex = 2;
+
             if (selectedDate != null) {
                 prepare.setTimestamp(paramIndex++, Timestamp.valueOf(selectedDate));
             }
@@ -496,11 +564,8 @@ public class LichSuDatVeController implements Initializable {
 
             try (ResultSet result = prepare.executeQuery()) {
                 while (result.next()) {
-                    Timestamp ngayMuaVeTimestamp = result.getTimestamp("NgayMuaVe");
-                    LocalDateTime ngayMuaVe = (ngayMuaVeTimestamp != null) ? ngayMuaVeTimestamp.toLocalDateTime() : null;
-
-                    Timestamp ngayThanhToanTimestamp = result.getTimestamp("NgayThanhToan");
-                    LocalDateTime ngayThanhToan = (ngayThanhToanTimestamp != null) ? ngayThanhToanTimestamp.toLocalDateTime() : null;
+                    LocalDateTime ngayMuaVe = result.getTimestamp("NgayMuaVe") != null ? result.getTimestamp("NgayMuaVe").toLocalDateTime() : null;
+                    LocalDateTime ngayThanhToan = result.getTimestamp("NgayThanhToan") != null ? result.getTimestamp("NgayThanhToan").toLocalDateTime() : null;
 
                     CT_DatVe datVe = new CT_DatVe(
                             result.getString("MaCT_DATVE"),
@@ -568,29 +633,6 @@ public class LichSuDatVeController implements Initializable {
             sanbayden_menubtn.getItems().add(menuItem);
         }
     }
-
-    private void xuatVe(){
-        CT_DatVe selectedVeDaDat = veDaDat_tbview.getSelectionModel().getSelectedItem();
-        if (selectedVeDaDat == null) {
-            alert.errorMessage("Vui lòng chọn một vé để xuất vé.");
-            return;
-        }
-
-        String maVe = selectedVeDaDat.getMaVe();
-        String tenKhachHang = getTenKhachHang(selectedVeDaDat.getMaKhachHang());
-        String SDT = getSDT(selectedVeDaDat.getMaKhachHang());
-        String maGhe = getMaGhe(maVe);
-        String hangVe = getTenHangVe(maVe);
-        String giaVe = getGiaTien(maVe)+"";
-        String sanBayDi = getSanBayDi(maVe);
-        String sanBayDen = getSanBayDen(maVe);
-        String ngayBay = Timestamp.valueOf(LocalDateTime.parse(getNgayBay(maVe), formatter))+"";
-        String gioBay = Timestamp.valueOf(LocalDateTime.parse(getGioBay(maVe), formatter))+"";
-        ReportController report = new ReportController();
-        report.PrintVe(maVe, tenKhachHang,  SDT,  maGhe,  hangVe,  giaVe,  sanBayDi,  sanBayDen,  ngayBay,  gioBay);
-        // Thực hiện các thao tác cần thiết với các giá trị này, ví dụ: in ra console hoặc thực hiện các xử lý khác
-    }
-
 }
 
 

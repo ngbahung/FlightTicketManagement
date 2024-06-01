@@ -22,6 +22,8 @@ import java.sql.*;
 import java.sql.Date;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class LichChuyenBayController implements Initializable {
@@ -142,73 +144,6 @@ public class LichChuyenBayController implements Initializable {
     }
 
     @FXML
-    private void xuLySanBayDiMenuButton(MouseEvent event) {
-        sanbaydi_menubtn.getItems().clear();
-
-        // Add "Null" option
-        MenuItem nullItem = new MenuItem("Null");
-        nullItem.setOnAction(e -> sanbaydi_menubtn.setText(null));
-        sanbaydi_menubtn.getItems().add(nullItem);
-
-        String sql = "SELECT DISTINCT sb.TenSanBay FROM SANBAY sb JOIN DUONGBAY db ON sb.MaSanBay = db.MaSanBayDi";
-
-        try (Connection conn = DatabaseDriver.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            Set<String> uniqueAirports = new HashSet<>();
-            while (rs.next()) {
-                uniqueAirports.add(rs.getString("TenSanBay"));
-            }
-
-            for (String airport : uniqueAirports) {
-                MenuItem item = new MenuItem(airport);
-                item.setOnAction(e -> sanbaydi_menubtn.setText(airport));
-                sanbaydi_menubtn.getItems().add(item);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            alert.errorMessage("Error occurred while loading departure airports.");
-        }
-    }
-
-    @FXML
-    private void xuLySanBayDenMenuButton(MouseEvent event) {
-        sanbayden_menubtn.getItems().clear();
-
-        // Add "Null" option
-        MenuItem nullItem = new MenuItem("Null");
-        nullItem.setOnAction(e -> sanbayden_menubtn.setText(null));
-        sanbayden_menubtn.getItems().add(nullItem);
-
-        String sql = "SELECT DISTINCT sb.TenSanBay FROM SANBAY sb JOIN DUONGBAY db ON sb.MaSanBay = db.MaSanBayDen";
-
-        try (Connection conn = DatabaseDriver.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            Set<String> uniqueAirports = new HashSet<>();
-            while (rs.next()) {
-                uniqueAirports.add(rs.getString("TenSanBay"));
-            }
-
-            for (String airport : uniqueAirports) {
-                MenuItem item = new MenuItem(airport);
-                item.setOnAction(e -> {
-                    sanbayden_menubtn.setText(airport);
-                    voHieuTimKiemButton();
-                });
-                sanbayden_menubtn.getItems().add(item);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            alert.errorMessage("Error occurred while loading destination airports.");
-        }
-    }
-
-    @FXML
     private void xuLyTimKiemButton(ActionEvent event) {
         // Lấy giá trị từ các thành phần giao diện
         String sanBayDi = sanbaydi_menubtn.getText().trim();
@@ -225,56 +160,30 @@ public class LichChuyenBayController implements Initializable {
         chuyenBay_tableview.getItems().clear();
 
         // Tạo câu truy vấn cơ bản
-        StringBuilder query = new StringBuilder("SELECT * FROM CHUYENBAY WHERE 1=1");
+        String baseQuery = "SELECT * FROM CHUYENBAY WHERE 1=1";
+        StringBuilder conditions = new StringBuilder();
         List<Object> parameters = new ArrayList<>();
 
         // Thêm điều kiện vào câu truy vấn dựa trên các tiêu chí
-        if (!"Chọn sân bay đi".equals(sanBayDi)) {
-            query.append(" AND MaDuongBay IN (SELECT MaDuongBay FROM DUONGBAY WHERE MaSanBayDi = (SELECT MaSanBay FROM SANBAY WHERE UPPER(TenSanBay) LIKE ?))");
+        if (!"Sân bay đi".equals(sanBayDi)) {
+            conditions.append(" AND MaDuongBay IN (SELECT MaDuongBay FROM DUONGBAY WHERE MaSanBayDi = (SELECT MaSanBay FROM SANBAY WHERE UPPER(TenSanBay) LIKE ?))");
             parameters.add(sanBayDi.toUpperCase());
         }
-        if (!"Chọn sân bay đến".equals(sanBayDen)) {
-            query.append(" AND MaDuongBay IN (SELECT MaDuongBay FROM DUONGBAY WHERE MaSanBayDen = (SELECT MaSanBay FROM SANBAY WHERE UPPER(TenSanBay) LIKE ?))");
+        if (!"Sân bay đến".equals(sanBayDen)) {
+            conditions.append(" AND MaDuongBay IN (SELECT MaDuongBay FROM DUONGBAY WHERE MaSanBayDen = (SELECT MaSanBay FROM SANBAY WHERE UPPER(TenSanBay) LIKE ?))");
             parameters.add(sanBayDen.toUpperCase());
         }
         if (ngayBay != null) {
-            query.append(" AND TRUNC(TGXP) = ?");
+            conditions.append(" AND TRUNC(TGXP) = ?");
             parameters.add(Date.valueOf(ngayBay));
         }
 
-        // Thực thi truy vấn và hiển thị kết quả
-        try (PreparedStatement prepare = connect.prepareStatement(query.toString())) {
-            for (int i = 0; i < parameters.size(); i++) {
-                prepare.setObject(i + 1, parameters.get(i));
-            }
+        String finalQuery = baseQuery + conditions.toString();
 
-            try (ResultSet result = prepare.executeQuery()) {
-                while (result.next()) {
-                    ChuyenBay chuyenBay = new ChuyenBay(
-                            result.getString("MaChuyenBay"),
-                            result.getString("MaDuongBay"),
-                            result.getTimestamp("TGXP").toLocalDateTime(),
-                            result.getTimestamp("TGKT").toLocalDateTime(),
-                            result.getString("TrangThai"),
-                            result.getFloat("GiaVe")
-                    );
-                    chuyenBay_tableview.getItems().add(chuyenBay);
-                }
-
-                maChuyenBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMaChuyenBay()));
-                sanBayDi_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSanBayDi(cellData.getValue().getMaDuongBay())));
-                sanBayDen_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSanBayDen(cellData.getValue().getMaDuongBay())));
-                ngayBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getThoiGianXuatPhat().toLocalDate().toString()));
-                gioBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getThoiGianXuatPhat().toLocalTime().toString()));
-                soGheTrong_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGheTrong(cellData.getValue().getMaChuyenBay()).toString()));
-                soGhe_tbcoumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGhe(cellData.getValue().getMaChuyenBay()).toString()));
-                thoiGianBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(dinhDangKhoangThoiGian(Duration.between(cellData.getValue().getThoiGianXuatPhat(), cellData.getValue().getThoiGianKetThuc()))));
-                giaVe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getGiaVe())));
-
-                // Check if the TableView is empty after the search
-                if (chuyenBay_tableview.getItems().isEmpty()) {
-                    alert.errorMessage("Không tìm thấy chuyến bay phù hợp.");
-                }
+        try {
+            prepareAndExecuteQuery(finalQuery, parameters, chuyenBay_tableview);
+            if (chuyenBay_tableview.getItems().isEmpty()) {
+                alert.errorMessage("Không tìm thấy dữ liệu.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -293,6 +202,8 @@ public class LichChuyenBayController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         connect = DatabaseDriver.getConnection();
         layDuLieu(null, null, null);
+        sanbaydi_menubtn.setOnShowing(event -> updateSanBayMenuItems());
+        sanbayden_menubtn.setOnShowing(event -> updateSanBayMenuItems());
         refresh_btn.setOnMouseClicked(event -> {
             sanbaydi_menubtn.setText("Sân bay đi");
             sanbayden_menubtn.setText("Sân bay đến");
@@ -364,7 +275,15 @@ public class LichChuyenBayController implements Initializable {
             maChuyenBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMaChuyenBay()));
             sanBayDi_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSanBayDi(cellData.getValue().getMaDuongBay())));
             sanBayDen_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSanBayDen(cellData.getValue().getMaDuongBay())));
-            ngayBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getThoiGianXuatPhat().toLocalDate().toString()));
+            ngayBay_tbcolumn.setCellValueFactory(cellData -> {
+                String ngayBayFormatted = "";
+                LocalDateTime ngayBayDateTime = cellData.getValue().getThoiGianXuatPhat();
+                if (ngayBayDateTime != null) {
+                    ngayBayFormatted = ngayBayDateTime.toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                }
+                return new SimpleStringProperty(ngayBayFormatted);
+            });
+
             gioBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getThoiGianXuatPhat().toLocalTime().toString()));
             soGheTrong_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGheTrong(cellData.getValue().getMaChuyenBay()).toString()));
             soGhe_tbcoumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGhe(cellData.getValue().getMaChuyenBay()).toString()));
@@ -384,6 +303,60 @@ public class LichChuyenBayController implements Initializable {
         }
     }
 
+    private void prepareAndExecuteQuery(String query, List<Object> parameters, TableView<ChuyenBay> tableView) throws SQLException {
+        try (PreparedStatement prepare = connect.prepareStatement(query)) {
+            for (int i = 0; i < parameters.size(); i++) {
+                prepare.setObject(i + 1, parameters.get(i));
+            }
+
+            try (ResultSet result = prepare.executeQuery()) {
+                while (result.next()) {
+                    ChuyenBay chuyenBay = new ChuyenBay(
+                            result.getString("MaChuyenBay"),
+                            result.getString("MaDuongBay"),
+                            result.getTimestamp("TGXP").toLocalDateTime(),
+                            result.getTimestamp("TGKT").toLocalDateTime(),
+                            result.getString("TrangThai"),
+                            result.getFloat("GiaVe")
+                    );
+                    tableView.getItems().add(chuyenBay);
+                }
+            }
+        }
+    }
+
+    private void updateSanBayMenuItems() {
+        // Clear the current items in the menu
+        sanbaydi_menubtn.getItems().clear();
+        sanbayden_menubtn.getItems().clear();
+
+        // Use a Set to avoid duplicates
+        Set<String> sanBayDiSet = new HashSet<>();
+        Set<String> sanBayDenSet = new HashSet<>();
+
+        // Fetch the airports for the table view
+        for (ChuyenBay chuyenBay : chuyenBay_tableview.getItems()) {
+            String sanBayDi = getSanBayDi(chuyenBay.getMaDuongBay());
+            String sanBayDen = getSanBayDen(chuyenBay.getMaDuongBay());
+            if (!sanBayDi.isEmpty()) sanBayDiSet.add(sanBayDi);
+            if (!sanBayDen.isEmpty()) sanBayDenSet.add(sanBayDen);
+        }
+
+        // Add the list of airports to the departure menu button
+        for (String sanBay : sanBayDiSet) {
+            MenuItem menuItem = new MenuItem(sanBay);
+            menuItem.setOnAction(event -> sanbaydi_menubtn.setText(sanBay));
+            sanbaydi_menubtn.getItems().add(menuItem);
+        }
+
+        // Add the list of airports to the arrival menu button
+        for (String sanBay : sanBayDenSet) {
+            MenuItem menuItem = new MenuItem(sanBay);
+            menuItem.setOnAction(event -> sanbayden_menubtn.setText(sanBay));
+            sanbayden_menubtn.getItems().add(menuItem);
+        }
+    }
+
     private void voHieuTimKiemButton() {
         timkiem_btn.setDisable(
                 sanbaydi_menubtn.getText().equals("Chọn sân bay đi") &&
@@ -393,71 +366,55 @@ public class LichChuyenBayController implements Initializable {
     }
 
     private String getSanBayDi(String maDuongBay) {
-        String sql = "SELECT sb.TenSanBay FROM DUONGBAY db " +
-                "JOIN SANBAY sb ON db.MaSanBayDi = sb.MaSanBay " +
-                "WHERE db.MaDuongBay = ?";
         try (Connection conn = DatabaseDriver.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, maDuongBay);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("TenSanBay");
-                }
-            }
+             CallableStatement cs = conn.prepareCall("{call GET_SANBAYDI(?, ?)}")) {
+            cs.setString(1, maDuongBay);
+            cs.registerOutParameter(2, Types.VARCHAR);
+            cs.execute();
+            return cs.getString(2);
         } catch (SQLException e) {
             e.printStackTrace();
+            return "N/A";
         }
-        return "San Bay Di"; // Placeholder if not found
     }
 
     private String getSanBayDen(String maDuongBay) {
-        String sql = "SELECT sb.TenSanBay FROM DUONGBAY db " +
-                "JOIN SANBAY sb ON db.MaSanBayDen = sb.MaSanBay " +
-                "WHERE db.MaDuongBay = ?";
         try (Connection conn = DatabaseDriver.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, maDuongBay);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("TenSanBay");
-                }
-            }
+             CallableStatement cs = conn.prepareCall("{call GET_SANBAYDEN(?, ?)}")) {
+            cs.setString(1, maDuongBay);
+            cs.registerOutParameter(2, Types.VARCHAR);
+            cs.execute();
+            return cs.getString(2);
         } catch (SQLException e) {
             e.printStackTrace();
+            return "N/A";
         }
-        return "San Bay Den"; // Placeholder if not found
     }
 
     private Integer getSoGheTrong(String maChuyenBay) {
-        String sql = "SELECT SUM(SoGheTrong) AS SoGheTrong FROM CT_HANGVE WHERE MaChuyenBay = ?";
         try (Connection conn = DatabaseDriver.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, maChuyenBay);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("SoGheTrong");
-                }
-            }
+             CallableStatement cs = conn.prepareCall("{call GET_SOGHETRONG(?, ?)}")) {
+            cs.setString(1, maChuyenBay);
+            cs.registerOutParameter(2, Types.INTEGER);
+            cs.execute();
+            return cs.getInt(2);
         } catch (SQLException e) {
             e.printStackTrace();
+            return 0;
         }
-        return 0;
     }
 
     private Integer getSoGhe(String maChuyenBay) {
-        String sql = "SELECT SUM(SoGheTrong + SoGheDat) AS SoGhe FROM CT_HANGVE WHERE MaChuyenBay = ?";
         try (Connection conn = DatabaseDriver.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, maChuyenBay);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("SoGhe");
-                }
-            }
+             CallableStatement cs = conn.prepareCall("{call GET_SOGHE(?, ?)}")) {
+            cs.setString(1, maChuyenBay);
+            cs.registerOutParameter(2, Types.INTEGER);
+            cs.execute();
+            return cs.getInt(2);
         } catch (SQLException e) {
             e.printStackTrace();
+            return 0;
         }
-        return 0;
     }
 
     private String dinhDangKhoangThoiGian(Duration duration) {

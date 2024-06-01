@@ -61,7 +61,7 @@
       <children>
          <HBox alignment="CENTER" layoutX="21.0" layoutY="14.0" prefHeight="47.0" prefWidth="665.0" spacing="50.0">
             <children>
-               <MenuButton fx:id="sanbaydi_menubtn" mnemonicParsing="false" onMouseClicked="#xuLySanBayDiMenuButton" prefHeight="39.0" prefWidth="185.0" text="Sân bay đi">
+               <MenuButton fx:id="sanbaydi_menubtn" mnemonicParsing="false" prefHeight="39.0" prefWidth="185.0" text="Sân bay đi">
                   <items>
                      <MenuItem mnemonicParsing="false" text="Action 1" />
                      <MenuItem mnemonicParsing="false" text="Action 2" />
@@ -71,7 +71,7 @@
                      <String fx:value="arrow" />
                   </styleClass>
                </MenuButton>
-               <MenuButton fx:id="sanbayden_menubtn" mnemonicParsing="false" onMouseClicked="#xuLySanBayDenMenuButton" prefHeight="41.0" prefWidth="181.0" text="Sân bay đến">
+               <MenuButton fx:id="sanbayden_menubtn" mnemonicParsing="false"  prefHeight="41.0" prefWidth="181.0" text="Sân bay đến">
                   <items>
                      <MenuItem mnemonicParsing="false" text="Action 1" />
                      <MenuItem mnemonicParsing="false" text="Action 2" />
