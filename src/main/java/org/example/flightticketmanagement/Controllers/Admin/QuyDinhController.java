@@ -192,7 +192,7 @@ public class QuyDinhController implements Initializable {
         refreshSanBayData_btn.setOnAction(e -> showSanBayList());
         refreshHangVeData_btn.setOnAction(e -> showHangVeList());
         suahangve_btn.setOnAction(this::editSelectedTicketClass);
-        xoahangve_btn.setOnAction(this::deactiveSelectedTicketClass);
+        xoaHangVe_btn.setOnAction(this::deactiveSelectedTicketClass);
         suaquydinh_btn.setOnAction(this::editParameter);
         searchDuongBay_btn.setOnAction(this::searchDuongBay);
         refreshDuongBayData_btn.setOnAction(e -> loadDuongBayData());
