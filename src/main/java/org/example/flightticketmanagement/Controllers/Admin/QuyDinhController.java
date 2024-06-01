@@ -184,16 +184,8 @@ public class QuyDinhController implements Initializable {
         showHangVeList();
         loadThamSoData();
         loadDuongBayData();
-        suasanbay_btn.setOnAction(this::editSelectedAirports);
-        xoasanbay_btn.setOnAction(this::deactivateSelectedAirports);
-        searchSanBay_btn.setOnAction(this::searchSanBay);
-        searchHangVe_btn.setOnAction(this::searchHangVe);
         refreshSanBayData_btn.setOnAction(e -> showSanBayList());
         refreshHangVeData_btn.setOnAction(e -> showHangVeList());
-        suahangve_btn.setOnAction(this::editSelectedTicketClass);
-        xoahangve_btn.setOnAction(this::deactiveSelectedTicketClass);
-        suaquydinh_btn.setOnAction(this::editParameter);
-        searchDuongBay_btn.setOnAction(this::searchDuongBay);
         refreshDuongBayData_btn.setOnAction(e -> loadDuongBayData());
     }
 
@@ -450,6 +442,7 @@ public class QuyDinhController implements Initializable {
         loadDuongBayData();
     }
 
+    @FXML
     private void searchSanBay(ActionEvent e) {
         String keyword = searchsanbay_tfx.getText();
         if (keyword == null || keyword.isEmpty()) {
@@ -472,6 +465,7 @@ public class QuyDinhController implements Initializable {
         sanbay_tbv.setItems(sortedData);
     }
 
+    @FXML
     private void searchHangVe(ActionEvent e) {
         String keyword = searchhangve_tfx.getText();
         if (keyword == null || keyword.isEmpty()) {
@@ -634,7 +628,6 @@ public class QuyDinhController implements Initializable {
         }
     }
 
-
     public void loadDuongBayData() {
         ObservableList<DuongBay> duongBayList = FXCollections.observableArrayList();
 
@@ -708,6 +701,7 @@ public class QuyDinhController implements Initializable {
         }
     }
 
+    @FXML
     private void searchDuongBay(ActionEvent e) {
         String keyword = searchDuongBay_textfield.getText();
         if (keyword == null || keyword.isEmpty()) {

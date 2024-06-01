@@ -138,6 +138,9 @@ public class LichChuyenBayController implements Initializable {
             return;
         }
 
+        // INSERT PROC XÓA CHUYẾN BAY
+
+
         for (ChuyenBay flight : selectedFlights) {
             alert.errorMessage("Không thể xóa vì ràng buộc dữ liệu.");
         }
@@ -212,50 +215,40 @@ public class LichChuyenBayController implements Initializable {
         });
         voHieuTimKiemButton();
     }
-
     public void layDuLieu(String sanBayDi, String sanBayDen, LocalDate ngayBay) {
-        chuyenBay_tableview.getItems().clear();  // Clear previous search results
+        chuyenBay_tableview.getItems().clear();  // Xóa kết quả tìm kiếm trước đó
+
+        String baseQuery = "SELECT * FROM CHUYENBAY cb "
+                + "JOIN DUONGBAY db ON cb.MaDuongBay = db.MaDuongBay "
+                + "JOIN SANBAY sbDi ON db.MaSanBayDi = sbDi.MaSanBay "
+                + "JOIN SANBAY sbDen ON db.MaSanBayDen = sbDen.MaSanBay";
+
+        List<String> conditions = new ArrayList<>();
+        List<Object> parameters = new ArrayList<>();
+
+        if (sanBayDi != null && !sanBayDi.isEmpty()) {
+            conditions.add("UPPER(sbDi.TenSanBay) LIKE ?");
+            parameters.add("%" + sanBayDi.toUpperCase() + "%");
+        }
+
+        if (sanBayDen != null && !sanBayDen.isEmpty()) {
+            conditions.add("UPPER(sbDen.TenSanBay) LIKE ?");
+            parameters.add("%" + sanBayDen.toUpperCase() + "%");
+        }
+
+        if (ngayBay != null) {
+            conditions.add("TRUNC(cb.TGXP) = ?");
+            parameters.add(Date.valueOf(ngayBay));
+        }
+
+        if (!conditions.isEmpty()) {
+            baseQuery += " WHERE " + String.join(" AND ", conditions);
+        }
 
         try {
-            StringBuilder query = new StringBuilder("SELECT * FROM CHUYENBAY");
-            boolean hasCondition = false;
-
-            // Check if there are conditions to add to the WHERE clause
-            if ((sanBayDi != null && !sanBayDi.isEmpty()) || (sanBayDen != null && !sanBayDen.isEmpty()) || ngayBay != null) {
-                query.append(" WHERE");
-            }
-
-            if (sanBayDi != null && !sanBayDi.isEmpty()) {
-                query.append(" MaDuongBay IN (SELECT MaDuongBay FROM DUONGBAY WHERE MaSanBayDi = (SELECT MaSanBay FROM SANBAY WHERE UPPER(TenSanBay) LIKE ?))");
-                hasCondition = true;
-            }
-
-            if (sanBayDen != null && !sanBayDen.isEmpty()) {
-                if (hasCondition) {
-                    query.append(" AND");
-                }
-                query.append(" MaDuongBay IN (SELECT MaDuongBay FROM DUONGBAY WHERE MaSanBayDen = (SELECT MaSanBay FROM SANBAY WHERE UPPER(TenSanBay) LIKE ?))");
-                hasCondition = true;
-            }
-
-            if (ngayBay != null) {
-                if (hasCondition) {
-                    query.append(" AND");
-                }
-                query.append(" TRUNC(TGXP) = ?");
-            }
-
-            prepare = connect.prepareStatement(query.toString());
-
-            int index = 1;
-            if (sanBayDi != null && !sanBayDi.isEmpty()) {
-                prepare.setString(index++, "%" + sanBayDi.toUpperCase() + "%");
-            }
-            if (sanBayDen != null && !sanBayDen.isEmpty()) {
-                prepare.setString(index++, "%" + sanBayDen.toUpperCase() + "%");
-            }
-            if (ngayBay != null) {
-                prepare.setDate(index, Date.valueOf(ngayBay));
+            prepare = connect.prepareStatement(baseQuery);
+            for (int i = 0; i < parameters.size(); i++) {
+                prepare.setObject(i + 1, parameters.get(i));
             }
 
             result = prepare.executeQuery();
@@ -276,11 +269,8 @@ public class LichChuyenBayController implements Initializable {
             sanBayDi_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSanBayDi(cellData.getValue().getMaDuongBay())));
             sanBayDen_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSanBayDen(cellData.getValue().getMaDuongBay())));
             ngayBay_tbcolumn.setCellValueFactory(cellData -> {
-                String ngayBayFormatted = "";
                 LocalDateTime ngayBayDateTime = cellData.getValue().getThoiGianXuatPhat();
-                if (ngayBayDateTime != null) {
-                    ngayBayFormatted = ngayBayDateTime.toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-                }
+                String ngayBayFormatted = (ngayBayDateTime != null) ? ngayBayDateTime.toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) : "";
                 return new SimpleStringProperty(ngayBayFormatted);
             });
 
@@ -292,14 +282,7 @@ public class LichChuyenBayController implements Initializable {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            alert.errorMessage("Error occurred while loading data from the database.");
-        } finally {
-            try {
-                if (result != null) result.close();
-                if (prepare != null) prepare.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            alert.errorMessage("Đã xảy ra lỗi khi tải dữ liệu từ cơ sở dữ liệu.");
         }
     }
 
