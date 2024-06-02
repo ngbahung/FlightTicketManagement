@@ -69,7 +69,6 @@ public class TraCuuBanVeController implements Initializable {
 
     @FXML
     private void handleSearch() {
-        // Lấy giá trị từ các thành phần giao diện
         String sanBayDi = sanbaydi_menubtn.getText().trim();
         String sanBayDen = sanbayden_menubtn.getText().trim();
         LocalDate ngayBay = ngay_datepicker.getValue();
