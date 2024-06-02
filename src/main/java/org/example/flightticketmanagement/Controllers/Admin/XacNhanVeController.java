@@ -75,6 +75,12 @@ public class XacNhanVeController implements Initializable {
     private Connection connect;
     private EventBus eventBus;
 
+//    private static EventBus eventBusXoaGheTrong;
+//
+//    public static EventBus getEventBus() {
+//        return eventBusXoaGheTrong;
+//    }
+
     private final AlertMessage alert = new AlertMessage();
 
     @FXML
@@ -119,7 +125,6 @@ public class XacNhanVeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         connect = DatabaseDriver.getConnection();
-        eventBus = new EventBus();
         eventBus.register(this);
         generateCustomerId(cccd_txtfld.getText());
         datVe_btn.setOnAction(e -> handleInsertBooking(true)); // for datVe (booking ticket)
