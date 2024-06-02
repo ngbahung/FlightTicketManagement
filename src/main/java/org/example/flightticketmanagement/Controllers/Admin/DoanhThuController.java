@@ -77,7 +77,7 @@ public class DoanhThuController implements Initializable {
     }
 
     public void InBaoCaoNam() {
-        if (DTN_isThongKeThanhCong == false) {
+        if (!DTN_isThongKeThanhCong) {
             alert.errorMessage("Vui lòng thống kê doanh thu trước khi xuất báo cáo!");
             return;
         }

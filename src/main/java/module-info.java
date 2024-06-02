@@ -7,6 +7,7 @@ module org.example.flightticketmanagement {
     requires com.oracle.database.jdbc;
     requires java.sql;
     requires jasperreports;
+    requires com.google.common;
 
     opens org.example.flightticketmanagement to javafx.fxml;
     opens org.example.flightticketmanagement.Controllers.Admin to javafx.fxml;

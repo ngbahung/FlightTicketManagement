@@ -183,7 +183,6 @@ public class ManHinhDatVeController implements Initializable {
         }
     }
 
-
     private String getTenHangVe(String maHangVe) {
         String tenHangVe;
         String sql = "{call GET_TENHANGVE(?, ?)}";
@@ -200,7 +199,6 @@ public class ManHinhDatVeController implements Initializable {
         }
         return tenHangVe;
     }
-
 
     private void generateTicketDetails(Ve ve) {
         maVe_txtfld.setText(generateMaVe());
@@ -224,7 +222,6 @@ public class ManHinhDatVeController implements Initializable {
 
         return maVe;
     }
-
 
     public String generateMaGhe() {
         String maGhe = "1"; // Giá trị mặc định
@@ -279,8 +276,6 @@ public class ManHinhDatVeController implements Initializable {
         return true;
     }
 
-    // Phương thức lưu thông tin vé vào cơ sở dữ liệu
-    // Phương thức lưu thông tin vé vào cơ sở dữ liệu sử dụng stored procedure
     private void saveTicketToDatabase() {
         Ve selectedVe = ve_tableview.getSelectionModel().getSelectedItem();
         String maChuyenBay = maCB_txtfld.getText();
@@ -349,9 +344,7 @@ public class ManHinhDatVeController implements Initializable {
         }
     }
 
-
     private void reloadFlightDetails() {
-        // Reload the data for the flight details and ticket list
         String maChuyenBay = maCB_txtfld.getText();
         loadVeForFlight(maChuyenBay);
     }

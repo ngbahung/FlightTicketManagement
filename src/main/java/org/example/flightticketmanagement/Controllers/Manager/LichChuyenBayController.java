@@ -1,5 +1,7 @@
 package org.example.flightticketmanagement.Controllers.Manager;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
@@ -10,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import org.example.flightticketmanagement.Controllers.Admin.LoadDataEvent;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.ChuyenBay;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
@@ -176,12 +179,15 @@ public class LichChuyenBayController implements Initializable {
     }
 
     private Connection connect;
+    private final EventBus eventBus = new EventBus();
+
 
     private final AlertMessage alert = new AlertMessage();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         connect = DatabaseDriver.getConnection();
+        eventBus.register(this);
         layDuLieu(null, null, null);
         sanbaydi_menubtn.setOnShowing(event -> updateSanBayMenuItems());
         sanbayden_menubtn.setOnShowing(event -> updateSanBayMenuItems());
@@ -191,6 +197,11 @@ public class LichChuyenBayController implements Initializable {
             ngay_datepicker.setValue(null);
             layDuLieu(null, null, null);
         });
+    }
+
+    @Subscribe
+    public void handleLoadDataEvent(LoadDataEvent event) {
+        layDuLieu(null, null, null);
     }
     public void layDuLieu(String sanBayDi, String sanBayDen, LocalDate ngayBay) {
         chuyenBay_tableview.getItems().clear();  // Xóa kết quả tìm kiếm trước đó
