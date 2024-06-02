@@ -5,10 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -145,36 +142,22 @@ public class ThemDuongBayController implements Initializable {
     }
 
     private String generateMaDuongBay() {
-        String sql = "SELECT maDuongBay FROM DUONGBAY ORDER BY maDuongBay desc fetch first row only";
-        String maDuongBay = "DB000";
-        Connection tempConnect = null;
-        PreparedStatement tempPrepare = null;
-        ResultSet tempResult = null;
+        String maDuongBay = "DB001";
+        CallableStatement callableStmt = null;
 
         try {
-            tempConnect = DatabaseDriver.getConnection();
-            tempPrepare = tempConnect.prepareStatement(sql);
-            tempResult = tempPrepare.executeQuery();
-            if (tempResult.next()) {
-                String lastMaDuongBay = tempResult.getString("maDuongBay");
-                int number = Integer.parseInt(lastMaDuongBay.substring(2));
-                number++;
-                maDuongBay = "DB" + String.format("%03d", number);
-            }
+            connect = DatabaseDriver.getConnection();
+            callableStmt = connect.prepareCall("{CALL GENERATE_MA_DUONGBAY(?)}");
+            callableStmt.registerOutParameter(1, java.sql.Types.VARCHAR);
+
+            callableStmt.execute();
+            maDuongBay = callableStmt.getString(1);
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (tempResult != null) tempResult.close();
-                if (tempPrepare != null) tempPrepare.close();
-                if (tempConnect != null && !tempConnect.isClosed()) tempConnect.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return maDuongBay;
-
     }
+
 
 
     private String getTenVietTat(String tenSanBay) {
