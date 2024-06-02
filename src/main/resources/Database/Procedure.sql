@@ -504,6 +504,15 @@ EXCEPTION
 RAISE;
 END GET_TAIKHOAN_PHANQUYEN;
 /
+-----------------------------------------------------------------------------
+-- XÓA CT_DATVE LIÊN QUAN ĐẾN VE ĐÃ XÓA
+
+CREATE OR REPLACE PROCEDURE delete_CT_DATVE_by_VE (p_MaVe VARCHAR2) IS
+BEGIN
+DELETE FROM CT_DATVE
+WHERE MaVe = p_MaVe;
+END;
+/
 
 
 

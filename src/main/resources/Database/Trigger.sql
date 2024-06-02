@@ -435,24 +435,16 @@ CREATE OR REPLACE TRIGGER rf_VE_CT_HANGVE_delete_CHUYENBAY
     AFTER DELETE ON CHUYENBAY
     FOR EACH ROW
 BEGIN
-    -- Delete related records from VE table
+    -- Xóa các bản ghi liên quan từ bảng VE
+    FOR rec IN (SELECT MaVe FROM VE WHERE MaChuyenBay = :OLD.MaChuyenBay) LOOP
+            delete_CT_DATVE_by_VE(rec.MaVe);
+        END LOOP;
+
     DELETE FROM VE
     WHERE MaChuyenBay = :OLD.MaChuyenBay;
 
-    -- Delete related records from CT_HANGVE table
+    -- Xóa các bản ghi liên quan từ bảng CT_HANGVE
     DELETE FROM CT_HANGVE
     WHERE MaChuyenBay = :OLD.MaChuyenBay;
 END;
-
-/* R17 xóa CT_DATVE liên quan đến vé đã xóa */
--- DROP TRIGGER rf_CT_DATVE_delete_VE;
-
-CREATE OR REPLACE TRIGGER rf_CT_DATVE_delete_VE
-    AFTER DELETE ON VE
-    FOR EACH ROW
-BEGIN
-    -- Delete related records from CT_DATVE table
-    DELETE FROM CT_DATVE
-    WHERE MaVe = :OLD.MaVe;
-
-END;
+/
