@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
+import org.example.flightticketmanagement.Controllers.Manager.ThemLichChuyenBayController;
 import org.example.flightticketmanagement.Models.ChuyenBay;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
 
@@ -126,14 +127,18 @@ public class TraCuuBanVeController implements Initializable {
     private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
-    private final EventBus eventBus = XacNhanVeController.getEventBus();
+    private final EventBus eventBusXoaGheTrong = XacNhanVeController.getEventBus();
+    private final EventBus eventBusThemGheTrong = LichSuDatVeController.getEventBus();
+    private final EventBus eventBusThemChuyenBay = ThemLichChuyenBayController.getEventBus();
 
     private final AlertMessage alert = new AlertMessage();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         connect = DatabaseDriver.getConnection();
-        eventBus.register(this);
+        eventBusXoaGheTrong.register(this);
+        eventBusThemGheTrong.register(this);
+        eventBusThemChuyenBay.register(this);
         loadData();
         sanbaydi_menubtn.setOnShowing(event -> updateSanBayMenuItems());
         sanbayden_menubtn.setOnShowing(event -> updateSanBayMenuItems());
