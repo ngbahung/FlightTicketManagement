@@ -89,11 +89,11 @@
             <String fx:value="table-row-cell" />
          </styleClass>
       </TableView>
-      <MFXButton id="custom_button3" fx:id="dtThang_inBaoCao_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="758.0" layoutY="349.0" prefHeight="40.0" prefWidth="133.0" styleClass="mfx-button-report" text="In báo cáo" AnchorPane.rightAnchor="34.0">
+      <MFXButton id="custom_button3" fx:id="dtThang_inBaoCao_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="758.0" layoutY="349.0" prefHeight="40.0" prefWidth="133.0"  text="In báo cáo" AnchorPane.rightAnchor="34.0">
          <graphic>
             <FontAwesomeIconView fill="WHITE" glyphName="PRINT" size="20" />
          </graphic></MFXButton>
-      <MFXButton id="custom_button4" fx:id="dtNam_inBaoCao_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="818.0" layoutY="726.0" prefHeight="40.0" prefWidth="134.0" styleClass="mfx-button-report" text="In báo cáo" AnchorPane.rightAnchor="32.0">
+      <MFXButton id="custom_button4" fx:id="dtNam_inBaoCao_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="818.0" layoutY="726.0" prefHeight="40.0" prefWidth="134.0"  text="In báo cáo" AnchorPane.rightAnchor="32.0">
          <graphic>
             <FontAwesomeIconView fill="WHITE" glyphName="PRINT" size="20" />
          </graphic></MFXButton>

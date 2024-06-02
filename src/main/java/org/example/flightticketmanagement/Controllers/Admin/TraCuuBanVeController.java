@@ -126,7 +126,7 @@ public class TraCuuBanVeController implements Initializable {
     private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
-    private final EventBus eventBus = new EventBus();
+    private final EventBus eventBus = XacNhanVeController.getEventBus();
 
     private final AlertMessage alert = new AlertMessage();
 

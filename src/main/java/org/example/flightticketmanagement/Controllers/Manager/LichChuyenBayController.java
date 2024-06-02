@@ -12,7 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.example.flightticketmanagement.Controllers.Admin.LoadDataEvent;
+import org.example.flightticketmanagement.Controllers.Admin.XacNhanVeController;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.ChuyenBay;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
@@ -179,7 +179,7 @@ public class LichChuyenBayController implements Initializable {
     }
 
     private Connection connect;
-    private final EventBus eventBus = new EventBus();
+    private final EventBus eventBus = XacNhanVeController.getEventBus();
 
 
     private final AlertMessage alert = new AlertMessage();
@@ -200,7 +200,7 @@ public class LichChuyenBayController implements Initializable {
     }
 
     @Subscribe
-    public void handleLoadDataEvent(LoadDataEvent event) {
+    public void handleLoadDataEvent(Object event) {
         layDuLieu(null, null, null);
     }
     public void layDuLieu(String sanBayDi, String sanBayDen, LocalDate ngayBay) {
