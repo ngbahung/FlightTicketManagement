@@ -1,5 +1,6 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
+<<<<<<< Updated upstream
 import io.github.palexdev.materialfx.controls.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -381,4 +382,7 @@ public class ManHinhDatVeController implements Initializable {
         stage.close();
     }
 
+=======
+public class ManHinhDatVeController {
+>>>>>>> Stashed changes
 }

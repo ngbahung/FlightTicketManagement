@@ -18,8 +18,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.example.flightticketmanagement.Controllers.Admin.SuaPhanQuyenController;
-import org.example.flightticketmanagement.Controllers.Admin.ThemPhanQuyenController;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
 import org.example.flightticketmanagement.Models.TaiKhoan;
