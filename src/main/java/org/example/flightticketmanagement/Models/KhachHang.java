@@ -1,5 +1,7 @@
 package org.example.flightticketmanagement.Models;
 
+import java.util.ArrayList;
+
 public class KhachHang {
     private String maKhachHang;
     private String hoTen;
@@ -7,7 +9,9 @@ public class KhachHang {
     private String SDT;
     private String email;
     private String diaChi;
+    public static ArrayList<KhachHang> khachHang = new ArrayList<>();
 
+    public KhachHang() {}
     public KhachHang(String maKhachHang, String hoTen, String CCCD, String SDT, String email, String diaChi) {
         this.maKhachHang = maKhachHang;
         this.hoTen = hoTen;

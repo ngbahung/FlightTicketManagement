@@ -21,5 +21,8 @@ module org.example.flightticketmanagement {
     exports org.example.flightticketmanagement.Controllers.Staff;
     exports org.example.flightticketmanagement.Models;
     exports org.example.flightticketmanagement.Views;
+    exports org.example.flightticketmanagement.Miscellaneous;
+    opens org.example.flightticketmanagement.Miscellaneous to javafx.fxml;
+    opens org.example.flightticketmanagement.Controllers to javafx.fxml;
 
 }
