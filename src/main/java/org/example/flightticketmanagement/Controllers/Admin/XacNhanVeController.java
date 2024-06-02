@@ -1,7 +1,6 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
 import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
@@ -10,12 +9,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
-import org.example.flightticketmanagement.Controllers.Manager.LichChuyenBayController;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
 
 import java.net.URL;
 import java.sql.*;
-import java.time.LocalDateTime;
+        import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -73,13 +71,13 @@ public class XacNhanVeController implements Initializable {
 
     // DATABASE TOOLS
     private Connection connect;
-    private EventBus eventBus;
+    private static final EventBus eventBus = new EventBus();
 
-//    private static EventBus eventBusXoaGheTrong;
-//
-//    public static EventBus getEventBus() {
-//        return eventBusXoaGheTrong;
-//    }
+    public XacNhanVeController() {}
+
+    public static EventBus getEventBus() {
+        return eventBus;
+    }
 
     private final AlertMessage alert = new AlertMessage();
 
@@ -95,7 +93,7 @@ public class XacNhanVeController implements Initializable {
             Stage stage = (Stage) sua_btn.getScene().getWindow();
             stage.close();
         }
-        closeStage();
+        closeStage(huy_btn);
     }
 
     @FXML
@@ -125,7 +123,6 @@ public class XacNhanVeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         connect = DatabaseDriver.getConnection();
-        eventBus.register(this);
         generateCustomerId(cccd_txtfld.getText());
         datVe_btn.setOnAction(e -> handleInsertBooking(true)); // for datVe (booking ticket)
         datCho_btn.setOnAction(e -> handleInsertBooking(false)); // for datCho (reserving seat)
@@ -175,9 +172,9 @@ public class XacNhanVeController implements Initializable {
             alert.successMessage(isDatVe ? "Đặt vé thành công!" : "Đặt chỗ thành công!");
             if (manHinhDatVeController != null) {
                 manHinhDatVeController.closeStage();
-                eventBus.post(new Object());
             }
-            closeStage();
+            eventBus.post(new Object());
+            closeStage(isDatVe ? datVe_btn : datCho_btn);
         } else {
             alert.errorMessage("Có lỗi xảy ra khi đặt vé hoặc đặt chỗ.");
         }
@@ -267,8 +264,8 @@ public class XacNhanVeController implements Initializable {
         }
     }
 
-    private void closeStage() {
-        Stage stage = (Stage) datVe_btn.getScene().getWindow();
+    private void closeStage(MFXButton button) {
+        Stage stage = (Stage) button.getScene().getWindow();
         stage.close();
     }
 }
