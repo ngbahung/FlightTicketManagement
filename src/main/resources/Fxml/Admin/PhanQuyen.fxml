@@ -9,7 +9,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="800.0" prefWidth="992.0" stylesheets="@../../Styles/Admin/PhanQuyen.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.PhanQuyenController">
+<AnchorPane prefHeight="800.0" prefWidth="992.0" style="-fx-background-color: white;" stylesheets="@../../Styles/Admin/PhanQuyen.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.PhanQuyenController">
+   <MFXTextField id="custom" fx:id="timKiem_txtfld" layoutX="238.0" layoutY="50.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="600.0" />
+   <MFXButton id="custom_them" fx:id="refresh_btn" layoutX="147.0" layoutY="50.0" onAction="#newPage" prefHeight="40.0" prefWidth="60.0" text=" ">
+      <styleClass>
+         <String fx:value="mfx-button" />
+         <String fx:value="mfx-ripple-generator" />
+         <String fx:value="text" />
+         <String fx:value="link-button" />
+      </styleClass>
+      <graphic>
+         <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" text="" />
+      </graphic>
+   </MFXButton>
     <TableView fx:id="phanQuyen_table" editable="true" layoutX="17.0" layoutY="142.0" prefHeight="453.0" prefWidth="961.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css" AnchorPane.bottomAnchor="205.0" AnchorPane.leftAnchor="17.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="142.0">
       <columns>
          <TableColumn id="custom" fx:id="id_tablecolumn" prefWidth="95.0" text="ID" />
@@ -28,8 +40,8 @@
          <String fx:value="table-cell" />
       </styleClass>
     </TableView>
-    <HBox layoutX="594.0" layoutY="730.0" prefHeight="40.0" prefWidth="355.0" spacing="22.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="594.0" AnchorPane.rightAnchor="43.0" AnchorPane.topAnchor="730.0">
-        <MFXButton id="custom_them" fx:id="them_btn" onAction="#newPage" prefHeight="40.0" prefWidth="110.0" text="Thêm">
+    <HBox layoutX="451.2" layoutY="731.2" prefHeight="38.0" prefWidth="498.0" spacing="22.0" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="451.0" AnchorPane.rightAnchor="43.0" AnchorPane.topAnchor="731.0">
+        <MFXButton id="custom_them" fx:id="them_btn" onAction="#newPage" prefHeight="40.0" prefWidth="120.0" text="Thêm">
          <styleClass>
             <String fx:value="mfx-button" />
             <String fx:value="mfx-ripple-generator" />
@@ -39,7 +51,7 @@
          <graphic>
             <FontAwesomeIconView fill="WHITE" glyphName="PLUS" size="20" />
          </graphic></MFXButton>
-        <MFXButton id="custom_xoa" prefHeight="50.0" prefWidth="150.0" text="Xóa" fx:id="xoa_btn">
+        <MFXButton id="custom_xoa" prefHeight="40.0" prefWidth="120.0" text="Xóa" fx:id="xoa_btn">
          <styleClass>
             <String fx:value="mfx-button" />
             <String fx:value="mfx-ripple-generator" />
@@ -49,7 +61,7 @@
          <graphic>
             <FontAwesomeIconView glyphName="TRASH" size="20" />
          </graphic></MFXButton>
-        <MFXButton id="custom_sua" fx:id="sua_btn" prefHeight="50.0" prefWidth="150.0" text="Sửa">
+        <MFXButton id="custom_sua" fx:id="sua_btn" prefHeight="40.0" prefWidth="120.0" text="Sửa">
          <styleClass>
             <String fx:value="link-button" />
             <String fx:value="mfx-button" />
@@ -60,31 +72,15 @@
             <FontAwesomeIconView fill="WHITE" glyphName="EDIT" size="20" />
          </graphic></MFXButton>
     </HBox>
-   <HBox alignment="CENTER" layoutX="107.0" layoutY="31.0" prefHeight="60.0" prefWidth="781.0" spacing="20.0">
-      <children>
-         <MFXButton id="custom_them" fx:id="refresh_btn" onAction="#newPage" prefHeight="32.0" prefWidth="62.0" text=" ">
-            <styleClass>
-               <String fx:value="mfx-button" />
-               <String fx:value="mfx-ripple-generator" />
-               <String fx:value="text" />
-               <String fx:value="link-button" />
-            </styleClass>
-            <graphic>
-               <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" text="" />
-            </graphic>
-         </MFXButton>
-         <MFXTextField id="custom" fx:id="timKiem_txtfld" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="579.0" />
-         <MFXButton id="custom_them" fx:id="timkiem_btn" prefHeight="32.0" prefWidth="66.0" text=" ">
-            <styleClass>
-               <String fx:value="mfx-button" />
-               <String fx:value="mfx-ripple-generator" />
-               <String fx:value="text" />
-               <String fx:value="link-button" />
-            </styleClass>
-            <graphic>
-               <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20" />
-            </graphic>
-         </MFXButton>
-      </children>
-   </HBox>
+   <MFXButton id="custom_them" fx:id="timkiem_btn" layoutX="793.0" layoutY="50.0" prefHeight="40.0" prefWidth="60.0" text=" ">
+      <styleClass>
+         <String fx:value="mfx-button" />
+         <String fx:value="mfx-ripple-generator" />
+         <String fx:value="text" />
+         <String fx:value="link-button" />
+      </styleClass>
+      <graphic>
+         <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20" />
+      </graphic>
+   </MFXButton>
 </AnchorPane>

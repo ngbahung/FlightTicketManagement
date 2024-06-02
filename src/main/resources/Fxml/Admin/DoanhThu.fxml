@@ -3,6 +3,10 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import java.lang.String?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
@@ -13,15 +17,15 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="800.0" prefWidth="992.0" styleClass="background" stylesheets="@../../Styles/Admin/DoanhThu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.DoanhThuController">
+<AnchorPane prefHeight="800.0" prefWidth="992.0" style="-fx-background-color: white;" styleClass="background" stylesheets="@../../Styles/Admin/DoanhThu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.DoanhThuController">
    <children>
-      <TableView fx:id="dtThang_tableView" layoutX="19.0" layoutY="68.0" prefHeight="310.0" prefWidth="654.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="319.0">
+      <TableView fx:id="dtThang_tableView" layoutX="19.0" layoutY="68.0" prefHeight="310.0" prefWidth="500.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css">
          <columns>
-            <TableColumn fx:id="dtThang_stt_tbcolumn" prefWidth="53.0" text="STT" />
-            <TableColumn fx:id="dtThang_macb_tbcolumn" prefWidth="142.0" text="Mã chuyến bay" />
-            <TableColumn fx:id="dtThang_soVe_tbcolumn" prefWidth="140.0" text="Số vé bán được" />
-            <TableColumn fx:id="dtThang_doanhThu_tbcolumn" prefWidth="162.0" text="Doanh thu" />
-            <TableColumn fx:id="dtThang_tyLe_tbcolumn" prefWidth="121.0" text="Tỉ lệ (%)" />
+            <TableColumn fx:id="dtThang_stt_tbcolumn" prefWidth="50.0" text="STT" />
+            <TableColumn fx:id="dtThang_macb_tbcolumn" prefWidth="100.0" text="Mã chuyến bay" />
+            <TableColumn fx:id="dtThang_soVe_tbcolumn" prefWidth="120.0" text="Số vé bán được" />
+            <TableColumn fx:id="dtThang_doanhThu_tbcolumn" prefWidth="120.0" text="Doanh thu" />
+            <TableColumn fx:id="dtThang_tyLe_tbcolumn" text="Tỉ lệ (%)" />
          </columns>
          <styleClass>
             <String fx:value="column-header" />
@@ -33,7 +37,7 @@
             <String fx:value="table-row-cell" />
          </styleClass>
       </TableView>
-      <AnchorPane prefHeight="62.0" prefWidth="992.0" styleClass="top-bar">
+      <AnchorPane prefHeight="55.0" prefWidth="992.0" style="-fx-background-color: #76b5c5;" styleClass="top-bar">
          <children>
             <HBox alignment="CENTER" layoutX="377.0" layoutY="8.0" prefHeight="47.0" prefWidth="601.0" spacing="30.0">
                <children>
@@ -51,12 +55,14 @@
             <Text layoutX="39.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="DOANH THU THÁNG" />
          </children>
       </AnchorPane>
-      <AnchorPane layoutY="393.0" prefHeight="55.0" prefWidth="992.0" styleClass="top-bar">
+      <AnchorPane layoutY="393.0" prefHeight="55.0" prefWidth="992.0" style="-fx-background-color: #76b5c5;" styleClass="top-bar">
          <children>
-            <HBox alignment="CENTER" layoutX="600.0" layoutY="8.0" prefHeight="47.0" prefWidth="378.0" spacing="30.0">
+            <HBox alignment="CENTER" layoutX="600.0" layoutY="8.0" prefHeight="47.0" prefWidth="378.0" spacing="30.0" />
+            <Text layoutX="41.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="DOANH THU NĂM" />
+            <HBox alignment="CENTER" layoutX="326.0" layoutY="12.0" prefHeight="40.0" prefWidth="398.0" spacing="20.0">
                <children>
-                  <Label layoutX="10.0" layoutY="10.0" styleClass="top-bar-text" text="Năm:" />
-                  <ComboBox fx:id="dtNam_cbbox_namSelection" layoutX="46.0" layoutY="10.0" prefHeight="25.0" prefWidth="112.0" />
+                  <Label prefHeight="18.0" prefWidth="42.0" styleClass="top-bar-text" text="Năm:" />
+                  <ComboBox fx:id="dtNam_cbbox_namSelection" prefHeight="26.0" prefWidth="120.0" />
                   <MFXButton id="custom_button2" fx:id="dtNam_thongKe_btn" buttonType="RAISED" depthLevel="LEVEL1" prefHeight="31.0" prefWidth="123.0" text="Thống kê">
                      <graphic>
                         <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20" />
@@ -64,14 +70,13 @@
                   </MFXButton>
                </children>
             </HBox>
-            <Text layoutX="41.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="DOANH THU NĂM" />
          </children>
       </AnchorPane>
-      <TableView fx:id="dtNam_tableview" layoutX="16.0" layoutY="457.0" prefHeight="324.0" prefWidth="660.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="319.0">
+      <TableView fx:id="dtNam_tableview" layoutX="16.0" layoutY="457.0" prefHeight="324.0" prefWidth="500.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css">
          <columns>
-            <TableColumn fx:id="dtNam_Thang_tbcolumn" prefWidth="67.33334732055664" text="Tháng" />
-            <TableColumn fx:id="dtNam_soChuyen_tbcolumn" prefWidth="216.0" text="Số chuyến bay" />
-            <TableColumn fx:id="dtNam_dt_tbcolumn" prefWidth="220.0" text="Doanh thu" />
+            <TableColumn fx:id="dtNam_Thang_tbcolumn" prefWidth="60.0" text="Tháng" />
+            <TableColumn fx:id="dtNam_soChuyen_tbcolumn" prefWidth="120.0" text="Số chuyến bay" />
+            <TableColumn fx:id="dtNam_dt_tbcolumn" prefWidth="170.0" text="Doanh thu" />
             <TableColumn fx:id="dtNam_tiLe_tbcolumn" prefWidth="118.0" text="Tỉ lệ (%)" />
          </columns>
          <styleClass>
@@ -84,12 +89,35 @@
             <String fx:value="table-row-cell" />
          </styleClass>
       </TableView>
-      <MFXButton id="custom_button3" fx:id="dtThang_inBaoCao_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="784.0" layoutY="321.0" prefHeight="40.0" prefWidth="153.0" styleClass="mfx-button-report" text="In báo cáo" />
-      <MFXButton id="custom_button4" fx:id="dtNam_inBaoCao_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="784.0" layoutY="728.0" prefHeight="40.0" prefWidth="153.0" styleClass="mfx-button-report" text="In báo cáo" />
+      <MFXButton id="custom_button3" fx:id="dtThang_inBaoCao_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="758.0" layoutY="349.0" prefHeight="40.0" prefWidth="133.0" styleClass="mfx-button-report" text="In báo cáo" AnchorPane.rightAnchor="34.0">
+         <graphic>
+            <FontAwesomeIconView fill="WHITE" glyphName="PRINT" size="20" />
+         </graphic></MFXButton>
+      <MFXButton id="custom_button4" fx:id="dtNam_inBaoCao_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="818.0" layoutY="726.0" prefHeight="40.0" prefWidth="134.0" styleClass="mfx-button-report" text="In báo cáo" AnchorPane.rightAnchor="32.0">
+         <graphic>
+            <FontAwesomeIconView fill="WHITE" glyphName="PRINT" size="20" />
+         </graphic></MFXButton>
       <Separator layoutY="389.0" prefHeight="8.0" prefWidth="992.0" />
-      <Label layoutX="744.0" layoutY="136.0" prefHeight="25.0" prefWidth="172.0" styleClass="bottom-bar-text" text="Tổng doanh thu:" />
-      <TextField fx:id="dtThang_tongdt_txfl" editable="false" layoutX="725.0" layoutY="172.0" prefHeight="43.0" prefWidth="185.0" styleClass="total-income" text="0 VNĐ" />
-      <Label layoutX="716.0" layoutY="512.0" styleClass="bottom-bar-text" text="Tổng doanh thu:" />
-      <TextField fx:id="dtNam_tongdt_txtfld" editable="false" layoutX="704.0" layoutY="558.0" prefHeight="31.0" prefWidth="185.0" styleClass="total-income" text="0 VNĐ" />
+      <Label layoutX="533.0" layoutY="303.0" prefHeight="25.0" prefWidth="172.0" styleClass="bottom-bar-text" text="Tổng doanh thu:" />
+      <TextField fx:id="dtThang_tongdt_txfl" editable="false" layoutX="705.0" layoutY="294.0" prefHeight="43.0" prefWidth="254.0" styleClass="total-income" text="0 VNĐ" AnchorPane.rightAnchor="32.60000000000002" />
+      <Label layoutX="553.0" layoutY="682.0" styleClass="bottom-bar-text" text="Tổng doanh thu:" />
+      <TextField fx:id="dtNam_tongdt_txtfld" editable="false" layoutX="744.0" layoutY="673.0" prefHeight="43.0" prefWidth="230.0" styleClass="total-income" text="0 VNĐ" AnchorPane.rightAnchor="32.0" />
+      <AnchorPane layoutX="562.0" layoutY="448.0" prefHeight="200.0" prefWidth="409.0">
+         <children>
+            <BarChart fx:id="doanhthunam_barchart" layoutX="-133.0" layoutY="-167.0" prefHeight="233.6" prefWidth="409.6" title="DOANH THU NĂM" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+            </BarChart>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="575.0" layoutY="62.0" prefHeight="220.0" prefWidth="378.0">
+         <children>
+            <PieChart fx:id="doanhthuthang_piechart" layoutX="-101.0" layoutY="-117.0" prefHeight="220.0" prefWidth="378.0" title="DOANH THU THÁNG" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
