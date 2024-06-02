@@ -96,6 +96,9 @@ public class SuaPhanQuyenController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         populateRoleComboBox();
+        ngay_datepicker.setDisable(true);
+        ngay_datepicker.setEditable(false);
+        ngay_datepicker.setValue(LocalDate.now());
     }
 
     public void setSelectedTaiKhoan(TaiKhoan taiKhoan) {
