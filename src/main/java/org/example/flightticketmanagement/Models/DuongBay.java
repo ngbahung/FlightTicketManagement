@@ -2,19 +2,19 @@ package org.example.flightticketmanagement.Models;
 
 public class DuongBay {
     private String maDuongBay;
-    private String maSanBayDi;
-    private String maSanBayDen;
-    private String maSanBayTG;
+    private String tenSanBayDi;
+    private String tenSanBayDen;
     private String tenDuongBay;
-    private Float doDaiDuongBay;
+    private Integer soThuTu;
+    private Integer trangThai;
 
-    public DuongBay(String maDuongBay, String maSanBayDi, String maSanBayDen, String maSanBayTG, String tenDuongBay, Float doDaiDuongBay) {
+    public DuongBay(String maDuongBay, String tenSanBayDi, String tenSanBayDen, String tenDuongBay, Integer soThuTu, Integer trangThai) {
         this.maDuongBay = maDuongBay;
-        this.maSanBayDi = maSanBayDi;
-        this.maSanBayDen = maSanBayDen;
-        this.maSanBayTG = maSanBayTG;
+        this.tenSanBayDi = tenSanBayDi;
+        this.tenSanBayDen = tenSanBayDen;
         this.tenDuongBay = tenDuongBay;
-        this.doDaiDuongBay = doDaiDuongBay;
+        this.soThuTu = soThuTu;
+        this.trangThai = trangThai;
     }
 
     public String getMaDuongBay() {
@@ -25,28 +25,20 @@ public class DuongBay {
         this.maDuongBay = maDuongBay;
     }
 
-    public String getMaSanBayDi() {
-        return maSanBayDi;
+    public String getTenSanBayDi() {
+        return tenSanBayDi;
     }
 
-    public void setMaSanBayDi(String maSanBayDi) {
-        this.maSanBayDi = maSanBayDi;
+    public void setTenSanBayDi(String tenSanBayDi) {
+        this.tenSanBayDi = tenSanBayDi;
     }
 
-    public String getMaSanBayDen() {
-        return maSanBayDen;
+    public String getTenSanBayDen() {
+        return tenSanBayDen;
     }
 
-    public void setMaSanBayDen(String maSanBayDen) {
-        this.maSanBayDen = maSanBayDen;
-    }
-
-    public String getMaSanBayTG() {
-        return maSanBayTG;
-    }
-
-    public void setMaSanBayTG(String maSanBayTG) {
-        this.maSanBayTG = maSanBayTG;
+    public void setTenSanBayDen(String tenSanBayDen) {
+        this.tenSanBayDen = tenSanBayDen;
     }
 
     public String getTenDuongBay() {
@@ -57,11 +49,19 @@ public class DuongBay {
         this.tenDuongBay = tenDuongBay;
     }
 
-    public Float getDoDaiDuongBay() {
-        return doDaiDuongBay;
+    public Integer getSoThuTu() {
+        return soThuTu;
     }
 
-    public void setDoDaiDuongBay(Float doDaiDuongBay) {
-        this.doDaiDuongBay = doDaiDuongBay;
+    public void setSoThuTu(Integer soThuTu) {
+        this.soThuTu = soThuTu;
+    }
+
+    public Integer getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(Integer trangThai) {
+        this.trangThai = trangThai;
     }
 }

@@ -22,9 +22,9 @@
       <TextField fx:id="tenVietTatNew_textfield" layoutX="41.0" layoutY="157.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="41.0" prefWidth="301.0" promptText="Tên viết tắt" />
       <Label styleClass="text-label-name" text="Tỉnh thành" />
       <TextField fx:id="tinhThanhNew_textfield" layoutX="41.0" layoutY="257.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="41.0" prefWidth="301.0" promptText="Tỉnh thành" />
-      <Button fx:id="luu_btn" graphicTextGap="15.0" mnemonicParsing="false" onAction="#saveNewAirport" prefHeight="35.0" prefWidth="93.0" text="Lưu">
+      <Button fx:id="luu_btn" graphicTextGap="15.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#saveNewAirport" prefHeight="43.0" prefWidth="112.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css" text="Lưu">
          <graphic>
-            <FontAwesomeIconView glyphName="SAVE" size="20" />
+            <FontAwesomeIconView fill="WHITE" glyphName="SAVE" size="20" />
          </graphic>
          <VBox.margin>
             <Insets left="100.0" />

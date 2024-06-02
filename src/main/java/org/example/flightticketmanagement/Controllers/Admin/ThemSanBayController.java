@@ -35,7 +35,6 @@ public class ThemSanBayController implements Initializable {
 
     private Connection connect;
     private PreparedStatement prepare;
-    private ResultSet result;
 
     private final AlertMessage alert = new AlertMessage();
 
@@ -43,11 +42,6 @@ public class ThemSanBayController implements Initializable {
 
     public void setParentController(QuyDinhController parentController) {
         this.parentController = parentController;
-
-        // Add listener for tenVietTat_txf to convert input to uppercase
-        tenVietTatNew_textfield.textProperty().addListener((observable, oldValue, newValue) -> {
-            tenVietTatNew_textfield.setText(newValue.toUpperCase());
-        });
     }
 
     @FXML
@@ -102,9 +96,9 @@ public class ThemSanBayController implements Initializable {
         String sql = "SELECT MaSanBay FROM sanbay ORDER BY MaSanBay DESC FETCH FIRST ROW ONLY";
         String maSanBay = "SBD000";
 
-        Connection tempConnect = null;
-        PreparedStatement tempPrepare = null;
-        ResultSet tempResult = null;
+        Connection tempConnect;
+        PreparedStatement tempPrepare;
+        ResultSet tempResult;
 
         try {
             tempConnect = DatabaseDriver.getConnection();
@@ -129,14 +123,7 @@ public class ThemSanBayController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         idNewSanBay_textfield.setText(generateMaSanBay());
         luu_btn.setOnAction(this::saveNewAirport);
-        tenVietTatNew_textfield.textProperty().addListener((observable, oldValue, newValue) -> {
-            tenVietTatNew_textfield.setText(newValue.toUpperCase());
-        });
-    }
-
-    private String removeDiacritics(String str) {
-        return java.text.Normalizer.normalize(str, java.text.Normalizer.Form.NFD)
-                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+        tenVietTatNew_textfield.textProperty().addListener((observable, oldValue, newValue) -> tenVietTatNew_textfield.setText(newValue.toUpperCase()));
     }
 
     private void closeWindow() {

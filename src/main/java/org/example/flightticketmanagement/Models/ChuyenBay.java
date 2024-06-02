@@ -2,13 +2,10 @@ package org.example.flightticketmanagement.Models;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ChuyenBay {
     private String maChuyenBay;
     private String maDuongBay;
-    private Integer soLuongGhe;
     private Integer soChuyenBay;
     private LocalDateTime thoiGianXuatPhat;
     private LocalDateTime thoiGianKetThuc ;
@@ -21,11 +18,9 @@ public class ChuyenBay {
     private Statement statement;
     private ResultSet result;
 
-    public ChuyenBay(String maChuyenBay, String maDuongBay, Integer soLuongGhe, Integer soChuyenBay, LocalDateTime thoiGianXuatPhat, LocalDateTime thoiGianKetThuc, String trangThai, Float giaVe) {
+    public ChuyenBay(String maChuyenBay, String maDuongBay, LocalDateTime thoiGianXuatPhat, LocalDateTime thoiGianKetThuc, String trangThai, Float giaVe) {
         this.maChuyenBay = maChuyenBay;
         this.maDuongBay = maDuongBay;
-        this.soLuongGhe = soLuongGhe;
-        this.soChuyenBay = soChuyenBay;
         this.thoiGianXuatPhat = thoiGianXuatPhat;
         this.thoiGianKetThuc = thoiGianKetThuc;
         this.trangThai = trangThai;
@@ -48,28 +43,12 @@ public class ChuyenBay {
         this.maDuongBay = maDuongBay;
     }
 
-    public Integer getSoLuongGhe() {
-        return soLuongGhe;
-    }
-
-    public void setSoLuongGhe(Integer soLuongGhe) {
-        this.soLuongGhe = soLuongGhe;
-    }
-
     public LocalDateTime getThoiGianXuatPhat() {
         return thoiGianXuatPhat;
     }
 
     public void setThoiGianXuatPhat(LocalDateTime thoiGianXuatPhat) {
         this.thoiGianXuatPhat = thoiGianXuatPhat;
-    }
-
-    public Integer getSoChuyenBay() {
-        return soChuyenBay;
-    }
-
-    public void setSoChuyenBay(Integer soChuyenBay) {
-        this.soChuyenBay = soChuyenBay;
     }
 
     public LocalDateTime getThoiGianKetThuc() {

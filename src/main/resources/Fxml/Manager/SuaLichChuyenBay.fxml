@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ComboBox?>
@@ -8,23 +9,22 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1000.0" styleClass="background-color" stylesheets="@../../Styles/Manager/ThemChuyenBay.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Fxml.Manager.ThemChuyenBay">
+<AnchorPane prefHeight="538.0" prefWidth="743.0" style="-fx-background-color: white;" styleClass="background-color" stylesheets="@../../Styles/Manager/ThemChuyenBay.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Manager.SuaLichChuyenBayController">
    <children>
-      <GridPane hgap="30.0" layoutX="46.0" layoutY="28.0" prefHeight="335.0" prefWidth="908.0" styleClass="grid-pane">
+      <GridPane hgap="20.0" layoutX="29.0" layoutY="58.0" prefHeight="244.0" prefWidth="686.0" styleClass="grid-pane">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="223.0" minWidth="10.0" prefWidth="166.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="555.0" minWidth="10.0" prefWidth="255.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="513.0" minWidth="10.0" prefWidth="145.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="390.0" minWidth="10.0" prefWidth="276.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="555.0" minWidth="10.0" prefWidth="187.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="513.0" minWidth="10.0" prefWidth="119.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="390.0" minWidth="10.0" prefWidth="204.0" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -33,55 +33,49 @@
          </rowConstraints>
          <children>
             <Label text="Mã chuyến bay:" />
-            <TextField GridPane.columnIndex="1" />
-            <Label text="Sân bay đi:" GridPane.rowIndex="1" />
-            <Label text="Sân bay đến:" GridPane.rowIndex="2" />
-            <Label text="Ngày bay:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Label text="Giờ bay:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Label text="Số lượng vé Phổ thông:" GridPane.rowIndex="3" />
-            <Label text="Thời gian bay:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Label text="Giá vé:" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <Label text="Số lượng vé Thương gia:" GridPane.rowIndex="4" />
-            <Label text="Số lượng vé Hạng nhất:" GridPane.rowIndex="5" />
-            <DatePicker prefHeight="28.0" prefWidth="266.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <TextField layoutX="170.0" layoutY="32.0" promptText="hh:mm" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField promptText="phút" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <TextField promptText="VNĐ" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-            <ComboBox prefHeight="23.0" prefWidth="249.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <ComboBox layoutX="200.0" layoutY="85.0" prefHeight="23.0" prefWidth="249.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <MFXButton id="custom-2" buttonType="RAISED" depthLevel="LEVEL1" prefHeight="41.0" prefWidth="99.0" text="Lưu" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
-         </children>
-         <padding>
-            <Insets left="20.0" right="20.0" />
-         </padding>
-      </GridPane>
-      <TableView layoutX="46.0" layoutY="378.0" prefHeight="200.0" prefWidth="440.0">
-         <columns>
-            <TableColumn prefWidth="50.0" text="STT" />
-            <TableColumn prefWidth="166.0" text="Sân bay trung gian" />
-            <TableColumn prefWidth="111.0" text="Thời gian dừng" />
-            <TableColumn prefWidth="112.0" text="Ghi chú" />
-         </columns>
-      </TableView>
-      <VBox alignment="CENTER" layoutX="854.0" layoutY="378.0" prefHeight="200.0" prefWidth="99.0" spacing="30.0">
-         <children>
-            <MFXButton id="custom" buttonType="RAISED" depthLevel="LEVEL1" prefHeight="38.0" prefWidth="130.0" text="Thêm SBTG" />
-            <MFXButton id="custom" buttonType="RAISED" depthLevel="LEVEL1" layoutX="10.0" layoutY="10.0" prefHeight="38.0" prefWidth="130.0" text="Sửa SBTG" />
-            <MFXButton id="custom" buttonType="RAISED" depthLevel="LEVEL1" layoutX="10.0" layoutY="48.0" prefHeight="38.0" prefWidth="130.0" text="Xóa SBTG" />
-         </children>
-      </VBox>
-      <VBox alignment="CENTER" layoutX="508.0" layoutY="397.0" prefHeight="163.0" prefWidth="275.0" spacing="30.0" styleClass="vbox">
-         <children>
-            <ComboBox prefHeight="23.0" prefWidth="249.0" promptText="Sân bay trung gian" />
-            <TextField promptText="Thời gian dừng (phút)" />
-            <TextField promptText="Ghi chú" />
+            <TextField fx:id="maChuyenBay_txtfld" disable="true" editable="false" GridPane.columnIndex="1" />
+            <Label text="Tên đường bay:" GridPane.rowIndex="1" />
+            <Label text="Ngày bay:" GridPane.rowIndex="2" />
+            <Label text="Giờ bay:" GridPane.rowIndex="3" />
+            <Label text="Thời gian bay:" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Label text="Giá vé cơ bản:" GridPane.rowIndex="4" />
+            <DatePicker fx:id="ngayBay_datepicker" prefHeight="28.0" prefWidth="266.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="thoiGianBay_txtfld" prefHeight="27.0" prefWidth="158.0" promptText="phút" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+            <TextField fx:id="gia_txtfld" promptText="VNĐ" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ComboBox fx:id="tenDuongBay_combobox" onAction="#xuLyLuaChonDuongBay" prefHeight="23.0" prefWidth="249.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Dự kiến hạ cánh:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <DatePicker fx:id="ngayHaCanh_datepicker" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <Label text="Mã đường bay:" GridPane.columnIndex="2" />
+            <TextField fx:id="maDuongBay_txtfld" disable="true" editable="false" GridPane.columnIndex="3" />
+            <Label text="Giờ hạ cánh:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <ComboBox fx:id="gioBay_combobox" prefHeight="23.0" prefWidth="249.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <ComboBox fx:id="gioHaCanh_combobox" prefHeight="23.0" prefWidth="249.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
          </children>
          <padding>
             <Insets left="10.0" right="10.0" />
          </padding>
-      </VBox>
+      </GridPane>
+      <MFXButton id="custom-2" fx:id="luu_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="616.0" layoutY="477.0" onAction="#luuButtonClicked" prefHeight="41.0" prefWidth="99.0" text="Lưu">
+         <graphic>
+            <FontAwesomeIconView fill="WHITE" glyphName="SAVE" size="20" />
+         </graphic>
+         <effect>
+            <DropShadow height="37.13" radius="16.9625" spread="0.17" width="32.72" />
+         </effect></MFXButton>
+      <Label layoutX="317.0" layoutY="20.0" text="SỬA LỊCH CHUYẾN BAY" />
+      <TableView fx:id="hangVe_tableview" layoutX="28.0" layoutY="318.0" prefHeight="200.0" prefWidth="245.0">
+         <columns>
+            <TableColumn fx:id="tenHangVe_tbcl" prefWidth="112.0" text="Tên hạng vé" />
+            <TableColumn fx:id="soLuongGhe_tbcl" prefWidth="128.0" text="Số lượng ghế trống" />
+         </columns>
+      </TableView>
+      <MFXButton id="custom-2" fx:id="themHangVe_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="288.0" layoutY="418.0" onAction="#moThemHangVeChuyenBay" prefHeight="41.0" prefWidth="127.0" text="Thêm hạng vé">
+         <graphic>
+            <FontAwesomeIconView fill="#fff1f1" glyphName="PLUS" size="20" />
+         </graphic></MFXButton>
+      <MFXButton id="custom-2" buttonType="RAISED" depthLevel="LEVEL1" layoutX="289.0" layoutY="477.0" onAction="#xoaHangVe" prefHeight="41.0" prefWidth="127.0" text="Xóa hạng vé" fx:id="xoaHangVe_btn">
+         <graphic>
+            <FontAwesomeIconView fill="WHITE" glyphName="TRASH" size="20" />
+         </graphic></MFXButton>
    </children>
 </AnchorPane>

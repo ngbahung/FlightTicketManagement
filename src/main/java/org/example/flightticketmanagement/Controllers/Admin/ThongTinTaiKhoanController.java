@@ -70,6 +70,8 @@ public class ThongTinTaiKhoanController implements Initializable {
     }
 
     private void loadData() {
+        clearFields();
+
         connect = DatabaseDriver.getConnection();
         String loggedInUserId = Model.getInstance().getLoggedInUserId();  // Get logged-in user ID
 
@@ -225,6 +227,16 @@ public class ThongTinTaiKhoanController implements Initializable {
                 alert.errorMessage("Không kết nối được với database.");
             }
         }
+    }
+
+    private void clearFields() {
+        maTaiKhoan_txtfld.clear();
+        ten_txtfld.clear();
+        sdt_txtfld.clear();
+        email_txtfld.clear();
+        matKhau_txtfld.clear();
+        ngay_datepicker.setValue(null);
+        vaitro_txtfld.clear();
     }
 
     private void styleInfoLabel() {

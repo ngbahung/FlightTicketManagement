@@ -33,7 +33,7 @@ public class ViewFactory {
     private AnchorPane lichCBStaView;
 
     public ViewFactory(){
-        this.loginAccountType = AccountType.STAFF;
+        this.loginAccountType = AccountType.ADMIN;
         this.adminSelectedMenuItem = new SimpleObjectProperty<>();
         this.managerSelectedMenuItem = new SimpleObjectProperty<>();
         this.staffSelectedMenuItem = new SimpleObjectProperty<>();
@@ -79,7 +79,7 @@ public class ViewFactory {
     public AnchorPane getLichSuView() {
         if (lichSuView == null){
             try {
-                lichSuView = new FXMLLoader(getClass().getResource("/Fxml/Admin/LichSu.fxml")).load();
+                lichSuView = new FXMLLoader(getClass().getResource("/Fxml/Admin/LichSuDatVe.fxml")).load();
             } catch (Exception e){
                 e.printStackTrace();
             }

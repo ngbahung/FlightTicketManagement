@@ -1,9 +1,14 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 
 import java.math.BigDecimal;
@@ -14,6 +19,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javafx.scene.input.MouseEvent;
 import org.example.flightticketmanagement.Models.BaoCaoNam;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.BaoCaoThang;
@@ -39,26 +46,35 @@ public class DoanhThuController implements Initializable {
     @FXML
     private TextField dtNam_tongdt_txtfld;
 
+    @FXML
+    private BarChart<String, Number> doanhthunam_barchart;
+
+    @FXML
+    private PieChart doanhthuthang_piechart;
+
+
 
     private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
 
     private final AlertMessage alert = new AlertMessage();
+    private final EventBus eventBusXoaGheTrong = XacNhanVeController.getEventBus();
+    private final EventBus eventBusThemGheTrong = LichSuDatVeController.getEventBus();
     private BigDecimal tongDoanhThuNam = BigDecimal.valueOf(0.0);
 
     private Integer DTN_namBaoCao = 0;
 
     private ReportController reportController;
     private boolean DTN_isThongKeThanhCong = false;
-    private List<BaoCaoNam> listBaoCaoNam;
+    private final List<BaoCaoNam> listBaoCaoNam = new ArrayList<BaoCaoNam>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        DTN_isThongKeThanhCong = false;
         reportController = new ReportController();
-        listBaoCaoNam = new ArrayList<BaoCaoNam>();
         connect = DatabaseDriver.getConnection();
+        eventBusXoaGheTrong.register(this);
+        eventBusThemGheTrong.register(this);
         DTNam_FillDataForComboBoxNam();
         DTThang_FillDataForComboBoxNam();
         DTThang_FillDataForComboBoxThang();
@@ -68,8 +84,14 @@ public class DoanhThuController implements Initializable {
         dtThang_inBaoCao_btn.setOnMouseClicked(event -> InBaoCaoThang());
     }
 
+    @Subscribe
+    public void handleUpdateData(Object e) {
+        DTNam_LoadData();
+        DTThang_LoadData();
+    }
+
     public void InBaoCaoNam() {
-        if (DTN_isThongKeThanhCong == false) {
+        if (!DTN_isThongKeThanhCong) {
             alert.errorMessage("Vui lòng thống kê doanh thu trước khi xuất báo cáo!");
             return;
         }
@@ -82,22 +104,27 @@ public class DoanhThuController implements Initializable {
                 ") " +
                 "SELECT" +
                 "    m.Thang as Thang," +
-                "    NVL(b.SoChuyenBay, 0) AS SoCuyenBay," +
-                "    NVL(b.DoanhThu, 0) AS DoanhThu," +
+                "    NVL(b.SoChuyenBay, 0) AS SoChuyenBay," +
+                "    NVL(b.DoanhThu, 0) AS DoanhThu " +
                 "FROM" +
                 "    Months m " +
                 "LEFT JOIN" +
-                "    BAOCAONAM b ON m.Thang = b.Thang AND b.Nam = (?) " +
+                "    BAOCAONAM b ON m.Thang = b.Thang AND b.Nam = ? " +
                 "ORDER BY" +
                 "    m.Thang";
-
         try (PreparedStatement prepare = connect.prepareStatement(query)) {
             prepare.setInt(1, namBaoCao);
             try (ResultSet result = prepare.executeQuery()) {
                 dtNam_tableview.getItems().clear();
                 listBaoCaoNam.clear();
+
+                // Data for BarChart
+                XYChart.Series<String, Number> series = new XYChart.Series<>();
+                series.setName("Doanh Thu");
+
                 while (result.next()) {
-                    Double tyLe = (result.getBigDecimal("DoanhThu").divide(tongDoanhThuNam,2,RoundingMode.HALF_UP).doubleValue())*100;
+                    BigDecimal doanhThu = result.getBigDecimal("DoanhThu");
+                    Double tyLe = doanhThu.divide(tongDoanhThuNam, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.HALF_UP).doubleValue();
                     BaoCaoNam baoCaoNam = new BaoCaoNam(
                             result.getInt("Thang"),
                             result.getInt("SoChuyenBay"),
@@ -106,7 +133,15 @@ public class DoanhThuController implements Initializable {
                     );
                     listBaoCaoNam.add(baoCaoNam);
                     dtNam_tableview.getItems().add(baoCaoNam);
+
+                    // Add data to BarChart series
+                    series.getData().add(new XYChart.Data<>(Integer.toString(result.getInt("Thang")), doanhThu));
                 }
+
+                // Update BarChart
+                doanhthunam_barchart.getData().clear();
+                boolean add = doanhthunam_barchart.getData().add(series);
+
                 DTN_isThongKeThanhCong = true;
 
                 dtNam_tongdt_txtfld.setText(tongDoanhThuNam.toString() + " VNĐ");
@@ -121,13 +156,10 @@ public class DoanhThuController implements Initializable {
         }
     }
 
+
     public void DTNam_LoadTongDT() {
-        if (dtThang_cbbox_namSelection.getSelectionModel().isEmpty()) {
+        if (dtNam_cbbox_namSelection.getSelectionModel().isEmpty()) {
             alert.errorMessage("Vui lòng chọn năm cần thống kê");
-            return;
-        }
-        if (dtThang_cbbox_thangSelection.getSelectionModel().isEmpty()) {
-            alert.errorMessage("Vui lòng chọn tháng cần thống kê");
             return;
         }
 
@@ -139,7 +171,7 @@ public class DoanhThuController implements Initializable {
                 ") " +
                 "SELECT" +
                 "    m.Thang, " +
-                "    NVL(b.DoanhThu, 0) AS doanhthu " +
+                "    NVL(b.DoanhThu, 0) AS DoanhThu " +
                 "FROM" +
                 "    Months m " +
                 "LEFT JOIN" +
@@ -148,7 +180,7 @@ public class DoanhThuController implements Initializable {
                 "    m.Thang";
 
         try (PreparedStatement prepare = connect.prepareStatement(query)) {
-            prepare.setInt(1, DTT_namBaoCao);
+            prepare.setInt(1, DTN_namBaoCao);
             try (ResultSet result = prepare.executeQuery()) {
                 tongDoanhThuNam = BigDecimal.valueOf(0.0);
                 while (result.next()) {
@@ -164,6 +196,8 @@ public class DoanhThuController implements Initializable {
     public void DTNam_LoadData(){
         DTNam_LoadTongDT();
         DTNam_UpdateData(DTN_namBaoCao, tongDoanhThuNam);
+        // Update BarChart with new data
+        UpdateBarChartWithData(listBaoCaoNam);
     }
 
     public void DTNam_FillDataForComboBoxNam() {
@@ -203,7 +237,7 @@ public class DoanhThuController implements Initializable {
     private Integer DTT_thangBaoCao = 0;
 
     private boolean DTT_isThongKeThanhCong = false;
-    private List<BaoCaoThang> listBaoCaoThang;
+    private List<BaoCaoThang> listBaoCaoThang = new ArrayList<BaoCaoThang>();
 
     public void InBaoCaoThang() {
         if (DTT_isThongKeThanhCong == false) {
@@ -224,10 +258,14 @@ public class DoanhThuController implements Initializable {
             try (ResultSet result = prepare.executeQuery()) {
                 dtThang_tableView.getItems().clear();
                 listBaoCaoThang.clear();
+
+                // Data for PieChart
+                ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+
                 int stt = 1;
                 while (result.next()) {
                     BigDecimal doanhThu = result.getBigDecimal("DoanhThu");
-                    Double tyLe = (doanhThu.divide(tongDoanhThuThang, 2, RoundingMode.HALF_UP).doubleValue()) * 100;
+                    Double tyLe = doanhThu.divide(tongDoanhThuThang, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.HALF_UP).doubleValue();
                     BaoCaoThang baoCaoThang = new BaoCaoThang(
                             stt,
                             result.getString("MaChuyenBay"),
@@ -237,8 +275,16 @@ public class DoanhThuController implements Initializable {
                     );
                     listBaoCaoThang.add(baoCaoThang);
                     dtThang_tableView.getItems().add(baoCaoThang);
+
+                    // Add data to PieChart
+                    pieChartData.add(new PieChart.Data(result.getString("MaChuyenBay"), doanhThu.doubleValue()));
+
                     stt++;
                 }
+
+                // Update PieChart
+                doanhthuthang_piechart.setData(pieChartData);
+
                 DTT_isThongKeThanhCong = true;
                 dtThang_tongdt_txfl.setText(tongDoanhThuThang.toString() + " VNĐ");
 
@@ -253,6 +299,7 @@ public class DoanhThuController implements Initializable {
             alert.errorMessage("Error occurred while loading data from the database.");
         }
     }
+
 
     public void DTThang_LoadTongDT() {
         if (dtThang_cbbox_namSelection.getSelectionModel().isEmpty()) {
@@ -302,5 +349,30 @@ public class DoanhThuController implements Initializable {
     public void DTThang_LoadData() {
         DTThang_LoadTongDT();
         DTThang_UpDateData(DTT_namBaoCao, DTT_thangBaoCao, tongDoanhThuThang);
+        // Update PieChart with new data
+        UpdatePieChartWithData(listBaoCaoThang);
     }
+
+    private void UpdateBarChartWithData(List<BaoCaoNam> listBaoCaoNam) {
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Doanh Thu");
+
+        for (BaoCaoNam baoCaoNam : listBaoCaoNam) {
+            series.getData().add(new XYChart.Data<>(Integer.toString(baoCaoNam.getThang()), baoCaoNam.getDoanhThu()));
+        }
+
+        doanhthunam_barchart.getData().clear();
+        doanhthunam_barchart.getData().add(series);
+    }
+
+    private void UpdatePieChartWithData(List<BaoCaoThang> listBaoCaoThang) {
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+
+        for (BaoCaoThang baoCaoThang : listBaoCaoThang) {
+            pieChartData.add(new PieChart.Data(baoCaoThang.getMaChuyenBay(), baoCaoThang.getDoanhThu().doubleValue()));
+        }
+
+        doanhthuthang_piechart.setData(pieChartData);
+    }
+
 }

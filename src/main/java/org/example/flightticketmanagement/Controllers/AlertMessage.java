@@ -4,6 +4,7 @@ import javafx.scene.control.Alert;
 import java.util.Optional;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
 
 public class AlertMessage {
     private Alert alert;

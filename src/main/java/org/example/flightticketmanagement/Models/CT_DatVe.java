@@ -1,5 +1,9 @@
 package org.example.flightticketmanagement.Models;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 public class CT_DatVe {
@@ -10,6 +14,7 @@ public class CT_DatVe {
     private LocalDateTime ngayThanhToan;
     private String trangThai;
 
+    public CT_DatVe() {}
     public CT_DatVe(String maCT_DatVe, String maVe, String maKhachHang, LocalDateTime ngayMuaVe, LocalDateTime ngayThanhToan, String trangThai) {
         this.maCT_DatVe = maCT_DatVe;
         this.maVe = maVe;
@@ -66,4 +71,5 @@ public class CT_DatVe {
     public void setNgayThanhToan(LocalDateTime ngayThanhToan) {
         this.ngayThanhToan = ngayThanhToan;
     }
+
 }

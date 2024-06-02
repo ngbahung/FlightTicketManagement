@@ -31,7 +31,6 @@ public class ThemHangVeController implements Initializable {
 
     private Connection connect;
     private PreparedStatement prepare;
-    private ResultSet result;
 
     private final AlertMessage alert = new AlertMessage();
 
@@ -87,9 +86,9 @@ public class ThemHangVeController implements Initializable {
         String sql = "SELECT MaHangVe FROM HANGVE ORDER BY MaHangVe DESC FETCH FIRST ROW ONLY";
         String maHangVe = "HV000";
 
-        Connection tempConnect = null;
-        PreparedStatement tempPrepare = null;
-        ResultSet tempResult = null;
+        Connection tempConnect;
+        PreparedStatement tempPrepare;
+        ResultSet tempResult;
 
         try {
             tempConnect = DatabaseDriver.getConnection();

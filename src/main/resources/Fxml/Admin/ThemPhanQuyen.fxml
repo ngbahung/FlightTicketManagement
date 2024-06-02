@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
@@ -13,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="479.0" prefWidth="400.0" stylesheets="@../../Styles/Admin/ThemPhanQuyen.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.ThemPhanQuyenController">
+<AnchorPane prefHeight="479.0" prefWidth="400.0" style="-fx-background-color: white;" stylesheets="@../../Styles/Admin/ThemPhanQuyen.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.ThemPhanQuyenController">
    <VBox alignment="TOP_CENTER" layoutX="33.0" layoutY="38.0" prefHeight="350.0" prefWidth="336.0" spacing="36.0">
       <Label id="them_tk" alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="192.0" text="THÊM TÀI KHOẢN">
          <font>
@@ -50,5 +51,8 @@
            <MFXTextField id="phanquyen" fx:id="email_txtfld" floatMode="DISABLED" prefHeight="50.0" prefWidth="260.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
        </GridPane>
    </VBox>
-   <MFXButton id="custom_them" fx:id="them_btn" layoutX="143.0" layoutY="426.0" onAction="#addAccount" prefHeight="39.0" prefWidth="115.0" text="Thêm" />
+   <MFXButton id="custom_them" fx:id="them_btn" layoutX="143.0" layoutY="426.0" onAction="#addAccount" prefHeight="39.0" prefWidth="115.0" text="Thêm">
+      <graphic>
+         <FontAwesomeIconView fill="WHITE" glyphName="PLUS" size="20" />
+      </graphic></MFXButton>
 </AnchorPane>
