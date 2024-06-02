@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -451,7 +452,7 @@ public class QuyDinhController implements Initializable {
     }
 
     @FXML
-    void deactiveSelectedTicketClass() {
+    void deactiveSelectedTicketClass(ActionEvent event) {
         ObservableList<HangVe> selectedTicketClasses = hangve_tbv.getSelectionModel().getSelectedItems();
 
         if (selectedTicketClasses.isEmpty()) {
@@ -460,35 +461,34 @@ public class QuyDinhController implements Initializable {
         }
 
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmationAlert.setTitle("Xác nhận cập nhật trạng thái");
-        confirmationAlert.setHeaderText("Bạn có muốn thay đổi trạng thái của các hạng vé đã chọn?");
-        confirmationAlert.setContentText("Hành động này sẽ thay đổi trạng thái của hạng vé từ 'Ngưng hoạt động' sang 'Đang hoạt động' và ngược lại.");
+        confirmationAlert.setTitle("Xác nhận xóa hạng vé");
+        confirmationAlert.setHeaderText("Bạn có muốn xóa hạng vé đã chọn?");
+        confirmationAlert.setContentText("Hành động này sẽ thay đổi danh sách hạng vé của bạn");
 
         Optional<ButtonType> result = confirmationAlert.showAndWait();
+        String query = "DELETE FROM HangVe WHERE MaHangVe = ?";
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
                 connect = DatabaseDriver.getConnection();
-                prepare = connect.prepareStatement("UPDATE HANGVE SET TrangThai = ? WHERE MaHangVe = ?");
+                prepare = connect.prepareStatement(query);
 
-                for (HangVe hangVe : selectedTicketClasses) {
-                    int newStatus = hangVe.getTrangThai() == 0 ? 1 : 0;
-                    prepare.setInt(1, newStatus);
-                    prepare.setString(2, hangVe.getMaHangVe());
+                for ( HangVe hangVe : selectedTicketClasses) {
+                    prepare.setString(1, hangVe.getMaHangVe());
                     prepare.addBatch();
                 }
 
                 int[] results = prepare.executeBatch();
                 if (results.length > 0) {
-                    alert.successMessage("Trạng thái hạng vé đã được cập nhật thành công.");
+                    alert.successMessage("Hạng vé đã được xóa thành công.");
                 } else {
-                    alert.errorMessage("Không cập nhật được trạng thái hạng vé đã chọn.");
+                    alert.errorMessage("Không xóa được hạng vé đã chọn.");
                 }
 
                 showHangVeList();  // Refresh the table
 
             } catch (SQLException e) {
                 e.printStackTrace();
-                alert.errorMessage("Lỗi khi đang cập nhật trạng thái hạng vé. Vui lòng kiểm tra lại.");
+                alert.errorMessage("Lỗi khi đang xóa hạng vé. Vui lòng kiểm tra lại.");
             } finally {
                 try {
                     if (prepare != null) prepare.close();

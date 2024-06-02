@@ -1,5 +1,7 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import javafx.beans.property.SimpleFloatProperty;
@@ -136,7 +138,7 @@ public class LichSuDatVeController implements Initializable {
         try {
             prepareAndExecuteQuery(finalQuery, selectedDate, sanBayDi, sanBayDen, veDaDat_tbview, 1);
             prepareAndExecuteQuery(finalQuery, selectedDate, sanBayDi, sanBayDen, phDC_tbview, 0);
-            if (veDaDat_tbview.getItems().isEmpty() || phDC_tbview.getItems().isEmpty()) {
+            if (veDaDat_tbview.getItems().isEmpty() && phDC_tbview.getItems().isEmpty()) {
                 alert.errorMessage("Không tìm thấy dữ liệu.");
             }
         } catch (SQLException e) {
@@ -156,13 +158,10 @@ public class LichSuDatVeController implements Initializable {
 
         boolean confirm = alert.confirmationMessage("Bạn có chắc chắn muốn thanh toán phiếu đặt chỗ này?");
         if (confirm) {
-            try {
-                callUpdateTicketStatusProcedure(selectedVe.getMaCT_DatVe(), 1);  // Call the procedure with status 1 (confirm)
-                loadData();  // Reload data
-                alert.successMessage("Thanh toán thành công.");
-            } catch (SQLException e) {
-                alert.errorMessage("Không thể thanh toán phiếu đặt chỗ.");
-            }
+            callUpdateTicketStatusProcedure(selectedVe.getMaCT_DatVe(), 1);
+            eventBus.post(new Object());
+            loadData();  // Reload data
+            alert.successMessage("Thanh toán thành công.");
         }
     }
 
@@ -188,14 +187,10 @@ public class LichSuDatVeController implements Initializable {
 
         boolean confirm = alert.confirmationMessage(message);
         if (confirm) {
-            try {
-                callUpdateTicketStatusProcedure(selected.getMaCT_DatVe(), 2);  // Call the procedure with status 2 (cancel)
-                loadData();  // Reload the data
-                alert.successMessage("Hủy vé hoặc phiếu đặt chỗ thành công.");
-            } catch (SQLException e) {
-                e.printStackTrace();
-                alert.errorMessage("Không thể hủy vé hoặc phiếu đặt chỗ.");
-            }
+            callUpdateTicketStatusProcedure(selected.getMaCT_DatVe(), 2);  // Call the procedure with status 2 (cancel)
+            eventBus.post(new Object());
+            loadData();  // Reload the data
+            alert.successMessage("Hủy vé hoặc phiếu đặt chỗ thành công.");
         }
     }
 
@@ -245,6 +240,14 @@ public class LichSuDatVeController implements Initializable {
     }
 
     private Connection connect;
+    private final EventBus eventBusXoaGheTrong = XacNhanVeController.getEventBus();
+    private static final EventBus eventBus = new EventBus();
+
+    public LichSuDatVeController() {}
+
+    public static EventBus getEventBus() {
+        return eventBus;
+    }
 
     private final AlertMessage alert = new AlertMessage();
 
@@ -252,6 +255,7 @@ public class LichSuDatVeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         connect = DatabaseDriver.getConnection();
+        eventBusXoaGheTrong.register(this);
         // Setup table columns
         setupTableViewColumns(phDC_maVe_tbcl, phDC_tenKH_tbcl, phDC_sdt_tbcl, phDC_ngayBay_tbcl, phDC_hangVe_tbcl,
                 phDC_maGhe_tbcl, phDC_sanBayDi_tbcl, phDC_sanBayDen_tbcl, phDC_gioBay_tbcl, phDC_giaTien_tbcl);
@@ -260,22 +264,14 @@ public class LichSuDatVeController implements Initializable {
                 veDD_maGhe_tbcl, veDD_sanBayDi_tbcl, veDD_sanBayDen_tbcl, veDD_gioBay_tbcl, veDD_giaTien_tbcl);
 
         // Load data
-        try {
-            loadData();
-        } catch (SQLException e) {
-            alert.errorMessage("Could not load data from the database.");
-        }
+        loadData();
 
         refresh_btn.setOnAction(event -> {
             // Xóa hết các lựa chọn và đặt lại giá trị mặc định
             sanbaydi_menubtn.setText("Sân bay đi");
             sanbayden_menubtn.setText("Sân bay đến");
             ngay_datepicker.setValue(null);
-            try {
-                loadData();
-            } catch (SQLException e) {
-                alert.errorMessage("Could not load data from the database.");
-            }
+            loadData();
         });
 
         sanbaydi_menubtn.setOnShowing(event -> updateSanBayMenuItems());
@@ -286,6 +282,12 @@ public class LichSuDatVeController implements Initializable {
                 (ObservableValue<? extends CT_DatVe> observable, CT_DatVe oldValue, CT_DatVe newValue) -> thanhToan_btn.setDisable(newValue == null)
         );
     }
+
+    @Subscribe
+    public void handleUpdateData(Object event) {
+        loadData();
+    }
+
 
     private void setupTableViewColumns(TableColumn<CT_DatVe, String> maVeCol,
                                        TableColumn<CT_DatVe, String> tenKHCol,
@@ -345,54 +347,61 @@ public class LichSuDatVeController implements Initializable {
         }
     }
 
-    private void loadData() throws SQLException {
-        veDaDat_tbview.getItems().clear();
-        phDC_tbview.getItems().clear();
+    private void loadData() {
+        try {
+            veDaDat_tbview.getItems().clear();
+            phDC_tbview.getItems().clear();
 
-        String queryVeDaDat = "SELECT * FROM CT_DATVE WHERE TrangThai = 1";
-        PreparedStatement prepare = connect.prepareStatement(queryVeDaDat);
-        ResultSet result = prepare.executeQuery();
+            String queryVeDaDat = "SELECT * FROM CT_DATVE WHERE TrangThai = 1";
+            try (PreparedStatement prepare = connect.prepareStatement(queryVeDaDat);
+                 ResultSet result = prepare.executeQuery()) {
 
-        while (result.next()) {
-            Timestamp ngayMuaVeTimestamp = result.getTimestamp("NgayMuaVe");
-            LocalDateTime ngayMuaVe = (ngayMuaVeTimestamp != null) ? ngayMuaVeTimestamp.toLocalDateTime() : null;
+                while (result.next()) {
+                    Timestamp ngayMuaVeTimestamp = result.getTimestamp("NgayMuaVe");
+                    LocalDateTime ngayMuaVe = (ngayMuaVeTimestamp != null) ? ngayMuaVeTimestamp.toLocalDateTime() : null;
 
-            Timestamp ngayThanhToanTimestamp = result.getTimestamp("NgayThanhToan");
-            LocalDateTime ngayThanhToan = (ngayThanhToanTimestamp != null) ? ngayThanhToanTimestamp.toLocalDateTime() : null;
+                    Timestamp ngayThanhToanTimestamp = result.getTimestamp("NgayThanhToan");
+                    LocalDateTime ngayThanhToan = (ngayThanhToanTimestamp != null) ? ngayThanhToanTimestamp.toLocalDateTime() : null;
 
-            CT_DatVe datVe = new CT_DatVe(
-                    result.getString("MaCT_DATVE"),
-                    result.getString("MaVe"),
-                    result.getString("MaKhachHang"),
-                    ngayMuaVe,
-                    ngayThanhToan,
-                    result.getString("TrangThai")
-            );
+                    CT_DatVe datVe = new CT_DatVe(
+                            result.getString("MaCT_DATVE"),
+                            result.getString("MaVe"),
+                            result.getString("MaKhachHang"),
+                            ngayMuaVe,
+                            ngayThanhToan,
+                            result.getString("TrangThai")
+                    );
 
-            veDaDat_tbview.getItems().add(datVe);
-        }
+                    veDaDat_tbview.getItems().add(datVe);
+                }
+            }
 
-        String queryPhDC = "SELECT * FROM CT_DATVE WHERE TrangThai = 0";
-        prepare = connect.prepareStatement(queryPhDC);
-        result = prepare.executeQuery();
+            String queryPhDC = "SELECT * FROM CT_DATVE WHERE TrangThai = 0";
+            try (PreparedStatement prepare = connect.prepareStatement(queryPhDC);
+                 ResultSet result = prepare.executeQuery()) {
 
-        while (result.next()) {
-            Timestamp ngayMuaVeTimestamp = result.getTimestamp("NgayMuaVe");
-            LocalDateTime ngayMuaVe = (ngayMuaVeTimestamp != null) ? ngayMuaVeTimestamp.toLocalDateTime() : null;
+                while (result.next()) {
+                    Timestamp ngayMuaVeTimestamp = result.getTimestamp("NgayMuaVe");
+                    LocalDateTime ngayMuaVe = (ngayMuaVeTimestamp != null) ? ngayMuaVeTimestamp.toLocalDateTime() : null;
 
-            Timestamp ngayThanhToanTimestamp = result.getTimestamp("NgayThanhToan");
-            LocalDateTime ngayThanhToan = (ngayThanhToanTimestamp != null) ? ngayThanhToanTimestamp.toLocalDateTime() : null;
+                    Timestamp ngayThanhToanTimestamp = result.getTimestamp("NgayThanhToan");
+                    LocalDateTime ngayThanhToan = (ngayThanhToanTimestamp != null) ? ngayThanhToanTimestamp.toLocalDateTime() : null;
 
-            CT_DatVe datVe = new CT_DatVe(
-                    result.getString("MaCT_DATVE"),
-                    result.getString("MaVe"),
-                    result.getString("MaKhachHang"),
-                    ngayMuaVe,
-                    ngayThanhToan,
-                    result.getString("TrangThai")
-            );
+                    CT_DatVe datVe = new CT_DatVe(
+                            result.getString("MaCT_DATVE"),
+                            result.getString("MaVe"),
+                            result.getString("MaKhachHang"),
+                            ngayMuaVe,
+                            ngayThanhToan,
+                            result.getString("TrangThai")
+                    );
 
-            phDC_tbview.getItems().add(datVe);
+                    phDC_tbview.getItems().add(datVe);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Error occurred while loading data from the database.");
         }
     }
 
@@ -523,6 +532,9 @@ public class LichSuDatVeController implements Initializable {
     }
 
     private void prepareAndExecuteQuery(String query, LocalDateTime selectedDate, String sanBayDi, String sanBayDen, TableView<CT_DatVe> tableView, int trangThai) throws SQLException {
+        // Set transaction isolation level here
+        connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+
         try (PreparedStatement prepare = connect.prepareStatement(query)) {
             prepare.setInt(1, trangThai);
             int paramIndex = 2;

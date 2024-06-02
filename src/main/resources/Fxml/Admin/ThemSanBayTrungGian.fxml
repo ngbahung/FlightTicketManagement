@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="301.0" prefWidth="321.0" spacing="30.0" styleClass="background-color" stylesheets="@../../Styles/Manager/SuaSBTG.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" prefHeight="301.0" prefWidth="321.0" spacing="30.0" styleClass="background-color" stylesheets="@../../Styles/Manager/SuaSBTG.css" xmlns="http://javafx.com/javafx/21">
    <children>
       <Label prefHeight="25.0" prefWidth="253.0" text="Thêm sân bay trung gian" />
       <ComboBox prefHeight="25.0" prefWidth="286.0" promptText="Sân bay trung gian" />

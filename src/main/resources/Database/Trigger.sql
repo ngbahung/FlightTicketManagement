@@ -428,3 +428,31 @@ BEGIN
 END;
 /
 
+/* R16: xóa VE và CT_HANGVE liên quan đến chuyến bay đã xóa */
+-- DROP TRIGGER rf_VE_CT_DATVE_delete_CHUYENBAY;
+
+CREATE OR REPLACE TRIGGER rf_VE_CT_HANGVE_delete_CHUYENBAY
+    AFTER DELETE ON CHUYENBAY
+    FOR EACH ROW
+BEGIN
+    -- Delete related records from VE table
+    DELETE FROM VE
+    WHERE MaChuyenBay = :OLD.MaChuyenBay;
+
+    -- Delete related records from CT_HANGVE table
+    DELETE FROM CT_HANGVE
+    WHERE MaChuyenBay = :OLD.MaChuyenBay;
+END;
+
+/* R17 xóa CT_DATVE liên quan đến vé đã xóa */
+-- DROP TRIGGER rf_CT_DATVE_delete_VE;
+
+CREATE OR REPLACE TRIGGER rf_CT_DATVE_delete_VE
+    AFTER DELETE ON VE
+    FOR EACH ROW
+BEGIN
+    -- Delete related records from CT_DATVE table
+    DELETE FROM CT_DATVE
+    WHERE MaVe = :OLD.MaVe;
+
+END;
