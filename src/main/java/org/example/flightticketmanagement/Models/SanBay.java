@@ -1,7 +1,5 @@
 package org.example.flightticketmanagement.Models;
 
-import java.util.Objects;
-
 public class SanBay {
     private String maSanBay;
     private String tenSanBay;
@@ -58,7 +56,6 @@ public class SanBay {
     public void setTrangThai(Integer trangThai) {
         this.trangThai = trangThai;
     }
-<<<<<<< Updated upstream
 
     public Integer getSoThuTu() {
         return soThuTu;
@@ -66,29 +63,5 @@ public class SanBay {
 
     public void setSoThuTu(Integer soThuTu) {
         this.soThuTu = soThuTu;
-=======
-    @Override
-    public String toString() {
-        return "SanBay{" +
-                "maSanBay='" + maSanBay + '\'' +
-                ", tenSanBay='" + tenSanBay + '\'' +
-                ", tenVietTat='" + tenVietTat + '\'' +
-                ", diaChi='" + diaChi + '\'' +
-                ", trangThai=" + trangThai +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SanBay sanBay = (SanBay) o;
-        return maSanBay.equals(sanBay.maSanBay);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(maSanBay);
->>>>>>> Stashed changes
     }
 }
