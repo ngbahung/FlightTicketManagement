@@ -1,5 +1,7 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
@@ -8,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
+import org.example.flightticketmanagement.Controllers.Manager.LichChuyenBayController;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
 
 import java.net.URL;
@@ -70,6 +73,7 @@ public class XacNhanVeController implements Initializable {
 
     // DATABASE TOOLS
     private Connection connect;
+    private EventBus eventBus;
 
     private final AlertMessage alert = new AlertMessage();
 
@@ -105,9 +109,7 @@ public class XacNhanVeController implements Initializable {
         }
     }
 
-
     private ManHinhDatVeController manHinhDatVeController;
-
 
     public void setManHinhDatVeController(ManHinhDatVeController controller) {
         this.manHinhDatVeController = controller;
@@ -117,6 +119,7 @@ public class XacNhanVeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         connect = DatabaseDriver.getConnection();
+        eventBus.register(this);
         generateCustomerId(cccd_txtfld.getText());
         datVe_btn.setOnAction(e -> handleInsertBooking(true)); // for datVe (booking ticket)
         datCho_btn.setOnAction(e -> handleInsertBooking(false)); // for datCho (reserving seat)
@@ -141,40 +144,22 @@ public class XacNhanVeController implements Initializable {
         gioBay_txtfld.setText(gioBay);
     }
 
-    private void generateCustomerId(String cccd) {
-        // SQL query to check if customer already exists
-        String checkSql = "SELECT MAKHACHHANG FROM KHACHHANG WHERE CCCD = ?";
-        // SQL query to get the maximum customer ID
-        String maxIdSql = "SELECT MAX(MAKHACHHANG) AS MaxMaKH FROM KHACHHANG";
+    public void generateCustomerId(String cccd) {
+        String sql = "{call GenerateCustomerId(?, ?)}";
 
-        try (PreparedStatement checkPs = connect.prepareStatement(checkSql)) {
-            checkPs.setString(1, cccd);
-            try (ResultSet checkRs = checkPs.executeQuery()) {
-                if (checkRs.next()) {
-                    // Customer exists, set the existing ID
-                    String existingMaKH = checkRs.getString("MAKHACHHANG");
-                    maKH_txtfld.setText(existingMaKH);
-                } else {
-                    // Customer does not exist, generate a new ID
-                    try (PreparedStatement maxIdPs = connect.prepareStatement(maxIdSql);
-                         ResultSet maxIdRs = maxIdPs.executeQuery()) {
-                        if (maxIdRs.next()) {
-                            String maxMaKH = maxIdRs.getString("MaxMaKH");
-                            if (maxMaKH != null) {
-                                int newMaKH = Integer.parseInt(maxMaKH.substring(2)) + 1;
-                                maKH_txtfld.setText(String.format("KH%03d", newMaKH));
-                            } else {
-                                maKH_txtfld.setText("KH001");
-                            }
-                        }
-                    }
-                }
-            }
+        try (CallableStatement callableStatement = connect.prepareCall(sql)) {
+            callableStatement.setString(1, cccd);
+            callableStatement.registerOutParameter(2, Types.VARCHAR);
+            callableStatement.execute();
+
+            String maKH = callableStatement.getString(2);
+            maKH_txtfld.setText(maKH);
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Không thể tạo mã khách hàng mới hoặc kiểm tra khách hàng hiện có.");
         }
     }
+
 
 
     private void handleInsertBooking(boolean isDatVe) {
@@ -184,6 +169,7 @@ public class XacNhanVeController implements Initializable {
             alert.successMessage(isDatVe ? "Đặt vé thành công!" : "Đặt chỗ thành công!");
             if (manHinhDatVeController != null) {
                 manHinhDatVeController.closeStage();
+                eventBus.post(new Object());
             }
             closeStage();
         } else {

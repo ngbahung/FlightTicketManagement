@@ -1,5 +1,7 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -124,15 +126,22 @@ public class TraCuuBanVeController implements Initializable {
     private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
+    private final EventBus eventBus = new EventBus();
 
     private final AlertMessage alert = new AlertMessage();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         connect = DatabaseDriver.getConnection();
+        eventBus.register(this);
         loadData();
         sanbaydi_menubtn.setOnShowing(event -> updateSanBayMenuItems());
         sanbayden_menubtn.setOnShowing(event -> updateSanBayMenuItems());
+    }
+
+    @Subscribe
+    public void handleUpdateData(Object event) {
+        loadData();
     }
 
     private void loadData() {

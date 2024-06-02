@@ -244,11 +244,9 @@ public class LichSuDatVeController implements Initializable {
         // Thực hiện các thao tác cần thiết với các giá trị này, ví dụ: in ra console hoặc thực hiện các xử lý khác
     }
 
-
     private Connection connect;
 
     private final AlertMessage alert = new AlertMessage();
-//    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
 
     @Override
@@ -559,7 +557,7 @@ public class LichSuDatVeController implements Initializable {
         }
     }
 
-    private void callUpdateTicketStatusProcedure(String maCT_DATVE, int trangThai) throws SQLException {
+    private void callUpdateTicketStatusProcedure(String maCT_DATVE, int trangThai) {
         String sql = "{call update_ticket_status(?, ?)}";  // SQL to call the stored procedure
         try (CallableStatement callableStatement = connect.prepareCall(sql)) {
             callableStatement.setString(1, maCT_DATVE);

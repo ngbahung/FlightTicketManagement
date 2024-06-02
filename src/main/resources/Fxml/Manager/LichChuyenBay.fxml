@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="800.0" prefWidth="992.0" styleClass="background-color" stylesheets="@../../Styles/Admin/LichChuyenBay.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Manager.LichChuyenBayController">
+<AnchorPane prefHeight="800.0" prefWidth="992.0" style="-fx-background-image: white;" styleClass="background-color" stylesheets="@../../Styles/Admin/LichChuyenBay.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Manager.LichChuyenBayController">
    <TableView fx:id="chuyenBay_tableview" layoutX="12.0" layoutY="155.0" prefHeight="530.0" prefWidth="974.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css">
       <columns>
          <TableColumn fx:id="maChuyenBay_tbcolumn" prefWidth="115.0" text="Mã chuyến bay" />

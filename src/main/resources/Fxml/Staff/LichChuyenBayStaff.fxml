@@ -12,71 +12,76 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="800.0" prefWidth="992.0" styleClass="background-color" stylesheets="@../../Styles/Admin/LichChuyenBay.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Manager.LichChuyenBayController">
-   <children>
-      <TableView fx:id="chuyenBay_tableview" layoutX="12.0" layoutY="155.0" prefHeight="530.0" prefWidth="974.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css">
-         <columns>
-            <TableColumn fx:id="maChuyenBay_tbcolumn" prefWidth="115.0" text="Mã chuyến bay" />
-            <TableColumn fx:id="sanBayDi_tbcolumn" prefWidth="132.0" text="Sân bay đi" />
-            <TableColumn fx:id="sanBayDen_tbcolumn" prefWidth="121.0" text="Sân bay đến" />
-            <TableColumn fx:id="ngayBay_tbcolumn" prefWidth="97.0" text="Ngày bay" />
-            <TableColumn fx:id="gioBay_tbcolumn" prefWidth="96.0" text="Giờ bay" />
-            <TableColumn fx:id="soGheTrong_tbcolumn" prefWidth="101.0" text="Số ghế trống" />
-            <TableColumn fx:id="soGhe_tbcoumn" prefWidth="81.0" text="Số ghế" />
-            <TableColumn fx:id="thoiGianBay_tbcolumn" prefWidth="120.0" text="Thời gian bay" />
-            <TableColumn fx:id="giaVe_tbcolumn" prefWidth="109.0" text="Giá vé" />
-         </columns>
-         <styleClass>
-            <String fx:value="column-header" />
-            <String fx:value="column-header-background" />
-            <String fx:value="custom-tableview" />
-            <String fx:value="filler" />
-            <String fx:value="resize-line" />
-            <String fx:value="table-row-cell" />
-            <String fx:value="table-cell" />
-         </styleClass>
-      </TableView>
-      <MFXButton id="custom_2" fx:id="refresh_btn" layoutX="88.0" layoutY="89.0" text=" ">
-         <graphic>
-            <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" size="30" />
-         </graphic>
-      </MFXButton>
-      <AnchorPane layoutX="153.0" layoutY="64.0" prefHeight="75.0" prefWidth="771.0" styleClass="filter-pane">
-         <effect>
-            <DropShadow />
-         </effect>
-         <children>
-            <HBox alignment="CENTER" layoutX="21.0" layoutY="14.0" prefHeight="47.0" prefWidth="665.0" spacing="50.0">
-               <children>
-                  <MenuButton fx:id="sanbaydi_menubtn" mnemonicParsing="false" prefHeight="39.0" prefWidth="185.0" text="Sân bay đi">
-                     <items>
-                        <MenuItem mnemonicParsing="false" text="Action 1" />
-                        <MenuItem mnemonicParsing="false" text="Action 2" />
-                     </items>
-                     <styleClass>
-                        <String fx:value="custom-menubutton" />
-                        <String fx:value="arrow" />
-                     </styleClass>
-                  </MenuButton>
-                  <MenuButton fx:id="sanbayden_menubtn" mnemonicParsing="false" prefHeight="41.0" prefWidth="181.0" text="Sân bay đến">
-                     <items>
-                        <MenuItem mnemonicParsing="false" text="Action 1" />
-                        <MenuItem mnemonicParsing="false" text="Action 2" />
-                     </items>
-                     <styleClass>
-                        <String fx:value="custom-menubutton" />
-                        <String fx:value="arrow" />
-                     </styleClass>
-                  </MenuButton>
-                  <MFXDatePicker fx:id="ngay_datepicker" prefHeight="43.0" prefWidth="183.0" promptText="Chọn ngày" />
-               </children>
-            </HBox>
-            <MFXButton id="custom_2" layoutX="692.0" layoutY="25.0" onAction="#xuLyTimKiemButton" prefHeight="30.0" prefWidth="53.0" text=" ">
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20" />
-               </graphic>
-            </MFXButton>
-         </children>
-      </AnchorPane>
-   </children>
+<AnchorPane prefHeight="800.0" prefWidth="992.0" style="-fx-background-color: white;" styleClass="background-color"
+            stylesheets="@../../Styles/Admin/LichChuyenBay.css" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.flightticketmanagement.Controllers.Manager.LichChuyenBayController">
+   <TableView fx:id="chuyenBay_tableview" layoutX="12.0" layoutY="155.0" prefHeight="530.0" prefWidth="974.0"
+              stylesheets="@../../Styles/Admin/LichChuyenBay.css">
+      <columns>
+         <TableColumn fx:id="maChuyenBay_tbcolumn" prefWidth="115.0" text="Mã chuyến bay"/>
+         <TableColumn fx:id="sanBayDi_tbcolumn" prefWidth="132.0" text="Sân bay đi"/>
+         <TableColumn fx:id="sanBayDen_tbcolumn" prefWidth="121.0" text="Sân bay đến"/>
+         <TableColumn fx:id="ngayBay_tbcolumn" prefWidth="97.0" text="Ngày bay"/>
+         <TableColumn fx:id="gioBay_tbcolumn" prefWidth="96.0" text="Giờ bay"/>
+         <TableColumn fx:id="soGheTrong_tbcolumn" prefWidth="101.0" text="Số ghế trống"/>
+         <TableColumn fx:id="soGhe_tbcoumn" prefWidth="81.0" text="Số ghế"/>
+         <TableColumn fx:id="thoiGianBay_tbcolumn" prefWidth="120.0" text="Thời gian bay"/>
+         <TableColumn fx:id="giaVe_tbcolumn" prefWidth="109.0" text="Giá vé"/>
+      </columns>
+      <styleClass>
+         <String fx:value="column-header"/>
+         <String fx:value="column-header-background"/>
+         <String fx:value="custom-tableview"/>
+         <String fx:value="filler"/>
+         <String fx:value="resize-line"/>
+         <String fx:value="table-row-cell"/>
+         <String fx:value="table-cell"/>
+      </styleClass>
+   </TableView>
+   <MFXButton id="custom_2" fx:id="refresh_btn" layoutX="88.0" layoutY="89.0" text=" ">
+      <graphic>
+         <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" size="30"/>
+      </graphic>
+   </MFXButton>
+   <AnchorPane layoutX="153.0" layoutY="64.0" prefHeight="75.0" prefWidth="771.0" styleClass="filter-pane">
+      <effect>
+         <DropShadow/>
+      </effect>
+      <children>
+         <HBox alignment="CENTER" layoutX="21.0" layoutY="14.0" prefHeight="47.0" prefWidth="665.0" spacing="50.0">
+            <children>
+               <MenuButton fx:id="sanbaydi_menubtn" mnemonicParsing="false" prefHeight="39.0" prefWidth="185.0"
+                           text="Sân bay đi">
+                  <items>
+                     <MenuItem mnemonicParsing="false" text="Action 1"/>
+                     <MenuItem mnemonicParsing="false" text="Action 2"/>
+                  </items>
+                  <styleClass>
+                     <String fx:value="custom-menubutton"/>
+                     <String fx:value="arrow"/>
+                  </styleClass>
+               </MenuButton>
+               <MenuButton fx:id="sanbayden_menubtn" mnemonicParsing="false" prefHeight="41.0" prefWidth="181.0"
+                           text="Sân bay đến">
+                  <items>
+                     <MenuItem mnemonicParsing="false" text="Action 1"/>
+                     <MenuItem mnemonicParsing="false" text="Action 2"/>
+                  </items>
+                  <styleClass>
+                     <String fx:value="custom-menubutton"/>
+                     <String fx:value="arrow"/>
+                  </styleClass>
+               </MenuButton>
+               <MFXDatePicker fx:id="ngay_datepicker" prefHeight="43.0" prefWidth="183.0" promptText="Chọn ngày"/>
+            </children>
+         </HBox>
+         <MFXButton id="custom_2" layoutX="692.0" layoutY="25.0" onAction="#xuLyTimKiemButton" prefHeight="30.0"
+                    prefWidth="53.0" text=" ">
+            <graphic>
+               <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20"/>
+            </graphic>
+         </MFXButton>
+      </children>
+   </AnchorPane>
 </AnchorPane>
