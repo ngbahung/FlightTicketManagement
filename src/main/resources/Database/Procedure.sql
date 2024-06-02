@@ -359,3 +359,151 @@ WHEN OTHERS THEN
 ROLLBACK;
 DBMS_OUTPUT.PUT_LINE('Lỗi: ' || SQLERRM);
 END;
+
+----------------------------------------------------------------------------------
+-- MÀN HÌNH ĐẶT VÉ CONTROLLER
+
+CREATE OR REPLACE PROCEDURE GET_VE_FOR_FLIGHT (
+    p_maChuyenBay IN VARCHAR2,
+    p_result OUT SYS_REFCURSOR
+)
+IS
+BEGIN
+    OPEN p_result FOR
+SELECT DISTINCT
+    hv.TENHANGVE,
+    hv.MAHANGVE,
+    (cb.GiaVe * hv.HeSo) AS GiaTien
+FROM
+    CT_HANGVE ct
+        JOIN
+    HANGVE hv ON ct.MaHangVe = hv.MaHangVe
+        JOIN
+    CHUYENBAY cb ON ct.MaChuyenBay = cb.MaChuyenBay
+WHERE
+    ct.MaChuyenBay = p_maChuyenBay
+  AND ct.SoGheTrong > 0;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('No tickets found for the specified flight.');
+WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+END GET_VE_FOR_FLIGHT;
+/
+
+CREATE OR REPLACE PROCEDURE GET_TENHANGVE (
+    p_maHangVe IN VARCHAR2,
+    p_tenHangVe OUT VARCHAR2
+)
+IS
+BEGIN
+SELECT HV.TENHANGVE
+INTO p_tenHangVe
+FROM HANGVE HV
+WHERE HV.MAHANGVE = p_maHangVe;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_tenHangVe := 'Không tìm thấy';
+WHEN OTHERS THEN
+        p_tenHangVe := 'Lỗi: ' || SQLERRM;
+END GET_TENHANGVE;
+/
+
+
+CREATE OR REPLACE PROCEDURE GENERATE_MA_VE (
+    p_newMaVe OUT VARCHAR2
+)
+IS
+    v_maxMaVe VE.MAVE%TYPE;
+v_newMaVeNumber NUMBER;
+BEGIN
+-- Lấy giá trị lớn nhất của MAVE từ bảng VE
+SELECT MAX(MAVE) INTO v_maxMaVe FROM VE;
+
+-- Nếu không có MAVE nào trong bảng VE, bắt đầu với VE001
+IF v_maxMaVe IS NULL THEN
+        p_newMaVe := 'VE001';
+ELSE
+        -- Tăng giá trị của MAVE lớn nhất thêm 1
+        v_newMaVeNumber := TO_NUMBER(SUBSTR(v_maxMaVe, 3)) + 1;
+        -- Tạo MAVE mới với định dạng VExxx
+p_newMaVe := 'VE' || TO_CHAR(v_newMaVeNumber, 'FM000');
+END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        p_newMaVe := 'VE001'; -- Trả về giá trị mặc định nếu có lỗi
+END GENERATE_MA_VE;
+/
+
+CREATE OR REPLACE PROCEDURE GENERATE_MA_GHE (
+    p_newMaGhe OUT NUMBER
+)
+IS
+    v_maxMaGhe VE.MAGHE%TYPE;
+BEGIN
+-- Lấy giá trị lớn nhất của MAGHE từ bảng VE
+SELECT MAX(MAGHE) INTO v_maxMaGhe FROM VE;
+
+-- Nếu không có MAGHE nào trong bảng VE, bắt đầu với 1
+IF v_maxMaGhe IS NULL THEN
+        p_newMaGhe := 1;
+ELSE
+        -- Tăng giá trị của MAGHE lớn nhất thêm 1
+        p_newMaGhe := v_maxMaGhe + 1;
+END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        p_newMaGhe := 1; -- Trả về giá trị mặc định nếu có lỗi
+END GENERATE_MA_GHE;
+/
+
+
+CREATE OR REPLACE PROCEDURE SAVE_TICKET (
+    p_maVe IN VARCHAR2,
+    p_maChuyenBay IN VARCHAR2,
+    p_maHangVe IN VARCHAR2,
+    p_maGhe IN VARCHAR2,
+    p_giaTien IN NUMBER
+)
+IS
+BEGIN
+INSERT INTO VE (MAVE, MACHUYENBAY, MAHANGVE, MAGHE, GIATIEN)
+VALUES (p_maVe, p_maChuyenBay, p_maHangVe, p_maGhe, p_giaTien);
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Error occurred while saving ticket: ' || SQLERRM);
+END SAVE_TICKET;
+/
+
+
+----------------------------------------------------------------------------
+-- PHÂN QUYÊN CONTROLLER
+CREATE OR REPLACE PROCEDURE GET_TAIKHOAN_PHANQUYEN (
+   p_result OUT SYS_REFCURSOR
+)
+IS
+BEGIN
+    OPEN p_result FOR
+SELECT
+    TaiKhoan.maTaiKhoan,
+    TaiKhoan.ten,
+    TaiKhoan.sdt,
+    TaiKhoan.email,
+    TaiKhoan.password,
+    TaiKhoan.created,
+    Quyen.tenQuyen
+FROM
+    TaiKhoan
+        JOIN
+    Quyen ON TaiKhoan.maQuyen = Quyen.maQuyen;
+EXCEPTION
+   WHEN OTHERS THEN
+      DBMS_OUTPUT.PUT_LINE('Error occurred: ' || SQLERRM);
+RAISE;
+END GET_TAIKHOAN_PHANQUYEN;
+/
+
+
+

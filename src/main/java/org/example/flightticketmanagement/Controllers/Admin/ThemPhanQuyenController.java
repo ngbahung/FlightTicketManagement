@@ -2,11 +2,9 @@ package org.example.flightticketmanagement.Controllers.Admin;
 
 import io.github.palexdev.materialfx.controls.*;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextFormatter;
-import org.example.flightticketmanagement.Controllers.Admin.PhanQuyenController;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
 
@@ -42,7 +40,6 @@ public class ThemPhanQuyenController implements Initializable {
 
     private Connection connect;
     private PreparedStatement prepare;
-    private ResultSet result;
 
     private final AlertMessage alert = new AlertMessage();
 
@@ -70,13 +67,13 @@ public class ThemPhanQuyenController implements Initializable {
     }
 
     @FXML
-    void addAccount(ActionEvent event) {
+    void addAccount() {
         String ten = ten_txtfld.getText();
         String sdt = sdt_txtfld.getText();
         LocalDate ngay = ngay_datepicker.getValue(); // get value from date picker
 
         // Kiểm tra các trường bắt buộc
-        if (ten.isEmpty() || sdt.isEmpty() || sdt.length() != 10 || !sdt.startsWith("0") || vaiTro_combobox.getValue() == null || ngay == null) {
+        if (ten.isEmpty() || sdt.length() != 10 || !sdt.startsWith("0") || vaiTro_combobox.getValue() == null || ngay == null) {
             alert.errorMessage("Vui lòng điền đầy đủ thông tin.");
             return;
         }
@@ -189,15 +186,11 @@ public class ThemPhanQuyenController implements Initializable {
 
 
     private String getRoleCode(String role) {
-        switch (role) {
-            case "Admin":
-                return "RL0001";
-            case "Manager":
-                return "RL0002";
-            case "Staff":
-                return "RL0003";
-            default:
-                return null;
-        }
+        return switch (role) {
+            case "Admin" -> "RL0001";
+            case "Manager" -> "RL0002";
+            case "Staff" -> "RL0003";
+            default -> null;
+        };
     }
 }

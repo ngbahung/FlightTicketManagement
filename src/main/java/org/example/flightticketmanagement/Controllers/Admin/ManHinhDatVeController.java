@@ -9,7 +9,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -21,7 +20,6 @@ import org.example.flightticketmanagement.Models.Ve;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
@@ -57,22 +55,13 @@ public class ManHinhDatVeController implements Initializable {
     private MFXTextField maCB_txtfld;
 
     @FXML
-    private TableColumn<Ve, Integer> maGhe_tbcl;
-
-    @FXML
     private MFXTextField maGhe_txtfld;
 
     @FXML
     private MFXTextField maVe_txtfld;
 
     @FXML
-    private TableColumn<Ve, String> mave_tbcl;
-
-    @FXML
     private MFXTextField ngayBay_txtfld;
-
-    @FXML
-    private MFXButton quayLai_btn;
 
     @FXML
     private MFXTextField sanBayDen_txtfld;
@@ -91,8 +80,6 @@ public class ManHinhDatVeController implements Initializable {
 
     // DATABASE TOOLS
     private Connection connect;
-    private PreparedStatement prepare;
-    private ResultSet result;
 
     private final AlertMessage alert = new AlertMessage();
 
@@ -120,7 +107,7 @@ public class ManHinhDatVeController implements Initializable {
         xemTruoc_btn.setOnAction(e -> {
             if (validateInputs()) {
                 saveTicketToDatabase();
-                showConfirmationDialog(true);
+                showConfirmationDialog();
             }
         });
     }
@@ -140,65 +127,55 @@ public class ManHinhDatVeController implements Initializable {
     }
 
     private String getSanBayDi(String maDuongBay) {
-        String sql = "SELECT sb.TenSanBay FROM DUONGBAY db " +
-                "JOIN SANBAY sb ON db.MaSanBayDi = sb.MaSanBay " +
-                "WHERE db.MaDuongBay = ?";
-        try (PreparedStatement ps = connect.prepareStatement(sql)) {
-            ps.setString(1, maDuongBay);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("TenSanBay");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        String sanBayDi;
+        try (CallableStatement statement = connect.prepareCall("{call GET_SANBAYDI(?, ?)}")) {
+            statement.setString(1, maDuongBay);
+            statement.registerOutParameter(2, Types.VARCHAR);
+            statement.execute();
+            return statement.getString(2);
+        } catch (Exception e) {
+            sanBayDi = "";
         }
-        return "San Bay Di"; // Placeholder if not found
+        return sanBayDi;
     }
 
     private String getSanBayDen(String maDuongBay) {
-        String sql = "SELECT sb.TenSanBay FROM DUONGBAY db " +
-                "JOIN SANBAY sb ON db.MaSanBayDen = sb.MaSanBay " +
-                "WHERE db.MaDuongBay = ?";
-        try (PreparedStatement ps = connect.prepareStatement(sql)) {
-            ps.setString(1, maDuongBay);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("TenSanBay");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        String sanBayDen;
+        try (CallableStatement statement = connect.prepareCall("{call GET_SANBAYDEN(?, ?)}")) {
+            statement.setString(1, maDuongBay);
+            statement.registerOutParameter(2, Types.VARCHAR);
+            statement.execute();
+            return statement.getString(2);
+        } catch (Exception e) {
+            sanBayDen = "";
         }
-        return "San Bay Den"; // Placeholder if not found
+        return sanBayDen;
     }
 
     private void loadVeForFlight(String maChuyenBay) {
-        String sql = "SELECT DISTINCT hv.TENHANGVE, hv.MAHANGVE, (cb.GiaVe * hv.HeSo) AS GiaTien " +
-                "FROM CT_HANGVE ct " +
-                "JOIN HANGVE hv ON ct.MaHangVe = hv.MaHangVe " +
-                "JOIN CHUYENBAY cb ON ct.MaChuyenBay = cb.MaChuyenBay " +
-                "WHERE ct.MaChuyenBay = ? AND ct.SoGheTrong > 0";
+        try (CallableStatement cs = connect.prepareCall("{call GET_VE_FOR_FLIGHT(?, ?)}")) {
+            cs.setString(1, maChuyenBay);
+            cs.registerOutParameter(2, java.sql.Types.REF_CURSOR);
 
-        try (PreparedStatement ps = connect.prepareStatement(sql)) {
-            ps.setString(1, maChuyenBay);
-            result = ps.executeQuery();
+            cs.execute();
 
-            ve_tableview.getItems().clear();
+            try (ResultSet result = (ResultSet) cs.getObject(2)) {
+                ve_tableview.getItems().clear();
 
-            while (result.next()) {
-                Ve ve = new Ve(
-                        null, // MaVe will be generated
-                        maChuyenBay,
-                        result.getString("MAHANGVE"),
-                        0, // MaGhe will be generated
-                        result.getFloat("GiaTien") // Calculated GiaTien
-                );
-                ve_tableview.getItems().add(ve);
+                while (result.next()) {
+                    Ve ve = new Ve(
+                            null, // MaVe will be generated
+                            maChuyenBay,
+                            result.getString("MAHANGVE"),
+                            0, // MaGhe will be generated
+                            result.getFloat("GiaTien") // Calculated GiaTien
+                    );
+                    ve_tableview.getItems().add(ve);
+                }
+
+                hangVe_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenHangVe(cellData.getValue().getMaHangVe())));
+                giaTien_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getGiaTien())));
             }
-
-            hangVe_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenHangVe(cellData.getValue().getMaHangVe())));
-            giaTien_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getGiaTien())));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -206,22 +183,21 @@ public class ManHinhDatVeController implements Initializable {
         }
     }
 
-
     private String getTenHangVe(String maHangVe) {
-        String sql = "SELECT HV.TENHANGVE FROM HANGVE HV " +
-                "WHERE HV.MAHANGVE = ?";
-        try (Connection conn = DatabaseDriver.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, maHangVe);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("TENHANGVE");
-                }
-            }
+        String tenHangVe;
+        String sql = "{call GET_TENHANGVE(?, ?)}";
+
+        try (CallableStatement cs = connect.prepareCall(sql)) {
+            cs.setString(1, maHangVe);
+            cs.registerOutParameter(2, Types.VARCHAR);
+
+            cs.execute();
+            tenHangVe = cs.getString(2);
         } catch (SQLException e) {
             e.printStackTrace();
+            tenHangVe = "Lỗi khi lấy tên hạng vé";
         }
-        return "Tên hạng vé";
+        return tenHangVe;
     }
 
     private void generateTicketDetails(Ve ve) {
@@ -230,35 +206,38 @@ public class ManHinhDatVeController implements Initializable {
         thanhTien_txtfld.setText(String.valueOf(ve.getGiaTien()));
     }
 
-    private String generateMaVe() {
-        String sql = "SELECT MAX(MAVE) AS MAVE FROM VE";
-        try (PreparedStatement ps = connect.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                String maxMaVe = rs.getString("MAVE");
-                if (maxMaVe != null) {
-                    int newMaVe = Integer.parseInt(maxMaVe.substring(2)) + 1;
-                    return String.format("VE%03d", newMaVe);
-                }
-            }
+    public String generateMaVe() {
+        String maVe = "VE001"; // Giá trị mặc định
+        String sql = "{call GENERATE_MA_VE(?)}";
+
+        try (CallableStatement callableStatement = connect.prepareCall(sql)) {
+            callableStatement.registerOutParameter(1, Types.VARCHAR);
+
+            callableStatement.execute();
+
+            maVe = callableStatement.getString(1);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return "VE001";
+
+        return maVe;
     }
 
+    public String generateMaGhe() {
+        String maGhe = "1"; // Giá trị mặc định
+        String sql = "{call GENERATE_MA_GHE(?)}";
 
-    private String generateMaGhe() {
-        String sql = "SELECT MAX(MAGHE) AS MAGHE FROM VE";
-        try (PreparedStatement ps = connect.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                int maxMaGhe = rs.getInt("MAGHE");
-                int newMaGhe = maxMaGhe + 1;
-                return String.valueOf(newMaGhe);
-            }
+        try (CallableStatement callableStatement = connect.prepareCall(sql)) {
+            callableStatement.registerOutParameter(1, Types.INTEGER);
+
+            callableStatement.execute();
+
+            maGhe = String.valueOf(callableStatement.getInt(1));
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return "1";
+
+        return maGhe;
     }
 
     private boolean validateInputs() {
@@ -297,36 +276,32 @@ public class ManHinhDatVeController implements Initializable {
         return true;
     }
 
-    // Phương thức lưu thông tin vé vào cơ sở dữ liệu
     private void saveTicketToDatabase() {
         Ve selectedVe = ve_tableview.getSelectionModel().getSelectedItem();
         String maChuyenBay = maCB_txtfld.getText();
         String maHangVe = selectedVe.getMaHangVe();
-        String maGhe = generateMaGhe();
+        String maGhe = generateMaGhe();  // Hàm này sẽ gọi stored procedure để tạo mã ghế
         float giaTien = selectedVe.getGiaTien();
 
-        String sql = "INSERT INTO VE (MAVE, MACHUYENBAY, MAHANGVE, MAGHE, GIATIEN) VALUES (?, ?, ?, ?, ?)";
+        String sql = "{call SAVE_TICKET(?, ?, ?, ?, ?)}";
 
-        try (PreparedStatement ps = connect.prepareStatement(sql)) {
-            ps.setString(1, maVe_txtfld.getText());
-            ps.setString(2, maChuyenBay);
-            ps.setString(3, maHangVe);
-            ps.setString(4, maGhe); // Lưu mã ghế tự tạo
-            ps.setFloat(5, giaTien);
+        try (CallableStatement cs = connect.prepareCall(sql)) {
+            cs.setString(1, maVe_txtfld.getText());
+            cs.setString(2, maChuyenBay);
+            cs.setString(3, maHangVe);
+            cs.setString(4, maGhe); // Lưu mã ghế tự tạo
+            cs.setFloat(5, giaTien);
 
-            int affectedRows = ps.executeUpdate();
-            if (affectedRows > 0) {
-                System.out.println("Ticket saved successfully.");
-            } else {
-                alert.errorMessage("Failed to save ticket.");
-            }
+            cs.execute();
+
+            System.out.println("Ticket saved successfully.");
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Error occurred while saving ticket to the database.");
         }
     }
 
-    private void showConfirmationDialog(boolean isDatVe) {
+    private void showConfirmationDialog() {
         if (validateInputs()) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Admin/XacNhanVe.fxml"));
@@ -353,7 +328,7 @@ public class ManHinhDatVeController implements Initializable {
                 String gioBay = gioBay_txtfld.getText();
 
                 // Pass the data to XacNhanVeController
-                controller.initData(isDatVe, maKH, hoten, cccd, email, sdt, diaChi, maVe, maGhe, thanhTien, maChuyenBay, sanBayDi, sanBayDen, ngayBay, gioBay);
+                controller.initData(maKH, hoten, cccd, email, sdt, diaChi, maVe, maGhe, thanhTien, maChuyenBay, sanBayDi, sanBayDen, ngayBay, gioBay);
 
                 Stage stage = new Stage();
                 stage.initModality(Modality.APPLICATION_MODAL);
@@ -369,9 +344,7 @@ public class ManHinhDatVeController implements Initializable {
         }
     }
 
-
     private void reloadFlightDetails() {
-        // Reload the data for the flight details and ticket list
         String maChuyenBay = maCB_txtfld.getText();
         loadVeForFlight(maChuyenBay);
     }

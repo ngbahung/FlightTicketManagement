@@ -20,7 +20,6 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Optional;
@@ -32,16 +31,10 @@ public class LichSuDatVeController implements Initializable {
     private MFXButton refresh_btn;
 
     @FXML
-    private MFXButton timkiem_btn;
-
-    @FXML
     private MenuButton sanbayden_menubtn;
 
     @FXML
     private MenuButton sanbaydi_menubtn;
-
-    @FXML
-    private MFXButton huyVeorDatCho_btn;
 
     @FXML
     private MFXDatePicker ngay_datepicker;
@@ -110,9 +103,6 @@ public class LichSuDatVeController implements Initializable {
     private TableColumn<CT_DatVe, Float> veDD_giaTien_tbcl;
 
     @FXML
-    private MFXButton xuatVe_btn;
-
-    @FXML
     private MFXButton thanhToan_btn;
 
     @FXML
@@ -141,11 +131,14 @@ public class LichSuDatVeController implements Initializable {
             conditions.append(" AND MaVe IN (SELECT V.MaVe FROM Ve V JOIN ChuyenBay CB ON V.MaChuyenBay = CB.MaChuyenBay JOIN DuongBay DB ON CB.MaDuongBay = DB.MaDuongBay JOIN SanBay SBDen ON DB.MaSanBayDen = SBDen.MaSanBay WHERE SBDen.TenSanBay = ?)");
         }
 
-        String finalQuery = baseQuery + conditions.toString();
+        String finalQuery = baseQuery + conditions;
 
         try {
             prepareAndExecuteQuery(finalQuery, selectedDate, sanBayDi, sanBayDen, veDaDat_tbview, 1);
             prepareAndExecuteQuery(finalQuery, selectedDate, sanBayDi, sanBayDen, phDC_tbview, 0);
+            if (veDaDat_tbview.getItems().isEmpty() || phDC_tbview.getItems().isEmpty()) {
+                alert.errorMessage("Không tìm thấy dữ liệu.");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Could not load data from the database.");
@@ -165,7 +158,7 @@ public class LichSuDatVeController implements Initializable {
         if (confirm) {
             try {
                 callUpdateTicketStatusProcedure(selectedVe.getMaCT_DatVe(), 1);  // Call the procedure with status 1 (confirm)
-                loadData(null);  // Reload data
+                loadData();  // Reload data
                 alert.successMessage("Thanh toán thành công.");
             } catch (SQLException e) {
                 alert.errorMessage("Không thể thanh toán phiếu đặt chỗ.");
@@ -197,7 +190,7 @@ public class LichSuDatVeController implements Initializable {
         if (confirm) {
             try {
                 callUpdateTicketStatusProcedure(selected.getMaCT_DatVe(), 2);  // Call the procedure with status 2 (cancel)
-                loadData(null);  // Reload the data
+                loadData();  // Reload the data
                 alert.successMessage("Hủy vé hoặc phiếu đặt chỗ thành công.");
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -207,7 +200,7 @@ public class LichSuDatVeController implements Initializable {
     }
 
     @FXML
-    private void xuatVe(){
+    void xuatVe(){
         CT_DatVe selectedVeDaDat = veDaDat_tbview.getSelectionModel().getSelectedItem();
         if (selectedVeDaDat == null) {
             alert.errorMessage("Vui lòng chọn một vé để xuất vé.");
@@ -251,13 +244,9 @@ public class LichSuDatVeController implements Initializable {
         // Thực hiện các thao tác cần thiết với các giá trị này, ví dụ: in ra console hoặc thực hiện các xử lý khác
     }
 
-
     private Connection connect;
-    private PreparedStatement prepare;
-    private ResultSet result;
 
     private final AlertMessage alert = new AlertMessage();
-//    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
 
     @Override
@@ -272,7 +261,7 @@ public class LichSuDatVeController implements Initializable {
 
         // Load data
         try {
-            loadData(null);
+            loadData();
         } catch (SQLException e) {
             alert.errorMessage("Could not load data from the database.");
         }
@@ -283,7 +272,7 @@ public class LichSuDatVeController implements Initializable {
             sanbayden_menubtn.setText("Sân bay đến");
             ngay_datepicker.setValue(null);
             try {
-                loadData(null);
+                loadData();
             } catch (SQLException e) {
                 alert.errorMessage("Could not load data from the database.");
             }
@@ -294,9 +283,7 @@ public class LichSuDatVeController implements Initializable {
 
         // Add listener to enable/disable thanhToan_btn based on selection in phDC_tbview
         phDC_tbview.getSelectionModel().selectedItemProperty().addListener(
-                (ObservableValue<? extends CT_DatVe> observable, CT_DatVe oldValue, CT_DatVe newValue) -> {
-                    thanhToan_btn.setDisable(newValue == null);
-                }
+                (ObservableValue<? extends CT_DatVe> observable, CT_DatVe oldValue, CT_DatVe newValue) -> thanhToan_btn.setDisable(newValue == null)
         );
     }
 
@@ -358,19 +345,13 @@ public class LichSuDatVeController implements Initializable {
         }
     }
 
-    private void loadData(LocalDate date) throws SQLException {
+    private void loadData() throws SQLException {
         veDaDat_tbview.getItems().clear();
         phDC_tbview.getItems().clear();
 
         String queryVeDaDat = "SELECT * FROM CT_DATVE WHERE TrangThai = 1";
-        if (date != null) {
-            queryVeDaDat += " AND TRUNC(NgayMuaVe) = ?";
-        }
-        prepare = connect.prepareStatement(queryVeDaDat);
-        if (date != null) {
-            prepare.setDate(1, Date.valueOf(date));
-        }
-        result = prepare.executeQuery();
+        PreparedStatement prepare = connect.prepareStatement(queryVeDaDat);
+        ResultSet result = prepare.executeQuery();
 
         while (result.next()) {
             Timestamp ngayMuaVeTimestamp = result.getTimestamp("NgayMuaVe");
@@ -392,13 +373,7 @@ public class LichSuDatVeController implements Initializable {
         }
 
         String queryPhDC = "SELECT * FROM CT_DATVE WHERE TrangThai = 0";
-        if (date != null) {
-            queryPhDC += " AND DATE(NgayMuaVe) = ?";
-        }
         prepare = connect.prepareStatement(queryPhDC);
-        if (date != null) {
-            prepare.setDate(1, Date.valueOf(date));
-        }
         result = prepare.executeQuery();
 
         while (result.next()) {
@@ -423,7 +398,7 @@ public class LichSuDatVeController implements Initializable {
 
     // Lấy tên khách hàng từ mã khách hàng
     public String getTenKhachHang(String p_MaKhachHang) {
-        String tenKhachHang = "";
+        String tenKhachHang;
         try (CallableStatement statement = connect.prepareCall("{call GET_TEN_KHACH_HANG(?, ?)}")) {
             statement.setString(1, p_MaKhachHang);
             statement.registerOutParameter(2, Types.VARCHAR);
@@ -437,7 +412,7 @@ public class LichSuDatVeController implements Initializable {
 
     // Lấy sân bay đi từ mã vé
     public String getSanBayDi(String p_MaVe) {
-        String sanBayDi = "";
+        String sanBayDi;
         try (CallableStatement statement = connect.prepareCall("{call GET_SAN_BAY_DI(?, ?)}")) {
             statement.setString(1, p_MaVe);
             statement.registerOutParameter(2, Types.VARCHAR);
@@ -451,7 +426,7 @@ public class LichSuDatVeController implements Initializable {
 
     // Lấy sân bay đến từ mã vé
     public String getSanBayDen(String p_MaVe)  {
-        String sanBayDen = "";
+        String sanBayDen;
         try (CallableStatement statement = connect.prepareCall("{call GET_SAN_BAY_DEN(?, ?)}")) {
             statement.setString(1, p_MaVe);
             statement.registerOutParameter(2, Types.VARCHAR);
@@ -465,7 +440,7 @@ public class LichSuDatVeController implements Initializable {
 
     // Lấy ngày bay từ mã vé
     public Timestamp getNgayBay(String p_MaVe) {
-        Timestamp ngayBay = null;
+        Timestamp ngayBay;
         try (CallableStatement statement = connect.prepareCall("{call GET_NGAY_BAY(?, ?)}")) {
             statement.setString(1, p_MaVe);
             statement.registerOutParameter(2, Types.TIMESTAMP);
@@ -479,7 +454,7 @@ public class LichSuDatVeController implements Initializable {
 
     // Lấy giờ bay từ mã vé
     public Timestamp getGioBay(String p_MaVe)  {
-        Timestamp gioBay = null;
+        Timestamp gioBay;
         try (CallableStatement statement = connect.prepareCall("{call GET_GIO_BAY(?, ?)}")) {
             statement.setString(1, p_MaVe);
             statement.registerOutParameter(2, Types.TIMESTAMP);
@@ -493,7 +468,7 @@ public class LichSuDatVeController implements Initializable {
 
     // Lấy số điện thoại từ mã khách hàng
     public String getSDT(String p_MaKhachHang) {
-        String sdt = "";
+        String sdt;
         try (CallableStatement statement = connect.prepareCall("{call GET_SDT(?, ?)}")) {
             statement.setString(1, p_MaKhachHang);
             statement.registerOutParameter(2, Types.VARCHAR);
@@ -507,7 +482,7 @@ public class LichSuDatVeController implements Initializable {
 
     // Lấy mã ghế từ mã vé
     public String getMaGhe(String p_MaVe)  {
-        String maGhe = "";
+        String maGhe;
         try (CallableStatement statement = connect.prepareCall("{call GET_MA_GHE(?, ?)}")) {
             statement.setString(1, p_MaVe);
             statement.registerOutParameter(2, Types.VARCHAR);
@@ -521,7 +496,7 @@ public class LichSuDatVeController implements Initializable {
 
     // Lấy giá tiền từ mã vé
     public float getGiaTien(String p_MaVe)  {
-        float giaTien = 0;
+        float giaTien;
         try (CallableStatement statement = connect.prepareCall("{call GET_GIA_TIEN(?, ?)}")) {
             statement.setString(1, p_MaVe);
             statement.registerOutParameter(2, Types.FLOAT);
@@ -535,7 +510,7 @@ public class LichSuDatVeController implements Initializable {
 
     // Lấy tên hạng vé từ mã hạng vé
     public String getTenHangVe(String p_MaVe) {
-        String tenHangVe = "";
+        String tenHangVe;
         try (CallableStatement statement = connect.prepareCall("{call GET_TEN_HANG_VE(?, ?)}")) {
             statement.setString(1, p_MaVe);
             statement.registerOutParameter(2, Types.VARCHAR);
@@ -582,7 +557,7 @@ public class LichSuDatVeController implements Initializable {
         }
     }
 
-    private void callUpdateTicketStatusProcedure(String maCT_DATVE, int trangThai) throws SQLException {
+    private void callUpdateTicketStatusProcedure(String maCT_DATVE, int trangThai) {
         String sql = "{call update_ticket_status(?, ?)}";  // SQL to call the stored procedure
         try (CallableStatement callableStatement = connect.prepareCall(sql)) {
             callableStatement.setString(1, maCT_DATVE);

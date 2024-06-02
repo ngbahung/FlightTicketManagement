@@ -1,8 +1,9 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -10,7 +11,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.ChuyenBay;
@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.sql.Date;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -46,9 +45,6 @@ public class TraCuuBanVeController implements Initializable {
     private TableColumn<ChuyenBay, String> ngayBay_tbcolumn;
 
     @FXML
-    private MFXButton refresh_btn;
-
-    @FXML
     private MFXDatePicker ngay_datepicker;
 
     @FXML
@@ -71,10 +67,7 @@ public class TraCuuBanVeController implements Initializable {
     private TableColumn<ChuyenBay, String> soGhe_tbcoumn;
 
     @FXML
-    private MFXButton timkiem_btn;
-
-    @FXML
-    private void handleSearch(ActionEvent event) {
+    private void handleSearch() {
         // Lấy giá trị từ các thành phần giao diện
         String sanBayDi = sanbaydi_menubtn.getText().trim();
         String sanBayDen = sanbayden_menubtn.getText().trim();
@@ -108,7 +101,7 @@ public class TraCuuBanVeController implements Initializable {
             parameters.add(Date.valueOf(ngayBay));
         }
 
-        String finalQuery = baseQuery + conditions.toString();
+        String finalQuery = baseQuery + conditions;
 
         try {
             prepareAndExecuteQuery(finalQuery, parameters, chuyenBay_tableview);
@@ -122,73 +115,43 @@ public class TraCuuBanVeController implements Initializable {
     }
 
     @FXML
-    private void handleRefresh(ActionEvent event) {
+    private void handleRefresh() {
         ngay_datepicker.setValue(null);
         sanbaydi_menubtn.setText("Chọn sân bay đi");
         sanbayden_menubtn.setText("Chọn sân bay đến");
-        loadData(null, null, null);
+        loadData();
     }
 
     // DATABASE TOOLS
     private Connection connect;
     private PreparedStatement prepare;
-    private Statement statement;
     private ResultSet result;
+    private final EventBus eventBus = new EventBus();
 
     private final AlertMessage alert = new AlertMessage();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         connect = DatabaseDriver.getConnection();
-        loadData(null, null, null);
+        eventBus.register(this);
+        loadData();
         sanbaydi_menubtn.setOnShowing(event -> updateSanBayMenuItems());
         sanbayden_menubtn.setOnShowing(event -> updateSanBayMenuItems());
     }
 
-    private void loadData(String sanBayDi, String sanBayDen, LocalDate ngayBay) {
+    @Subscribe
+    public void handleUpdateData(Object event) {
+        loadData();
+    }
+
+    private void loadData() {
         chuyenBay_tableview.getItems().clear();  // Clear previous search results
 
         try {
-            StringBuilder query = new StringBuilder("SELECT * FROM CHUYENBAY WHERE TrangThai = 0");
-            boolean hasCondition = false;
 
             // Check if there are conditions to add to the WHERE clause
-            if ((sanBayDi != null && !sanBayDi.isEmpty()) || (sanBayDen != null && !sanBayDen.isEmpty()) || ngayBay != null) {
-                query.append(" WHERE");
-            }
 
-            if (sanBayDi != null && !sanBayDi.isEmpty()) {
-                query.append(" MaDuongBay IN (SELECT MaDuongBay FROM DUONGBAY WHERE MaSanBayDi = (SELECT MaSanBay FROM SANBAY WHERE UPPER(TenSanBay) LIKE ? AND ROWNUM = 1))");
-                hasCondition = true;
-            }
-
-            if (sanBayDen != null && !sanBayDen.isEmpty()) {
-                if (hasCondition) {
-                    query.append(" AND");
-                }
-                query.append(" MaDuongBay IN (SELECT MaDuongBay FROM DUONGBAY WHERE MaSanBayDen = (SELECT MaSanBay FROM SANBAY WHERE UPPER(TenSanBay) LIKE ? AND ROWNUM = 1))");
-                hasCondition = true;
-            }
-
-            if (ngayBay != null) {
-                if (hasCondition) {
-                    query.append(" AND");
-                }
-                query.append(" TRUNC(TGXP) = ?");
-            }
-
-            prepare = connect.prepareStatement(query.toString());
-
-            int index = 1;
-            if (sanBayDi != null && !sanBayDi.isEmpty()) {
-                prepare.setString(index++, "%" + sanBayDi.toUpperCase() + "%");
-            }
-            if (sanBayDen != null && !sanBayDen.isEmpty()) {
-                prepare.setString(index++, "%" + sanBayDen.toUpperCase() + "%");
-            }
-            if (ngayBay != null) {
-                prepare.setDate(index, Date.valueOf(ngayBay));
-            }
+            prepare = connect.prepareStatement("SELECT * FROM CHUYENBAY WHERE TrangThai = 0");
 
             result = prepare.executeQuery();
 
@@ -308,55 +271,55 @@ public class TraCuuBanVeController implements Initializable {
     }
 
     private String getSanBayDi(String maDuongBay) {
-        try (Connection conn = DatabaseDriver.getConnection();
-             CallableStatement cs = conn.prepareCall("{call GET_SANBAYDI(?, ?)}")) {
-            cs.setString(1, maDuongBay);
-            cs.registerOutParameter(2, Types.VARCHAR);
-            cs.execute();
-            return cs.getString(2);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return "N/A";
+        String sanBayDi;
+        try (CallableStatement statement = connect.prepareCall("{call GET_SANBAYDI(?, ?)}")) {
+            statement.setString(1, maDuongBay);
+            statement.registerOutParameter(2, Types.VARCHAR);
+            statement.execute();
+            return statement.getString(2);
+        } catch (Exception e) {
+            sanBayDi = "";
         }
+        return sanBayDi;
     }
 
     private String getSanBayDen(String maDuongBay) {
-        try (Connection conn = DatabaseDriver.getConnection();
-             CallableStatement cs = conn.prepareCall("{call GET_SANBAYDEN(?, ?)}")) {
-            cs.setString(1, maDuongBay);
-            cs.registerOutParameter(2, Types.VARCHAR);
-            cs.execute();
-            return cs.getString(2);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return "N/A";
+        String sanBayDen;
+        try (CallableStatement statement = connect.prepareCall("{call GET_SANBAYDEN(?, ?)}")) {
+            statement.setString(1, maDuongBay);
+            statement.registerOutParameter(2, Types.VARCHAR);
+            statement.execute();
+            return statement.getString(2);
+        } catch (Exception e) {
+            sanBayDen = "";
         }
+        return sanBayDen;
     }
 
     private Integer getSoGheTrong(String maChuyenBay) {
-        try (Connection conn = DatabaseDriver.getConnection();
-             CallableStatement cs = conn.prepareCall("{call GET_SOGHETRONG(?, ?)}")) {
-            cs.setString(1, maChuyenBay);
-            cs.registerOutParameter(2, Types.INTEGER);
-            cs.execute();
-            return cs.getInt(2);
-        } catch (SQLException e) {
+        int soGheTrong = 0;
+        try (CallableStatement statement = connect.prepareCall("{call GET_SOGHETRONG(?, ?)}")) {
+            statement.setString(1, maChuyenBay);
+            statement.registerOutParameter(2, Types.INTEGER);
+            statement.execute();
+            return statement.getInt(2);
+        } catch (Exception e) {
             e.printStackTrace();
-            return 0;
         }
+        return soGheTrong;
     }
 
     private Integer getSoGhe(String maChuyenBay) {
-        try (Connection conn = DatabaseDriver.getConnection();
-             CallableStatement cs = conn.prepareCall("{call GET_SOGHE(?, ?)}")) {
-            cs.setString(1, maChuyenBay);
-            cs.registerOutParameter(2, Types.INTEGER);
-            cs.execute();
-            return cs.getInt(2);
-        } catch (SQLException e) {
+        int soGhe = 0;
+        try (CallableStatement statement = connect.prepareCall("{call GET_SOGHE(?, ?)}")) {
+            statement.setString(1, maChuyenBay);
+            statement.registerOutParameter(2, Types.INTEGER);
+            statement.execute();
+            return statement.getInt(2);
+        } catch (Exception e) {
             e.printStackTrace();
-            return 0;
         }
+        return soGhe;
     }
 
     private void showDetailWindow(ChuyenBay flight) {

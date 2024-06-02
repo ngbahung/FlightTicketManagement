@@ -57,7 +57,6 @@ public class ThemHangVe_ChuyenBayController implements Initializable {
 
 
     private Connection connect;
-    private ResultSet result;
 
     private final AlertMessage alert = new AlertMessage();
     private ThemLichChuyenBayController parentController;
@@ -101,7 +100,7 @@ public class ThemHangVe_ChuyenBayController implements Initializable {
     }
 
     private void chuyenDoiHangVeCombobox(ObservableList<HangVe> hangVeList) {
-        hangVe_combox.setConverter(new StringConverter<HangVe>() {
+        hangVe_combox.setConverter(new StringConverter<>() {
             @Override
             public String toString(HangVe hangVe) {
                 return hangVe != null ? hangVe.getTenHangVe() : "";
