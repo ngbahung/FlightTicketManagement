@@ -3,7 +3,9 @@ package org.example.flightticketmanagement.Controllers.Manager;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import io.github.palexdev.materialfx.controls.*;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.Admin.LoadDataEvent;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
+import org.example.flightticketmanagement.Models.CT_HangVe;
 import org.example.flightticketmanagement.Models.ChuyenBay;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
 
@@ -117,16 +120,52 @@ public class LichChuyenBayController implements Initializable {
             alert.errorMessage("Không thể mở trang mới.");
         }
     }
-
     @FXML
     void xoaLichChuyenBay() {
-        ObservableList<ChuyenBay> selectedFlights = chuyenBay_tableview.getSelectionModel().getSelectedItems();
+        ObservableList<ChuyenBay> selectedFlight = chuyenBay_tableview.getSelectionModel().getSelectedItems();
 
-        if (selectedFlights.isEmpty()) {
-            alert.errorMessage("Vui lòng chọn ít nhất một chuyến bay để xóa.");
+        if (selectedFlight.isEmpty()) {
+            alert.errorMessage("Không chọn chuyến bay nào. Vui lòng chọn ít nhất một chuyến bay.");
+            return;
         }
 
-        // INSERT PROC XÓA CHUYẾN BAY
+        for ( ChuyenBay chuyenBay : selectedFlight) {
+            if(chuyenBay.getThoiGianXuatPhat().isBefore(LocalDateTime.now())){
+                alert.errorMessage("Chuyến bay đã xuất phát, không thể xóa chuyến bay đã chọn.");
+                return;
+            }
+        }
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Xác nhận xóa chuyến bay");
+        confirmationAlert.setHeaderText("Bạn có muốn xóa chuyến bay đã chọn?");
+        confirmationAlert.setContentText("Hành động này sẽ thay đổi danh sách chuyến bay của bạn");
+
+        Optional<ButtonType> result = confirmationAlert.showAndWait();
+
+        String query = "DELETE FROM ChuyenBay WHERE MaChuyenBay = ?";
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+
+            try {
+                connect = DatabaseDriver.getConnection();
+                PreparedStatement prepare = connect.prepareStatement(query);
+
+                for ( ChuyenBay chuyenBay : selectedFlight) {
+                    prepare.setString(1, chuyenBay.getMaChuyenBay());
+                    prepare.addBatch();
+                }
+
+                int[] results = prepare.executeBatch();
+                if (results.length > 0) {
+                    alert.successMessage("Chuyến bay đã được xóa thành công.");
+                } else {
+                    alert.errorMessage("Không xóa được chuyến bay đã chọn.");
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                alert.errorMessage("Lỗi khi đang xóa hạng vé. Vui lòng kiểm tra lại.");
+            }
+        }
 
     }
 
