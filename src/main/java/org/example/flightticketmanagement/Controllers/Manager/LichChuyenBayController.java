@@ -3,8 +3,8 @@ package org.example.flightticketmanagement.Controllers.Manager;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import io.github.palexdev.materialfx.controls.*;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -14,7 +14,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.example.flightticketmanagement.Controllers.Admin.LoadDataEvent;
+import org.example.flightticketmanagement.Controllers.Admin.LichSuDatVeController;
+import org.example.flightticketmanagement.Controllers.Admin.XacNhanVeController;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.CT_HangVe;
 import org.example.flightticketmanagement.Models.ChuyenBay;
@@ -120,21 +121,24 @@ public class LichChuyenBayController implements Initializable {
             alert.errorMessage("Không thể mở trang mới.");
         }
     }
+
     @FXML
     void xoaLichChuyenBay() {
-        ObservableList<ChuyenBay> selectedFlight = chuyenBay_tableview.getSelectionModel().getSelectedItems();
+        ObservableList<ChuyenBay> selectedFlights = chuyenBay_tableview.getSelectionModel().getSelectedItems();
 
-        if (selectedFlight.isEmpty()) {
-            alert.errorMessage("Không chọn chuyến bay nào. Vui lòng chọn ít nhất một chuyến bay.");
+        if (selectedFlights.isEmpty()) {
+            alert.errorMessage("Vui lòng chọn ít nhất một chuyến bay để xóa.");
             return;
         }
 
-        for ( ChuyenBay chuyenBay : selectedFlight) {
-            if(chuyenBay.getThoiGianXuatPhat().isBefore(LocalDateTime.now())){
+        // Kiểm tra xem tất cả các chuyến bay được chọn có thể xóa được không
+        for (ChuyenBay chuyenBay : selectedFlights) {
+            if (chuyenBay.getThoiGianXuatPhat().isBefore(LocalDateTime.now())) {
                 alert.errorMessage("Chuyến bay đã xuất phát, không thể xóa chuyến bay đã chọn.");
                 return;
             }
         }
+
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setTitle("Xác nhận xóa chuyến bay");
         confirmationAlert.setHeaderText("Bạn có muốn xóa chuyến bay đã chọn?");
@@ -144,30 +148,36 @@ public class LichChuyenBayController implements Initializable {
 
         String query = "DELETE FROM ChuyenBay WHERE MaChuyenBay = ?";
         if (result.isPresent() && result.get() == ButtonType.OK) {
-
             try {
                 connect = DatabaseDriver.getConnection();
                 PreparedStatement prepare = connect.prepareStatement(query);
 
-                for ( ChuyenBay chuyenBay : selectedFlight) {
+                for (ChuyenBay chuyenBay : selectedFlights) {
                     prepare.setString(1, chuyenBay.getMaChuyenBay());
                     prepare.addBatch();
                 }
 
                 int[] results = prepare.executeBatch();
-                if (results.length > 0) {
-                    alert.successMessage("Chuyến bay đã được xóa thành công.");
+                if (Arrays.stream(results).allMatch(i -> i > 0)) {
+                    alert.successMessage("Tất cả các chuyến bay đã được xóa thành công.");
                 } else {
-                    alert.errorMessage("Không xóa được chuyến bay đã chọn.");
+                    alert.errorMessage("Không xóa được một số chuyến bay đã chọn.");
                 }
 
             } catch (SQLException e) {
                 e.printStackTrace();
-                alert.errorMessage("Lỗi khi đang xóa hạng vé. Vui lòng kiểm tra lại.");
+                alert.errorMessage("Lỗi khi đang xóa chuyến bay. Vui lòng kiểm tra lại.");
+            } finally {
+                try {
+                    if (prepare != null) prepare.close();
+                    if (connect != null) connect.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
-
     }
+
 
     @FXML
     private void xuLyTimKiemButton() {
@@ -218,15 +228,18 @@ public class LichChuyenBayController implements Initializable {
     }
 
     private Connection connect;
-    private final EventBus eventBus = new EventBus();
-
+    private PreparedStatement prepare;
+    private ResultSet result;
+    private final EventBus eventBusXoaGheTrong = XacNhanVeController.getEventBus();
+    private final EventBus eventBusThemGheTrong = LichSuDatVeController.getEventBus();
 
     private final AlertMessage alert = new AlertMessage();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         connect = DatabaseDriver.getConnection();
-        eventBus.register(this);
+        eventBusXoaGheTrong.register(this);
+        eventBusThemGheTrong.register(this);
         layDuLieu(null, null, null);
         sanbaydi_menubtn.setOnShowing(event -> updateSanBayMenuItems());
         sanbayden_menubtn.setOnShowing(event -> updateSanBayMenuItems());
@@ -239,9 +252,10 @@ public class LichChuyenBayController implements Initializable {
     }
 
     @Subscribe
-    public void handleLoadDataEvent(LoadDataEvent event) {
+    public void handleLoadDataEvent(Object event) {
         layDuLieu(null, null, null);
     }
+
     public void layDuLieu(String sanBayDi, String sanBayDen, LocalDate ngayBay) {
         chuyenBay_tableview.getItems().clear();  // Xóa kết quả tìm kiếm trước đó
 

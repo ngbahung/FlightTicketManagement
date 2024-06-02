@@ -12,17 +12,17 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="800.0" prefWidth="992.0" style="-fx-background-image: white;" styleClass="background-color" stylesheets="@../../Styles/Admin/LichChuyenBay.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Manager.LichChuyenBayController">
+<AnchorPane prefHeight="800.0" prefWidth="992.0" styleClass="background-color" stylesheets="@../../Styles/Admin/LichChuyenBay.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Manager.LichChuyenBayController">
    <TableView fx:id="chuyenBay_tableview" layoutX="12.0" layoutY="155.0" prefHeight="530.0" prefWidth="974.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css">
       <columns>
-         <TableColumn fx:id="maChuyenBay_tbcolumn" prefWidth="115.0" text="Mã chuyến bay" />
-         <TableColumn fx:id="sanBayDi_tbcolumn" prefWidth="132.0" text="Sân bay đi" />
-         <TableColumn fx:id="sanBayDen_tbcolumn" prefWidth="121.0" text="Sân bay đến" />
-         <TableColumn fx:id="ngayBay_tbcolumn" prefWidth="97.0" text="Ngày bay" />
-         <TableColumn fx:id="gioBay_tbcolumn" prefWidth="96.0" text="Giờ bay" />
-         <TableColumn fx:id="soGheTrong_tbcolumn" prefWidth="101.0" text="Số ghế trống" />
-         <TableColumn fx:id="soGhe_tbcoumn" prefWidth="81.0" text="Số ghế" />
-         <TableColumn fx:id="thoiGianBay_tbcolumn" prefWidth="115.0" text="Thời gian bay" />
+         <TableColumn fx:id="maChuyenBay_tbcolumn" minWidth="7.0" prefWidth="100.0" text="Mã chuyến bay" />
+         <TableColumn fx:id="sanBayDi_tbcolumn" prefWidth="120.0" text="Sân bay đi" />
+         <TableColumn fx:id="sanBayDen_tbcolumn" prefWidth="120.0" text="Sân bay đến" />
+         <TableColumn fx:id="ngayBay_tbcolumn" prefWidth="100.0" text="Ngày bay" />
+         <TableColumn fx:id="gioBay_tbcolumn" prefWidth="90.0" text="Giờ bay" />
+         <TableColumn fx:id="soGheTrong_tbcolumn" prefWidth="85.0" text="Số ghế trống" />
+         <TableColumn fx:id="soGhe_tbcoumn" prefWidth="70.0" text="Số ghế" />
+         <TableColumn fx:id="thoiGianBay_tbcolumn" prefWidth="150.0" text="Thời gian bay" />
          <TableColumn fx:id="giaVe_tbcolumn" prefWidth="109.0" text="Giá vé" />
       </columns>
       <styleClass>
@@ -38,15 +38,15 @@
    <HBox alignment="CENTER" layoutX="34.0" layoutY="703.0" prefHeight="69.0" prefWidth="929.0" spacing="50.0" styleClass="background-color">
       <MFXButton buttonType="RAISED" depthLevel="LEVEL1" minHeight="-Infinity" minWidth="-Infinity" onAction="#themLichChuyenBay" prefHeight="45.0" prefWidth="177.0" text="Thêm">
          <graphic>
-            <FontAwesomeIconView glyphName="PLUS" size="20" />
+            <FontAwesomeIconView fill="WHITE" glyphName="PLUS" size="20" />
          </graphic></MFXButton>
       <MFXButton buttonType="RAISED" depthLevel="LEVEL1" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" onAction="#xoaLichChuyenBay" prefHeight="45.0" prefWidth="177.0" text="Xóa">
          <graphic>
-            <FontAwesomeIconView glyphName="TRASH" size="20" />
+            <FontAwesomeIconView fill="WHITE" glyphName="TRASH" size="20" />
          </graphic></MFXButton>
       <MFXButton buttonType="RAISED" depthLevel="LEVEL1" layoutX="386.0" layoutY="22.0" minHeight="-Infinity" minWidth="-Infinity" onAction="#suaLichChuyenBay" prefHeight="45.0" prefWidth="177.0" text="Sửa">
          <graphic>
-            <FontAwesomeIconView glyphName="EDIT" size="20" />
+            <FontAwesomeIconView fill="WHITE" glyphName="EDIT" size="20" />
          </graphic></MFXButton>
    </HBox>
    <MFXButton id="custom_2" fx:id="refresh_btn" layoutX="88.0" layoutY="89.0" text=" ">

@@ -1,5 +1,6 @@
 package org.example.flightticketmanagement.Controllers.Manager;
 
+import com.google.common.eventbus.EventBus;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -15,8 +16,8 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.CT_HangVe;
-import org.example.flightticketmanagement.Models.DatabaseDriver;
 import org.example.flightticketmanagement.Models.HangVe;
+import org.example.flightticketmanagement.Models.DatabaseDriver;
 
 import java.net.URL;
 import java.sql.*;
@@ -86,51 +87,61 @@ public class ThemLichChuyenBayController implements Initializable {
 
     @FXML
     void xoaHangVe() {
+        CT_HangVe selectedHangVe = hangVe_tableview.getSelectionModel().getSelectedItem();
         ObservableList<CT_HangVe> selectedTicketClasses = hangVe_tableview.getSelectionModel().getSelectedItems();
 
-        if (selectedTicketClasses.isEmpty()) {
-            alert.errorMessage("Không chọn hạng vé nào. Vui lòng chọn ít nhất một hạng vé.");
-            return;
-        }
-        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmationAlert.setTitle("Xác nhận xóa hạng vé");
-        confirmationAlert.setHeaderText("Bạn có muốn xóa hạng vé đã chọn?");
-        confirmationAlert.setContentText("Hành động này sẽ thay đổi danh sách hạng vé của bạn");
+        if (selectedHangVe != null) {
+            boolean confirmed = alert.confirmationMessage("Bạn có chắc chắn muốn xóa hạng vé này?");
+            if (selectedTicketClasses.isEmpty()) {
+                alert.errorMessage("Không chọn hạng vé nào. Vui lòng chọn ít nhất một hạng vé.");
+                return;
+            }
+            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmationAlert.setTitle("Xác nhận xóa hạng vé");
+            confirmationAlert.setHeaderText("Bạn có muốn xóa hạng vé đã chọn?");
+            confirmationAlert.setContentText("Hành động này sẽ thay đổi danh sách hạng vé của bạn");
 
-        Optional<ButtonType> result = confirmationAlert.showAndWait();
-        String query = "DELETE FROM CT_HangVe WHERE MaHangVe = ?";
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            try {
-                connect = DatabaseDriver.getConnection();
-                prepare = connect.prepareStatement(query);
-
-                for ( CT_HangVe ct_hangVe : selectedTicketClasses) {
-                    prepare.setString(1, ct_hangVe.getMaHangVe());
-                    prepare.addBatch();
-                }
-
-                int[] results = prepare.executeBatch();
-                if (results.length > 0) {
-                    alert.successMessage("Hạng vé đã được xóa thành công.");
-                } else {
-                    alert.errorMessage("Không xóa được hạng vé đã chọn.");
-                }
-
-                // Refresh the table
-                tenHangVe_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenHangVe(cellData.getValue().getMaHangVe())));
-                soLuongGhe_tbcl.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getSoGheTrong()).asObject());
-                hangVe_tableview.setItems(FXCollections.observableArrayList());
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-                alert.errorMessage("Lỗi khi đang xóa hạng vé. Vui lòng kiểm tra lại.");
-            } finally {
+            Optional<ButtonType> result = confirmationAlert.showAndWait();
+            String query = "DELETE FROM CT_HangVe WHERE MaHangVe = ?";
+            if (result.isPresent() && result.get() == ButtonType.OK) {
                 try {
-                    if (prepare != null) prepare.close();
-                    if (connect != null) connect.close();
+                    connect = DatabaseDriver.getConnection();
+                    prepare = connect.prepareStatement(query);
+
+                    for (CT_HangVe ct_hangVe : selectedTicketClasses) {
+                        prepare.setString(1, ct_hangVe.getMaHangVe());
+                        prepare.addBatch();
+                    }
+
+                    int[] results = prepare.executeBatch();
+                    if (results.length > 0) {
+                        alert.successMessage("Hạng vé đã được xóa thành công.");
+                    } else {
+                        alert.errorMessage("Không xóa được hạng vé đã chọn.");
+                    }
+
+                    if (confirmed) {
+                        hangVe_tableview.getItems().remove(selectedHangVe);
+                        alert.successMessage("Hạng vé đã được xóa thành công.");
+                        // Refresh the table
+                        tenHangVe_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenHangVe(cellData.getValue().getMaHangVe())));
+                        soLuongGhe_tbcl.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getSoGheTrong()).asObject());
+                        hangVe_tableview.setItems(FXCollections.observableArrayList());
+
+                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
+                    alert.errorMessage("Lỗi khi đang xóa hạng vé. Vui lòng kiểm tra lại.");
+                } finally {
+                    try {
+                        if (prepare != null) prepare.close();
+                        if (connect != null) connect.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                 }
+            } else {
+                alert.errorMessage("Vui lòng chọn một hạng vé để xóa.");
             }
         }
     }
@@ -214,6 +225,7 @@ public class ThemLichChuyenBayController implements Initializable {
                 parentController.layDuLieu(null, null, null);
             }
             refreshTableView();
+            eventBus.post(new Object());
             closeStage();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -231,6 +243,13 @@ public class ThemLichChuyenBayController implements Initializable {
     private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
+    private static final EventBus eventBus = new EventBus();
+
+    public ThemLichChuyenBayController() {}
+
+    public static EventBus getEventBus() {
+        return eventBus;
+    }
 
     private final AlertMessage alert = new AlertMessage();
 
@@ -276,6 +295,7 @@ public class ThemLichChuyenBayController implements Initializable {
         }
 
         tenDuongBay_combobox.valueProperty().addListener((observableValue, oldValue, newValue) -> maDuongBay_txtfld.setText(getMaDuongBayByTen(newValue)));
+
         generateMaChuyenBay();
 
         for (ComboBox<String> stringComboBox : Arrays.asList(gioBay_combobox, gioHaCanh_combobox)) {

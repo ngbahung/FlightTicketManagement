@@ -1,5 +1,7 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -17,6 +19,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javafx.scene.input.MouseEvent;
 import org.example.flightticketmanagement.Models.BaoCaoNam;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.BaoCaoThang;
@@ -55,18 +59,22 @@ public class DoanhThuController implements Initializable {
     private ResultSet result;
 
     private final AlertMessage alert = new AlertMessage();
+    private final EventBus eventBusXoaGheTrong = XacNhanVeController.getEventBus();
+    private final EventBus eventBusThemGheTrong = LichSuDatVeController.getEventBus();
     private BigDecimal tongDoanhThuNam = BigDecimal.valueOf(0.0);
 
     private Integer DTN_namBaoCao = 0;
 
     private ReportController reportController;
     private boolean DTN_isThongKeThanhCong = false;
-    private List<BaoCaoNam> listBaoCaoNam = new ArrayList<BaoCaoNam>();
+    private final List<BaoCaoNam> listBaoCaoNam = new ArrayList<BaoCaoNam>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         reportController = new ReportController();
         connect = DatabaseDriver.getConnection();
+        eventBusXoaGheTrong.register(this);
+        eventBusThemGheTrong.register(this);
         DTNam_FillDataForComboBoxNam();
         DTThang_FillDataForComboBoxNam();
         DTThang_FillDataForComboBoxThang();
@@ -74,6 +82,12 @@ public class DoanhThuController implements Initializable {
         dtThang_thongKe_btn.setOnMouseClicked(event -> DTThang_LoadData());
         dtNam_inBaoCao_btn.setOnMouseClicked(event -> InBaoCaoNam());
         dtThang_inBaoCao_btn.setOnMouseClicked(event -> InBaoCaoThang());
+    }
+
+    @Subscribe
+    public void handleUpdateData(Object e) {
+        DTNam_LoadData();
+        DTThang_LoadData();
     }
 
     public void InBaoCaoNam() {

@@ -283,23 +283,32 @@ public class ManHinhDatVeController implements Initializable {
         String maGhe = generateMaGhe();  // Hàm này sẽ gọi stored procedure để tạo mã ghế
         float giaTien = selectedVe.getGiaTien();
 
-        String sql = "{call SAVE_TICKET(?, ?, ?, ?, ?)}";
+        try {
+            // Đặt transaction isolation level ở đây
+            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 
-        try (CallableStatement cs = connect.prepareCall(sql)) {
-            cs.setString(1, maVe_txtfld.getText());
-            cs.setString(2, maChuyenBay);
-            cs.setString(3, maHangVe);
-            cs.setString(4, maGhe); // Lưu mã ghế tự tạo
-            cs.setFloat(5, giaTien);
+            String sql = "{call SAVE_TICKET(?, ?, ?, ?, ?)}";
 
-            cs.execute();
+            try (CallableStatement cs = connect.prepareCall(sql)) {
+                cs.setString(1, maVe_txtfld.getText());
+                cs.setString(2, maChuyenBay);
+                cs.setString(3, maHangVe);
+                cs.setString(4, maGhe); // Lưu mã ghế tự tạo
+                cs.setFloat(5, giaTien);
 
-            System.out.println("Ticket saved successfully.");
+                cs.execute();
+
+                System.out.println("Ticket saved successfully.");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                alert.errorMessage("Error occurred while saving ticket to the database.");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            alert.errorMessage("Error occurred while saving ticket to the database.");
+            alert.errorMessage("Error setting transaction isolation level.");
         }
     }
+
 
     private void showConfirmationDialog() {
         if (validateInputs()) {

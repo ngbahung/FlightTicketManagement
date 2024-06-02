@@ -55,6 +55,9 @@ public class ThemPhanQuyenController implements Initializable {
                 (change.getControlNewText().matches("0\\d*") && change.getControlNewText().length() <= 10) ? change : null));
 
         ngay_datepicker.setEditable(false);
+        ngay_datepicker.setDisable(true);
+        ngay_datepicker.setValue(LocalDate.now());
+
 
         vaiTro_combobox.setItems(FXCollections.observableArrayList("Admin", "Manager", "Staff"));
         maTaiKhoan_txtfld.setText(generateAccountID());
