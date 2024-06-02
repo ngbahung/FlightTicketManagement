@@ -48,21 +48,22 @@
             </font></MFXDatePicker>
          <MFXButton id="custom_2" onAction="#search" prefHeight="30.0" prefWidth="53.0" text=" ">
             <graphic>
-               <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20" />
+               <FontAwesomeIconView glyphName="SEARCH" size="20" />
             </graphic>
          </MFXButton>
       </HBox>
    </AnchorPane>
    <VBox layoutX="11.0" layoutY="121.0" prefHeight="334.0" prefWidth="964.0">
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="66.0" prefWidth="965.0">
-         <Text id="custom" layoutX="408.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="table-text" text="VÉ ĐÃ ĐẶT" />
-         <MFXButton id="custom_2" layoutX="842.0" layoutY="14.0" onMouseClicked="#xuatVe" prefHeight="30.0" prefWidth="111.0" text="Xuất vé">
+         <Text layoutX="401.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-text" text="VÉ ĐÃ ĐẶT" />
+         <MFXButton id="custom_2" buttonType="RAISED" depthLevel="LEVEL1" graphicTextGap="10.0" layoutX="842.0" layoutY="14.0" onMouseClicked="#xuatVe" prefHeight="30.0" prefWidth="111.0" text="Xuất vé">
             <graphic>
-               <FontAwesomeIconView fill="WHITE" glyphName="TICKET" size="20" />
+               <FontAwesomeIconView fill="#00a4bd" glyphName="TICKET" size="20" />
             </graphic>
          </MFXButton>
          <styleClass>
             <String fx:value="table-label" />
+            <String fx:value="custom-anchorpane" />
             <String fx:value="custom-tableview" />
             <String fx:value="column-header-background" />
             <String fx:value="column-header" />
@@ -99,14 +100,15 @@
    <Separator layoutX="38.0" layoutY="454.0" prefHeight="0.0" prefWidth="916.0" />
    <VBox layoutX="10.0" layoutY="457.0" prefHeight="319.0" prefWidth="966.0">
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="969.0">
-         <Text id="custom" layoutX="408.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="table-text" text="PHIẾU ĐẶT CHỖ" />
-         <MFXButton id="custom_2" fx:id="thanhToan_btn" disable="true" layoutX="813.0" layoutY="17.0" onAction="#handleThanhToan" prefHeight="30.0" prefWidth="144.0" text="Thanh toán">
+         <Text layoutX="366.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-text" text="PHIẾU ĐẶT CHỖ" />
+         <MFXButton id="custom_2" fx:id="thanhToan_btn" buttonType="RAISED" depthLevel="LEVEL1" graphicTextGap="10.0" layoutX="811.0" layoutY="17.0" onAction="#handleThanhToan" prefHeight="30.0" prefWidth="144.0" text="Thanh toán">
             <graphic>
-               <FontAwesomeIconView fill="WHITE" glyphName="MONEY" size="20" />
+               <FontAwesomeIconView fill="#00a4bd" glyphName="MONEY" size="20" />
             </graphic>
          </MFXButton>
          <styleClass>
             <String fx:value="table-label" />
+            <String fx:value="custom-anchorpane" />
             <String fx:value="custom-tableview" />
             <String fx:value="column-header-background" />
             <String fx:value="column-header" />

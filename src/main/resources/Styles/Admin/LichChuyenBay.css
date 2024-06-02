@@ -44,8 +44,10 @@
 }
 
 #custom_2 {
-    -fx-background-color: #00A4BD;
-    -fx-text-fill: white;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-font-family: Inter;
 }
 
 /* Menu button */
@@ -168,6 +170,7 @@
     -fx-font-weight: bold;
     -fx-text-fill: #333333;
     -fx-padding: 0;
+    -fx-font-family: Inter;
 }
 
 /* Tùy chỉnh các text field trong GridPane */
@@ -178,3 +181,18 @@
     -fx-border-radius: 5;
     -fx-padding: 0;
 }
+
+/* Tùy chỉnh AnchorPane */
+
+.custom-anchorpane {
+    -fx-background-color: #00A4BD;
+    -fx-font-family: Inter;
+}
+
+.custom-text {
+    -fx-font-family: Inter;
+    -fx-font-size: 30px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
