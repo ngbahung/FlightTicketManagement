@@ -89,63 +89,68 @@ public class ThemLichChuyenBayController implements Initializable {
 
     @FXML
     void xoaHangVe() {
-        CT_HangVe selectedHangVe = hangVe_tableview.getSelectionModel().getSelectedItem();
         ObservableList<CT_HangVe> selectedTicketClasses = hangVe_tableview.getSelectionModel().getSelectedItems();
 
-        if (selectedHangVe != null) {
-            boolean confirmed = alert.confirmationMessage("Bạn có chắc chắn muốn xóa hạng vé này?");
-            if (selectedTicketClasses.isEmpty()) {
-                alert.errorMessage("Không chọn hạng vé nào. Vui lòng chọn ít nhất một hạng vé.");
-                return;
-            }
-            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmationAlert.setTitle("Xác nhận xóa hạng vé");
-            confirmationAlert.setHeaderText("Bạn có muốn xóa hạng vé đã chọn?");
-            confirmationAlert.setContentText("Hành động này sẽ thay đổi danh sách hạng vé của bạn");
+        if (selectedTicketClasses.isEmpty()) {
+            alert.errorMessage("Không chọn hạng vé nào. Vui lòng chọn ít nhất một hạng vé.");
+            return;
+        }
 
-            Optional<ButtonType> result = confirmationAlert.showAndWait();
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Xác nhận xóa hạng vé");
+        confirmationAlert.setHeaderText("Bạn có muốn xóa các hạng vé đã chọn?");
+        confirmationAlert.setContentText("Hành động này sẽ thay đổi danh sách hạng vé của bạn");
+
+        Optional<ButtonType> result = confirmationAlert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
             String query = "DELETE FROM CT_HangVe WHERE MaHangVe = ?";
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                try {
-                    connect = DatabaseDriver.getConnection();
-                    prepare = connect.prepareStatement(query);
 
-                    for (CT_HangVe ct_hangVe : selectedTicketClasses) {
-                        prepare.setString(1, ct_hangVe.getMaHangVe());
-                        prepare.addBatch();
-                    }
+            try {
+                connect = DatabaseDriver.getConnection();
+                prepare = connect.prepareStatement(query);
 
-                    int[] results = prepare.executeBatch();
-                    if (results.length > 0) {
-                        alert.successMessage("Hạng vé đã được xóa thành công.");
-                    } else {
-                        alert.errorMessage("Không xóa được hạng vé đã chọn.");
-                    }
-
-                    if (confirmed) {
-                        hangVe_tableview.getItems().remove(selectedHangVe);
-                        alert.successMessage("Hạng vé đã được xóa thành công.");
-                        // Refresh the table
-                        tenHangVe_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenHangVe(cellData.getValue().getMaHangVe())));
-                        soLuongGhe_tbcl.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getSoGheTrong()).asObject());
-                        hangVe_tableview.setItems(FXCollections.observableArrayList());
-
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    alert.errorMessage("Lỗi khi đang xóa hạng vé. Vui lòng kiểm tra lại.");
-                } finally {
-                    try {
-                        if (prepare != null) prepare.close();
-                        if (connect != null) connect.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+                for (CT_HangVe ct_hangVe : selectedTicketClasses) {
+                    prepare.setString(1, ct_hangVe.getMaHangVe());
+                    prepare.addBatch();
                 }
-            } else {
-                alert.errorMessage("Vui lòng chọn một hạng vé để xóa.");
+
+                int[] results = prepare.executeBatch();
+                if (results.length > 0) {
+                    alert.successMessage("Hạng vé đã được xóa thành công.");
+                    hangVe_tableview.getItems().removeAll(selectedTicketClasses);
+                } else {
+                    alert.errorMessage("Không xóa được hạng vé đã chọn.");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                alert.errorMessage("Lỗi khi đang xóa hạng vé. Vui lòng kiểm tra lại.");
             }
         }
+    }
+
+    private void displayHangVe(String maChuyenBay) {
+        ObservableList<CT_HangVe> hangVeList = FXCollections.observableArrayList();
+        String query = "SELECT HV.MaHangVe, HV.TenHangVe, CTHV.SoGheTrong FROM HANGVE HV JOIN CT_HANGVE CTHV ON HV.MaHangVe = CTHV.MaHangVe WHERE CTHV.MaChuyenBay = ?";
+        try {
+            PreparedStatement statement = connect.prepareStatement(query);
+            statement.setString(1, maChuyenBay);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                String maHangVe = resultSet.getString("MaHangVe");
+                String tenHangVe = resultSet.getString("TenHangVe");
+                int soGheTrong = resultSet.getInt("SoGheTrong");
+                CT_HangVe ctHangVe = new CT_HangVe(maChuyenBay, maHangVe, soGheTrong, 0);
+                hangVeList.add(ctHangVe);
+            }
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Error occurred while retrieving seat count from the database.");
+        }
+        // Set items in the TableView
+        hangVe_tableview.setItems(hangVeList);
     }
 
 
