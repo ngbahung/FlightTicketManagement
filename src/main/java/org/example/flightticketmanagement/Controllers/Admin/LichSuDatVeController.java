@@ -143,7 +143,6 @@ public class LichSuDatVeController implements Initializable {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            alert.errorMessage("Could not load data from the database.");
         }
     }
 
@@ -399,7 +398,6 @@ public class LichSuDatVeController implements Initializable {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            alert.errorMessage("Error occurred while loading data from the database.");
         }
     }
 
