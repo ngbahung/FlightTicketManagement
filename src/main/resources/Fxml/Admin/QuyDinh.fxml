@@ -76,8 +76,8 @@
         </HBox>
         <TableView fx:id="hangve_tbv" layoutX="580.0" layoutY="399.0" prefHeight="249.0" prefWidth="376.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css" AnchorPane.rightAnchor="10.0">
             <columns>
-                <TableColumn fx:id="tenhangve_col" minWidth="20.0" prefWidth="160.0" text="Tên hạng vé" />
-                <TableColumn fx:id="heso_col" prefWidth="110.0" text="Hệ số" />
+                <TableColumn fx:id="tenhangve_col" minWidth="20.0" prefWidth="130.0" text="Tên hạng vé" />
+                <TableColumn fx:id="heso_col" prefWidth="70.0" text="Hệ số" />
                 <TableColumn fx:id="statusHangVe_col" prefWidth="143.33331298828125" text="Trạng thái" />
             </columns>
             <styleClass>
@@ -101,12 +101,11 @@
                 </Button>
             </children>
         </HBox>
-        <HBox alignment="CENTER_RIGHT" layoutX="482.0" layoutY="663.0" prefHeight="35.0" prefWidth="500.0" spacing="20.0">
+        <HBox alignment="CENTER_RIGHT" layoutX="606.0" layoutY="671.0" prefHeight="31.0" prefWidth="376.0" spacing="20.0">
             <children>
-                <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#deactiveSelectedTicketClass" prefHeight="34.0" prefWidth="146.0" styleClass="button-row" text="Thay đổi trạng thái" visible="false" />
-                <Button mnemonicParsing="false" onAction="#deactiveSelectedTicketClass" prefHeight="35.0" prefWidth="292.0" styleClass="button-row" text="Thay đổi trạng thái" />
-                <Button layoutX="103.0" layoutY="10.0" mnemonicParsing="false" onAction="#addHangVe" prefHeight="35.0" prefWidth="199.0" styleClass="button-row" text="Thêm" />
-                <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#editSelectedTicketClass" prefHeight="35.0" prefWidth="179.0" styleClass="button-row" text="Sửa" />
+                <Button mnemonicParsing="false" onAction="#deactiveSelectedTicketClass" prefHeight="35.0" prefWidth="190.0" styleClass="button-row" text="Thay đổi trạng thái" />
+                <Button layoutX="103.0" layoutY="10.0" mnemonicParsing="false" onAction="#addHangVe" prefHeight="31.0" prefWidth="66.0" styleClass="button-row" text="Thêm" />
+                <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#editSelectedTicketClass" prefHeight="31.0" prefWidth="74.0" styleClass="button-row" text="Sửa" />
             </children>
         </HBox>
         <HBox layoutX="687.0" layoutY="359.0" prefHeight="28.0" prefWidth="258.0" spacing="20.0">

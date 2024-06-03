@@ -15,109 +15,113 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="800.0" prefWidth="992.0" style="-fx-background-color: white;" styleClass="background" stylesheets="@../../Styles/Admin/DoanhThu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.DoanhThuController">
-   <children>
-      <TableView fx:id="dtThang_tableView" layoutX="19.0" layoutY="68.0" prefHeight="310.0" prefWidth="500.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css">
-         <columns>
-            <TableColumn fx:id="dtThang_stt_tbcolumn" prefWidth="50.0" text="STT" />
-            <TableColumn fx:id="dtThang_macb_tbcolumn" prefWidth="100.0" text="Mã chuyến bay" />
-            <TableColumn fx:id="dtThang_soVe_tbcolumn" prefWidth="120.0" text="Số vé bán được" />
-            <TableColumn fx:id="dtThang_doanhThu_tbcolumn" prefWidth="120.0" text="Doanh thu" />
-            <TableColumn fx:id="dtThang_tyLe_tbcolumn" text="Tỉ lệ (%)" />
-         </columns>
-         <styleClass>
-            <String fx:value="column-header" />
-            <String fx:value="column-header-background" />
-            <String fx:value="custom-tableview" />
-            <String fx:value="filler" />
-            <String fx:value="resize-line" />
-            <String fx:value="table-cell" />
-            <String fx:value="table-row-cell" />
-         </styleClass>
-      </TableView>
-      <AnchorPane prefHeight="55.0" prefWidth="992.0" style="-fx-background-color: #76b5c5;" styleClass="top-bar">
-         <children>
-            <HBox alignment="CENTER" layoutX="377.0" layoutY="8.0" prefHeight="47.0" prefWidth="601.0" spacing="30.0">
-               <children>
-                  <Label styleClass="top-bar-text" text="Tháng:" />
-                  <ComboBox fx:id="dtThang_cbbox_thangSelection" prefHeight="25.0" prefWidth="112.0" />
-                  <Label layoutX="10.0" layoutY="10.0" styleClass="top-bar-text" text="Năm:" />
-                  <ComboBox fx:id="dtThang_cbbox_namSelection" layoutX="46.0" layoutY="10.0" prefHeight="25.0" prefWidth="112.0" />
-                  <MFXButton id="custom_button" fx:id="dtThang_thongKe_btn" buttonType="RAISED" depthLevel="LEVEL1" prefHeight="31.0" prefWidth="123.0" text="Thống kê">
-                     <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20" />
-                     </graphic>
-                  </MFXButton>
-               </children>
-            </HBox>
-            <Text layoutX="39.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="DOANH THU THÁNG" />
-         </children>
-      </AnchorPane>
-      <AnchorPane layoutY="401.0" prefHeight="47.0" prefWidth="992.0" style="-fx-background-color: #76b5c5;" styleClass="top-bar">
-         <children>
-            <HBox alignment="CENTER" layoutX="600.0" layoutY="8.0" prefHeight="47.0" prefWidth="378.0" spacing="30.0" />
-            <Text layoutX="41.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="DOANH THU NĂM" />
-            <HBox alignment="CENTER" layoutX="326.0" layoutY="12.0" prefHeight="40.0" prefWidth="398.0" spacing="20.0">
-               <children>
-                  <Label prefHeight="18.0" prefWidth="42.0" styleClass="top-bar-text" text="Năm:" />
-                  <ComboBox fx:id="dtNam_cbbox_namSelection" prefHeight="26.0" prefWidth="120.0" />
-                  <MFXButton id="custom_button2" fx:id="dtNam_thongKe_btn" buttonType="RAISED" depthLevel="LEVEL1" prefHeight="31.0" prefWidth="123.0" text="Thống kê">
-                     <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20" />
-                     </graphic>
-                  </MFXButton>
-               </children>
-            </HBox>
-         </children>
-      </AnchorPane>
-      <TableView fx:id="dtNam_tableview" layoutX="16.0" layoutY="471.0" prefHeight="310.0" prefWidth="500.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css">
-         <columns>
-            <TableColumn fx:id="dtNam_Thang_tbcolumn" prefWidth="60.0" text="Tháng" />
-            <TableColumn fx:id="dtNam_soChuyen_tbcolumn" prefWidth="120.0" text="Số chuyến bay" />
-            <TableColumn fx:id="dtNam_dt_tbcolumn" prefWidth="170.0" text="Doanh thu" />
-            <TableColumn fx:id="dtNam_tiLe_tbcolumn" prefWidth="118.0" text="Tỉ lệ (%)" />
-         </columns>
-         <styleClass>
-            <String fx:value="column-header" />
-            <String fx:value="column-header-background" />
-            <String fx:value="custom-tableview" />
-            <String fx:value="filler" />
-            <String fx:value="resize-line" />
-            <String fx:value="table-cell" />
-            <String fx:value="table-row-cell" />
-         </styleClass>
-      </TableView>
-      <MFXButton id="custom_button3" fx:id="dtThang_inBaoCao_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="826.0" layoutY="358.0" prefHeight="40.0" prefWidth="133.0" text="In báo cáo" AnchorPane.rightAnchor="32.39999999999998">
-         <graphic>
-            <FontAwesomeIconView fill="WHITE" glyphName="PRINT" size="20" />
-         </graphic></MFXButton>
-      <MFXButton id="custom_button4" fx:id="dtNam_inBaoCao_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="823.0" layoutY="746.0" prefHeight="40.0" prefWidth="134.0" text="In báo cáo" AnchorPane.rightAnchor="32.0">
-         <graphic>
-            <FontAwesomeIconView fill="WHITE" glyphName="PRINT" size="20" />
-         </graphic></MFXButton>
-      <Separator layoutY="397.0" prefHeight="0.0" prefWidth="992.0" />
-      <Label layoutX="533.0" layoutY="316.0" prefHeight="25.0" prefWidth="172.0" styleClass="bottom-bar-text" text="Tổng doanh thu:" />
-      <TextField fx:id="dtThang_tongdt_txfl" editable="false" layoutX="705.0" layoutY="307.0" prefHeight="43.0" prefWidth="254.0" styleClass="total-income" text="0 VNĐ" AnchorPane.rightAnchor="32.60000000000002" />
-      <Label layoutX="550.0" layoutY="704.0" styleClass="bottom-bar-text" text="Tổng doanh thu:" />
-      <TextField fx:id="dtNam_tongdt_txtfld" editable="false" layoutX="729.0" layoutY="695.0" prefHeight="43.0" prefWidth="230.0" styleClass="total-income" text="0 VNĐ" AnchorPane.rightAnchor="32.60000000000002" />
-      <AnchorPane layoutX="526.0" layoutY="455.0" prefHeight="233.0" prefWidth="463.0">
-         <children>
-            <BarChart fx:id="doanhthunam_barchart" layoutY="32.0" prefHeight="200.0" prefWidth="409.6" title="DOANH THU NĂM" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-              <xAxis>
-                <CategoryAxis side="BOTTOM" />
-              </xAxis>
-              <yAxis>
-                <NumberAxis side="LEFT" />
-              </yAxis>
-            </BarChart>
-         </children>
-      </AnchorPane>
-      <AnchorPane layoutX="536.0" layoutY="51.0" prefHeight="250.0" prefWidth="446.0">
-         <children>
-            <PieChart fx:id="doanhthuthang_piechart" layoutX="-101.0" layoutY="-117.0" prefHeight="250.4" prefWidth="446.4" title="DOANH THU THÁNG" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-         </children>
-      </AnchorPane>
-   </children>
+<AnchorPane prefHeight="800.0" prefWidth="992.0" style="-fx-background-color: white;" stylesheets="@../../Styles/Admin/LichChuyenBay.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.DoanhThuController">
+   <TableView fx:id="dtThang_tableView" layoutX="19.0" layoutY="68.0" prefHeight="310.0" prefWidth="500.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css">
+      <columns>
+         <TableColumn fx:id="dtThang_stt_tbcolumn" prefWidth="50.0" text="STT" />
+         <TableColumn fx:id="dtThang_macb_tbcolumn" prefWidth="100.0" text="Mã chuyến bay" />
+         <TableColumn fx:id="dtThang_soVe_tbcolumn" prefWidth="120.0" text="Số vé bán được" />
+         <TableColumn fx:id="dtThang_doanhThu_tbcolumn" prefWidth="120.0" text="Doanh thu" />
+         <TableColumn fx:id="dtThang_tyLe_tbcolumn" text="Tỉ lệ (%)" />
+      </columns>
+      <styleClass>
+         <String fx:value="column-header" />
+         <String fx:value="column-header-background" />
+         <String fx:value="custom-tableview" />
+         <String fx:value="filler" />
+         <String fx:value="resize-line" />
+         <String fx:value="table-cell" />
+         <String fx:value="table-row-cell" />
+      </styleClass>
+   </TableView>
+   <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="992.0" style="-fx-background-color: #00A4BD;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <HBox alignment="CENTER" layoutX="368.0" layoutY="5.0" prefHeight="47.0" prefWidth="594.0" spacing="30.0">
+         <Label styleClass="top-bar-text" text="Tháng:" />
+         <ComboBox fx:id="dtThang_cbbox_thangSelection" prefHeight="25.0" prefWidth="112.0" />
+         <Label layoutX="10.0" layoutY="10.0" styleClass="top-bar-text" text="Năm:" />
+         <ComboBox fx:id="dtThang_cbbox_namSelection" layoutX="46.0" layoutY="10.0" prefHeight="25.0" prefWidth="112.0" />
+         <MFXButton id="custom_button" fx:id="dtThang_thongKe_btn" buttonType="RAISED" depthLevel="LEVEL1" prefHeight="31.0" prefWidth="123.0" text="Thống kê">
+            <graphic>
+               <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20" />
+            </graphic>
+         </MFXButton>
+      </HBox>
+      <Text layoutX="39.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="DOANH THU THÁNG">
+         <font>
+            <Font name="System Bold" size="30.0" />
+         </font></Text>
+      <styleClass>
+         <String fx:value="column-header" />
+         <String fx:value="column-header-background" />
+         <String fx:value="custom-tableview" />
+      </styleClass>
+   </AnchorPane>
+   <AnchorPane layoutY="401.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="992.0" style="-fx-background-color: #00A4BD;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <Text layoutX="41.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="DOANH THU NĂM">
+         <font>
+            <Font name="System Bold" size="30.0" />
+         </font></Text>
+      <HBox alignment="CENTER" layoutX="332.0" layoutY="9.0" prefHeight="40.0" prefWidth="398.0" spacing="20.0">
+         <Label prefHeight="18.0" prefWidth="42.0" styleClass="top-bar-text" text="Năm:" />
+         <ComboBox fx:id="dtNam_cbbox_namSelection" prefHeight="26.0" prefWidth="120.0" />
+         <MFXButton id="custom_button2" fx:id="dtNam_thongKe_btn" buttonType="RAISED" depthLevel="LEVEL1" prefHeight="31.0" prefWidth="123.0" text="Thống kê">
+            <graphic>
+               <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="20" />
+            </graphic>
+         </MFXButton>
+      </HBox>
+      <styleClass>
+         <String fx:value="column-header" />
+         <String fx:value="column-header-background" />
+         <String fx:value="custom-tableview" />
+      </styleClass>
+   </AnchorPane>
+   <TableView fx:id="dtNam_tableview" layoutX="16.0" layoutY="471.0" prefHeight="310.0" prefWidth="500.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css">
+      <columns>
+         <TableColumn fx:id="dtNam_Thang_tbcolumn" prefWidth="60.0" text="Tháng" />
+         <TableColumn fx:id="dtNam_soChuyen_tbcolumn" prefWidth="120.0" text="Số chuyến bay" />
+         <TableColumn fx:id="dtNam_dt_tbcolumn" prefWidth="170.0" text="Doanh thu" />
+         <TableColumn fx:id="dtNam_tiLe_tbcolumn" prefWidth="118.0" text="Tỉ lệ (%)" />
+      </columns>
+      <styleClass>
+         <String fx:value="column-header" />
+         <String fx:value="column-header-background" />
+         <String fx:value="custom-tableview" />
+         <String fx:value="filler" />
+         <String fx:value="resize-line" />
+         <String fx:value="table-cell" />
+         <String fx:value="table-row-cell" />
+      </styleClass>
+   </TableView>
+   <MFXButton id="custom_button3" fx:id="dtThang_inBaoCao_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="833.0" layoutY="358.0" prefHeight="30.0" prefWidth="120.0" text="In báo cáo" AnchorPane.rightAnchor="33.0">
+      <graphic>
+         <FontAwesomeIconView fill="WHITE" glyphName="PRINT" size="20" />
+      </graphic>
+   </MFXButton>
+   <MFXButton fx:id="dtNam_inBaoCao_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="839.0" layoutY="750.0" prefHeight="30.0" prefWidth="120.0" text="In báo cáo" AnchorPane.rightAnchor="33.0">
+      <graphic>
+         <FontAwesomeIconView fill="WHITE" glyphName="PRINT" size="20" />
+      </graphic>
+   </MFXButton>
+   <Separator layoutY="397.0" prefHeight="0.0" prefWidth="992.0" />
+   <Label id="custom" layoutX="533.0" layoutY="316.0" prefHeight="25.0" prefWidth="172.0" styleClass="bottom-bar-text" text="Tổng doanh thu:" />
+   <TextField fx:id="dtThang_tongdt_txfl" editable="false" layoutX="708.0" layoutY="309.0" prefHeight="40.0" prefWidth="250.0" styleClass="total-income" text="0 VNĐ" AnchorPane.rightAnchor="33.60000000000002" />
+   <Label id="custom" layoutX="550.0" layoutY="704.0" styleClass="bottom-bar-text" text="Tổng doanh thu:" />
+   <TextField fx:id="dtNam_tongdt_txtfld" editable="false" layoutX="729.0" layoutY="695.0" prefHeight="40.0" prefWidth="250.0" styleClass="total-income" text="0 VNĐ" AnchorPane.rightAnchor="32.60000000000002" />
+   <AnchorPane layoutX="526.0" layoutY="455.0" prefHeight="233.0" prefWidth="463.0">
+      <BarChart fx:id="doanhthunam_barchart" layoutY="32.0" prefHeight="200.0" prefWidth="409.6" title="DOANH THU NĂM" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <xAxis>
+            <CategoryAxis side="BOTTOM" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis side="LEFT" />
+         </yAxis>
+      </BarChart>
+   </AnchorPane>
+   <AnchorPane layoutX="536.0" layoutY="51.0" prefHeight="250.0" prefWidth="446.0">
+      <PieChart fx:id="doanhthuthang_piechart" layoutX="-101.0" layoutY="-117.0" prefHeight="250.4" prefWidth="446.4" title="DOANH THU THÁNG" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+   </AnchorPane>
 </AnchorPane>

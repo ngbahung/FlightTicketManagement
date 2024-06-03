@@ -56,9 +56,9 @@
    <VBox layoutX="11.0" layoutY="121.0" prefHeight="334.0" prefWidth="964.0">
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="66.0" prefWidth="965.0">
          <Text layoutX="401.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-text" text="VÉ ĐÃ ĐẶT" />
-         <MFXButton id="custom_2" buttonType="RAISED" depthLevel="LEVEL1" graphicTextGap="10.0" layoutX="842.0" layoutY="14.0" onMouseClicked="#xuatVe" prefHeight="30.0" prefWidth="111.0" text="Xuất vé">
+         <MFXButton id="custom_1" buttonType="RAISED" depthLevel="LEVEL1" graphicTextGap="10.0" layoutX="842.0" layoutY="14.0" onMouseClicked="#xuatVe" prefHeight="30.0" prefWidth="111.0" text="Xuất vé">
             <graphic>
-               <FontAwesomeIconView fill="#00a4bd" glyphName="TICKET" size="20" />
+               <FontAwesomeIconView fill="WHITE" glyphName="TICKET" size="20" />
             </graphic>
          </MFXButton>
          <styleClass>
@@ -101,9 +101,9 @@
    <VBox layoutX="10.0" layoutY="457.0" prefHeight="319.0" prefWidth="966.0">
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="969.0">
          <Text layoutX="366.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-text" text="PHIẾU ĐẶT CHỖ" />
-         <MFXButton id="custom_2" fx:id="thanhToan_btn" buttonType="RAISED" depthLevel="LEVEL1" graphicTextGap="10.0" layoutX="811.0" layoutY="17.0" onAction="#handleThanhToan" prefHeight="30.0" prefWidth="144.0" text="Thanh toán">
+         <MFXButton id="custom_1" fx:id="thanhToan_btn" buttonType="RAISED" depthLevel="LEVEL1" graphicTextGap="10.0" layoutX="811.0" layoutY="17.0" onAction="#handleThanhToan" prefHeight="30.0" prefWidth="144.0" text="Thanh toán">
             <graphic>
-               <FontAwesomeIconView fill="#00a4bd" glyphName="MONEY" size="20" />
+               <FontAwesomeIconView fill="WHITE" glyphName="MONEY" size="20" />
             </graphic>
          </MFXButton>
          <styleClass>
