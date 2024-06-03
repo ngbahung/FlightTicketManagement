@@ -484,7 +484,7 @@ CREATE OR REPLACE TRIGGER rf_VE_CT_HANGVE_delete_CHUYENBAY
     FOR EACH ROW
 BEGIN
     -- Xóa các bản ghi liên quan từ bảng VE
-    DELETE CT_HANGVE
+    DELETE FROM CT_HANGVE
     WHERE machuyenbay = :OLD.machuyenbay;
 
     FOR rec IN (SELECT MaVe FROM VE WHERE MaChuyenBay = :OLD.MaChuyenBay)
