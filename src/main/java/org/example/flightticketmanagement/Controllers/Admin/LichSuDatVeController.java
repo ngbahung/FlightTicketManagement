@@ -158,7 +158,6 @@ public class LichSuDatVeController implements Initializable {
 
         boolean confirm = alert.confirmationMessage("Bạn có chắc chắn muốn thanh toán phiếu đặt chỗ này?");
         if (confirm) {
-            callUpdateTicketStatusProcedure(selectedVe.getMaCT_DatVe(), 1);
             eventBus.post(new Object());
             loadData();  // Reload data
             alert.successMessage("Thanh toán thành công.");
@@ -187,7 +186,6 @@ public class LichSuDatVeController implements Initializable {
 
         boolean confirm = alert.confirmationMessage(message);
         if (confirm) {
-            callUpdateTicketStatusProcedure(selected.getMaCT_DatVe(), 2);  // Call the procedure with status 2 (cancel)
             eventBus.post(new Object());
             loadData();  // Reload the data
             alert.successMessage("Hủy vé hoặc phiếu đặt chỗ thành công.");
@@ -566,18 +564,6 @@ public class LichSuDatVeController implements Initializable {
                     tableView.getItems().add(datVe);
                 }
             }
-        }
-    }
-
-    private void callUpdateTicketStatusProcedure(String maCT_DATVE, int trangThai) {
-        String sql = "{call update_ticket_status(?, ?)}";  // SQL to call the stored procedure
-        try (CallableStatement callableStatement = connect.prepareCall(sql)) {
-            callableStatement.setString(1, maCT_DATVE);
-            callableStatement.setInt(2, trangThai);
-            callableStatement.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            alert.errorMessage("Có lỗi xảy ra khi cập nhật trạng thái vé.");
         }
     }
 

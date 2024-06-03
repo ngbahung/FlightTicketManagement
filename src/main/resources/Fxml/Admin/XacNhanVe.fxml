@@ -13,8 +13,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="521.0" prefWidth="803.0" style="-fx-background-color: #ffffff;" stylesheets="@../../Styles/Admin/PhanQuyen.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.XacNhanVeController">
-   <GridPane hgap="20.0" layoutX="20.0" layoutY="67.0" prefHeight="230.0" prefWidth="380.0" styleClass="custom-gridpane" stylesheets="@../../Styles/Admin/LichChuyenBay.css" vgap="20.0">
+<AnchorPane prefHeight="536.0" prefWidth="803.0" style="-fx-background-color: #ffffff;" stylesheets="@../../Styles/Admin/PhanQuyen.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.XacNhanVeController">
+   <GridPane hgap="20.0" layoutX="20.0" layoutY="67.0" prefHeight="205.0" prefWidth="380.0" styleClass="custom-gridpane" stylesheets="@../../Styles/Admin/LichChuyenBay.css" vgap="20.0">
       <columnConstraints>
          <ColumnConstraints hgrow="SOMETIMES" maxWidth="222.0" minWidth="10.0" prefWidth="133.0" />
          <ColumnConstraints hgrow="SOMETIMES" maxWidth="323.0" minWidth="10.0" prefWidth="320.0" />
@@ -25,23 +25,20 @@
          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       </rowConstraints>
       <padding>
          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
       </padding>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Họ và tên" GridPane.rowIndex="1" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CCCD" GridPane.rowIndex="2" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Số điện thoại" GridPane.rowIndex="3" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email" GridPane.rowIndex="4" />
-      <MFXTextField fx:id="hoten_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="29.0" prefWidth="320.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <MFXTextField fx:id="cccd_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="27.0" prefWidth="319.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <MFXTextField fx:id="sdt_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="25.0" prefWidth="318.0" textLimit="10" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-      <MFXTextField fx:id="email_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="30.0" prefWidth="318.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Địa chỉ" GridPane.rowIndex="5" />
-      <MFXTextField fx:id="diaChi_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="29.0" prefWidth="317.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã khách hàng" visible="false" />
-      <MFXTextField fx:id="maKH_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="11.0" prefWidth="320.0" visible="false" GridPane.columnIndex="1" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Họ và tên" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CCCD" GridPane.rowIndex="1" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Số điện thoại" GridPane.rowIndex="2" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email" GridPane.rowIndex="3" />
+      <MFXTextField fx:id="hoten_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="29.0" prefWidth="320.0" GridPane.columnIndex="1" />
+      <MFXTextField fx:id="cccd_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="27.0" prefWidth="319.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <MFXTextField fx:id="sdt_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="25.0" prefWidth="318.0" textLimit="10" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <MFXTextField fx:id="email_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="30.0" prefWidth="318.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Địa chỉ" GridPane.rowIndex="4" />
+      <MFXTextField fx:id="diaChi_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="29.0" prefWidth="317.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
    </GridPane>
    <Label layoutX="279.0" layoutY="11.0" prefHeight="30.0" prefWidth="242.0" style="-fx-font-size: 20; -fx-font-family: Inter;" text="XÁC NHẬN THÔNG TIN" textFill="#5718a4">
       <font>
@@ -58,15 +55,15 @@
          <Font name="System Bold Italic" size="15.0" />
       </font>
    </Label>
-   <Label id="custom_thongtin" layoutX="20.0" layoutY="305.0" text="Thông tin vé" textFill="#1a0b36">
+   <Label id="custom_thongtin" layoutX="20.0" layoutY="288.0" text="Thông tin vé" textFill="#1a0b36">
       <font>
          <Font name="System Bold Italic" size="15.0" />
       </font>
    </Label>
    <GridPane hgap="10.0" layoutX="410.0" layoutY="67.0" prefHeight="230.0" prefWidth="380.0" styleClass="custom-gridpane" stylesheets="@../../Styles/Admin/LichChuyenBay.css" vgap="20.0">
       <columnConstraints>
-         <ColumnConstraints hgrow="SOMETIMES" maxWidth="222.0" minWidth="10.0" prefWidth="133.0" />
-         <ColumnConstraints hgrow="SOMETIMES" maxWidth="336.0" minWidth="10.0" prefWidth="320.0" />
+         <ColumnConstraints hgrow="SOMETIMES" maxWidth="222.0" minWidth="10.0" prefWidth="97.80001220703124" />
+         <ColumnConstraints hgrow="SOMETIMES" maxWidth="336.0" minWidth="10.0" prefWidth="221.79998779296875" />
       </columnConstraints>
       <rowConstraints>
          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -86,10 +83,10 @@
       <MFXTextField fx:id="sanBayDen_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="27.0" prefWidth="319.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <MFXTextField fx:id="ngayBay_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="25.0" prefWidth="318.0" textLimit="10" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       <MFXTextField fx:id="gioBay_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="30.0" prefWidth="318.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã chuyến bay" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã chuyến bay" wrappingWidth="94.01998853683472" />
       <MFXTextField fx:id="maChuyenBay_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="11.0" prefWidth="320.0" GridPane.columnIndex="1" />
    </GridPane>
-   <GridPane hgap="20.0" layoutX="20.0" layoutY="330.0" prefHeight="115.0" prefWidth="380.0" styleClass="custom-gridpane" stylesheets="@../../Styles/Admin/LichChuyenBay.css" vgap="30.0">
+   <GridPane hgap="20.0" layoutX="20.0" layoutY="313.0" prefHeight="142.0" prefWidth="370.0" styleClass="custom-gridpane" stylesheets="@../../Styles/Admin/LichChuyenBay.css" vgap="30.0">
       <columnConstraints>
          <ColumnConstraints hgrow="SOMETIMES" maxWidth="222.0" minWidth="10.0" prefWidth="74.0" />
          <ColumnConstraints hgrow="SOMETIMES" maxWidth="336.0" minWidth="10.0" prefWidth="272.0" />
@@ -97,19 +94,19 @@
       <rowConstraints>
          <RowConstraints maxHeight="19.0" minHeight="10.0" prefHeight="19.0" vgrow="SOMETIMES" />
          <RowConstraints maxHeight="23.0" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
-         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
       </rowConstraints>
       <padding>
-         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         <Insets left="10.0" right="10.0" top="10.0" />
       </padding>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã ghế" GridPane.rowIndex="1" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Thành tiền" GridPane.rowIndex="2" />
-      <MFXTextField fx:id="maGhe_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="29.0" prefWidth="320.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <MFXTextField fx:id="thanhTien_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="27.0" prefWidth="319.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <MFXTextField fx:id="maGhe_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="22.0" prefWidth="254.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <MFXTextField fx:id="thanhTien_txtfld" allowEdit="false" floatMode="DISABLED" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="254.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã vé" />
       <MFXTextField fx:id="maVe_txtfld" allowEdit="false" floatMode="DISABLED" prefHeight="11.0" prefWidth="320.0" GridPane.columnIndex="1" />
    </GridPane>
-   <HBox alignment="TOP_RIGHT" layoutX="117.0" layoutY="465.0" prefHeight="40.0" prefWidth="607.0" spacing="20.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css">
+   <HBox alignment="TOP_RIGHT" layoutX="116.0" layoutY="480.0" prefHeight="40.0" prefWidth="607.0" spacing="20.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css">
       <MFXButton id="custom_them" fx:id="sua_btn" graphicTextGap="20.0" layoutX="10.0" layoutY="10.0" onAction="#handleSuaButtonAction" prefHeight="54.0" prefWidth="147.0" text="Sửa">
          <graphic>
             <FontAwesomeIconView fill="WHITE" glyphName="EDIT" size="30" />
@@ -131,4 +128,6 @@
          </graphic>
       </MFXButton>
    </HBox>
+   <Text layoutX="453.0" layoutY="376.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã khách hàng" visible="false" />
+   <MFXTextField fx:id="maKH_txtfld" allowEdit="false" floatMode="DISABLED" layoutX="452.0" layoutY="388.0" prefHeight="11.0" prefWidth="320.0" visible="false" />
 </AnchorPane>

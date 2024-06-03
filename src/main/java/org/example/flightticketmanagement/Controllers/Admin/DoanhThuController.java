@@ -67,7 +67,7 @@ public class DoanhThuController implements Initializable {
 
     private ReportController reportController;
     private boolean DTN_isThongKeThanhCong = false;
-    private final List<BaoCaoNam> listBaoCaoNam = new ArrayList<BaoCaoNam>();
+    private final List<BaoCaoNam> listBaoCaoNam = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -82,6 +82,18 @@ public class DoanhThuController implements Initializable {
         dtThang_thongKe_btn.setOnMouseClicked(event -> DTThang_LoadData());
         dtNam_inBaoCao_btn.setOnMouseClicked(event -> InBaoCaoNam());
         dtThang_inBaoCao_btn.setOnMouseClicked(event -> InBaoCaoThang());
+
+        // Set current month and year as default selection
+        LocalDate currentDate = LocalDate.now();
+        int currentYear = currentDate.getYear();
+        int currentMonth = currentDate.getMonthValue();
+
+        dtNam_cbbox_namSelection.getSelectionModel().select((Integer) currentYear);
+        dtThang_cbbox_namSelection.getSelectionModel().select((Integer) currentYear);
+        dtThang_cbbox_thangSelection.getSelectionModel().select((Integer) currentMonth);
+        // Load data for current year and month
+        DTNam_LoadData();
+        DTThang_LoadData();
     }
 
     @Subscribe
@@ -124,7 +136,12 @@ public class DoanhThuController implements Initializable {
 
                 while (result.next()) {
                     BigDecimal doanhThu = result.getBigDecimal("DoanhThu");
-                    Double tyLe = doanhThu.divide(tongDoanhThuNam, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.HALF_UP).doubleValue();
+                    Double tyLe = 0.0;
+                    if (tongDoanhThuNam.compareTo(BigDecimal.ZERO) > 0) {
+                        tyLe = doanhThu.divide(tongDoanhThuNam, 4, RoundingMode.HALF_UP)
+                                .multiply(BigDecimal.valueOf(100))
+                                .setScale(2, RoundingMode.HALF_UP).doubleValue();
+                    }
                     BaoCaoNam baoCaoNam = new BaoCaoNam(
                             result.getInt("Thang"),
                             result.getInt("SoChuyenBay"),
@@ -140,7 +157,7 @@ public class DoanhThuController implements Initializable {
 
                 // Update BarChart
                 doanhthunam_barchart.getData().clear();
-                boolean add = doanhthunam_barchart.getData().add(series);
+                doanhthunam_barchart.getData().add(series);
 
                 DTN_isThongKeThanhCong = true;
 
@@ -155,6 +172,7 @@ public class DoanhThuController implements Initializable {
             alert.errorMessage("Error occurred while loading data from the database.");
         }
     }
+
 
 
     public void DTNam_LoadTongDT() {
@@ -237,10 +255,10 @@ public class DoanhThuController implements Initializable {
     private Integer DTT_thangBaoCao = 0;
 
     private boolean DTT_isThongKeThanhCong = false;
-    private List<BaoCaoThang> listBaoCaoThang = new ArrayList<BaoCaoThang>();
+    private final List<BaoCaoThang> listBaoCaoThang = new ArrayList<>();
 
     public void InBaoCaoThang() {
-        if (DTT_isThongKeThanhCong == false) {
+        if (!DTT_isThongKeThanhCong) {
             alert.errorMessage("Vui lòng thống kê doanh thu trước khi xuất báo cáo!");
             return;
         }
