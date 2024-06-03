@@ -4,6 +4,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -29,6 +30,13 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 public class LichSuDatVeController implements Initializable {
+    @FXML
+    private MFXTextField tenkhachhang_txtfld;
+
+    @FXML
+    private MFXTextField mave_txtfld;
+
+
     @FXML
     private MFXButton refresh_btn;
 
@@ -115,6 +123,13 @@ public class LichSuDatVeController implements Initializable {
         LocalDateTime selectedDate = ngay_datepicker.getValue() != null ? ngay_datepicker.getValue().atStartOfDay() : null;
         String sanBayDi = sanbaydi_menubtn.getText();
         String sanBayDen = sanbayden_menubtn.getText();
+        String maVe = mave_txtfld.getText().trim();
+        String tenKhachHang = tenkhachhang_txtfld.getText().trim();
+
+        if (selectedDate == null && "Sân bay đi".equals(sanBayDi) && "Sân bay đến".equals(sanBayDen) && maVe.isEmpty() && tenKhachHang.isEmpty()) {
+            alert.errorMessage("Vui lòng nhập ít nhất một tiêu chí tìm kiếm.");
+            return;
+        }
 
         veDaDat_tbview.getItems().clear();
         phDC_tbview.getItems().clear();
@@ -132,12 +147,18 @@ public class LichSuDatVeController implements Initializable {
         if (!"Sân bay đến".equals(sanBayDen)) {
             conditions.append(" AND MaVe IN (SELECT V.MaVe FROM Ve V JOIN ChuyenBay CB ON V.MaChuyenBay = CB.MaChuyenBay JOIN DuongBay DB ON CB.MaDuongBay = DB.MaDuongBay JOIN SanBay SBDen ON DB.MaSanBayDen = SBDen.MaSanBay WHERE SBDen.TenSanBay = ?)");
         }
+        if (!maVe.isEmpty()) {
+            conditions.append(" AND MaVe = ?");
+        }
+        if (!tenKhachHang.isEmpty()) {
+            conditions.append(" AND MaKhachHang IN (SELECT MaKhachHang FROM KhachHang WHERE HOTEN LIKE ?)");
+        }
 
         String finalQuery = baseQuery + conditions;
 
         try {
-            prepareAndExecuteQuery(finalQuery, selectedDate, sanBayDi, sanBayDen, veDaDat_tbview, 1);
-            prepareAndExecuteQuery(finalQuery, selectedDate, sanBayDi, sanBayDen, phDC_tbview, 0);
+            prepareAndExecuteQuery(finalQuery, selectedDate, sanBayDi, sanBayDen, maVe, tenKhachHang, veDaDat_tbview, 1);
+            prepareAndExecuteQuery(finalQuery, selectedDate, sanBayDi, sanBayDen, maVe, tenKhachHang, phDC_tbview, 0);
             if (veDaDat_tbview.getItems().isEmpty() && phDC_tbview.getItems().isEmpty()) {
                 alert.errorMessage("Không tìm thấy dữ liệu.");
             }
@@ -157,11 +178,32 @@ public class LichSuDatVeController implements Initializable {
 
         boolean confirm = alert.confirmationMessage("Bạn có chắc chắn muốn thanh toán phiếu đặt chỗ này?");
         if (confirm) {
-            eventBus.post(new Object());
-            loadData();  // Reload data
-            alert.successMessage("Thanh toán thành công.");
+            Connection connect = null;
+            try {
+                connect = DatabaseDriver.getConnection();
+                connect.setAutoCommit(false);  // Begin transaction
+
+                try (CallableStatement cstmt = connect.prepareCall("{call update_ticket_status(?, ?)}")) {
+                    cstmt.setString(1, selectedVe.getMaCT_DatVe());
+                    cstmt.setInt(2, 1);  // Status value 1 to indicate payment
+                    cstmt.executeUpdate();
+                }
+
+                connect.commit();  // Commit transaction
+                eventBus.post(new Object());
+                loadData();  // Reload data
+                alert.successMessage("Thanh toán thành công.");
+            } catch (SQLException e) {
+                try {
+                    connect.rollback();  // Rollback transaction in case of error
+                } catch (SQLException rollbackEx) {
+                    alert.errorMessage("Lỗi khi rollback: " + rollbackEx.getMessage());
+                }
+                alert.errorMessage("Có lỗi xảy ra khi thanh toán: " + e.getMessage());
+            }
         }
     }
+
 
     @FXML
     void cancelTicketOrReservation() {
@@ -175,7 +217,8 @@ public class LichSuDatVeController implements Initializable {
 
         String message = "Bạn có chắc chắn muốn hủy ";
         CT_DatVe selected;
-        if (selectedVeDaDat != null) {
+        boolean isTicket = selectedVeDaDat != null;
+        if (isTicket) {
             message += "vé này?";
             selected = selectedVeDaDat;
         } else {
@@ -185,11 +228,41 @@ public class LichSuDatVeController implements Initializable {
 
         boolean confirm = alert.confirmationMessage(message);
         if (confirm) {
-            eventBus.post(new Object());
-            loadData();  // Reload the data
-            alert.successMessage("Hủy vé hoặc phiếu đặt chỗ thành công.");
+            try {
+                connect = DatabaseDriver.getConnection();
+                connect.setAutoCommit(false);
+
+                if (isTicket) {
+                    try (CallableStatement cstmt = connect.prepareCall("{call update_ticket_status(?, ?)}")) {
+                        cstmt.setString(1, selected.getMaCT_DatVe());
+                        cstmt.setInt(2, 2);
+                        cstmt.executeUpdate();
+                    }
+                } else {
+                    // Directly delete reservation
+                    try (PreparedStatement pstmt = connect.prepareStatement("DELETE FROM CT_DATVE WHERE MaCT_DATVE = ?")) {
+                        pstmt.setString(1, selected.getMaCT_DatVe());
+                        pstmt.executeUpdate();
+                    }
+                }
+
+                connect.commit();
+                eventBus.post(new Object());
+                loadData();
+                alert.successMessage("Hủy vé hoặc phiếu đặt chỗ thành công.");
+            } catch (SQLException e) {
+                try {
+                    if (connect != null) {
+                        connect.rollback();
+                    }
+                } catch (SQLException rollbackEx) {
+                    alert.errorMessage("Lỗi khi rollback: " + rollbackEx.getMessage());
+                }
+                alert.errorMessage("Có lỗi xảy ra khi hủy vé hoặc phiếu đặt chỗ: " + e.getMessage());
+            }
         }
     }
+
 
     @FXML
     void xuatVe(){
@@ -268,6 +341,8 @@ public class LichSuDatVeController implements Initializable {
             sanbaydi_menubtn.setText("Sân bay đi");
             sanbayden_menubtn.setText("Sân bay đến");
             ngay_datepicker.setValue(null);
+            mave_txtfld.setText("");
+            tenkhachhang_txtfld.setText("");
             loadData();
         });
 
@@ -527,7 +602,7 @@ public class LichSuDatVeController implements Initializable {
         return tenHangVe;
     }
 
-    private void prepareAndExecuteQuery(String query, LocalDateTime selectedDate, String sanBayDi, String sanBayDen, TableView<CT_DatVe> tableView, int trangThai) throws SQLException {
+    private void prepareAndExecuteQuery(String query, LocalDateTime selectedDate, String sanBayDi, String sanBayDen, String maVe, String tenKhachHang, TableView<CT_DatVe> tableView, int trangThai) throws SQLException {
         // Set transaction isolation level here
         connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 
@@ -543,6 +618,12 @@ public class LichSuDatVeController implements Initializable {
             }
             if (!"Sân bay đến".equals(sanBayDen)) {
                 prepare.setString(paramIndex++, sanBayDen);
+            }
+            if (!maVe.isEmpty()) {
+                prepare.setString(paramIndex++, maVe);
+            }
+            if (!tenKhachHang.isEmpty()) {
+                prepare.setString(paramIndex++, "%" + tenKhachHang + "%");
             }
 
             try (ResultSet result = prepare.executeQuery()) {

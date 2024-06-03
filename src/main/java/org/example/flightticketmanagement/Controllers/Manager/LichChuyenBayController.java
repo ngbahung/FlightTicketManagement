@@ -160,6 +160,8 @@ public class LichChuyenBayController implements Initializable {
                 int[] results = prepare.executeBatch();
                 if (Arrays.stream(results).allMatch(i -> i > 0)) {
                     alert.successMessage("Tất cả các chuyến bay đã được xóa thành công.");
+                    eventBus.post(new Object());
+                    layDuLieu(null, null, null);
                 } else {
                     alert.errorMessage("Không xóa được một số chuyến bay đã chọn.");
                 }
@@ -167,13 +169,6 @@ public class LichChuyenBayController implements Initializable {
             } catch (SQLException e) {
                 e.printStackTrace();
                 alert.errorMessage("Lỗi khi đang xóa chuyến bay. Vui lòng kiểm tra lại.");
-            } finally {
-                try {
-                    if (prepare != null) prepare.close();
-                    if (connect != null) connect.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }
@@ -230,8 +225,16 @@ public class LichChuyenBayController implements Initializable {
     private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
+    private static final EventBus eventBus = new EventBus();
+
+    public LichChuyenBayController() {}
+
+    public static EventBus getEventBus() {
+        return eventBus;
+    }
     private final EventBus eventBusXoaGheTrong = XacNhanVeController.getEventBus();
     private final EventBus eventBusThemGheTrong = LichSuDatVeController.getEventBus();
+    private final EventBus eventBusSuaChuyenBay = SuaLichChuyenBayController.getEventBus();
 
     private final AlertMessage alert = new AlertMessage();
 
@@ -240,6 +243,7 @@ public class LichChuyenBayController implements Initializable {
         connect = DatabaseDriver.getConnection();
         eventBusXoaGheTrong.register(this);
         eventBusThemGheTrong.register(this);
+        eventBusSuaChuyenBay.register(this);
         layDuLieu(null, null, null);
         sanbaydi_menubtn.setOnShowing(event -> updateSanBayMenuItems());
         sanbayden_menubtn.setOnShowing(event -> updateSanBayMenuItems());

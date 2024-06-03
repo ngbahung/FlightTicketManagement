@@ -19,8 +19,9 @@
     <children>
         <GridPane layoutX="22.0" layoutY="61.0" prefHeight="225.0" prefWidth="391.0" styleClass="grid-pane" stylesheets="@../../Styles/Admin/LichChuyenBay.css" AnchorPane.leftAnchor="10.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="288.0" minWidth="10.0" prefWidth="170.33336385091147" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="225.33331298828125" minWidth="8.333302815755218" prefWidth="8.333302815755218" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="288.0" minWidth="10.0" prefWidth="253.40001220703124" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="225.33331298828125" minWidth="8.333302815755218" prefWidth="48.79997558593749" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="225.33331298828125" minWidth="10.0" prefWidth="65.60002441406249" />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -43,6 +44,11 @@
                 <TextField fx:id="maxtgdung_tfx" disable="true" editable="false" promptText="phút" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                 <TextField fx:id="mintgdatve_tfx" disable="true" editable="false" promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                 <TextField fx:id="mintghuyve_tfx" disable="true" editable="false" promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label alignment="CENTER" contentDisplay="CENTER" text="phút" GridPane.columnIndex="2" />
+            <Label alignment="CENTER" contentDisplay="CENTER" text="phút" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Label alignment="CENTER" contentDisplay="CENTER" text="phút" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label alignment="CENTER" contentDisplay="CENTER" text="giờ" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Label alignment="CENTER" contentDisplay="CENTER" text="giờ" GridPane.columnIndex="2" GridPane.rowIndex="5" />
             </children>
             <padding>
                 <Insets left="10.0" right="10.0" />

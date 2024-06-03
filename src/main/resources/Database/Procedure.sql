@@ -231,6 +231,8 @@ END GET_GIA_TIEN;
 
 -- PROCEDURE 9: update lại số ghế trống, số ghế đặt khi thay đổi trạng thái của ct_datve */
 --UPDATE TRANGTHAI
+--DROP PROCEDURE update_ticket_status;
+
 CREATE OR REPLACE PROCEDURE update_ticket_status(
     p_maCT_DATVE IN VARCHAR2,
     p_trangThai IN number
@@ -260,30 +262,19 @@ BEGIN
             END
     WHERE
         MaCT_DATVE = p_maCT_DATVE;
-
-
 -- Fetch related MaChuyenBay and MaHangVe
     SELECT V.MaChuyenBay, V.MaHangVe INTO v_maChuyenBay, v_maHangVe
     FROM VE V
     WHERE v.MaVe = v_maVe;
 
 -- Adjust the available seats in CT_HANGVE
-    IF p_trangThai = 1 THEN
-        IF v_oldTrangThai != 0 THEN
-            -- If old status is not 0, decrement available seats and increment booked seats
-            UPDATE CT_HANGVE
-            SET SoGheTrong = SoGheTrong - 1,
-                SoGheDat = SoGheDat + 1
-            WHERE MaChuyenBay = v_maChuyenBay AND MaHangVe = v_maHangVe;
-        END IF;
-    ELSIF p_trangThai = 2 THEN
-        -- If ticket is cancelled, increment available seats and decrement booked seats
+
+    IF (p_trangThai = 1 AND v_oldTrangThai = 0 )THEN
         UPDATE CT_HANGVE
         SET SoGheTrong = SoGheTrong + 1,
             SoGheDat = SoGheDat - 1
         WHERE MaChuyenBay = v_maChuyenBay AND MaHangVe = v_maHangVe;
     END IF;
-
     COMMIT;
 EXCEPTION
     WHEN OTHERS THEN
@@ -334,41 +325,6 @@ EXCEPTION
         ROLLBACK;
         RAISE;
 END SellTicket;
-
---PROCEDURE 2: SO GHE trong
-CREATE OR REPLACE PROCEDURE update_soGheTrong(
-    p_maCT_DATVE IN VARCHAR2,
-    p_trangThai IN INT
-) AS
-    v_maChuyenBay VARCHAR2(10);
-    v_maHangVe VARCHAR2(10);
-BEGIN
-    -- Lấy thông tin chuyến bay và hạng vé từ bảng CT_DATVE
-    SELECT V.MaChuyenBay, V.MaHangVe
-    INTO v_maChuyenBay, v_maHangVe
-    FROM VE V
-             JOIN CT_DATVE CDV ON V.MaVe = CDV.MaVe
-    WHERE CDV.MaCT_DATVE = p_maCT_DATVE;
-
--- Cập nhật số ghế trống và đặt cho hợp lý dựa trên trạng thái mới của vé
-    IF p_trangThai IN (0, 1) THEN
-        -- Trạng thái mới là 1 (đã đặt vé), giảm số ghế trống và tăng số ghế đã đặt
-        UPDATE CT_HANGVE
-        SET SoGheTrong = SoGheTrong - 1,
-            SoGheDat = SoGheDat + 1
-        WHERE MaChuyenBay = v_maChuyenBay AND MaHangVe = v_maHangVe;
-    END IF;
-
-    COMMIT;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        -- Xử lý ngoại lệ khi không tìm thấy dữ liệu
-        DBMS_OUTPUT.PUT_LINE('Không tìm thấy dữ liệu cho mã CT_DATVE: ' || p_maCT_DATVE);
-    WHEN OTHERS THEN
-        -- Xử lý ngoại lệ khác và rollback
-        ROLLBACK;
-        DBMS_OUTPUT.PUT_LINE('Lỗi: ' || SQLERRM);
-END;
 
 --PROCEDURE 3: TẠO MÃ KHÁCH hàng
 CREATE OR REPLACE PROCEDURE GenerateCustomerId(
@@ -573,13 +529,23 @@ EXCEPTION
     WHEN OTHERS THEN
         p_newMaDB := 'DB001'; -- Trả về giá trị mặc định nếu có lỗi
 END GENERATE_MA_DUONGBAY;
-
-
 -----------------------------------------------------------------------------
 -- XÓA CT_DATVE LIÊN QUAN ĐẾN VE ĐÃ XÓA
-
-CREATE OR REPLACE PROCEDURE delete_CT_DATVE_by_VE (p_MaVe VARCHAR2) IS
+CREATE OR REPLACE PROCEDURE delete_CT_DATVE_by_VE(
+    p_MaVe IN VARCHAR2
+) AS
 BEGIN
     DELETE FROM CT_DATVE
     WHERE MaVe = p_MaVe;
-END;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        NULL; -- Nếu không tìm thấy MaVe trong CT_DATVE thì bỏ qua
+    WHEN OTHERS THEN
+        -- Xử lý các ngoại lệ khác nếu cần thiết
+        NULL;
+END delete_CT_DATVE_by_VE;
+
+
+
+-------------------------------------------------------------------
+

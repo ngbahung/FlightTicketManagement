@@ -213,33 +213,12 @@ public class XacNhanVeController implements Initializable {
                 cs.setInt(10, trangThai);
                 cs.execute();
             }
-
-            // Gọi hàm update_soghetrong sau khi SellTicket
-            String maCT_DATVE = getMaCT_DATVEByMaVe(maVe); // Hàm này cần được tạo để lấy MaCT_DATVE từ MaVe
-            update_soghetrong(maCT_DATVE, trangThai);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Có lỗi xảy ra khi đặt vé hoặc đặt chỗ.");
             return false;
         }
-    }
-
-    private String getMaCT_DATVEByMaVe(String maVe) {
-        String maCT_DATVE = null;
-        String query = "SELECT MACT_DATVE FROM CT_DATVE WHERE MaVe = ?";
-        try (PreparedStatement ps = connect.prepareStatement(query)) {
-            ps.setString(1, maVe);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    maCT_DATVE = rs.getString("MACT_DATVE");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            alert.errorMessage("Có lỗi xảy ra khi lấy MaCT_DATVE.");
-        }
-        return maCT_DATVE;
     }
 
     private void deleteBooking() {
@@ -251,16 +230,6 @@ public class XacNhanVeController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Có lỗi xảy ra khi xóa vé.");
-        }
-    }
-
-    // Hàm update_soghetrong
-    private void update_soghetrong(String maCT_DATVE, int trangThai) throws SQLException {
-        String callProcedureSql = "{CALL update_soghetrong(?, ?)}";
-        try (CallableStatement cs = connect.prepareCall(callProcedureSql)) {
-            cs.setString(1, maCT_DATVE);
-            cs.setInt(2, trangThai);
-            cs.execute();
         }
     }
 

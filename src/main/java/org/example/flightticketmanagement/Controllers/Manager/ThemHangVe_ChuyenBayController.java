@@ -55,7 +55,6 @@ public class ThemHangVe_ChuyenBayController implements Initializable {
         stage.close();
     }
 
-
     private Connection connect;
 
     private final AlertMessage alert = new AlertMessage();
@@ -73,7 +72,7 @@ public class ThemHangVe_ChuyenBayController implements Initializable {
         ObservableList<HangVe> hangVeList = FXCollections.observableArrayList();
 
         try {
-            String query = "SELECT * FROM HANGVE";
+            String query = "SELECT * FROM HANGVE WHERE TRANGTHAI = 1";
             Statement stmt = connect.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
