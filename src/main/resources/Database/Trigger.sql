@@ -1,5 +1,6 @@
 
 
+
 /* R1: Thời gian xuất phát của một chuyến bay phải nhỏ hơn thời gian kết thúc */
 
 ALTER TABLE CHUYENBAY
@@ -37,8 +38,7 @@ END;
 
 /* R4: Cập nhật doanh thu  tháng khi có thêm doanh thu chuyến bay.*/
 
--- DROP TRIGGER Update_DoanhThu_Thang;
-
+DROP TRIGGER Update_DoanhThu_Thang;
 CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang
     FOR INSERT OR update ON CT_DATVE
     COMPOUND TRIGGER
@@ -51,7 +51,9 @@ CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang
     v_countMaChuyenBay NUMBER;
     CheckExist NUMBER := 0 ;
     v_count NUMBER;
-
+    p_trangThai NUMBER;
+    v_maVe VARCHAR2(10);
+    v_maHangVe VARCHAR2(10);
 
 BEFORE STATEMENT IS
 BEGIN
@@ -61,25 +63,32 @@ END BEFORE STATEMENT;
     BEFORE EACH ROW IS
     BEGIN
 
-        IF (:NEW.NgayThanhToan = NULL) THEN
+        IF (:NEW.NgayThanhToan IS NULL) THEN
             BEGIN
                 SELECT 0,0 INTO v_nam,V_THANG
                 FROM dual;
             END;
         ELSE
-            begin
-                SELECT EXTRACT(YEAR FROM :NEW.NgayThanhToan), EXTRACT(MONTH FROM :NEW.NgayThanhToan) INTO v_nam,v_thang
-                FROM dual;
-
-                SELECT Giatien INTO giave
-                FROM VE v
-                WHERE V.MaVE = :NEW.MaVE;
-
-                SELECT Machuyenbay INTO v_machuyenbay
-                FROM ve
-                WHERE Ve.MaVE = :NEW.MAVE;
-            END;
+            SELECT EXTRACT(YEAR FROM :NEW.NgayThanhToan), EXTRACT(MONTH FROM :NEW.NgayThanhToan) INTO v_nam,v_thang
+            FROM dual;
         END IF;
+
+        SELECT :NEW.TrangThai INTO p_trangThai
+        FROM dual;
+
+        SELECT MAHANGVE INTO v_maHangVe
+        FROM VE
+        WHERE Ve.MaVE = :NEW.MAVE;
+
+        SELECT Giatien INTO giave
+        FROM VE v
+        WHERE V.MaVE = :NEW.MaVE;
+
+        SELECT Machuyenbay INTO v_machuyenbay
+        FROM ve
+        WHERE Ve.MaVE = :NEW.MAVE;
+
+
 
         IF (:NEW.TrangThai = 2) THEN
             BEGIN
@@ -98,6 +107,20 @@ END BEFORE STATEMENT;
 
     AFTER STATEMENT IS
     BEGIN
+
+        IF (( p_trangThai = 1) OR (p_trangThai = 0) ) THEN
+            UPDATE CT_HANGVE
+            SET SoGheTrong = SoGheTrong - 1,
+                SoGheDat = SoGheDat + 1
+            WHERE MaChuyenBay = v_maChuyenBay AND MaHangVe = v_maHangVe;
+        ELSIF p_trangThai = 2 THEN
+            UPDATE CT_HANGVE
+            SET SoGheTrong = SoGheTrong + 1,
+                SoGheDat = SoGheDat - 1
+            WHERE MaChuyenBay = v_maChuyenBay AND MaHangVe = v_maHangVe;
+        END IF;
+
+
         IF (v_nam > 0 AND v_thang > 0 AND CheckExist = 0) THEN
             BEGIN
                 SELECT COUNT(*) INTO v_dem
@@ -174,14 +197,11 @@ END BEFORE STATEMENT;
             END;
         END IF;
 
-
     END AFTER STATEMENT;
     END Update_DoanhThu_Thang;
 
-
 --trigger cho delete
 --DROP TRIGGER Update_DoanhThu_Thang_delete;
-
 CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang_delete
     FOR delete ON CT_DATVE
     COMPOUND TRIGGER
@@ -191,6 +211,8 @@ CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang_delete
     v_dem NUMBER;
     v_machuyenbay VARCHAR2(10);
     v_count NUMBER;
+    v_maHangVe VARCHAR2(10);
+
 
 BEFORE STATEMENT IS
 BEGIN
@@ -199,8 +221,18 @@ END BEFORE STATEMENT;
 
     BEFORE EACH ROW IS
     BEGIN
-        SELECT EXTRACT(YEAR FROM :OLD.NgayThanhToan), EXTRACT(MONTH FROM :OLD.NgayThanhToan) INTO v_nam,v_thang
-        FROM dual;
+        IF (:OLD.NgayThanhToan IS NULL) THEN
+            BEGIN
+                SELECT 0,0 INTO v_nam,V_THANG
+                FROM dual;
+            END;
+        ELSE
+            BEGIN
+                SELECT EXTRACT(YEAR FROM :OLD.NgayThanhToan), EXTRACT(MONTH FROM :OLD.NgayThanhToan) INTO v_nam,v_thang
+                FROM dual;
+            END;
+        END IF;
+
         SELECT Giatien INTO giave
         FROM VE v
         WHERE V.MaVE = :OLD.MaVE;
@@ -208,6 +240,11 @@ END BEFORE STATEMENT;
         SELECT machuyenbay INTO v_machuyenbay
         FROM VE
         WHERE mave = :OLD.mave;
+
+        SELECT MAHANGVE INTO v_maHangVe
+        FROM VE
+        WHERE Ve.MaVE = :OLD.MAVE;
+
     END BEFORE EACH ROW;
 
     AFTER EACH ROW IS
@@ -217,35 +254,45 @@ END BEFORE STATEMENT;
 
     AFTER STATEMENT IS
     BEGIN
-        SELECT sovedaban INTO v_count
-        FROM BAOCAOTHANG
-        WHERE thang = v_thang AND nam = v_nam AND machuyenbay = v_machuyenbay ;
 
-        IF (v_count > 1 ) THEN
-            begin
-                UPDATE BAOCAOTHANG
-                SET DoanhThu = DoanhThu - GiaVe,
-                    SoVeDaBan = SoVeDaBan - 1
-                WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
+        UPDATE ct_hangve
+        SET soghetrong = soghetrong + 1 ,
+            soghedat = soghedat - 1
+        WHERE machuyenbay = v_machuyenbay  AND mahangve = V_MAHANGVE;
 
-                UPDATE BAOCAONAM
-                SET doanhthu = doanhthu - giave
-                WHERE nam = v_nam AND thang = v_thang;
-            END;
-        ELSE
+        IF (v_nam > 0 AND v_thang > 0 ) THEN
             BEGIN
-                UPDATE BAOCAOTHANG
-                SET DoanhThu = DoanhThu - GiaVe,
-                    SoVeDaBan = SoVeDaBan - 1
-                WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
+                SELECT sovedaban INTO v_count
+                FROM BAOCAOTHANG
+                WHERE thang = v_thang AND nam = v_nam AND machuyenbay = v_machuyenbay ;
 
-                UPDATE BAOCAONAM
-                SET doanhthu = doanhthu - giave, SOCHUYENBAY = SOCHUYENBAY - 1
-                WHERE nam = v_nam AND thang = v_thang;
+                IF (v_count > 1 ) THEN
+                    begin
+                        UPDATE BAOCAOTHANG
+                        SET DoanhThu = DoanhThu - GiaVe,
+                            SoVeDaBan = SoVeDaBan - 1
+                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
 
-                DELETE FROM baocaothang
-                WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
+                        UPDATE BAOCAONAM
+                        SET doanhthu = doanhthu - giave
+                        WHERE nam = v_nam AND thang = v_thang;
+                    END;
+                ELSE
+                    BEGIN
+                        UPDATE BAOCAOTHANG
+                        SET DoanhThu = DoanhThu - GiaVe,
+                            SoVeDaBan = SoVeDaBan - 1
+                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
 
+                        UPDATE BAOCAONAM
+                        SET doanhthu = doanhthu - giave, SOCHUYENBAY = SOCHUYENBAY - 1
+                        WHERE nam = v_nam AND thang = v_thang;
+
+                        DELETE FROM baocaothang
+                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
+
+                    END;
+                END IF;
             END;
         END IF;
     END AFTER STATEMENT;
@@ -428,17 +475,35 @@ BEGIN
 END;
 /
 
+
 /* R16: xóa VE và CT_HANGVE liên quan đến chuyến bay đã xóa */
 -- DROP TRIGGER rf_VE_CT_DATVE_delete_CHUYENBAY;
 
 CREATE OR REPLACE TRIGGER rf_VE_CT_HANGVE_delete_CHUYENBAY
-    AFTER DELETE ON CHUYENBAY
+    before DELETE ON CHUYENBAY
     FOR EACH ROW
 BEGIN
     -- Xóa các bản ghi liên quan từ bảng VE
-    FOR rec IN (SELECT MaVe FROM VE WHERE MaChuyenBay = :OLD.MaChuyenBay) LOOP
-            delete_CT_DATVE_by_VE(rec.MaVe);
+    DELETE CT_HANGVE
+    WHERE machuyenbay = :OLD.machuyenbay;
+
+    FOR rec IN (SELECT MaVe FROM VE WHERE MaChuyenBay = :OLD.MaChuyenBay)
+        LOOP
+            BEGIN
+                -- Gọi procedure delete_CT_DATVE_by_VE để xóa các bản ghi trong CT_DATVE, nếu không tìm thấy thì bỏ qua
+                delete_CT_DATVE_by_VE(rec.MaVe);
+            EXCEPTION
+                WHEN NO_DATA_FOUND THEN
+                    -- Nếu không tìm thấy MaVe trong CT_DATVE thì bỏ qua
+                    NULL;
+                WHEN OTHERS THEN
+                    -- Xử lý các ngoại lệ khác nếu cần thiết
+                    NULL;
+            END;
         END LOOP;
 
+    -- Xóa các bản ghi trong bảng VE liên quan đến MaChuyenBay vừa xóa
     DELETE FROM VE
     WHERE MaChuyenBay = :OLD.MaChuyenBay;
+END rf_VE_CT_HANGVE_delete_CHUYENBAY;
+/

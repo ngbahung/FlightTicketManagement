@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.scene.input.MouseEvent;
+import org.example.flightticketmanagement.Controllers.Manager.LichChuyenBayController;
 import org.example.flightticketmanagement.Models.BaoCaoNam;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.BaoCaoThang;
@@ -61,6 +62,7 @@ public class DoanhThuController implements Initializable {
     private final AlertMessage alert = new AlertMessage();
     private final EventBus eventBusXoaGheTrong = XacNhanVeController.getEventBus();
     private final EventBus eventBusThemGheTrong = LichSuDatVeController.getEventBus();
+    private final EventBus eventBusXoaChuyenBay = LichChuyenBayController.getEventBus();
     private BigDecimal tongDoanhThuNam = BigDecimal.valueOf(0.0);
 
     private Integer DTN_namBaoCao = 0;
@@ -75,6 +77,7 @@ public class DoanhThuController implements Initializable {
         connect = DatabaseDriver.getConnection();
         eventBusXoaGheTrong.register(this);
         eventBusThemGheTrong.register(this);
+        eventBusXoaChuyenBay.register(this);
         DTNam_FillDataForComboBoxNam();
         DTThang_FillDataForComboBoxNam();
         DTThang_FillDataForComboBoxThang();

@@ -19,8 +19,10 @@ import org.example.flightticketmanagement.Models.CT_HangVe;
 import org.example.flightticketmanagement.Models.HangVe;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -150,7 +152,6 @@ public class ThemLichChuyenBayController implements Initializable {
     @FXML
     void luuButtonClicked() {
         try {
-
             // Check if all the required fields are filled
             if (maChuyenBay_txtfld.getText().isEmpty() || maDuongBay_txtfld.getText().isEmpty() ||
                     ngayBay_datepicker.getValue() == null || ngayHaCanh_datepicker.getValue() == null ||
@@ -184,6 +185,7 @@ public class ThemLichChuyenBayController implements Initializable {
                 alert.errorMessage("Vui lòng thêm ít nhất một hạng vé cho chuyến bay.");
                 return;
             }
+
             // Lấy thông tin từ các trường nhập liệu
             String maChuyenBay = maChuyenBay_txtfld.getText();
             String maDuongBay = maDuongBay_txtfld.getText();
@@ -191,17 +193,22 @@ public class ThemLichChuyenBayController implements Initializable {
                     LocalTime.parse(gioBay_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
             LocalDateTime thoiGianHaCanh = LocalDateTime.of(ngayHaCanh_datepicker.getValue(),
                     LocalTime.parse(gioHaCanh_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
-            double giaVe = Double.parseDouble(gia_txtfld.getText());
+            BigDecimal giaVe = new BigDecimal(gia_txtfld.getText());
+
+            // Parse and format the price
+            DecimalFormat df = new DecimalFormat("#.00");  // Set the format to two decimal places
+            String formattedGiaVe = df.format(giaVe);
 
             // Tạo câu lệnh SQL để chèn dữ liệu vào bảng CHUYENBAY
             String insertChuyenBayQuery = "INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe) " +
                     "VALUES (?, ?, ?, ?, 0, ?)";
+            connect = DatabaseDriver.getConnection();
             PreparedStatement insertChuyenBayStatement = connect.prepareStatement(insertChuyenBayQuery);
             insertChuyenBayStatement.setString(1, maChuyenBay);
             insertChuyenBayStatement.setString(2, maDuongBay);
             insertChuyenBayStatement.setTimestamp(3, Timestamp.valueOf(thoiGianXuatPhat));
             insertChuyenBayStatement.setTimestamp(4, Timestamp.valueOf(thoiGianHaCanh));
-            insertChuyenBayStatement.setDouble(5, giaVe);
+            insertChuyenBayStatement.setBigDecimal(5, giaVe);
 
             // Thực thi câu lệnh SQL chèn dữ liệu vào bảng CHUYENBAY
             insertChuyenBayStatement.executeUpdate();
@@ -229,9 +236,9 @@ public class ThemLichChuyenBayController implements Initializable {
             closeStage();
         } catch (SQLException e) {
             e.printStackTrace();
-            alert.errorMessage("Đã xảy ra lỗi khi lưu dữ liệu xuống cơ sở dữ liệu.");
         }
     }
+
 
     private void refreshTableView() {
         // Fetch the updated data from the database
@@ -334,7 +341,7 @@ public class ThemLichChuyenBayController implements Initializable {
     }
 
     private void populateTenDuongBayComboBox() {
-        String query = "SELECT TenDuongBay FROM DuongBay";
+        String query = "SELECT TenDuongBay FROM DuongBay WHERE TRANGTHAI = 1";
         try {
             prepare = connect.prepareStatement(query);
             result = prepare.executeQuery();

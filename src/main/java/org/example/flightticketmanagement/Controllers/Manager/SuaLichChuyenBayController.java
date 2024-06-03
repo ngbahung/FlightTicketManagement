@@ -1,5 +1,6 @@
 package org.example.flightticketmanagement.Controllers.Manager;
 
+import com.google.common.eventbus.EventBus;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -232,6 +233,7 @@ public class SuaLichChuyenBayController implements Initializable {
 
             // Hiển thị thông báo thành công
             alert.successMessage("Dữ liệu đã được lưu xuống cơ sở dữ liệu thành công");
+            eventBus.post(new Object());
             if (parentController != null) {
                 parentController.layDuLieu(null, null, null);
             }
@@ -246,6 +248,13 @@ public class SuaLichChuyenBayController implements Initializable {
     private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
+    private static final EventBus eventBus = new EventBus();
+
+    public SuaLichChuyenBayController() {}
+
+    public static EventBus getEventBus() {
+        return eventBus;
+    }
     private final AlertMessage alert = new AlertMessage();
 
     private LichChuyenBayController parentController;
