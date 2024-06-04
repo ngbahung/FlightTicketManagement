@@ -118,6 +118,11 @@ public class LichSuDatVeController implements Initializable {
     @FXML
     private TableView<CT_DatVe> veDaDat_tbview;
 
+    private Connection connect;
+    private PreparedStatement prepare;
+    private Statement statement;
+    private ResultSet result;
+
     @FXML
     void search() {
         LocalDateTime selectedDate = ngay_datepicker.getValue() != null ? ngay_datepicker.getValue().atStartOfDay() : null;
@@ -226,6 +231,18 @@ public class LichSuDatVeController implements Initializable {
             selected = selectedPhDC;
         }
 
+        // Get the flight date
+        LocalDateTime ngayBayDateTime = getNgayGioBay(selected.getMaVe());
+
+        // Get the value of n
+        int n = getThamSo("TGTT_HV");
+
+        // Compare the flight date with the current date and time minus n hours
+        if (ngayBayDateTime != null && ngayBayDateTime.isBefore(LocalDateTime.now().minusHours(n))) {
+            alert.errorMessage("Không thể hủy vé hoặc phiếu đặt chỗ nếu ngày bay còn ít hơn " + n + " giờ.");
+            return;
+        }
+
         boolean confirm = alert.confirmationMessage(message);
         if (confirm) {
             try {
@@ -261,6 +278,36 @@ public class LichSuDatVeController implements Initializable {
                 alert.errorMessage("Có lỗi xảy ra khi hủy vé hoặc phiếu đặt chỗ: " + e.getMessage());
             }
         }
+    }
+
+    private int getThamSo(String maThuocTinh) {
+        String query = "SELECT GiaTri FROM THAMSO WHERE MaThuocTinh = ?";
+        try {
+            connect = DatabaseDriver.getConnection();
+            prepare = connect.prepareStatement(query);
+            prepare.setString(1, maThuocTinh);
+            result = prepare.executeQuery();
+            if (result.next()) {
+                return result.getInt("GiaTri");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public LocalDateTime getNgayGioBay(String p_MaVe) {
+        LocalDateTime ngayGioBay;
+        try (CallableStatement statement = connect.prepareCall("{call GET_GIO_BAY(?, ?)}")) {
+            statement.setString(1, p_MaVe);
+            statement.registerOutParameter(2, Types.TIMESTAMP);
+            statement.execute();
+            Timestamp ngayGioBayTimestamp = statement.getTimestamp(2);
+            ngayGioBay = (ngayGioBayTimestamp != null) ? ngayGioBayTimestamp.toLocalDateTime() : null;
+        } catch (Exception e) {
+            ngayGioBay = null;
+        }
+        return ngayGioBay;
     }
 
 
@@ -309,7 +356,7 @@ public class LichSuDatVeController implements Initializable {
         // Thực hiện các thao tác cần thiết với các giá trị này, ví dụ: in ra console hoặc thực hiện các xử lý khác
     }
 
-    private Connection connect;
+
     private final EventBus eventBusXoaGheTrong = XacNhanVeController.getEventBus();
     private static final EventBus eventBus = new EventBus();
 
