@@ -118,11 +118,6 @@ public class LichSuDatVeController implements Initializable {
     @FXML
     private TableView<CT_DatVe> veDaDat_tbview;
 
-    private Connection connect;
-    private PreparedStatement prepare;
-    private Statement statement;
-    private ResultSet result;
-
     @FXML
     void search() {
         LocalDateTime selectedDate = ngay_datepicker.getValue() != null ? ngay_datepicker.getValue().atStartOfDay() : null;
@@ -356,7 +351,10 @@ public class LichSuDatVeController implements Initializable {
         // Thực hiện các thao tác cần thiết với các giá trị này, ví dụ: in ra console hoặc thực hiện các xử lý khác
     }
 
-
+    private Connection connect;
+    private PreparedStatement prepare;
+    private Statement statement;
+    private ResultSet result;
     private final EventBus eventBusXoaGheTrong = XacNhanVeController.getEventBus();
     private static final EventBus eventBus = new EventBus();
 
