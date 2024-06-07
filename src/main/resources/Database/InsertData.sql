@@ -1398,9 +1398,110 @@ INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, T
 VALUES ('CTDV172', 'VE0172', 'KH002', TO_TIMESTAMP('2023-11-15 09:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-11-16 15:29:59', 'YYYY-MM-DD HH24:MI:SS'), 1);
 
 
+--- TRUNGHIEU thêm
+-- Thêm sân bay quốc tế
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD050', 'Seletar', 'XSP', 'Singapore', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD051', 'Changi', 'SIN', 'Singapore', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD052', 'Phuket', 'PKT', 'Thai Lan', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD053', 'Chiang Mai', 'CMT', 'Thai Lan', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD054', 'Incheon', 'ICN', 'Han Quoc', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD055', 'Gimhae', 'PUS', 'Han Quoc', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD056', 'Chicago', 'ORD', 'Hoa Ky', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD057', 'Dallas', 'DFW', 'Hoa Ky', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD058', 'Abingdon', 'ABB', 'Anh', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD059', 'Bedford', 'BFC', 'Anh', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD060', 'Berlin', 'TXL', 'Duc', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD061', 'Frankfurt am Main', 'FRA', 'Duc', 1);
+
+-- Thêm Đường bay
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
+VALUES ('DB050', 'SBD001', 'SBD057', 'SGN-DFW', 9683,1); -- Ho Chi Minh City to Hoa Ky
+
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
+VALUES ('DB051', 'SBD003', 'SBD055', 'VCL-PUS', 2755,1); -- Quang Nam to Han Quoc
+
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
+VALUES ('DB052', 'SBD012', 'SBD051', 'CXR-SIN', 3475,1); -- Khanh Hoa to Singapore
+
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
+VALUES ('DB053', 'SBD005', 'SBD058', 'DAD-ABB', 6542,1); -- Da Nang to Anh
+
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
+VALUES ('DB054', 'SBD014', 'SBD052', 'VCA-PKT', 1074,1); -- Can Tho to Thai Lan
+
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
+VALUES ('DB055', 'SBD011', 'SBD061', 'HUI-FRA', 4556,1); -- Hue to Duc
+
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
+VALUES ('DB056', 'SBD013', 'SBD050', 'DLI-XSP', 20331,1); -- Lam Dong to Singapore
 
 
+-- Thêm sân bay trung gian
+INSERT INTO SANBAYTG (MaDuongBay, MaSanBay, ThuTu, ThoiGianDung)
+VALUES ('DB050', 'SBD059', 1, INTERVAL '0 1:30:00' DAY TO SECOND);
 
+INSERT INTO SANBAYTG (MaDuongBay, MaSanBay, ThuTu, ThoiGianDung)
+VALUES ('DB051', 'SBD005', 1, INTERVAL '0 1:00:00' DAY TO SECOND);
+
+INSERT INTO SANBAYTG (MaDuongBay, MaSanBay, ThuTu, ThoiGianDung)
+VALUES ('DB052', 'SBD001', 1, INTERVAL '0 00:30:00' DAY TO SECOND);
+
+INSERT INTO SANBAYTG (MaDuongBay, MaSanBay, ThuTu, ThoiGianDung)
+VALUES ('DB054', 'SBD001', 1, INTERVAL '0 00:30:00' DAY TO SECOND);
+
+INSERT INTO SANBAYTG (MaDuongBay, MaSanBay, ThuTu, ThoiGianDung)
+VALUES ('DB055', 'SBD002', 1, INTERVAL '0 1:00:00' DAY TO SECOND);
+
+INSERT INTO SANBAYTG (MaDuongBay, MaSanBay, ThuTu, ThoiGianDung)
+VALUES ('DB055', 'SBD058', 2, INTERVAL '0 2:45:00' DAY TO SECOND);
+
+INSERT INTO SANBAYTG (MaDuongBay, MaSanBay, ThuTu, ThoiGianDung)
+VALUES ('DB056', 'SBD001', 1, INTERVAL '0 0:50:00' DAY TO SECOND);
+
+-- Thêm chuyến bay
+INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
+VALUES ('CB040', 'DB050', TO_TIMESTAMP('2023-01-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-01-12 22:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 9500000);
+
+INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
+VALUES ('CB041', 'DB051', TO_TIMESTAMP('2023-05-15 19:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-5-16 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 5000000);
+
+INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
+VALUES ('CB042', 'DB052', TO_TIMESTAMP('2023-07-31 7:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-08-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 4300000);
+
+INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
+VALUES ('CB043', 'DB053', TO_TIMESTAMP('2024-01-10 9:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-01-11 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 8760000);
+
+INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
+VALUES ('CB044', 'DB054', TO_TIMESTAMP('2023-12-12 22:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-12-13 13:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 2360000);
+
+INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
+VALUES ('CB045', 'DB055', TO_TIMESTAMP('2024-04-23 18:45:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-04-24 6:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 7760000);
+
+INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
+VALUES ('CB046', 'DB056', TO_TIMESTAMP('2023-05-17 23:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-05-18 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 3530000);
 
 --future
 
@@ -1443,4 +1544,7 @@ DELETE FROM QUYEN;
 
 -- Xóa dữ liệu trong bảng THAMSO
 DELETE FROM THAMSO;
+
+-- Xóa dữ liệu trong bảng SANBAYTG
+DELETE FRROM SANBAYTG;
 */
