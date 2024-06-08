@@ -106,7 +106,7 @@
          </styleClass>
       </TableView>
    </VBox>
-   <MFXButton id="custom_1" graphicTextGap="15.0" layoutX="791.0" layoutY="52.0" onAction="#cancelTicketOrReservation" prefHeight="38.0" prefWidth="177.0" text="Hủy vé/đặt chỗ" textFill="RED">
+   <MFXButton id="custom_1" graphicTextGap="15.0" layoutX="787.0" layoutY="70.0" onAction="#cancelTicketOrReservation" prefHeight="38.0" prefWidth="177.0" text="Hủy vé/đặt chỗ" textFill="RED">
       <graphic>
          <FontAwesomeIconView fill="RED" glyphName="EXCLAMATION_TRIANGLE" size="20" />
       </graphic>
@@ -154,4 +154,9 @@
          <MFXTextField fx:id="tenkhachhang_txtfld" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="39.0" prefWidth="195.0" promptText="Tên khách hàng" />
       </children>
    </HBox>
+   <MFXButton id="custom_2" graphicTextGap="15.0" layoutX="809.0" layoutY="18.0" onAction="#xemVeDaHuy" prefHeight="38.0" prefWidth="156.0" text="Xem vé đã hủy" textFill="RED">
+      <graphic>
+         <FontAwesomeIconView glyphName="TRASH" size="20" />
+      </graphic>
+   </MFXButton>
 </AnchorPane>

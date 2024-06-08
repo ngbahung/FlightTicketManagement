@@ -59,12 +59,13 @@
          <TableColumn fx:id="maChuyenBay_tbcolumn" prefWidth="98.66665267944336" text="Mã chuyến bay" />
          <TableColumn fx:id="sanBayDi_tbcolumn" prefWidth="96.0" text="Sân bay đi" />
          <TableColumn fx:id="sanBayDen_tbcolumn" prefWidth="94.0" text="Sân bay đến" />
-         <TableColumn fx:id="ngayBay_tbcolumn" prefWidth="102.0" text="Ngày bay" />
-         <TableColumn fx:id="gioBay_tbcolumn" prefWidth="72.0" text="Giờ bay" />
+         <TableColumn fx:id="ngayBay_tbcolumn" prefWidth="95.0" text="Ngày bay" />
+         <TableColumn fx:id="gioBay_tbcolumn" prefWidth="65.0" text="Giờ bay" />
          <TableColumn fx:id="soGheTrong_tbcolumn" prefWidth="94.0" text="Số ghế trống" />
          <TableColumn fx:id="soGhe_tbcoumn" prefWidth="97.0" text="Tổng ghế" />
-         <TableColumn fx:id="giaVe_tbcolumn" prefWidth="133.0" text="Giá cơ bản" />
-         <TableColumn fx:id="chiTiet_tbcl" prefWidth="139.0" text="Chi tiết" />
+         <TableColumn fx:id="diemDung_tbcl" prefWidth="75.0" text="Điểm dừng" />
+         <TableColumn fx:id="giaVe_tbcolumn" prefWidth="100.0" text="Giá cơ bản" />
+         <TableColumn fx:id="chiTiet_tbcl" prefWidth="100.0" text="Chi tiết" />
       </columns>
       <styleClass>
          <String fx:value="column-header" />
