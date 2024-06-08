@@ -18,6 +18,7 @@ import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.CT_HangVe;
 import org.example.flightticketmanagement.Models.HangVe;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
+import org.example.flightticketmanagement.Models.SanBayTrungGian;
 
 import java.math.BigDecimal;
 import java.net.URL;
@@ -34,6 +35,16 @@ import java.util.ResourceBundle;
 public class ThemLichChuyenBayController implements Initializable {
     @FXML
     private TextField gia_txtfld;
+
+    @FXML
+    private TableColumn<SanBayTrungGian, Integer> stt_tbcl;
+
+    @FXML
+
+    private TableColumn<SanBayTrungGian, String> tenSBTG_tbcl;
+
+    @FXML
+    private TableView<SanBayTrungGian> sanBayTrungGian_tbview;
 
     @FXML
     private ComboBox<String> gioBay_combobox;
@@ -85,8 +96,6 @@ public class ThemLichChuyenBayController implements Initializable {
         this.parentController = parentController;
     }
 
-
-
     @FXML
     void xoaHangVe() {
         ObservableList<CT_HangVe> selectedTicketClasses = hangVe_tableview.getSelectionModel().getSelectedItems();
@@ -129,13 +138,11 @@ public class ThemLichChuyenBayController implements Initializable {
         }
     }
 
-
-
     @FXML
     void luuButtonClicked() {
         try {
             // Check if all the required fields are filled
-            if (maChuyenBay_txtfld.getText().isEmpty() || maDuongBay_txtfld.getText().isEmpty() ||
+            if (maChuyenBay_txtfld.getText().isEmpty() ||  maDuongBay_txtfld.getText().isEmpty() ||
                     ngayBay_datepicker.getValue() == null || ngayHaCanh_datepicker.getValue() == null ||
                     gioBay_combobox.getValue() == null || gioHaCanh_combobox.getValue() == null ||
                     gia_txtfld.getText().isEmpty()) {
@@ -149,13 +156,14 @@ public class ThemLichChuyenBayController implements Initializable {
                 return;
             }
 
-            // Check if the flight duration is within the minimum and maximum flight hours
             LocalDateTime departure = LocalDateTime.of(ngayBay_datepicker.getValue(),
                     LocalTime.parse(gioBay_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
-            LocalDateTime arrival = LocalDateTime.of(ngayHaCanh_datepicker.getValue(),
-                    LocalTime.parse(gioHaCanh_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
-            Duration duration = Duration.between(departure, arrival);
-            long flightHours = duration.toHours();
+            String thoiGianBay = thoiGianBay_txtfld.getText();
+            int flightHours = Integer.parseInt(thoiGianBay.substring(0, thoiGianBay.indexOf(" ")));
+            LocalDateTime arrival = departure.plusHours(flightHours);
+
+            ngayHaCanh_datepicker.setValue(arrival.toLocalDate());
+            gioHaCanh_combobox.setValue(arrival.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
 
             if (flightHours < MIN_FLIGHT_HOURS) {
                 alert.errorMessage("Độ dài chuyến bay phải lớn hơn " + MIN_FLIGHT_HOURS + " giờ.");
@@ -221,7 +229,6 @@ public class ThemLichChuyenBayController implements Initializable {
         }
     }
 
-
     private void refreshTableView() {
         // Fetch the updated data from the database
         if (parentController != null) {
@@ -241,9 +248,6 @@ public class ThemLichChuyenBayController implements Initializable {
     }
 
     private final AlertMessage alert = new AlertMessage();
-
-
-
 
     @FXML
     void moThemHangVeChuyenBay() {
@@ -287,18 +291,97 @@ public class ThemLichChuyenBayController implements Initializable {
 
         generateMaChuyenBay();
 
-        for (ComboBox<String> stringComboBox : Arrays.asList(gioBay_combobox, gioHaCanh_combobox)) {
-            stringComboBox.valueProperty().addListener((obs, oldVal, newVal) -> tinhThoiGianBay());
-        }
-        ngayBay_datepicker.valueProperty().addListener((obs, oldVal, newVal) -> tinhThoiGianBay());
-        ngayHaCanh_datepicker.valueProperty().addListener((obs, oldVal, newVal) -> tinhThoiGianBay());
-
         // Initialize table columns
         tenHangVe_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenHangVe(cellData.getValue().getMaHangVe())));
         soLuongGhe_tbcl.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getSoGheTrong()).asObject());
 
         // Initialize the TableView with an empty ObservableList
         hangVe_tableview.setItems(FXCollections.observableArrayList());
+
+        tenDuongBay_combobox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                String maDuongBay = getMaDuongBayByTen(newVal);
+                if (maDuongBay != null) {
+                    maDuongBay_txtfld.setText(maDuongBay);
+                    String thoiGianBay = getThoiGianBayByMaDuongBay(maDuongBay);
+                    if (thoiGianBay != null) {
+                        thoiGianBay_txtfld.setText(thoiGianBay);
+                        updateArrivalDateTime();
+                    }
+                    populateSanBayTrungGianTableView(maDuongBay); // Sửa đổi
+                }
+            }
+        });
+
+        ngayBay_datepicker.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                updateArrivalDateTime();
+            }
+        });
+
+        gioBay_combobox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                updateArrivalDateTime();
+            }
+        });
+
+
+
+        stt_tbcl.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getThuTu()).asObject());
+        tenSBTG_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenSanBayTrungGian(cellData.getValue().getMaSanBay())));
+
+        sanBayTrungGian_tbview.setItems(FXCollections.observableArrayList());
+    }
+
+    private void populateSanBayTrungGianTableView(String maDuongBay) {
+        ObservableList<SanBayTrungGian> sanBayTrungGianList = FXCollections.observableArrayList();
+        String query = "SELECT ThuTu, MaSanBay FROM SANBAYTG WHERE MaDuongBay = ?";
+        try {
+            prepare = connect.prepareStatement(query);
+            prepare.setString(1, maDuongBay);
+            result = prepare.executeQuery();
+            while (result.next()) {
+                int stt = result.getInt("ThuTu");
+                String maSanBay = result.getString("MaSanBay");
+                String tenSanBay = getTenSanBayTrungGian(maSanBay);
+                sanBayTrungGianList.add(new SanBayTrungGian(maDuongBay, maSanBay, stt, tenSanBay));
+                System.out.println("Added to list: " + maSanBay + " - " + tenSanBay); // Log để kiểm tra
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Could not fetch intermediate airports.");
+        }
+        System.out.println("Total items in list: " + sanBayTrungGianList.size()); // Log để kiểm tra
+        sanBayTrungGian_tbview.setItems(sanBayTrungGianList);
+    }
+
+    private void updateArrivalDateTime() {
+        if (!thoiGianBay_txtfld.getText().startsWith("0")) { // Kiểm tra thời gian bay khác 0
+            LocalDateTime departureDateTime = LocalDateTime.of(ngayBay_datepicker.getValue(),
+                    LocalTime.parse(gioBay_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
+            int flightHours = Integer.parseInt(thoiGianBay_txtfld.getText().split(" ")[0]); // Lấy số giờ bay
+            LocalDateTime arrivalDateTime = departureDateTime.plusHours(flightHours); // Tính toán thời gian hạ cánh
+            ngayHaCanh_datepicker.setValue(arrivalDateTime.toLocalDate()); // Cập nhật ngày hạ cánh
+            gioHaCanh_combobox.setValue(arrivalDateTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"))); // Cập nhật giờ hạ cánh
+        }
+    }
+
+
+
+    public String getTenSanBayTrungGian(String maSanBay) {
+        String query = "SELECT TenSanBay FROM SanBay WHERE MaSanBay = ?";
+        try {
+            prepare = connect.prepareStatement(query);
+            prepare.setString(1, maSanBay);
+            result = prepare.executeQuery();
+            if (result.next()) {
+                return result.getString("TenSanBay");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Could not fetch airport name.");
+        }
+        return ""; // Trả về chuỗi rỗng nếu không tìm thấy tên sân bay
     }
 
     private void generateMaChuyenBay() {
@@ -323,12 +406,20 @@ public class ThemLichChuyenBayController implements Initializable {
     }
 
     private void populateTenDuongBayComboBox() {
-        String query = "SELECT TenDuongBay FROM DuongBay WHERE TRANGTHAI = 1";
+        String query = "SELECT " +
+                "sb1.TenSanBay AS SanBayDi, " +
+                "sb2.TenSanBay AS SanBayDen " +
+                "FROM DuongBay db " +
+                "JOIN SanBay sb1 ON db.MaSanBayDi = sb1.MaSanBay " +
+                "JOIN SanBay sb2 ON db.MaSanBayDen = sb2.MaSanBay " +
+                "WHERE db.TrangThai = 1";
         try {
             prepare = connect.prepareStatement(query);
             result = prepare.executeQuery();
             while (result.next()) {
-                tenDuongBay_combobox.getItems().add(result.getString("TenDuongBay"));
+                String sanBayDi = result.getString("SanBayDi");
+                String sanBayDen = result.getString("SanBayDen");
+                tenDuongBay_combobox.getItems().add(sanBayDi + " - " + sanBayDen);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -336,11 +427,22 @@ public class ThemLichChuyenBayController implements Initializable {
         }
     }
 
+    private String[] splitTenDuongBay(String tenDuongBay) {
+        return tenDuongBay.split(" - ");
+    }
+
     private String getMaDuongBayByTen(String tenDuongBay) {
-        String query = "SELECT MaDuongBay FROM DuongBay WHERE TenDuongBay = ?";
+        String[] parts = splitTenDuongBay(tenDuongBay);
+        if (parts.length != 2) {
+            alert.errorMessage("Invalid route format.");
+            return null;
+        }
+        String query = "SELECT MaDuongBay FROM DuongBay WHERE MaSanBayDi = (SELECT MaSanBay FROM SanBay WHERE TenSanBay = ?) " +
+                "AND MaSanBayDen = (SELECT MaSanBay FROM SanBay WHERE TenSanBay = ?)";
         try {
             prepare = connect.prepareStatement(query);
-            prepare.setString(1, tenDuongBay);
+            prepare.setString(1, parts[0]);
+            prepare.setString(2, parts[1]);
             result = prepare.executeQuery();
             if (result.next()) {
                 return result.getString("MaDuongBay");
@@ -352,6 +454,24 @@ public class ThemLichChuyenBayController implements Initializable {
         return null;
     }
 
+
+    private String getThoiGianBayByMaDuongBay(String maDuongBay) {
+        String query = "SELECT ThoiGianBay FROM DuongBay WHERE MaDuongBay = ?";
+        try {
+            prepare = connect.prepareStatement(query);
+            prepare.setString(1, maDuongBay);
+            result = prepare.executeQuery();
+            if (result.next()) {
+                return result.getString("ThoiGianBay");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Could not fetch flight duration.");
+        }
+        return null;
+    }
+
+
     private void populateTimeComboBox(ComboBox<String> comboBox) {
         for (int h = 0; h < 24; h++) {
             for (int m = 0; m < 60; m++) {
@@ -360,18 +480,6 @@ public class ThemLichChuyenBayController implements Initializable {
         }
     }
 
-    private void tinhThoiGianBay() {
-        if (ngayBay_datepicker.getValue() != null && ngayHaCanh_datepicker.getValue() != null &&
-                gioBay_combobox.getValue() != null && gioHaCanh_combobox.getValue() != null) {
-            LocalDateTime departure = LocalDateTime.of(ngayBay_datepicker.getValue(),
-                    LocalTime.parse(gioBay_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
-            LocalDateTime arrival = LocalDateTime.of(ngayHaCanh_datepicker.getValue(),
-                    LocalTime.parse(gioHaCanh_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
-
-            Duration duration = Duration.between(departure, arrival);
-            thoiGianBay_txtfld.setText(String.format("%d giờ %d phút", duration.toHours(), duration.toMinutesPart()));
-        }
-    }
 
     public String getGeneratedMaChuyenBay() {
         return maChuyenBay_txtfld.getText();

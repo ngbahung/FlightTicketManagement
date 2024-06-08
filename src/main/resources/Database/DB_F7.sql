@@ -2,8 +2,8 @@
 
 alter session set "_ORACLE_SCRIPT"=true;
 
-CREATE USER fly_the_end11 IDENTIFIED BY password;
-GRANT CONNECT, RESOURCE, DBA TO fly_the_end11;
+CREATE USER fly_the_end12A IDENTIFIED BY password;
+GRANT CONNECT, RESOURCE, DBA TO fly_the_end12A;
 
 
 alter session set "_ORACLE_SCRIPT"=true;
@@ -16,7 +16,7 @@ GRANT CONNECT, RESOURCE, DBA TO user2;
 
 -- Sử dụng Schema
 
-ALTER SESSION SET CURRENT_SCHEMA = fly_the_end11;
+ALTER SESSION SET CURRENT_SCHEMA = fly_the_end12A;
 
 
 -- create sequence
@@ -103,7 +103,17 @@ CREATE TABLE DUONGBAY (
                           TenDuongBay VARCHAR2(30) NOT NULL,
                           DoDaiDuongBay NUMBER,
                           trangthai NUMBER,
+                          ThoiGianBay INTERVAL DAY(2) TO SECOND,
                           CONSTRAINT PK_DUONGBAY PRIMARY KEY (MaDuongBay)
+);
+
+/* TABLE 14: SANBAYTG */
+CREATE TABLE SANBAYTG (
+                          MaDuongBay VARCHAR2(10) NOT NULL,
+                          MaSanBay VARCHAR2(10) NOT NULL,
+                          ThuTu NUMBER,
+                          ThoiGianDung INTERVAL DAY TO SECOND,
+                          CONSTRAINT PK_SANBAYTG PRIMARY KEY (MaDuongBay, MaSanBay)
 );
 
 
@@ -259,811 +269,22 @@ ALTER TABLE CT_DATVE
 ALTER TABLE BAOCAOTHANG
     ADD CONSTRAINT FK_BAOCAOTHANG_CHUYENBAY FOREIGN KEY (MaChuyenBay) REFERENCES CHUYENBAY(MaChuyenBay);
 
-
 ALTER TABLE TAIKHOAN
-    ADD CONSTRAINT FK_TAIKHOAN_QUYEN
-        FOREIGN KEY (MaQuyen) REFERENCES QUYEN(MaQuyen);
-
-
+    ADD CONSTRAINT FK_TAIKHOAN_QUYEN FOREIGN KEY (MaQuyen) REFERENCES QUYEN(MaQuyen);
 
 ALTER TABLE chuyenbay
     ADD CONSTRAINT FK_CB_DB FOREIGN KEY (MADUONGBAY) REFERENCES DUONGBAY(MADUONGBAY);
 
+--- TRUNGHIEU thêm
+ALTER TABLE SANBAYTG
+    ADD CONSTRAINT FK_SANBAYTG_DUONGBAY FOREIGN KEY (MaDuongBay) REFERENCES DUONGBAY(MaDuongBay);
 
+ALTER TABLE SANBAYTG
+    ADD CONSTRAINT FK_SANBAYTG_SANBAY FOREIGN KEY (MaSanBay) REFERENCES SANBAY(MaSanBay);
 
 
-/* R1: Thời gian xuất phát của một chuyến bay phải nhỏ hơn thời gian kết thúc */
-
-ALTER TABLE CHUYENBAY
-    ADD CONSTRAINT Check_ThoiGian_CB CHECK (TGXP < TGKT);
-
-
-/* R2: Ngày thanh toán vé phải sau ngày mua vé */
-
-ALTER TABLE CT_DATVE
-    ADD CONSTRAINT Check_NgayThanhToan_VE CHECK (NgayMuaVe <= NgayThanhToan);
-
-
-/* R3:Tổng giá tiền thanh toán = giá vé x hệ số */
-
-CREATE OR REPLACE TRIGGER Tienthanhtoan_VE
-    AFTER INSERT OR UPDATE ON VE
-    FOR EACH ROW
-DECLARE
-    v_GiaVe CHUYENBAY.GiaVe%TYPE;
-    v_HeSo HANGVE.HeSo%TYPE;
-BEGIN
-
-    SELECT cb.GiaVe, hv.HeSo
-    INTO v_GiaVe, v_HeSo
-    FROM CHUYENBAY cb, HANGVE hv
-    WHERE cb.MaChuyenBay = :NEW.MaChuyenBay
-      AND hv.MaHangVe = :NEW.MaHangVe;
-
-
-    IF :NEW.GiaTien <> v_HeSo * v_GiaVe THEN
-        RAISE_APPLICATION_ERROR(-20002, 'Tổng giá tiền thanh toán không hợp lệ.');
-    END IF;
-END;
-/
-
-/* R4: Cập nhật doanh thu  tháng khi có thêm doanh thu chuyến bay.*/
-
--- DROP TRIGGER Update_DoanhThu_Thang;
-
-CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang
-    FOR INSERT OR update ON CT_DATVE
-    COMPOUND TRIGGER
-    v_nam NUMBER;
-    v_thang NUMBER;
-    giave NUMBER;
-    v_dem NUMBER;
-    v_dem_nam NUMBER;
-    v_machuyenbay VARCHAR2(10);
-    v_countMaChuyenBay NUMBER;
-    CheckExist NUMBER := 0 ;
-    v_count NUMBER;
-
-
-BEFORE STATEMENT IS
-BEGIN
-    NULL;
-END BEFORE STATEMENT;
-
-    BEFORE EACH ROW IS
-    BEGIN
-
-        IF (:NEW.NgayThanhToan = NULL) THEN
-            BEGIN
-                SELECT 0,0 INTO v_nam,V_THANG
-                FROM dual;
-            END;
-        ELSE
-            begin
-                SELECT EXTRACT(YEAR FROM :NEW.NgayThanhToan), EXTRACT(MONTH FROM :NEW.NgayThanhToan) INTO v_nam,v_thang
-                FROM dual;
-
-                SELECT Giatien INTO giave
-                FROM VE v
-                WHERE V.MaVE = :NEW.MaVE;
-
-                SELECT Machuyenbay INTO v_machuyenbay
-                FROM ve
-                WHERE Ve.MaVE = :NEW.MAVE;
-            END;
-        END IF;
-
-        IF (:NEW.TrangThai = 2) THEN
-            BEGIN
-                CheckExist := 1;
-            END;
-        END IF;
-
-    END BEFORE EACH ROW;
-
-
-    AFTER EACH ROW IS
-    BEGIN
-        NULL;
-    END AFTER EACH ROW;
-
-
-    AFTER STATEMENT IS
-    BEGIN
-        IF (v_nam > 0 AND v_thang > 0 AND CheckExist = 0) THEN
-            BEGIN
-                SELECT COUNT(*) INTO v_dem
-                FROM baocaothang
-                WHERE thang = v_thang AND nam = v_nam;
-
-                SELECT COUNT(*) INTO v_dem_nam
-                FROM baocaonam
-                WHERE nam = v_nam;
-
-                SELECT COUNT(*) INTO v_countMaChuyenBay
-                FROM BAOCAOTHANG
-                WHERE machuyenbay = v_machuyenbay;
-
-                IF (v_dem > 0) THEN
-                    begin
-                        IF (v_countMaChuyenBay > 0 ) THEN
-                            begin
-                                UPDATE BAOCAOTHANG
-                                SET DoanhThu = DoanhThu + GiaVe,
-                                    SoVeDaBan = SoVeDaBan + 1
-                                WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
-                            END;
-                        ELSE
-                            BEGIN
-                                INSERT INTO BAOCAOTHANG ( MaChuyenBay, SoVeDaBan, DoanhThu, Thang, Nam)
-                                VALUES (v_machuyenbay, 1, giave, v_thang, v_nam);
-                            END;
-                        END IF;
-                    END;
-                ELSE
-                    BEGIN
-                        INSERT INTO BAOCAOTHANG ( MaChuyenBay, SoVeDaBan, DoanhThu, Thang, Nam)
-                        VALUES (v_machuyenbay, 1, giave, v_thang, v_nam);
-                    END;
-                END IF;
-
-                UPDATE baocaonam
-                SET doanhthu = doanhthu + GIAVE
-                WHERE nam = v_nam AND thang = v_thang;
-
-            END;
-        END IF;
-
-        ----
-        IF (CheckExist = 1 ) THEN
-            BEGIN
-                SELECT sovedaban INTO v_count
-                FROM BAOCAOTHANG
-                WHERE thang = v_thang AND nam = v_nam AND machuyenbay = v_machuyenbay ;
-
-                IF (v_count > 1 ) THEN
-                    begin
-                        UPDATE BAOCAOTHANG
-                        SET DoanhThu = DoanhThu - GiaVe,
-                            SoVeDaBan = SoVeDaBan - 1
-                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
-
-                        UPDATE BAOCAONAM
-                        SET doanhthu = doanhthu - giave
-                        WHERE nam = v_nam AND thang = v_thang;
-                    END;
-                ELSE
-                    BEGIN
-                        UPDATE BAOCAONAM
-                        SET doanhthu = doanhthu - giave, SOCHUYENBAY = SOCHUYENBAY - 1
-                        WHERE nam = v_nam AND thang = v_thang;
-
-                        DELETE FROM baocaothang
-                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
-
-                    END;
-                END IF;
-            END;
-        END IF;
-
-
-    END AFTER STATEMENT;
-    END Update_DoanhThu_Thang;
-
-
---trigger cho delete
---DROP TRIGGER Update_DoanhThu_Thang_delete;
-
-CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang_delete
-    FOR delete ON CT_DATVE
-    COMPOUND TRIGGER
-    v_nam NUMBER;
-    v_thang NUMBER;
-    giave NUMBER;
-    v_dem NUMBER;
-    v_machuyenbay VARCHAR2(10);
-    v_count NUMBER;
-
-BEFORE STATEMENT IS
-BEGIN
-    NULL;
-END BEFORE STATEMENT;
-
-    BEFORE EACH ROW IS
-    BEGIN
-        SELECT EXTRACT(YEAR FROM :OLD.NgayThanhToan), EXTRACT(MONTH FROM :OLD.NgayThanhToan) INTO v_nam,v_thang
-        FROM dual;
-        SELECT Giatien INTO giave
-        FROM VE v
-        WHERE V.MaVE = :OLD.MaVE;
-
-        SELECT machuyenbay INTO v_machuyenbay
-        FROM VE
-        WHERE mave = :OLD.mave;
-    END BEFORE EACH ROW;
-
-    AFTER EACH ROW IS
-    BEGIN
-        NULL;
-    END AFTER EACH ROW;
-
-    AFTER STATEMENT IS
-    BEGIN
-        SELECT sovedaban INTO v_count
-        FROM BAOCAOTHANG
-        WHERE thang = v_thang AND nam = v_nam AND machuyenbay = v_machuyenbay ;
-
-        IF (v_count > 1 ) THEN
-            begin
-                UPDATE BAOCAOTHANG
-                SET DoanhThu = DoanhThu - GiaVe,
-                    SoVeDaBan = SoVeDaBan - 1
-                WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
-
-                UPDATE BAOCAONAM
-                SET doanhthu = doanhthu - giave
-                WHERE nam = v_nam AND thang = v_thang;
-            END;
-        ELSE
-            BEGIN
-                UPDATE BAOCAOTHANG
-                SET DoanhThu = DoanhThu - GiaVe,
-                    SoVeDaBan = SoVeDaBan - 1
-                WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
-
-                UPDATE BAOCAONAM
-                SET doanhthu = doanhthu - giave, SOCHUYENBAY = SOCHUYENBAY - 1
-                WHERE nam = v_nam AND thang = v_thang;
-
-                DELETE FROM baocaothang
-                WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
-
-            END;
-        END IF;
-    END AFTER STATEMENT;
-
-    END Update_DoanhThu_Thang_delete;
-
-/* R4: Mỗi vé phải đặt trước một khoảng thời gian nhất định trước khi máy bay xuất phát. */
---DROP TRIGGER trigger_CT_DATVE
-
-CREATE OR REPLACE TRIGGER trigger_CT_DATVE
-    BEFORE INSERT OR update ON CT_DATVE
-    FOR EACH ROW
-DECLARE
-    v_MinBookingTime NUMBER;
-    v_Interval INTERVAL DAY(4) TO SECOND;
-    v_TimeMin INTERVAL DAY(4) TO SECOND;
-BEGIN
-    SELECT GiaTri into v_MinBookingTime
-    FROM THAMSO
-    WHERE TenThuocTinh = 'ThoiGianToiThieuDatVe';
-
-    v_Interval := NUMTODSINTERVAL(v_MinBookingTime, 'HOUR');
-
-    SELECT (TGXP - :NEW.NgayMuaVe  ) INTO v_TimeMin
-    FROM chuyenbay cb, ve v
-    WHERE V.MAVE = :NEW.MaVE  AND CB.MACHUYENBAY = V.MACHUYENBAY;
-
-
-    IF v_TimeMin < v_Interval THEN
-        RAISE_APPLICATION_ERROR(-20004, 'Mỗi vé phải được đặt trước ít nhất ' || v_MinBookingTime || ' giờ trước khi máy bay xuất phát.');
-    END IF;
-
-END;
-/
-
-
-
-/* R5: Cập nhật Số chuyến bay báo cáo năm khi có chuyến bay mới được update vào baocaothang.*/
---DROP TRIGGER Update_DoanhThu_Nam;
-SHOW
-CREATE OR REPLACE TRIGGER Update_DoanhThu_Nam
-    BEFORE INSERT ON baocaothang
-    FOR EACH ROW
-DECLARE
-    v_checkExist NUMBER;
-BEGIN
-
-    SELECT COUNT(*) INTO V_CHECKEXIST
-    FROM baocaonam
-    WHERE nam = :NEW.Nam AND thang = :NEW.thang;
-
-    IF (V_CHECKEXIST > 0) THEN
-        BEGIN
-            UPDATE BAOCAONAM
-            SET sochuyenbay = sochuyenbay + 1
-            WHERE thang = :NEW.thang AND nam = :NEW.nam;
-        END;
-    ELSE
-        BEGIN
-            INSERT INTO baocaonam(thang,nam,sochuyenbay,doanhthu) VALUES (:NEW.thang,:NEW.nam,1,0);
-        END;
-    END IF;
-END;
-/
-
-
-
-
-
-/* R6:  Giá tiền của Vé là một số không âm. */
-
-ALTER TABLE VE
-    ADD CONSTRAINT Check_GiaTien_ CHECK (GiaTien >= 0);
-
-
-/* R7: Trạng thái là chưa đổi hoặc đã đổi */
-
-ALTER TABLE HANGVE
-    ADD CONSTRAINT Check_TrangThai_HV CHECK (TrangThai IN (0,1));
-
-
-/* R8.1: Trạng thái mặc định ban đầu là chưa đổi */
-
-ALTER TABLE HANGVE
-    MODIFY TrangThai DEFAULT 1;
-
-
-/* R18.2: Trạng thái mặc định ban đầu là chưa đổi */
-
-ALTER TABLE CT_DATVE
-    MODIFY TrangThai DEFAULT 1;
-
-
-
-/* R9: Số vé là một số không âm. */
-
-ALTER TABLE baocaothang
-    ADD CONSTRAINT Check_SoVe CHECK (SoVeDaBan >= 0);
-
-
-/* R10: Doanh thu là một số không âm. */
-
-ALTER TABLE baocaothang
-    ADD CONSTRAINT Check_DoanhThu CHECK (DoanhThu >= 0);
-
-
-/* R11: Doanh thu mặc định là 0. */
-
-ALTER TABLE BAOCAONAM
-    MODIFY DoanhThu DEFAULT 0;
-
-
-/* R12: So Ve mặc định là 0.  */
-
-ALTER TABLE baocaothang
-    MODIFY SoVeDaBan DEFAULT 0;
-
-
-/* R13: Thời gian bay phải không nhỏ hơn thời gian bay tối thiểu. */
---DROP TRIGGER Check_ThoiGianXuatPhat
-
-CREATE OR REPLACE TRIGGER Check_ThoiGianXuatPhat
-    BEFORE INSERT OR UPDATE ON CHUYENBAY
-    FOR EACH ROW
-DECLARE
-    v_ThoiGianToiThieu THAMSO.GiaTri%TYPE;
-    thoigianbay NUMBER;
-    distance INTERVAL DAY TO SECOND;
-BEGIN
-    SELECT GiaTri INTO v_ThoiGianToiThieu
-    FROM THAMSO
-    WHERE TenThuocTinh = 'ThoiGianBayToiThieu';
-
-    distance := :NEW.TGKT - :NEW.TGXP;
-
-    SELECT EXTRACT(DAY FROM (distance)) * 24 +
-           EXTRACT(HOUR FROM (distance)) +
-           EXTRACT(MINUTE FROM (distance)) / 60 +
-           EXTRACT(SECOND FROM (distance)) / 3600 into thoigianbay
-    FROM dual;
-
-    IF thoigianbay  < v_ThoiGianToiThieu THEN
-        RAISE_APPLICATION_ERROR(-20008, 'Thời gian bay phải lớn hơn hoặc bằng thời gian bay tối thiểu.');
-    END IF;
-END;
-/
-
-
-/* R14: sân bay đến và sân bay đi của đường bay không trùng nhau */
---DROP TRIGGER Check_DuongBay
-
-CREATE OR REPLACE TRIGGER Check_DuongBay
-    BEFORE INSERT OR UPDATE ON DUONGBAY
-    FOR EACH ROW
-BEGIN
-    IF :NEW.MaSanBayDi = :NEW.MaSanBayDen THEN
-        RAISE_APPLICATION_ERROR(-20009, 'Sân bay đi và sân bay đến không được trùng nhau.');
-    END IF;
-END;
-/
-
-/* R15: nếu số lượng ghế trống = 0 thì không cho đặt vé */
---DROP TRIGGER check_SL_GheTrong;
-
-CREATE OR REPLACE TRIGGER check_SL_GheTrong
-    BEFORE INSERT ON CT_DATVE
-    FOR EACH ROW
-DECLARE
-    v_soghetrong CT_HANGVE.SOGHETRONG%TYPE;
-BEGIN
-
-    SELECT soghetrong INTO v_soghetrong
-    FROM CT_HANGVE cthv, ve v
-    WHERE v.MaVE = :NEW.MaVe AND v.machuyenbay = cthv.machuyenbay AND v.MAHANGVE = cthv.MAHANGVE;
-
-
-    IF (v_SoGheTrong = 0) THEN
-        RAISE_APPLICATION_ERROR(-20009, 'Hết vé trống');
-    END IF;
-END;
-/
-
-
-
--- LỊCH CHUYẾN BAY CONTROLLER
--- GET SAN BAY DI
-CREATE OR REPLACE PROCEDURE GET_SANBAYDI (
-    p_MaDuongBay IN VARCHAR2,
-    p_TenSanBay OUT VARCHAR2
-)
-    IS
-BEGIN
-    SELECT sb.TenSanBay INTO p_TenSanBay
-    FROM SANBAY sb
-             JOIN DUONGBAY db ON sb.MaSanBay = db.MaSanBayDi
-    WHERE db.MaDuongBay = p_MaDuongBay;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        p_TenSanBay := 'N/A'; -- Trả về giá trị mặc định nếu không tìm thấy dữ liệu
-END GET_SANBAYDI;
-/
---GET SAN BAY ĐẾN
-CREATE OR REPLACE PROCEDURE GET_SANBAYDEN (
-    p_MaDuongBay IN VARCHAR2,
-    p_TenSanBay OUT VARCHAR2
-)
-    IS
-BEGIN
-    SELECT sb.TenSanBay INTO p_TenSanBay
-    FROM SANBAY sb
-             JOIN DUONGBAY db ON sb.MaSanBay = db.MaSanBayDen
-    WHERE db.MaDuongBay = p_MaDuongBay;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        p_TenSanBay := 'N/A'; -- Trả về giá trị mặc định nếu không tìm thấy dữ liệu
-END GET_SANBAYDEN;
-/
---GET SỐ GHẾ TRỐNG
-CREATE OR REPLACE PROCEDURE GET_SOGHETRONG (
-    p_MaChuyenBay IN VARCHAR2,
-    p_SoGheTrong OUT NUMBER
-)
-    IS
-BEGIN
-    SELECT SUM(SoGheTrong) INTO p_SoGheTrong
-    FROM CT_HANGVE
-    WHERE MaChuyenBay = p_MaChuyenBay;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        p_SoGheTrong := 0; -- Trả về giá trị mặc định nếu không tìm thấy dữ liệu
-END GET_SOGHETRONG;
-/
---GET SỐ Ghế
-CREATE OR REPLACE PROCEDURE GET_SOGHE (
-    p_MaChuyenBay IN VARCHAR2,
-    p_SoGhe OUT NUMBER
-)
-    IS
-BEGIN
-    SELECT SUM(SoGheTrong + SoGheDat) INTO p_SoGhe
-    FROM CT_HANGVE
-    WHERE MaChuyenBay = p_MaChuyenBay;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        p_SoGhe := 0; -- Trả về giá trị mặc định nếu không tìm thấy dữ liệu
-END GET_SOGHE;
-/
-
---------------------------------------------------------------------------------------
--- TRA CỨU DẶT VÉ CONTROLLER
--- PROCEDURE 1: Lấy tên khách hàng từ mã khách hàng
-CREATE OR REPLACE PROCEDURE GET_TEN_KHACH_HANG(
-    p_MaKhachHang IN VARCHAR2,
-    p_HoTen OUT VARCHAR2
-) AS
-BEGIN
-    SELECT HoTen INTO p_HoTen
-    FROM KHACHHANG
-    WHERE MaKhachHang = p_MaKhachHang;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        p_HoTen := NULL;
-    WHEN OTHERS THEN
-        -- Xử lí các trường hợp ngoại lệ khác ở đây
-        NULL;
-END GET_TEN_KHACH_HANG;
-/
-
--- PROCEDURE 2: Lấy sân bay đi từ mã vé
-CREATE OR REPLACE PROCEDURE GET_SAN_BAY_DI(
-    p_MaVe IN VARCHAR2,
-    p_SanBayDi OUT VARCHAR2
-) AS
-BEGIN
-    SELECT SBDi.TenSanBay INTO p_SanBayDi
-    FROM Ve V
-             JOIN CHUYENBAY CB ON V.MaChuyenBay = CB.MaChuyenBay
-             JOIN DUONGBAY DB ON CB.MaDuongBay = DB.MaDuongBay
-             JOIN SANBAY SBDi ON DB.MaSanBayDi = SBDi.MaSanBay
-    WHERE V.MAVE = p_MaVe;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        p_SanBayDi := NULL;
-    WHEN OTHERS THEN
-        NULL;
-END GET_SAN_BAY_DI;
-/
-
--- PROCEDURE 3: Lấy sân bay đến từ mã vé
-CREATE OR REPLACE PROCEDURE GET_SAN_BAY_DEN(
-    p_MaVe IN VARCHAR2,
-    p_SanBayDen OUT VARCHAR2
-) AS
-BEGIN
-    SELECT SBDen.TenSanBay INTO p_SanBayDen
-    FROM Ve V
-             JOIN CHUYENBAY CB ON V.MaChuyenBay = CB.MaChuyenBay
-             JOIN DUONGBAY DB ON CB.MaDuongBay = DB.MaDuongBay
-             JOIN SANBAY SBDen ON DB.MaSanBayDen = SBDen.MaSanBay
-    WHERE V.MAVE = p_MaVe;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        p_SanBayDen := NULL;
-    WHEN OTHERS THEN
-        NULL;
-END GET_SAN_BAY_DEN;
-/
-
--- PROCEDURE 4: Lấy ngày bay từ mã vé
-CREATE OR REPLACE PROCEDURE GET_NGAY_BAY(
-    p_MaVe IN VARCHAR2,
-    p_NgayBay OUT TIMESTAMP
-) AS
-BEGIN
-    SELECT CB.TGXP INTO p_NgayBay
-    FROM CT_DATVE CDV
-             JOIN Ve V ON CDV.MaVe = V.MaVe
-             JOIN CHUYENBAY CB ON V.MaChuyenBay = CB.MaChuyenBay
-    WHERE CDV.MaVe = p_MaVe;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        p_NgayBay := NULL;
-    WHEN OTHERS THEN
-        NULL;
-END GET_NGAY_BAY;
-/
-
--- PROCEDURE 5: Lấy giờ bay từ mã vé
-CREATE OR REPLACE PROCEDURE GET_GIO_BAY(
-    p_MaVe IN VARCHAR2,
-    p_GioBay OUT TIMESTAMP
-) AS
-BEGIN
-    SELECT CB.TGXP INTO p_GioBay
-    FROM CT_DATVE CDV
-             JOIN Ve V ON CDV.MaVe = V.MaVe
-             JOIN CHUYENBAY CB ON V.MaChuyenBay = CB.MaChuyenBay
-    WHERE CDV.MaVe = p_MaVe;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        p_GioBay := NULL;
-    WHEN OTHERS THEN
-        NULL;
-END GET_GIO_BAY;
-/
-
--- PROCEDURE 6: Lấy số điện thoại từ mã khách hàng
-CREATE OR REPLACE PROCEDURE GET_SDT(
-    p_MaKhachHang IN VARCHAR2,
-    p_SDT OUT VARCHAR2
-) AS
-BEGIN
-    SELECT SDT INTO p_SDT
-    FROM KHACHHANG
-    WHERE MaKhachHang = p_MaKhachHang;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        p_SDT := NULL;
-    WHEN OTHERS THEN
-        NULL;
-END GET_SDT;
-/
-
--- PROCEDURE 7: Lấy mã ghế từ mã vé
-CREATE OR REPLACE PROCEDURE GET_MA_GHE(
-    p_MaVe IN VARCHAR2,
-    p_MaGhe OUT NUMBER
-) AS
-BEGIN
-    SELECT MaGhe INTO p_MaGhe
-    FROM VE
-    WHERE MAVE = p_MaVe;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        p_MaGhe := NULL;
-    WHEN OTHERS THEN
-        NULL;
-END GET_MA_GHE;
-/
-
--- PROCEDURE 8: Lấy tên hạng vé từ mã vé
-CREATE OR REPLACE PROCEDURE GET_TEN_HANG_VE(
-    p_MaVe IN VARCHAR2,
-    p_TenHangVe OUT VARCHAR2
-) AS
-BEGIN
-    SELECT HV.TenHangVe INTO p_TenHangVe
-    FROM HANGVE HV
-             JOIN VE V ON HV.MaHangVe = V.MaHangVe
-    WHERE V.MAVE = p_MaVe;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        p_TenHangVe := NULL;
-    WHEN OTHERS THEN
-        NULL;
-END GET_TEN_HANG_VE;
-/
-
--- PROCEDURE 9: Lấy giá tiền từ mã vé
-CREATE OR REPLACE PROCEDURE GET_GIA_TIEN(
-    p_MaVe IN VARCHAR2,
-    p_GiaTien OUT NUMBER
-) AS
-BEGIN
-    SELECT GiaTien INTO p_GiaTien
-    FROM VE
-    WHERE MAVE = p_MaVe;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        p_GiaTien := NULL;
-    WHEN OTHERS THEN
-        NULL;
-END GET_GIA_TIEN;
-/
-
--- PROCEDURE 9: update lại số ghế trống, số ghế đặt khi thay đổi trạng thái của ct_datve */
---UPDATE TRANGTHAI
-CREATE OR REPLACE PROCEDURE update_ticket_status(
-    p_maCT_DATVE IN VARCHAR2,
-    p_trangThai IN INT
-) AS
-    v_maChuyenBay VARCHAR2(10);
-    v_maHangVe VARCHAR2(10);
-    v_oldTrangThai INT;
-BEGIN
-    -- Fetch the current status of the ticket
-    SELECT TrangThai INTO v_oldTrangThai
-    FROM CT_DATVE
-    WHERE MaCT_DATVE = p_maCT_DATVE;
-
--- Update the status of the ticket in CT_DATVE
-    UPDATE CT_DATVE
-    SET TrangThai = p_trangThai,
-        NgayThanhToan = CASE WHEN p_trangThai IN (1, 2) THEN SYSDATE ELSE NULL END
-    WHERE MaCT_DATVE = p_maCT_DATVE;
-
--- Fetch related MaChuyenBay and MaHangVe
-    SELECT V.MaChuyenBay, V.MaHangVe INTO v_maChuyenBay, v_maHangVe
-    FROM VE V
-             JOIN CT_DATVE CDV ON V.MaVe = CDV.MaVe
-    WHERE CDV.MaCT_DATVE = p_maCT_DATVE;
-
--- Adjust the available seats in CT_HANGVE
-    IF p_trangThai = 1 THEN
-        IF v_oldTrangThai != 0 THEN
-            -- If old status is not 0, decrement available seats and increment booked seats
-            UPDATE CT_HANGVE
-            SET SoGheTrong = SoGheTrong - 1,
-                SoGheDat = SoGheDat + 1
-            WHERE MaChuyenBay = v_maChuyenBay AND MaHangVe = v_maHangVe;
-        END IF;
-    ELSIF p_trangThai = 2 THEN
-        -- If ticket is cancelled, increment available seats and decrement booked seats
-        UPDATE CT_HANGVE
-        SET SoGheTrong = SoGheTrong + 1,
-            SoGheDat = SoGheDat - 1
-        WHERE MaChuyenBay = v_maChuyenBay AND MaHangVe = v_maHangVe;
-    END IF;
-
-    COMMIT;
-EXCEPTION
-    WHEN OTHERS THEN
-        -- Handle exceptions
-        ROLLBACK;
-        RAISE;
-END;
-/
-
---XÁC NHẬN ĐẶT VÉ CONTROLLER
---PROCEDURE 1: SELL ticket
-CREATE OR REPLACE PROCEDURE SellTicket(
-    p_maKH IN VARCHAR2,
-    p_hoten IN VARCHAR2,
-    p_cccd IN VARCHAR2,
-    p_email IN VARCHAR2,
-    p_sdt IN VARCHAR2,
-    p_diaChi IN VARCHAR2,
-    p_maVe IN VARCHAR2,
-    p_ngayMuaVe IN TIMESTAMP,
-    p_ngayThanhToan IN TIMESTAMP,
-    p_trangThai IN INTEGER
-) AS
-    v_customerExists INTEGER;
-    v_newMaCT_DATVE VARCHAR2(10);
-BEGIN
-    -- Check if customer exists
-    SELECT COUNT(*) INTO v_customerExists
-    FROM KHACHHANG
-    WHERE MAKHACHHANG = p_maKH;
-
--- If customer does not exist, insert into KHACHHANG
-    IF v_customerExists = 0 THEN
-        INSERT INTO KHACHHANG (MAKHACHHANG, HOTEN, CCCD, EMAIL, SDT, DIACHI)
-        VALUES (p_maKH, p_hoten, p_cccd, p_email, p_sdt, p_diaChi);
-    END IF;
-
-    -- Generate new MaCT_DATVE
-    SELECT 'CTDV' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(MaCT_DATVE, 5))), 0) + 1, 3, '0') INTO v_newMaCT_DATVE
-    FROM CT_DATVE;
-
--- Insert booking into CT_DATVE
-    INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
-    VALUES (v_newMaCT_DATVE, p_maVe, p_maKH, p_ngayMuaVe, p_ngayThanhToan, p_trangThai);
-
-    COMMIT;
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        RAISE;
-END SellTicket;
-
---PROCEDURE 2: SO GHE trong
-CREATE OR REPLACE PROCEDURE update_soGheTrong(
-    p_maCT_DATVE IN VARCHAR2,
-    p_trangThai IN INT
-) AS
-    v_maChuyenBay VARCHAR2(10);
-    v_maHangVe VARCHAR2(10);
-BEGIN
-    -- Lấy thông tin chuyến bay và hạng vé từ bảng CT_DATVE
-    SELECT V.MaChuyenBay, V.MaHangVe
-    INTO v_maChuyenBay, v_maHangVe
-    FROM VE V
-             JOIN CT_DATVE CDV ON V.MaVe = CDV.MaVe
-    WHERE CDV.MaCT_DATVE = p_maCT_DATVE;
-
--- Cập nhật số ghế trống và đặt cho hợp lý dựa trên trạng thái mới của vé
-    IF p_trangThai IN (0, 1) THEN
-        -- Trạng thái mới là 1 (đã đặt vé), giảm số ghế trống và tăng số ghế đã đặt
-        UPDATE CT_HANGVE
-        SET SoGheTrong = SoGheTrong - 1,
-            SoGheDat = SoGheDat + 1
-        WHERE MaChuyenBay = v_maChuyenBay AND MaHangVe = v_maHangVe;
-    END IF;
-
-    COMMIT;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        -- Xử lý ngoại lệ khi không tìm thấy dữ liệu
-        DBMS_OUTPUT.PUT_LINE('Không tìm thấy dữ liệu cho mã CT_DATVE: ' || p_maCT_DATVE);
-    WHEN OTHERS THEN
-        -- Xử lý ngoại lệ khác và rollback
-        ROLLBACK;
-        DBMS_OUTPUT.PUT_LINE('Lỗi: ' || SQLERRM);
-END;
-
+---------------------------------------------------------------------------------------------------------------
+-- INSERT DATA
 
 --insert dữ liệu
 
@@ -1112,103 +333,192 @@ VALUES ('SBD013', 'Liên Khương', 'DLI', 'Lâm Đồng', 1);
 INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
 VALUES ('SBD014', 'Cần Thơ', 'VCA', 'Cần Thơ', 1);
 
+-- Thêm sân bay quốc tế
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD050', 'Seletar', 'XSP', 'Singapore', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD051', 'Changi', 'SIN', 'Singapore', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD052', 'Phuket', 'PKT', 'Thai Lan', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD053', 'Chiang Mai', 'CMT', 'Thai Lan', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD054', 'Incheon', 'ICN', 'Han Quoc', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD055', 'Gimhae', 'PUS', 'Han Quoc', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD056', 'Chicago', 'ORD', 'Hoa Ky', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD057', 'Dallas', 'DFW', 'Hoa Ky', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD058', 'Abingdon', 'ABB', 'Anh', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD059', 'Bedford', 'BFC', 'Anh', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD060', 'Berlin', 'TXL', 'Duc', 1);
+
+INSERT INTO SANBAY (MaSanBay, TenSanBay, TenVietTat, DiaChi, TrangThai)
+VALUES ('SBD061', 'Frankfurt am Main', 'FRA', 'Duc', 1);
+
+
 -- TABLE: DUONGBAY
 
--- Routes from quangnam(Chu lai - VCL)
+-- Chèn đường bay với thời gian bay
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB001', 'SBD003', 'SBD002', 'VCL-HAN', 9800,1);
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB001', 'SBD003', 'SBD002', 'VCL-HAN', 9800, 1, INTERVAL '09:45:00' HOUR TO SECOND);
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB002', 'SBD003', 'SBD004','VCL-PQC', 9800,1);
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB002', 'SBD003', 'SBD004', 'VCL-PQC', 9800, 1, INTERVAL '01:20:00' HOUR TO SECOND);
 
--- Routes from binhdinh (phu cat - UIH)
+-- Routes from Binh Dinh (Phu Cat - UIH)
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB003', 'SBD006', 'SBD002', 'UIH-HAN', 9800,1);
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB003', 'SBD006', 'SBD002', 'UIH-HAN', 9800, 1, INTERVAL '01:50:00' HOUR TO SECOND);
 
 -- Routes from Hanoi (Noi Bai - HAN)
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB004', 'SBD002', 'SBD001', 'HAN-SGN', 1200,1);
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB004', 'SBD002', 'SBD001', 'HAN-SGN', 1200, 1, INTERVAL '02:10:00' HOUR TO SECOND);
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB005', 'SBD002', 'SBD003', 'HAN-VCL', 9800,1);
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB005', 'SBD002', 'SBD003', 'HAN-VCL', 9800, 1, INTERVAL '01:30:00' HOUR TO SECOND);
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB006', 'SBD002', 'SBD005','HAN-DAD', 6700,1);
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB006', 'SBD002', 'SBD005', 'HAN-DAD', 6700, 1, INTERVAL '01:20:00' HOUR TO SECOND);
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB007', 'SBD002', 'SBD006','HAN-UIH', 9800,1);
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB007', 'SBD002', 'SBD006', 'HAN-UIH', 9800, 1, INTERVAL '01:50:00' HOUR TO SECOND);
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB008', 'SBD002', 'SBD004', 'HAN-PQC', 1250,1); -- Hanoi to Phu Quoc
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB008', 'SBD002', 'SBD004', 'HAN-PQC', 1250, 1, INTERVAL '02:05:00' HOUR TO SECOND); -- Hanoi to Phu Quoc
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB009', 'SBD002', 'SBD007', 'HAN-PXU', 760,1); -- Hanoi to Pleiku
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB009', 'SBD002', 'SBD007', 'HAN-PXU', 760, 1, INTERVAL '01:30:00' HOUR TO SECOND); -- Hanoi to Pleiku
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB010', 'SBD002', 'SBD010', 'HAN-VII', 290,1); -- Hanoi to Vinh
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB010', 'SBD002', 'SBD010', 'HAN-VII', 290, 1, INTERVAL '01:20:00' HOUR TO SECOND); -- Hanoi to Vinh
 
 -- Routes from Ho Chi Minh City (Tan Son Nhat - SGN)
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB011', 'SBD001', 'SBD002', 'SGN-HAN', 1150,1); -- Ho Chi Minh City to Hanoi
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB011', 'SBD001', 'SBD002', 'SGN-HAN', 1150, 1, INTERVAL '01:55:00' HOUR TO SECOND); -- Ho Chi Minh City to Hanoi
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB012', 'SBD001', 'SBD005', 'SGN-DAD', 610,1); -- Ho Chi Minh City to Da Nang
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB012', 'SBD001', 'SBD005', 'SGN-DAD', 610, 1, INTERVAL '01:25:00' HOUR TO SECOND); -- Ho Chi Minh City to Da Nang
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB013', 'SBD001', 'SBD004', 'SGN-PQC', 300,1); -- Ho Chi Minh City to Phu Quoc
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB013', 'SBD001', 'SBD004', 'SGN-PQC', 300, 1, INTERVAL '01:30:00' HOUR TO SECOND); -- Ho Chi Minh City to Phu Quoc
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB14', 'SBD001', 'SBD006', 'SGN-UIH', 440,1); -- Ho Chi Minh City to Quy Nhon
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB014', 'SBD001', 'SBD006', 'SGN-UIH', 440, 1, INTERVAL '01:35:00' HOUR TO SECOND); -- Ho Chi Minh City to Quy Nhon
 
 -- Routes from Da Nang (Da Nang - DAD)
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB015', 'SBD005', 'SBD002', 'DAD-HAN', 630,1); -- Da Nang to Hanoi
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB015', 'SBD005', 'SBD002', 'DAD-HAN', 630, 1, INTERVAL '01:35:00' HOUR TO SECOND); -- Da Nang to Hanoi
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB016', 'SBD005', 'SBD001', 'DAD-SGN', 610,1); -- Da Nang to Ho Chi Minh City
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB016', 'SBD005', 'SBD001', 'DAD-SGN', 610, 1, INTERVAL '01:30:00' HOUR TO SECOND); -- Da Nang to Ho Chi Minh City
 
 -- Routes from Phu Quoc (Phu Quoc - PQC)
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB017', 'SBD004', 'SBD002', 'PQC-HAN', 1250,1); -- Phu Quoc to Hanoi
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB017', 'SBD004', 'SBD002', 'PQC-HAN', 1250, 1, INTERVAL '02:05:00' HOUR TO SECOND); -- Phu Quoc to Hanoi
 
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB018', 'SBD004', 'SBD001', 'PQC-SGN', 300,1); -- Phu Quoc to Ho Chi Minh City
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB018', 'SBD004', 'SBD001', 'PQC-SGN', 300, 1, INTERVAL '01:10:00' HOUR TO SECOND); -- Phu Quoc to Ho Chi Minh City
 
 -- Routes from Vinh (Vinh - VII)
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB019', 'SBD010', 'SBD002', 'VII-HAN', 290,1); -- Vinh to Hanoi
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB019', 'SBD010', 'SBD002', 'VII-HAN', 290, 1, INTERVAL '00:50:00' HOUR TO SECOND); -- Vinh to Hanoi
 
 -- Routes from Can Tho (Can Tho - VCA)
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB020', 'SBD014', 'SBD002', 'VCA-HAN', 1220,1); -- Can Tho to Hanoi
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB020', 'SBD014', 'SBD002', 'VCA-HAN', 1220, 1, INTERVAL '02:00:00' HOUR TO SECOND); -- Can Tho to Hanoi
 
 -- Routes from Van Don (Van Don - VDO)
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB021', 'SBD008', 'SBD001', 'VDO-SGN', 1270,1); -- Van Don to Ho Chi Minh City
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB021', 'SBD008', 'SBD001', 'VDO-SGN', 1270, 1, INTERVAL '02:05:00' HOUR TO SECOND); -- Van Don to Ho Chi Minh City
 
 -- Routes from Hai Phong (Cat Bi - HPH)
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB022', 'SBD009', 'SBD001', 'HPH-SGN', 1120,1); -- Hai Phong to Ho Chi Minh City
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB022', 'SBD009', 'SBD001', 'HPH-SGN', 1120, 1, INTERVAL '01:55:00' HOUR TO SECOND); -- Cat Bi to Ho Chi Minh
 
 -- Routes from Hue (Phu Bai - HUI)
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB023', 'SBD011', 'SBD002', 'HUI-HAN', 540,1); -- Hue to Hanoi
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB023', 'SBD011', 'SBD002', 'HUI-HAN', 540, 1, INTERVAL '01:25:00' HOUR TO SECOND); -- Hue to Hanoi
 
 -- Routes from Cam Ranh (Cam Ranh - CXR)
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB024', 'SBD012', 'SBD001', 'CXR-SGN', 350,1); -- Cam Ranh to Ho Chi Minh City
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB024', 'SBD012', 'SBD001', 'CXR-SGN', 350, 1, INTERVAL '01:10:00' HOUR TO SECOND); -- Cam Ranh to Ho Chi Minh City
 
 -- Routes from Lien Khuong (Lien Khuong - DLI)
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB025', 'SBD013', 'SBD001', 'DLI-SGN', 250,1); -- Lien Khuong to Ho Chi Minh City
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB025', 'SBD013', 'SBD001', 'DLI-SGN', 250, 1, INTERVAL '01:00:00' HOUR TO SECOND); -- Lien Khuong to Ho Chi Minh City
 
 -- Routes from Pleiku (Pleiku - PXU)
-INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay,trangthai)
-VALUES ('DB026', 'SBD007', 'SBD001', 'PXU-SGN', 370,1); -- Pleiku to Ho Chi Minh City
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB026', 'SBD007', 'SBD001', 'PXU-SGN', 370, 1, INTERVAL '01:20:00' HOUR TO SECOND); -- Pleiku to Ho Chi Minh City
 
+-- Thêm Đường bay quốc tế
+-- Ho Chi Minh City (SGN) to Dallas-Fort Worth (DFW)
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB050', 'SBD001', 'SBD057', 'SGN-DFW', 9683, 1, INTERVAL '16:20:00' HOUR TO SECOND); -- Ho Chi Minh City to Hoa Ky
+
+-- Quang Nam (VCL) to Pusan (PUS)
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB051', 'SBD003', 'SBD055', 'VCL-PUS', 2755, 1, INTERVAL '04:00:00' HOUR TO SECOND); -- Quang Nam to Han Quoc
+
+-- Khanh Hoa (CXR) to Singapore (SIN)
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB052', 'SBD012', 'SBD051', 'CXR-SIN', 3475, 1, INTERVAL '04:45:00' HOUR TO SECOND); -- Khanh Hoa to Singapore
+
+-- Da Nang (DAD) to London (ABB)
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB053', 'SBD005', 'SBD058', 'DAD-ABB', 6542, 1, INTERVAL '11:30:00' HOUR TO SECOND); -- Da Nang to Anh
+
+-- Can Tho (VCA) to Bangkok (PKT)
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB054', 'SBD014', 'SBD052', 'VCA-PKT', 1074, 1, INTERVAL '02:00:00' HOUR TO SECOND); -- Can Tho to Thai Lan
+
+-- Hue (HUI) to Frankfurt (FRA)
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB055', 'SBD011', 'SBD061', 'HUI-FRA', 4556, 1, INTERVAL '10:30:00' HOUR TO SECOND); -- Hue to Duc
+
+-- Lam Dong (DLI) to Singapore (XSP)
+INSERT INTO DUONGBAY (MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, DoDaiDuongBay, trangthai, ThoiGianBay)
+VALUES ('DB056', 'SBD013', 'SBD050', 'DLI-XSP', 20331, 1, INTERVAL '12:00:00' HOUR TO SECOND); -- Lam Dong to Singapore
+
+--TABLE: SANBAYTRUNGGIAN
+-- Thêm sân bay trung gian
+INSERT INTO SANBAYTG (MaDuongBay, MaSanBay, ThuTu, ThoiGianDung)
+VALUES ('DB050', 'SBD059', 1, INTERVAL '0 1:30:00' DAY TO SECOND);
+
+INSERT INTO SANBAYTG (MaDuongBay, MaSanBay, ThuTu, ThoiGianDung)
+VALUES ('DB051', 'SBD005', 1, INTERVAL '0 1:00:00' DAY TO SECOND);
+
+INSERT INTO SANBAYTG (MaDuongBay, MaSanBay, ThuTu, ThoiGianDung)
+VALUES ('DB052', 'SBD001', 1, INTERVAL '0 00:30:00' DAY TO SECOND);
+
+INSERT INTO SANBAYTG (MaDuongBay, MaSanBay, ThuTu, ThoiGianDung)
+VALUES ('DB054', 'SBD001', 1, INTERVAL '0 00:30:00' DAY TO SECOND);
+
+INSERT INTO SANBAYTG (MaDuongBay, MaSanBay, ThuTu, ThoiGianDung)
+VALUES ('DB055', 'SBD002', 1, INTERVAL '0 1:00:00' DAY TO SECOND);
+
+INSERT INTO SANBAYTG (MaDuongBay, MaSanBay, ThuTu, ThoiGianDung)
+VALUES ('DB055', 'SBD058', 2, INTERVAL '0 2:45:00' DAY TO SECOND);
+
+INSERT INTO SANBAYTG (MaDuongBay, MaSanBay, ThuTu, ThoiGianDung)
+VALUES ('DB056', 'SBD001', 1, INTERVAL '0 0:50:00' DAY TO SECOND);
 
 -- TABLE : CHUYENBAY
 
@@ -1285,6 +595,30 @@ VALUES ('CB022', 'DB010', TO_TIMESTAMP('2024-10-20 09:00:00', 'YYYY-MM-DD HH24:M
 
 INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
 VALUES ('CB023', 'DB011', TO_TIMESTAMP('2024-11-25 07:45:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-11-25 10:15:00', 'YYYY-MM-DD HH24:MI:SS'), 0, 1200000);
+
+
+
+-- Thêm chuyến bay quốc tế
+INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
+VALUES ('CB040', 'DB050', TO_TIMESTAMP('2023-01-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-01-12 22:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 9500000);
+
+INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
+VALUES ('CB041', 'DB051', TO_TIMESTAMP('2023-05-15 19:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-5-16 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 5000000);
+
+INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
+VALUES ('CB042', 'DB052', TO_TIMESTAMP('2023-07-31 7:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-08-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 4300000);
+
+INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
+VALUES ('CB043', 'DB053', TO_TIMESTAMP('2024-01-10 9:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-01-11 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 8760000);
+
+INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
+VALUES ('CB044', 'DB054', TO_TIMESTAMP('2023-12-12 22:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-12-13 13:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 2360000);
+
+INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
+VALUES ('CB045', 'DB055', TO_TIMESTAMP('2024-04-23 18:45:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-04-24 6:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 7760000);
+
+INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
+VALUES ('CB046', 'DB056', TO_TIMESTAMP('2023-05-17 23:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-05-18 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 3530000);
 
 
 -- TABLE : HANGVE
@@ -2068,7 +1402,8 @@ INSERT INTO THAMSO (MaThuocTinh, TenThuocTinh, GiaTri) VALUES ('TGDTD', 'ThoiGia
 INSERT INTO THAMSO (MaThuocTinh, TenThuocTinh, GiaTri) VALUES ('TGTTDV', 'ThoiGianToiThieuDatVe', 24);
 INSERT INTO THAMSO (MaThuocTinh, TenThuocTinh, GiaTri) VALUES ('TGTT_HV', 'ThoiGianToiThieuHuyVe', 24);
 
-
+-- ----------------------------------------------------------------------------------------------------------------------------------------------------------
+--CHẠY TRIGGER VÀ PROC RỒI MỚI CHẠY CT_DATVE
 
 -- TABLE : CT_DATVE
 --past
@@ -2464,12 +1799,6 @@ INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, T
 VALUES ('CTDV172', 'VE0172', 'KH002', TO_TIMESTAMP('2023-11-15 09:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-11-16 15:29:59', 'YYYY-MM-DD HH24:MI:SS'), 1);
 
 
-
-
-
-
---future
-
 /*
 -- Xóa dữ liệu trong bảng CT_DATVE
 DELETE FROM CT_DATVE;
@@ -2509,4 +1838,1099 @@ DELETE FROM QUYEN;
 
 -- Xóa dữ liệu trong bảng THAMSO
 DELETE FROM THAMSO;
+
+-- Xóa dữ liệu trong bảng SANBAYTG
+DELETE FRROM SANBAYTG;
 */
+
+
+-----------------------------------------------------------------------------------------------
+--TRIGGER
+
+
+
+/* R1: Thời gian xuất phát của một chuyến bay phải nhỏ hơn thời gian kết thúc */
+
+ALTER TABLE CHUYENBAY
+    ADD CONSTRAINT Check_ThoiGian_CB CHECK (TGXP < TGKT);
+
+
+/* R2: Ngày thanh toán vé phải sau ngày mua vé */
+
+ALTER TABLE CT_DATVE
+    ADD CONSTRAINT Check_NgayThanhToan_VE CHECK (NgayMuaVe <= NgayThanhToan);
+
+
+/* R3:Tổng giá tiền thanh toán = giá vé x hệ số */
+
+CREATE OR REPLACE TRIGGER Tienthanhtoan_VE
+    AFTER INSERT OR UPDATE ON VE
+    FOR EACH ROW
+DECLARE
+    v_GiaVe CHUYENBAY.GiaVe%TYPE;
+    v_HeSo HANGVE.HeSo%TYPE;
+BEGIN
+
+    SELECT cb.GiaVe, hv.HeSo
+    INTO v_GiaVe, v_HeSo
+    FROM CHUYENBAY cb, HANGVE hv
+    WHERE cb.MaChuyenBay = :NEW.MaChuyenBay
+      AND hv.MaHangVe = :NEW.MaHangVe;
+
+
+    IF :NEW.GiaTien <> v_HeSo * v_GiaVe THEN
+        RAISE_APPLICATION_ERROR(-20002, 'Tổng giá tiền thanh toán không hợp lệ.');
+    END IF;
+END;
+/
+
+/* R4: Cập nhật doanh thu  tháng khi có thêm doanh thu chuyến bay.*/
+
+CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang
+    FOR INSERT OR update ON CT_DATVE
+    COMPOUND TRIGGER
+    v_nam NUMBER;
+    v_thang NUMBER;
+    giave NUMBER;
+    v_dem NUMBER;
+    v_dem_nam NUMBER;
+    v_machuyenbay VARCHAR2(10);
+    v_countMaChuyenBay NUMBER;
+    CheckExist NUMBER := 0 ;
+    v_count NUMBER;
+    p_trangThai NUMBER;
+    v_maVe VARCHAR2(10);
+    v_maHangVe VARCHAR2(10);
+
+BEFORE STATEMENT IS
+BEGIN
+    NULL;
+END BEFORE STATEMENT;
+
+    BEFORE EACH ROW IS
+    BEGIN
+
+        IF (:NEW.NgayThanhToan IS NULL) THEN
+            BEGIN
+                SELECT 0,0 INTO v_nam,V_THANG
+                FROM dual;
+            END;
+        ELSE
+            SELECT EXTRACT(YEAR FROM :NEW.NgayThanhToan), EXTRACT(MONTH FROM :NEW.NgayThanhToan) INTO v_nam,v_thang
+            FROM dual;
+        END IF;
+
+        SELECT :NEW.TrangThai INTO p_trangThai
+        FROM dual;
+
+        SELECT MAHANGVE INTO v_maHangVe
+        FROM VE
+        WHERE Ve.MaVE = :NEW.MAVE;
+
+        SELECT Giatien INTO giave
+        FROM VE v
+        WHERE V.MaVE = :NEW.MaVE;
+
+        SELECT Machuyenbay INTO v_machuyenbay
+        FROM ve
+        WHERE Ve.MaVE = :NEW.MAVE;
+
+
+
+        IF (:NEW.TrangThai = 2) THEN
+            BEGIN
+                CheckExist := 1;
+            END;
+        END IF;
+
+    END BEFORE EACH ROW;
+
+
+    AFTER EACH ROW IS
+    BEGIN
+        NULL;
+    END AFTER EACH ROW;
+
+
+    AFTER STATEMENT IS
+    BEGIN
+
+        IF (( p_trangThai = 1) OR (p_trangThai = 0) ) THEN
+            UPDATE CT_HANGVE
+            SET SoGheTrong = SoGheTrong - 1,
+                SoGheDat = SoGheDat + 1
+            WHERE MaChuyenBay = v_maChuyenBay AND MaHangVe = v_maHangVe;
+        ELSIF p_trangThai = 2 THEN
+            UPDATE CT_HANGVE
+            SET SoGheTrong = SoGheTrong + 1,
+                SoGheDat = SoGheDat - 1
+            WHERE MaChuyenBay = v_maChuyenBay AND MaHangVe = v_maHangVe;
+        END IF;
+
+
+        IF (v_nam > 0 AND v_thang > 0 AND CheckExist = 0) THEN
+            BEGIN
+                SELECT COUNT(*) INTO v_dem
+                FROM baocaothang
+                WHERE thang = v_thang AND nam = v_nam;
+
+                SELECT COUNT(*) INTO v_dem_nam
+                FROM baocaonam
+                WHERE nam = v_nam;
+
+                SELECT COUNT(*) INTO v_countMaChuyenBay
+                FROM BAOCAOTHANG
+                WHERE machuyenbay = v_machuyenbay;
+
+                IF (v_dem > 0) THEN
+                    begin
+                        IF (v_countMaChuyenBay > 0 ) THEN
+                            begin
+                                UPDATE BAOCAOTHANG
+                                SET DoanhThu = DoanhThu + GiaVe,
+                                    SoVeDaBan = SoVeDaBan + 1
+                                WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
+                            END;
+                        ELSE
+                            BEGIN
+                                INSERT INTO BAOCAOTHANG ( MaChuyenBay, SoVeDaBan, DoanhThu, Thang, Nam)
+                                VALUES (v_machuyenbay, 1, giave, v_thang, v_nam);
+                            END;
+                        END IF;
+                    END;
+                ELSE
+                    BEGIN
+                        INSERT INTO BAOCAOTHANG ( MaChuyenBay, SoVeDaBan, DoanhThu, Thang, Nam)
+                        VALUES (v_machuyenbay, 1, giave, v_thang, v_nam);
+                    END;
+                END IF;
+
+                UPDATE baocaonam
+                SET doanhthu = doanhthu + GIAVE
+                WHERE nam = v_nam AND thang = v_thang;
+
+            END;
+        END IF;
+
+        ----
+        IF (CheckExist = 1 ) THEN
+            BEGIN
+                SELECT sovedaban INTO v_count
+                FROM BAOCAOTHANG
+                WHERE thang = v_thang AND nam = v_nam AND machuyenbay = v_machuyenbay ;
+
+                IF (v_count > 1 ) THEN
+                    begin
+                        UPDATE BAOCAOTHANG
+                        SET DoanhThu = DoanhThu - GiaVe,
+                            SoVeDaBan = SoVeDaBan - 1
+                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
+
+                        UPDATE BAOCAONAM
+                        SET doanhthu = doanhthu - giave
+                        WHERE nam = v_nam AND thang = v_thang;
+                    END;
+                ELSE
+                    BEGIN
+                        UPDATE BAOCAONAM
+                        SET doanhthu = doanhthu - giave, SOCHUYENBAY = SOCHUYENBAY - 1
+                        WHERE nam = v_nam AND thang = v_thang;
+
+                        DELETE FROM baocaothang
+                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
+
+                    END;
+                END IF;
+            END;
+        END IF;
+
+    END AFTER STATEMENT;
+    END Update_DoanhThu_Thang;
+
+--trigger cho delete
+
+CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang_delete
+    FOR delete ON CT_DATVE
+    COMPOUND TRIGGER
+    v_nam NUMBER;
+    v_thang NUMBER;
+    giave NUMBER;
+    v_dem NUMBER;
+    v_machuyenbay VARCHAR2(10);
+    v_count NUMBER;
+    v_maHangVe VARCHAR2(10);
+
+
+BEFORE STATEMENT IS
+BEGIN
+    NULL;
+END BEFORE STATEMENT;
+
+    BEFORE EACH ROW IS
+    BEGIN
+        IF (:OLD.NgayThanhToan IS NULL) THEN
+            BEGIN
+                SELECT 0,0 INTO v_nam,V_THANG
+                FROM dual;
+            END;
+        ELSE
+            BEGIN
+                SELECT EXTRACT(YEAR FROM :OLD.NgayThanhToan), EXTRACT(MONTH FROM :OLD.NgayThanhToan) INTO v_nam,v_thang
+                FROM dual;
+            END;
+        END IF;
+
+        SELECT Giatien INTO giave
+        FROM VE v
+        WHERE V.MaVE = :OLD.MaVE;
+
+        SELECT machuyenbay INTO v_machuyenbay
+        FROM VE
+        WHERE mave = :OLD.mave;
+
+        SELECT MAHANGVE INTO v_maHangVe
+        FROM VE
+        WHERE Ve.MaVE = :OLD.MAVE;
+
+    END BEFORE EACH ROW;
+
+    AFTER EACH ROW IS
+    BEGIN
+        NULL;
+    END AFTER EACH ROW;
+
+    AFTER STATEMENT IS
+    BEGIN
+
+        UPDATE ct_hangve
+        SET soghetrong = soghetrong + 1 ,
+            soghedat = soghedat - 1
+        WHERE machuyenbay = v_machuyenbay  AND mahangve = V_MAHANGVE;
+
+        IF (v_nam > 0 AND v_thang > 0 ) THEN
+            BEGIN
+                SELECT sovedaban INTO v_count
+                FROM BAOCAOTHANG
+                WHERE thang = v_thang AND nam = v_nam AND machuyenbay = v_machuyenbay ;
+
+                IF (v_count > 1 ) THEN
+                    begin
+                        UPDATE BAOCAOTHANG
+                        SET DoanhThu = DoanhThu - GiaVe,
+                            SoVeDaBan = SoVeDaBan - 1
+                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
+
+                        UPDATE BAOCAONAM
+                        SET doanhthu = doanhthu - giave
+                        WHERE nam = v_nam AND thang = v_thang;
+                    END;
+                ELSE
+                    BEGIN
+                        UPDATE BAOCAOTHANG
+                        SET DoanhThu = DoanhThu - GiaVe,
+                            SoVeDaBan = SoVeDaBan - 1
+                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
+
+                        UPDATE BAOCAONAM
+                        SET doanhthu = doanhthu - giave, SOCHUYENBAY = SOCHUYENBAY - 1
+                        WHERE nam = v_nam AND thang = v_thang;
+
+                        DELETE FROM baocaothang
+                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
+
+                    END;
+                END IF;
+            END;
+        END IF;
+    END AFTER STATEMENT;
+
+    END Update_DoanhThu_Thang_delete;
+
+/* R4: Mỗi vé phải đặt trước một khoảng thời gian nhất định trước khi máy bay xuất phát. */
+--DROP TRIGGER trigger_CT_DATVE
+
+CREATE OR REPLACE TRIGGER trigger_CT_DATVE
+    BEFORE INSERT OR update ON CT_DATVE
+    FOR EACH ROW
+DECLARE
+    v_MinBookingTime NUMBER;
+    v_Interval INTERVAL DAY(4) TO SECOND;
+    v_TimeMin INTERVAL DAY(4) TO SECOND;
+BEGIN
+    SELECT GiaTri into v_MinBookingTime
+    FROM THAMSO
+    WHERE TenThuocTinh = 'ThoiGianToiThieuDatVe';
+
+    v_Interval := NUMTODSINTERVAL(v_MinBookingTime, 'HOUR');
+
+    SELECT (TGXP - :NEW.NgayMuaVe  ) INTO v_TimeMin
+    FROM chuyenbay cb, ve v
+    WHERE V.MAVE = :NEW.MaVE  AND CB.MACHUYENBAY = V.MACHUYENBAY;
+
+
+    IF v_TimeMin < v_Interval THEN
+        RAISE_APPLICATION_ERROR(-20004, 'Mỗi vé phải được đặt trước ít nhất ' || v_MinBookingTime || ' giờ trước khi máy bay xuất phát.');
+    END IF;
+
+END;
+/
+
+
+
+/* R5: Cập nhật Số chuyến bay báo cáo năm khi có chuyến bay mới được update vào baocaothang.*/
+--DROP TRIGGER Update_DoanhThu_Nam;
+
+CREATE OR REPLACE TRIGGER Update_DoanhThu_Nam
+    BEFORE INSERT ON baocaothang
+    FOR EACH ROW
+DECLARE
+    v_checkExist NUMBER;
+BEGIN
+
+    SELECT COUNT(*) INTO V_CHECKEXIST
+    FROM baocaonam
+    WHERE nam = :NEW.Nam AND thang = :NEW.thang;
+
+    IF (V_CHECKEXIST > 0) THEN
+        BEGIN
+            UPDATE BAOCAONAM
+            SET sochuyenbay = sochuyenbay + 1
+            WHERE thang = :NEW.thang AND nam = :NEW.nam;
+        END;
+    ELSE
+        BEGIN
+            INSERT INTO baocaonam(thang,nam,sochuyenbay,doanhthu) VALUES (:NEW.thang,:NEW.nam,1,0);
+        END;
+    END IF;
+END;
+/
+
+
+
+
+
+/* R6:  Giá tiền của Vé là một số không âm. */
+
+ALTER TABLE VE
+    ADD CONSTRAINT Check_GiaTien_ CHECK (GiaTien >= 0);
+
+
+/* R7: Trạng thái là chưa đổi hoặc đã đổi */
+
+ALTER TABLE HANGVE
+    ADD CONSTRAINT Check_TrangThai_HV CHECK (TrangThai IN (0,1));
+
+
+/* R8.1: Trạng thái mặc định ban đầu là chưa đổi */
+
+ALTER TABLE HANGVE
+    MODIFY TrangThai DEFAULT 1;
+
+
+/* R18.2: Trạng thái mặc định ban đầu là chưa đổi */
+
+ALTER TABLE CT_DATVE
+    MODIFY TrangThai DEFAULT 1;
+
+
+
+/* R9: Số vé là một số không âm. */
+
+ALTER TABLE baocaothang
+    ADD CONSTRAINT Check_SoVe CHECK (SoVeDaBan >= 0);
+
+
+/* R10: Doanh thu là một số không âm. */
+
+ALTER TABLE baocaothang
+    ADD CONSTRAINT Check_DoanhThu CHECK (DoanhThu >= 0);
+
+
+/* R11: Doanh thu mặc định là 0. */
+
+ALTER TABLE BAOCAONAM
+    MODIFY DoanhThu DEFAULT 0;
+
+
+/* R12: So Ve mặc định là 0.  */
+
+ALTER TABLE baocaothang
+    MODIFY SoVeDaBan DEFAULT 0;
+
+
+/* R13: Thời gian bay phải không nhỏ hơn thời gian bay tối thiểu. */
+--DROP TRIGGER Check_ThoiGianXuatPhat
+
+CREATE OR REPLACE TRIGGER Check_ThoiGianXuatPhat
+    BEFORE INSERT OR UPDATE ON CHUYENBAY
+    FOR EACH ROW
+DECLARE
+    v_ThoiGianToiThieu THAMSO.GiaTri%TYPE;
+    thoigianbay NUMBER;
+    distance INTERVAL DAY TO SECOND;
+BEGIN
+    SELECT GiaTri INTO v_ThoiGianToiThieu
+    FROM THAMSO
+    WHERE TenThuocTinh = 'ThoiGianBayToiThieu';
+
+    distance := :NEW.TGKT - :NEW.TGXP;
+
+    SELECT EXTRACT(DAY FROM (distance)) * 24 +
+           EXTRACT(HOUR FROM (distance)) +
+           EXTRACT(MINUTE FROM (distance)) / 60 +
+           EXTRACT(SECOND FROM (distance)) / 3600 into thoigianbay
+    FROM dual;
+
+    IF thoigianbay  < v_ThoiGianToiThieu THEN
+        RAISE_APPLICATION_ERROR(-20008, 'Thời gian bay phải lớn hơn hoặc bằng thời gian bay tối thiểu.');
+    END IF;
+END;
+/
+
+
+/* R14: sân bay đến và sân bay đi của đường bay không trùng nhau */
+--DROP TRIGGER Check_DuongBay
+
+CREATE OR REPLACE TRIGGER Check_DuongBay
+    BEFORE INSERT OR UPDATE ON DUONGBAY
+    FOR EACH ROW
+BEGIN
+    IF :NEW.MaSanBayDi = :NEW.MaSanBayDen THEN
+        RAISE_APPLICATION_ERROR(-20009, 'Sân bay đi và sân bay đến không được trùng nhau.');
+    END IF;
+END;
+/
+
+/* R15: nếu số lượng ghế trống = 0 thì không cho đặt vé */
+--DROP TRIGGER check_SL_GheTrong;
+
+CREATE OR REPLACE TRIGGER check_SL_GheTrong
+    BEFORE INSERT ON CT_DATVE
+    FOR EACH ROW
+DECLARE
+    v_soghetrong CT_HANGVE.SOGHETRONG%TYPE;
+BEGIN
+
+    SELECT soghetrong INTO v_soghetrong
+    FROM CT_HANGVE cthv, ve v
+    WHERE v.MaVE = :NEW.MaVe AND v.machuyenbay = cthv.machuyenbay AND v.MAHANGVE = cthv.MAHANGVE;
+
+
+    IF (v_SoGheTrong = 0) THEN
+        RAISE_APPLICATION_ERROR(-20009, 'Hết vé trống');
+    END IF;
+END;
+/
+
+
+/* R16: xóa VE và CT_HANGVE liên quan đến chuyến bay đã xóa */
+
+--CHẠY PROCEDURE XONG MỚI CHẠY LẠI TRIGGER NÀY
+
+CREATE OR REPLACE TRIGGER rf_VE_CT_HANGVE_delete_CHUYENBAY
+    before DELETE ON CHUYENBAY
+    FOR EACH ROW
+BEGIN
+    -- Xóa các bản ghi liên quan từ bảng VE
+    DELETE CT_HANGVE
+    WHERE machuyenbay = :OLD.machuyenbay;
+
+    FOR rec IN (SELECT MaVe FROM VE WHERE MaChuyenBay = :OLD.MaChuyenBay)
+        LOOP
+            BEGIN
+                -- Gọi procedure delete_CT_DATVE_by_VE để xóa các bản ghi trong CT_DATVE, nếu không tìm thấy thì bỏ qua
+                delete_CT_DATVE_by_VE(rec.MaVe);
+            EXCEPTION
+                WHEN NO_DATA_FOUND THEN
+                    -- Nếu không tìm thấy MaVe trong CT_DATVE thì bỏ qua
+                    NULL;
+                WHEN OTHERS THEN
+                    -- Xử lý các ngoại lệ khác nếu cần thiết
+                    NULL;
+            END;
+        END LOOP;
+
+    -- Xóa các bản ghi trong bảng VE liên quan đến MaChuyenBay vừa xóa
+    DELETE FROM VE
+    WHERE MaChuyenBay = :OLD.MaChuyenBay;
+END rf_VE_CT_HANGVE_delete_CHUYENBAY;
+/
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+--PROCEDURE
+-- LỊCH CHUYẾN BAY CONTROLLER
+-- GET SAN BAY DI
+CREATE OR REPLACE PROCEDURE GET_SANBAYDI (
+    p_MaDuongBay IN VARCHAR2,
+    p_TenSanBay OUT VARCHAR2
+)
+    IS
+BEGIN
+    SELECT sb.TenSanBay INTO p_TenSanBay
+    FROM SANBAY sb
+             JOIN DUONGBAY db ON sb.MaSanBay = db.MaSanBayDi
+    WHERE db.MaDuongBay = p_MaDuongBay;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_TenSanBay := 'N/A'; -- Trả về giá trị mặc định nếu không tìm thấy dữ liệu
+END GET_SANBAYDI;
+/
+--GET SAN BAY ĐẾN
+CREATE OR REPLACE PROCEDURE GET_SANBAYDEN (
+    p_MaDuongBay IN VARCHAR2,
+    p_TenSanBay OUT VARCHAR2
+)
+    IS
+BEGIN
+    SELECT sb.TenSanBay INTO p_TenSanBay
+    FROM SANBAY sb
+             JOIN DUONGBAY db ON sb.MaSanBay = db.MaSanBayDen
+    WHERE db.MaDuongBay = p_MaDuongBay;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_TenSanBay := 'N/A'; -- Trả về giá trị mặc định nếu không tìm thấy dữ liệu
+END GET_SANBAYDEN;
+/
+--GET SỐ GHẾ TRỐNG
+CREATE OR REPLACE PROCEDURE GET_SOGHETRONG (
+    p_MaChuyenBay IN VARCHAR2,
+    p_SoGheTrong OUT NUMBER
+)
+    IS
+BEGIN
+    SELECT SUM(SoGheTrong) INTO p_SoGheTrong
+    FROM CT_HANGVE
+    WHERE MaChuyenBay = p_MaChuyenBay;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_SoGheTrong := 0; -- Trả về giá trị mặc định nếu không tìm thấy dữ liệu
+END GET_SOGHETRONG;
+/
+--GET SỐ Ghế
+CREATE OR REPLACE PROCEDURE GET_SOGHE (
+    p_MaChuyenBay IN VARCHAR2,
+    p_SoGhe OUT NUMBER
+)
+    IS
+BEGIN
+    SELECT SUM(SoGheTrong + SoGheDat) INTO p_SoGhe
+    FROM CT_HANGVE
+    WHERE MaChuyenBay = p_MaChuyenBay;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_SoGhe := 0; -- Trả về giá trị mặc định nếu không tìm thấy dữ liệu
+END GET_SOGHE;
+/
+
+--GET SỐ ĐIỂM DỪNG
+CREATE OR REPLACE PROCEDURE GET_SODIEMDUNG (
+    p_MaDuongBay IN VARCHAR2,
+    p_SoDiemDung OUT NUMBER
+) AS
+BEGIN
+    -- Đếm số lượng điểm dừng (sân bay trung gian) của đường bay
+    SELECT COUNT(*)
+    INTO p_SoDiemDung
+    FROM SANBAYTG
+    WHERE MaDuongBay = p_MaDuongBay;
+
+    -- Nếu không có kết quả, gán giá trị 0 cho p_SoDiemDung
+    IF p_SoDiemDung IS NULL THEN
+        p_SoDiemDung := 0;
+    END IF;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_SoDiemDung := 0;
+    WHEN OTHERS THEN
+        p_SoDiemDung := 0;
+END GET_SODIEMDUNG;
+/
+
+
+--------------------------------------------------------------------------------------
+-- TRA CỨU DẶT VÉ CONTROLLER
+-- PROCEDURE 1: Lấy tên khách hàng từ mã khách hàng
+CREATE OR REPLACE PROCEDURE GET_TEN_KHACH_HANG(
+    p_MaKhachHang IN VARCHAR2,
+    p_HoTen OUT VARCHAR2
+) AS
+BEGIN
+    SELECT HoTen INTO p_HoTen
+    FROM KHACHHANG
+    WHERE MaKhachHang = p_MaKhachHang;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_HoTen := NULL;
+    WHEN OTHERS THEN
+        -- Xử lí các trường hợp ngoại lệ khác ở đây
+        NULL;
+END GET_TEN_KHACH_HANG;
+/
+
+-- PROCEDURE 2: Lấy sân bay đi từ mã vé
+CREATE OR REPLACE PROCEDURE GET_SAN_BAY_DI(
+    p_MaVe IN VARCHAR2,
+    p_SanBayDi OUT VARCHAR2
+) AS
+BEGIN
+    SELECT SBDi.TenSanBay INTO p_SanBayDi
+    FROM Ve V
+             JOIN CHUYENBAY CB ON V.MaChuyenBay = CB.MaChuyenBay
+             JOIN DUONGBAY DB ON CB.MaDuongBay = DB.MaDuongBay
+             JOIN SANBAY SBDi ON DB.MaSanBayDi = SBDi.MaSanBay
+    WHERE V.MAVE = p_MaVe;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_SanBayDi := NULL;
+    WHEN OTHERS THEN
+        NULL;
+END GET_SAN_BAY_DI;
+/
+
+-- PROCEDURE 3: Lấy sân bay đến từ mã vé
+CREATE OR REPLACE PROCEDURE GET_SAN_BAY_DEN(
+    p_MaVe IN VARCHAR2,
+    p_SanBayDen OUT VARCHAR2
+) AS
+BEGIN
+    SELECT SBDen.TenSanBay INTO p_SanBayDen
+    FROM Ve V
+             JOIN CHUYENBAY CB ON V.MaChuyenBay = CB.MaChuyenBay
+             JOIN DUONGBAY DB ON CB.MaDuongBay = DB.MaDuongBay
+             JOIN SANBAY SBDen ON DB.MaSanBayDen = SBDen.MaSanBay
+    WHERE V.MAVE = p_MaVe;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_SanBayDen := NULL;
+    WHEN OTHERS THEN
+        NULL;
+END GET_SAN_BAY_DEN;
+/
+
+-- PROCEDURE 4: Lấy ngày bay từ mã vé
+CREATE OR REPLACE PROCEDURE GET_NGAY_BAY(
+    p_MaVe IN VARCHAR2,
+    p_NgayBay OUT TIMESTAMP
+) AS
+BEGIN
+    SELECT CB.TGXP INTO p_NgayBay
+    FROM CT_DATVE CDV
+             JOIN Ve V ON CDV.MaVe = V.MaVe
+             JOIN CHUYENBAY CB ON V.MaChuyenBay = CB.MaChuyenBay
+    WHERE CDV.MaVe = p_MaVe;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_NgayBay := NULL;
+    WHEN OTHERS THEN
+        NULL;
+END GET_NGAY_BAY;
+/
+
+-- PROCEDURE 5: Lấy giờ bay từ mã vé
+CREATE OR REPLACE PROCEDURE GET_GIO_BAY(
+    p_MaVe IN VARCHAR2,
+    p_GioBay OUT TIMESTAMP
+) AS
+BEGIN
+    SELECT CB.TGXP INTO p_GioBay
+    FROM CT_DATVE CDV
+             JOIN Ve V ON CDV.MaVe = V.MaVe
+             JOIN CHUYENBAY CB ON V.MaChuyenBay = CB.MaChuyenBay
+    WHERE CDV.MaVe = p_MaVe;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_GioBay := NULL;
+    WHEN OTHERS THEN
+        NULL;
+END GET_GIO_BAY;
+/
+
+-- PROCEDURE 6: Lấy số điện thoại từ mã khách hàng
+CREATE OR REPLACE PROCEDURE GET_SDT(
+    p_MaKhachHang IN VARCHAR2,
+    p_SDT OUT VARCHAR2
+) AS
+BEGIN
+    SELECT SDT INTO p_SDT
+    FROM KHACHHANG
+    WHERE MaKhachHang = p_MaKhachHang;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_SDT := NULL;
+    WHEN OTHERS THEN
+        NULL;
+END GET_SDT;
+/
+
+-- PROCEDURE 7: Lấy mã ghế từ mã vé
+CREATE OR REPLACE PROCEDURE GET_MA_GHE(
+    p_MaVe IN VARCHAR2,
+    p_MaGhe OUT NUMBER
+) AS
+BEGIN
+    SELECT MaGhe INTO p_MaGhe
+    FROM VE
+    WHERE MAVE = p_MaVe;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_MaGhe := NULL;
+    WHEN OTHERS THEN
+        NULL;
+END GET_MA_GHE;
+/
+
+-- PROCEDURE 8: Lấy tên hạng vé từ mã vé
+CREATE OR REPLACE PROCEDURE GET_TEN_HANG_VE(
+    p_MaVe IN VARCHAR2,
+    p_TenHangVe OUT VARCHAR2
+) AS
+BEGIN
+    SELECT HV.TenHangVe INTO p_TenHangVe
+    FROM HANGVE HV
+             JOIN VE V ON HV.MaHangVe = V.MaHangVe
+    WHERE V.MAVE = p_MaVe;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_TenHangVe := NULL;
+    WHEN OTHERS THEN
+        NULL;
+END GET_TEN_HANG_VE;
+/
+
+-- PROCEDURE 9: Lấy giá tiền từ mã vé
+CREATE OR REPLACE PROCEDURE GET_GIA_TIEN(
+    p_MaVe IN VARCHAR2,
+    p_GiaTien OUT NUMBER
+) AS
+BEGIN
+    SELECT GiaTien INTO p_GiaTien
+    FROM VE
+    WHERE MAVE = p_MaVe;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_GiaTien := NULL;
+    WHEN OTHERS THEN
+        NULL;
+END GET_GIA_TIEN;
+/
+
+-- PROCEDURE 9: update lại số ghế trống, số ghế đặt khi thay đổi trạng thái của ct_datve */
+--UPDATE TRANGTHAI
+--DROP PROCEDURE update_ticket_status;
+
+CREATE OR REPLACE PROCEDURE update_ticket_status(
+    p_maCT_DATVE IN VARCHAR2,
+    p_trangThai IN number
+) AS
+    v_maVe VARCHAR2(10);
+    v_maChuyenBay VARCHAR2(10);
+    v_maHangVe VARCHAR2(10);
+    v_oldTrangThai number;
+    v_NgayThanhToan TIMESTAMP;
+BEGIN
+    -- Fetch the current status of the ticket
+    SELECT TrangThai INTO v_oldTrangThai
+    FROM CT_DATVE
+    WHERE MaCT_DATVE = p_maCT_DATVE;
+
+    SELECT mave,ngaythanhtoan INTO v_maVe,v_NgayThanhToan
+    FROM CT_DATVE cd
+    WHERE CD.MACT_DATVE = P_MACT_DATVE;
+
+-- Update the status of the ticket in CT_DATVE
+    UPDATE CT_DATVE
+    SET
+        TrangThai = p_trangThai,
+        NgayThanhToan =  CASE
+                             WHEN p_trangThai = 1 THEN SYSDATE
+                             ELSE v_NgayThanhToan
+            END
+    WHERE
+        MaCT_DATVE = p_maCT_DATVE;
+-- Fetch related MaChuyenBay and MaHangVe
+    SELECT V.MaChuyenBay, V.MaHangVe INTO v_maChuyenBay, v_maHangVe
+    FROM VE V
+    WHERE v.MaVe = v_maVe;
+
+-- Adjust the available seats in CT_HANGVE
+
+    IF (p_trangThai = 1 AND v_oldTrangThai = 0 )THEN
+        UPDATE CT_HANGVE
+        SET SoGheTrong = SoGheTrong + 1,
+            SoGheDat = SoGheDat - 1
+        WHERE MaChuyenBay = v_maChuyenBay AND MaHangVe = v_maHangVe;
+    END IF;
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN
+        -- Handle exceptions
+        ROLLBACK;
+        RAISE;
+END;
+
+--XÁC NHẬN ĐẶT VÉ CONTROLLER
+--PROCEDURE 1: SELL ticket
+CREATE OR REPLACE PROCEDURE SellTicket(
+    p_maKH IN VARCHAR2,
+    p_hoten IN VARCHAR2,
+    p_cccd IN VARCHAR2,
+    p_email IN VARCHAR2,
+    p_sdt IN VARCHAR2,
+    p_diaChi IN VARCHAR2,
+    p_maVe IN VARCHAR2,
+    p_ngayMuaVe IN TIMESTAMP,
+    p_ngayThanhToan IN TIMESTAMP,
+    p_trangThai IN INTEGER
+) AS
+    v_customerExists INTEGER;
+    v_newMaCT_DATVE VARCHAR2(10);
+BEGIN
+    -- Check if customer exists
+    SELECT COUNT(*) INTO v_customerExists
+    FROM KHACHHANG
+    WHERE MAKHACHHANG = p_maKH;
+
+-- If customer does not exist, insert into KHACHHANG
+    IF v_customerExists = 0 THEN
+        INSERT INTO KHACHHANG (MAKHACHHANG, HOTEN, CCCD, EMAIL, SDT, DIACHI)
+        VALUES (p_maKH, p_hoten, p_cccd, p_email, p_sdt, p_diaChi);
+    END IF;
+
+    -- Generate new MaCT_DATVE
+    SELECT 'CTDV' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(MaCT_DATVE, 5))), 0) + 1, 3, '0') INTO v_newMaCT_DATVE
+    FROM CT_DATVE;
+
+-- Insert booking into CT_DATVE
+    INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
+    VALUES (v_newMaCT_DATVE, p_maVe, p_maKH, p_ngayMuaVe, p_ngayThanhToan, p_trangThai);
+
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        RAISE;
+END SellTicket;
+
+--PROCEDURE 3: TẠO MÃ KHÁCH hàng
+CREATE OR REPLACE PROCEDURE GenerateCustomerId(
+    p_cccd IN VARCHAR2,
+    p_maKH OUT VARCHAR2
+) AS
+    v_maxMaKH VARCHAR2(10);
+BEGIN
+    -- Kiểm tra xem khách hàng đã tồn tại hay chưa
+    SELECT MAKHACHHANG
+    INTO p_maKH
+    FROM KHACHHANG
+    WHERE CCCD = p_cccd;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        -- Lấy mã khách hàng lớn nhất
+        SELECT MAX(MAKHACHHANG)
+        INTO v_maxMaKH
+        FROM KHACHHANG;
+
+        IF v_maxMaKH IS NOT NULL THEN
+            -- Tăng mã khách hàng lên 1
+            p_maKH := 'KH' || TO_CHAR(TO_NUMBER(SUBSTR(v_maxMaKH, 3)) + 1, 'FM000');
+        ELSE
+            -- Nếu không có khách hàng nào, bắt đầu từ KH001
+            p_maKH := 'KH001';
+        END IF;
+END GenerateCustomerId;
+
+----------------------------------------------------------------------------------
+-- MÀN HÌNH ĐẶT VÉ CONTROLLER
+
+CREATE OR REPLACE PROCEDURE GET_VE_FOR_FLIGHT (
+    p_maChuyenBay IN VARCHAR2,
+    p_result OUT SYS_REFCURSOR
+)
+    IS
+BEGIN
+    OPEN p_result FOR
+        SELECT DISTINCT
+            hv.TENHANGVE,
+            hv.MAHANGVE,
+            (cb.GiaVe * hv.HeSo) AS GiaTien
+        FROM
+            CT_HANGVE ct
+                JOIN
+            HANGVE hv ON ct.MaHangVe = hv.MaHangVe
+                JOIN
+            CHUYENBAY cb ON ct.MaChuyenBay = cb.MaChuyenBay
+        WHERE
+            ct.MaChuyenBay = p_maChuyenBay
+          AND ct.SoGheTrong > 0;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('No tickets found for the specified flight.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+END GET_VE_FOR_FLIGHT;
+/
+
+CREATE OR REPLACE PROCEDURE GET_TENHANGVE (
+    p_maHangVe IN VARCHAR2,
+    p_tenHangVe OUT VARCHAR2
+)
+    IS
+BEGIN
+    SELECT HV.TENHANGVE
+    INTO p_tenHangVe
+    FROM HANGVE HV
+    WHERE HV.MAHANGVE = p_maHangVe;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_tenHangVe := 'Không tìm thấy';
+    WHEN OTHERS THEN
+        p_tenHangVe := 'Lỗi: ' || SQLERRM;
+END GET_TENHANGVE;
+/
+
+
+CREATE OR REPLACE PROCEDURE GENERATE_MA_VE (
+    p_newMaVe OUT VARCHAR2
+)
+    IS
+    v_maxMaVe VE.MAVE%TYPE;
+    v_newMaVeNumber NUMBER;
+BEGIN
+    -- Lấy giá trị lớn nhất của MAVE từ bảng VE
+    SELECT MAX(MAVE) INTO v_maxMaVe FROM VE;
+
+    -- Nếu không có MAVE nào trong bảng VE, bắt đầu với VE001
+    IF v_maxMaVe IS NULL THEN
+        p_newMaVe := 'VE001';
+    ELSE
+        -- Tăng giá trị của MAVE lớn nhất thêm 1
+        v_newMaVeNumber := TO_NUMBER(SUBSTR(v_maxMaVe, 3)) + 1;
+        -- Tạo MAVE mới với định dạng VExxx
+        p_newMaVe := 'VE' || TO_CHAR(v_newMaVeNumber, 'FM000');
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        p_newMaVe := 'VE001'; -- Trả về giá trị mặc định nếu có lỗi
+END GENERATE_MA_VE;
+/
+
+CREATE OR REPLACE PROCEDURE GENERATE_MA_GHE (
+    p_newMaGhe OUT NUMBER
+)
+    IS
+    v_maxMaGhe VE.MAGHE%TYPE;
+BEGIN
+    -- Lấy giá trị lớn nhất của MAGHE từ bảng VE
+    SELECT MAX(MAGHE) INTO v_maxMaGhe FROM VE;
+
+    -- Nếu không có MAGHE nào trong bảng VE, bắt đầu với 1
+    IF v_maxMaGhe IS NULL THEN
+        p_newMaGhe := 1;
+    ELSE
+        -- Tăng giá trị của MAGHE lớn nhất thêm 1
+        p_newMaGhe := v_maxMaGhe + 1;
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        p_newMaGhe := 1; -- Trả về giá trị mặc định nếu có lỗi
+END GENERATE_MA_GHE;
+/
+
+
+CREATE OR REPLACE PROCEDURE SAVE_TICKET (
+    p_maVe IN VARCHAR2,
+    p_maChuyenBay IN VARCHAR2,
+    p_maHangVe IN VARCHAR2,
+    p_maGhe IN VARCHAR2,
+    p_giaTien IN NUMBER
+)
+    IS
+BEGIN
+    INSERT INTO VE (MAVE, MACHUYENBAY, MAHANGVE, MAGHE, GIATIEN)
+    VALUES (p_maVe, p_maChuyenBay, p_maHangVe, p_maGhe, p_giaTien);
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Error occurred while saving ticket: ' || SQLERRM);
+END SAVE_TICKET;
+/
+
+
+----------------------------------------------------------------------------
+-- PHÂN QUYÊN CONTROLLER
+CREATE OR REPLACE PROCEDURE GET_TAIKHOAN_PHANQUYEN (
+    p_result OUT SYS_REFCURSOR
+)
+    IS
+BEGIN
+    OPEN p_result FOR
+        SELECT
+            TaiKhoan.maTaiKhoan,
+            TaiKhoan.ten,
+            TaiKhoan.sdt,
+            TaiKhoan.email,
+            TaiKhoan.password,
+            TaiKhoan.created,
+            Quyen.tenQuyen
+        FROM
+            TaiKhoan
+                JOIN
+            Quyen ON TaiKhoan.maQuyen = Quyen.maQuyen;
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error occurred: ' || SQLERRM);
+        RAISE;
+END GET_TAIKHOAN_PHANQUYEN;
+/
+
+
+
+------------------------------------------------------------------
+-- QUY ĐỊNH CONTROLLER
+-- PROCEDURE 1: TẠO MÃ ĐƯỜNG BAY
+CREATE OR REPLACE PROCEDURE GENERATE_MA_DUONGBAY (
+    p_newMaDB OUT VARCHAR2
+)
+    IS
+    v_maxMaDB VARCHAR2(6);
+    v_maxNumber NUMBER;
+    v_newMaDBNumber NUMBER;
+BEGIN
+    -- Lấy giá trị lớn nhất của phần số trong MADUONGBAY
+    SELECT MAX(TO_NUMBER(SUBSTR(MADUONGBAY, 3))) INTO v_maxNumber FROM DUONGBAY;
+
+    -- Nếu không có MADUONGBAY nào trong bảng DUONGBAY, bắt đầu với DB001
+    IF v_maxNumber IS NULL THEN
+        p_newMaDB := 'DB001';
+    ELSE
+        -- Tăng giá trị của phần số lớn nhất thêm 1
+        v_newMaDBNumber := v_maxNumber + 1;
+        -- Tạo MADUONGBAY mới với định dạng DBxxx
+        p_newMaDB := 'DB' || TO_CHAR(v_newMaDBNumber, 'FM000');
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        p_newMaDB := 'DB001'; -- Trả về giá trị mặc định nếu có lỗi
+END GENERATE_MA_DUONGBAY;
+-----------------------------------------------------------------------------
+-- XÓA CT_DATVE LIÊN QUAN ĐẾN VE ĐÃ XÓA
+CREATE OR REPLACE PROCEDURE delete_CT_DATVE_by_VE(
+    p_MaVe IN VARCHAR2
+) AS
+BEGIN
+    DELETE FROM CT_DATVE
+    WHERE MaVe = p_MaVe;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        NULL; -- Nếu không tìm thấy MaVe trong CT_DATVE thì bỏ qua
+    WHEN OTHERS THEN
+        -- Xử lý các ngoại lệ khác nếu cần thiết
+        NULL;
+END delete_CT_DATVE_by_VE;
+
+
+
+-------------------------------------------------------------------
+

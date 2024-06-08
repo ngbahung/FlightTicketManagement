@@ -1,4 +1,7 @@
 
+-----------------------------------------------------------------------------------------------
+--TRIGGER
+
 
 
 /* R1: Thời gian xuất phát của một chuyến bay phải nhỏ hơn thời gian kết thúc */
@@ -38,7 +41,6 @@ END;
 
 /* R4: Cập nhật doanh thu  tháng khi có thêm doanh thu chuyến bay.*/
 
-DROP TRIGGER Update_DoanhThu_Thang;
 CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang
     FOR INSERT OR update ON CT_DATVE
     COMPOUND TRIGGER
@@ -201,7 +203,7 @@ END BEFORE STATEMENT;
     END Update_DoanhThu_Thang;
 
 --trigger cho delete
---DROP TRIGGER Update_DoanhThu_Thang_delete;
+
 CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang_delete
     FOR delete ON CT_DATVE
     COMPOUND TRIGGER
@@ -332,7 +334,7 @@ END;
 
 /* R5: Cập nhật Số chuyến bay báo cáo năm khi có chuyến bay mới được update vào baocaothang.*/
 --DROP TRIGGER Update_DoanhThu_Nam;
-SHOW
+
 CREATE OR REPLACE TRIGGER Update_DoanhThu_Nam
     BEFORE INSERT ON baocaothang
     FOR EACH ROW
@@ -477,7 +479,8 @@ END;
 
 
 /* R16: xóa VE và CT_HANGVE liên quan đến chuyến bay đã xóa */
--- DROP TRIGGER rf_VE_CT_DATVE_delete_CHUYENBAY;
+
+--CHẠY PROCEDURE XONG MỚI CHẠY LẠI TRIGGER NÀY
 
 CREATE OR REPLACE TRIGGER rf_VE_CT_HANGVE_delete_CHUYENBAY
     before DELETE ON CHUYENBAY

@@ -2,8 +2,8 @@
 
 alter session set "_ORACLE_SCRIPT"=true;
 
-CREATE USER fly_the_end11 IDENTIFIED BY password;
-GRANT CONNECT, RESOURCE, DBA TO fly_the_end11;
+CREATE USER fly_the_end12A IDENTIFIED BY password;
+GRANT CONNECT, RESOURCE, DBA TO fly_the_end12A;
 
 
 alter session set "_ORACLE_SCRIPT"=true;
@@ -16,7 +16,7 @@ GRANT CONNECT, RESOURCE, DBA TO user2;
 
 -- Sử dụng Schema
 
-ALTER SESSION SET CURRENT_SCHEMA = fly_the_end11;
+ALTER SESSION SET CURRENT_SCHEMA = fly_the_end12A;
 
 
 -- create sequence
@@ -103,7 +103,17 @@ CREATE TABLE DUONGBAY (
                           TenDuongBay VARCHAR2(30) NOT NULL,
                           DoDaiDuongBay NUMBER,
                           trangthai NUMBER,
+                          ThoiGianBay INTERVAL DAY(2) TO SECOND,
                           CONSTRAINT PK_DUONGBAY PRIMARY KEY (MaDuongBay)
+);
+
+/* TABLE 14: SANBAYTG */
+CREATE TABLE SANBAYTG (
+                          MaDuongBay VARCHAR2(10) NOT NULL,
+                          MaSanBay VARCHAR2(10) NOT NULL,
+                          ThuTu NUMBER,
+                          ThoiGianDung INTERVAL DAY TO SECOND,
+                          CONSTRAINT PK_SANBAYTG PRIMARY KEY (MaDuongBay, MaSanBay)
 );
 
 
@@ -225,16 +235,6 @@ CREATE TABLE THAMSO (
                         CONSTRAINT PK_THAMSO PRIMARY KEY (MaThuocTinh)
 );
 
--- TRUNGHIEU thêm
-/* TABLE 14: SANBAYTG */
-CREATE TABLE SANBAYTG (
-                          MaDuongBay VARCHAR2(10) NOT NULL,
-                          MaSanBay VARCHAR2(10) NOT NULL,
-                          ThuTu NUMBER,
-                          ThoiGianDung INTERVAL DAY TO SECOND,
-                          CONSTRAINT PK_SANBAYTG PRIMARY KEY (MaDuongBay, MaSanBay)
-);
-
 
 
 /* KHOA NGOAI */
@@ -281,3 +281,4 @@ ALTER TABLE SANBAYTG
 
 ALTER TABLE SANBAYTG
     ADD CONSTRAINT FK_SANBAYTG_SANBAY FOREIGN KEY (MaSanBay) REFERENCES SANBAY(MaSanBay);
+

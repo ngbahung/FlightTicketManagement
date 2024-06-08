@@ -37,6 +37,9 @@ public class LichChuyenBayController implements Initializable {
     private TableView<ChuyenBay> chuyenBay_tableview;
 
     @FXML
+    private TableColumn<ChuyenBay, String> diemDung_tbcl;
+
+    @FXML
     private TableColumn<ChuyenBay, String> giaVe_tbcolumn;
 
     @FXML
@@ -320,6 +323,7 @@ public class LichChuyenBayController implements Initializable {
             });
 
             gioBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getThoiGianXuatPhat().toLocalTime().toString()));
+            diemDung_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getSoDiemDung(cellData.getValue().getMaDuongBay())));
             soGheTrong_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGheTrong(cellData.getValue().getMaChuyenBay()).toString()));
             soGhe_tbcoumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGhe(cellData.getValue().getMaChuyenBay()).toString()));
             thoiGianBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(dinhDangKhoangThoiGian(Duration.between(cellData.getValue().getThoiGianXuatPhat(), cellData.getValue().getThoiGianKetThuc()))));
@@ -435,6 +439,20 @@ public class LichChuyenBayController implements Initializable {
             e.printStackTrace();
         }
         return soGhe;
+    }
+
+    private String getSoDiemDung(String maDuongBay) {
+        String soDiemDung = "";
+        try (CallableStatement statement = connect.prepareCall("{call GET_SODIEMDUNG(?, ?)}")) {
+            statement.setString(1, maDuongBay);
+            statement.registerOutParameter(2, Types.INTEGER);
+            statement.execute();
+            return String.valueOf(statement.getInt(2));
+        } catch (Exception e) {
+            e.printStackTrace();
+            soDiemDung = "0";
+        }
+        return soDiemDung;
     }
 
     private String dinhDangKhoangThoiGian(Duration duration) {
