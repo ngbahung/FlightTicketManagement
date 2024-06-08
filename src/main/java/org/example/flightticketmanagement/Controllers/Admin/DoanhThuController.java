@@ -110,7 +110,7 @@ public class DoanhThuController implements Initializable {
             alert.errorMessage("Vui lòng thống kê doanh thu trước khi xuất báo cáo!");
             return;
         }
-        reportController.PrintReportBaoCaoNam(DTN_namBaoCao, listBaoCaoNam);
+        reportController.PrintReportBaoCaoNam(DTN_namBaoCao, listBaoCaoNam, tongDoanhThuNam);
     }
 
     public void DTNam_UpdateData(Integer namBaoCao, BigDecimal tongDoanhThuNam){
@@ -265,7 +265,7 @@ public class DoanhThuController implements Initializable {
             alert.errorMessage("Vui lòng thống kê doanh thu trước khi xuất báo cáo!");
             return;
         }
-        reportController.PrintReportBaoCaoThang(DTT_namBaoCao, DTT_thangBaoCao, listBaoCaoThang);
+        reportController.PrintReportBaoCaoThang(DTT_namBaoCao, DTT_thangBaoCao, listBaoCaoThang, tongDoanhThuThang);
     }
 
     public void DTThang_UpDateData(Integer namBaoCao, Integer thangBaoCao, BigDecimal tongDoanhThuThang) {
