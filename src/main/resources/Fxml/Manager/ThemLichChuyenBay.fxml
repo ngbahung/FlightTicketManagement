@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="538.0" prefWidth="743.0" styleClass="background-color" stylesheets="@../../Styles/Manager/ThemChuyenBay.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Manager.ThemLichChuyenBayController">
+<AnchorPane prefHeight="538.0" prefWidth="743.0" style="-fx-background-color: white;" styleClass="background-color" stylesheets="@../../Styles/Manager/ThemChuyenBay.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Manager.ThemLichChuyenBayController">
    <children>
       <GridPane hgap="20.0" layoutX="29.0" layoutY="58.0" prefHeight="244.0" prefWidth="686.0" styleClass="grid-pane">
          <columnConstraints>
@@ -54,14 +54,14 @@
          </padding>
       </GridPane>
       <MFXButton id="custom-2" fx:id="luu_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="616.0" layoutY="477.0" onAction="#luuButtonClicked" prefHeight="41.0" prefWidth="99.0" text="Lưu" />
-      <Label layoutX="297.0" layoutY="20.0" text="NHẬN LỊCH CHUYẾN BAY" />
-      <TableView fx:id="hangVe_tableview" layoutX="28.0" layoutY="318.0" prefHeight="200.0" prefWidth="245.0">
+      <Label layoutX="185.0" layoutY="14.0" styleClass="title-text" text="NHẬN LỊCH CHUYẾN BAY" />
+      <TableView fx:id="hangVe_tableview" layoutX="28.0" layoutY="318.0" prefHeight="200.0" prefWidth="269.0" styleClass="custom-tableview">
         <columns>
           <TableColumn fx:id="tenHangVe_tbcl" prefWidth="112.0" text="Tên hạng vé" />
           <TableColumn fx:id="soLuongGhe_tbcl" prefWidth="128.0" text="Số lượng ghế" />
         </columns>
       </TableView>
-      <MFXButton id="custom-2" fx:id="themHangVe_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="288.0" layoutY="418.0" onAction="#moThemHangVeChuyenBay" prefHeight="41.0" prefWidth="99.0" text="Thêm hạng vé" />
-      <MFXButton id="custom-2" buttonType="RAISED" depthLevel="LEVEL1" layoutX="288.0" layoutY="477.0" onAction="#xoaHangVe" prefHeight="41.0" prefWidth="99.0" text="Xóa hạng vé" fx:id="xoaHangVe_btn" />
+      <MFXButton id="custom-2" fx:id="themHangVe_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="323.0" layoutY="418.0" onAction="#moThemHangVeChuyenBay" prefHeight="41.0" prefWidth="146.0" text="Thêm hạng vé" />
+      <MFXButton id="custom-2" buttonType="RAISED" depthLevel="LEVEL1" layoutX="323.0" layoutY="477.0" onAction="#xoaHangVe" prefHeight="41.0" prefWidth="146.0" text="Xóa hạng vé" fx:id="xoaHangVe_btn" />
    </children>
 </AnchorPane>

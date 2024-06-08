@@ -1,5 +1,6 @@
 package org.example.flightticketmanagement.Controllers.Manager;
 
+import com.google.common.eventbus.EventBus;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -15,15 +16,19 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.CT_HangVe;
+import org.example.flightticketmanagement.Models.HangVe;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ThemLichChuyenBayController implements Initializable {
@@ -84,25 +89,51 @@ public class ThemLichChuyenBayController implements Initializable {
 
     @FXML
     void xoaHangVe() {
-        CT_HangVe selectedHangVe = hangVe_tableview.getSelectionModel().getSelectedItem();
+        ObservableList<CT_HangVe> selectedTicketClasses = hangVe_tableview.getSelectionModel().getSelectedItems();
 
-        if (selectedHangVe != null) {
-            boolean confirmed = alert.confirmationMessage("Bạn có chắc chắn muốn xóa hạng vé này?");
+        if (selectedTicketClasses.isEmpty()) {
+            alert.errorMessage("Không chọn hạng vé nào. Vui lòng chọn ít nhất một hạng vé.");
+            return;
+        }
 
-            if (confirmed) {
-                hangVe_tableview.getItems().remove(selectedHangVe);
-                alert.successMessage("Hạng vé đã được xóa thành công.");
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Xác nhận xóa hạng vé");
+        confirmationAlert.setHeaderText("Bạn có muốn xóa các hạng vé đã chọn?");
+        confirmationAlert.setContentText("Hành động này sẽ thay đổi danh sách hạng vé của bạn");
+
+        Optional<ButtonType> result = confirmationAlert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String query = "DELETE FROM CT_HangVe WHERE MaHangVe = ?";
+
+            try {
+                connect = DatabaseDriver.getConnection();
+                prepare = connect.prepareStatement(query);
+
+                for (CT_HangVe ct_hangVe : selectedTicketClasses) {
+                    prepare.setString(1, ct_hangVe.getMaHangVe());
+                    prepare.addBatch();
+                }
+
+                int[] results = prepare.executeBatch();
+                if (results.length > 0) {
+                    alert.successMessage("Hạng vé đã được xóa thành công.");
+                    hangVe_tableview.getItems().removeAll(selectedTicketClasses);
+                } else {
+                    alert.errorMessage("Không xóa được hạng vé đã chọn.");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                alert.errorMessage("Lỗi khi đang xóa hạng vé. Vui lòng kiểm tra lại.");
             }
-        } else {
-            alert.errorMessage("Vui lòng chọn một hạng vé để xóa.");
         }
     }
+
 
 
     @FXML
     void luuButtonClicked() {
         try {
-
             // Check if all the required fields are filled
             if (maChuyenBay_txtfld.getText().isEmpty() || maDuongBay_txtfld.getText().isEmpty() ||
                     ngayBay_datepicker.getValue() == null || ngayHaCanh_datepicker.getValue() == null ||
@@ -136,6 +167,7 @@ public class ThemLichChuyenBayController implements Initializable {
                 alert.errorMessage("Vui lòng thêm ít nhất một hạng vé cho chuyến bay.");
                 return;
             }
+
             // Lấy thông tin từ các trường nhập liệu
             String maChuyenBay = maChuyenBay_txtfld.getText();
             String maDuongBay = maDuongBay_txtfld.getText();
@@ -143,17 +175,22 @@ public class ThemLichChuyenBayController implements Initializable {
                     LocalTime.parse(gioBay_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
             LocalDateTime thoiGianHaCanh = LocalDateTime.of(ngayHaCanh_datepicker.getValue(),
                     LocalTime.parse(gioHaCanh_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
-            double giaVe = Double.parseDouble(gia_txtfld.getText());
+            BigDecimal giaVe = new BigDecimal(gia_txtfld.getText());
+
+            // Parse and format the price
+            DecimalFormat df = new DecimalFormat("#.00");  // Set the format to two decimal places
+            String formattedGiaVe = df.format(giaVe);
 
             // Tạo câu lệnh SQL để chèn dữ liệu vào bảng CHUYENBAY
             String insertChuyenBayQuery = "INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe) " +
                     "VALUES (?, ?, ?, ?, 0, ?)";
+            connect = DatabaseDriver.getConnection();
             PreparedStatement insertChuyenBayStatement = connect.prepareStatement(insertChuyenBayQuery);
             insertChuyenBayStatement.setString(1, maChuyenBay);
             insertChuyenBayStatement.setString(2, maDuongBay);
             insertChuyenBayStatement.setTimestamp(3, Timestamp.valueOf(thoiGianXuatPhat));
             insertChuyenBayStatement.setTimestamp(4, Timestamp.valueOf(thoiGianHaCanh));
-            insertChuyenBayStatement.setDouble(5, giaVe);
+            insertChuyenBayStatement.setBigDecimal(5, giaVe);
 
             // Thực thi câu lệnh SQL chèn dữ liệu vào bảng CHUYENBAY
             insertChuyenBayStatement.executeUpdate();
@@ -177,12 +214,13 @@ public class ThemLichChuyenBayController implements Initializable {
                 parentController.layDuLieu(null, null, null);
             }
             refreshTableView();
+            eventBus.post(new Object());
             closeStage();
         } catch (SQLException e) {
             e.printStackTrace();
-            alert.errorMessage("Đã xảy ra lỗi khi lưu dữ liệu xuống cơ sở dữ liệu.");
         }
     }
+
 
     private void refreshTableView() {
         // Fetch the updated data from the database
@@ -194,6 +232,13 @@ public class ThemLichChuyenBayController implements Initializable {
     private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
+    private static final EventBus eventBus = new EventBus();
+
+    public ThemLichChuyenBayController() {}
+
+    public static EventBus getEventBus() {
+        return eventBus;
+    }
 
     private final AlertMessage alert = new AlertMessage();
 
@@ -278,7 +323,7 @@ public class ThemLichChuyenBayController implements Initializable {
     }
 
     private void populateTenDuongBayComboBox() {
-        String query = "SELECT TenDuongBay FROM DuongBay";
+        String query = "SELECT TenDuongBay FROM DuongBay WHERE TRANGTHAI = 1";
         try {
             prepare = connect.prepareStatement(query);
             result = prepare.executeQuery();

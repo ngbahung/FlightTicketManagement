@@ -47,7 +47,12 @@ public class SuaThamSoQuyDinhController implements Initializable {
     @FXML
     void saveChangesOnParameter(ActionEvent event) {
         // Null check for text fields
-        if (maxTGDung_tf.getText().isEmpty() || minTGDung_tf.getText().isEmpty() || numSBTGmax_tf.getText().isEmpty() ||
+//        if (maxTGDung_tf.getText().isEmpty() || minTGDung_tf.getText().isEmpty() || numSBTGmax_tf.getText().isEmpty() ||
+//                tgBayToiThieu_tf.getText().isEmpty() || tgChamNhatDatVe_tf.getText().isEmpty() || tgChamNhatHuyVe_tf.getText().isEmpty()) {
+//            alert.errorMessage("Vui lòng điền đầy đủ thông tin");
+//            return;
+//        }
+        if (maxTGDung_tf.getText().isEmpty() || minTGDung_tf.getText().isEmpty() ||
                 tgBayToiThieu_tf.getText().isEmpty() || tgChamNhatDatVe_tf.getText().isEmpty() || tgChamNhatHuyVe_tf.getText().isEmpty()) {
             alert.errorMessage("Vui lòng điền đầy đủ thông tin");
             return;
@@ -56,7 +61,7 @@ public class SuaThamSoQuyDinhController implements Initializable {
         // Parsing values and validation
         int maxTGDung;
         int minTGDung;
-        int numSBTGmax;
+//        int numSBTGmax;
         int tgBayToiThieu;
         int tgChamNhatDatVe;
         int tgChamNhatHuyVe;
@@ -64,7 +69,7 @@ public class SuaThamSoQuyDinhController implements Initializable {
         try {
             maxTGDung = Integer.parseInt(maxTGDung_tf.getText());
             minTGDung = Integer.parseInt(minTGDung_tf.getText());
-            numSBTGmax = Integer.parseInt(numSBTGmax_tf.getText());
+//            numSBTGmax = Integer.parseInt(numSBTGmax_tf.getText());
             tgBayToiThieu = Integer.parseInt(tgBayToiThieu_tf.getText());
             tgChamNhatDatVe = Integer.parseInt(tgChamNhatDatVe_tf.getText());
             tgChamNhatHuyVe = Integer.parseInt(tgChamNhatHuyVe_tf.getText());
@@ -74,10 +79,15 @@ public class SuaThamSoQuyDinhController implements Initializable {
         }
 
         // Validating logical constraints
-        if (maxTGDung < 0 || minTGDung < 0 || numSBTGmax < 0 || tgBayToiThieu < 0 || tgChamNhatDatVe < 0 || tgChamNhatHuyVe < 0) {
+//        if (maxTGDung < 0 || minTGDung < 0 || numSBTGmax < 0 || tgBayToiThieu < 0 || tgChamNhatDatVe < 0 || tgChamNhatHuyVe < 0) {
+//            alert.errorMessage("Vui lòng nhập số nguyên dương");
+//            return;
+//        }
+        if (maxTGDung < 0 || minTGDung < 0 || tgBayToiThieu < 0 || tgChamNhatDatVe < 0 || tgChamNhatHuyVe < 0) {
             alert.errorMessage("Vui lòng nhập số nguyên dương");
             return;
         }
+
 
         if (maxTGDung < minTGDung) {
             alert.errorMessage("Thời gian dừng tối đa phải lớn hơn thời gian dừng tối thiểu");
@@ -102,9 +112,9 @@ public class SuaThamSoQuyDinhController implements Initializable {
                 preState.setString(2, "TGDTT");
                 preState.executeUpdate();
 
-                preState.setInt(1, numSBTGmax);
-                preState.setString(2, "SSBTGTMD");
-                preState.executeUpdate();
+//                preState.setInt(1, numSBTGmax);
+//                preState.setString(2, "SSBTGTMD");
+//                preState.executeUpdate();
 
                 preState.setInt(1, tgBayToiThieu);
                 preState.setString(2, "TGBTT");

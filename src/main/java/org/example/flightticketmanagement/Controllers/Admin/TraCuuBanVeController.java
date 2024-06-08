@@ -1,5 +1,7 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -11,6 +13,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
+import org.example.flightticketmanagement.Controllers.Manager.SuaLichChuyenBayController;
+import org.example.flightticketmanagement.Controllers.Manager.ThemLichChuyenBayController;
 import org.example.flightticketmanagement.Models.ChuyenBay;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
 
@@ -66,7 +70,6 @@ public class TraCuuBanVeController implements Initializable {
 
     @FXML
     private void handleSearch() {
-        // Lấy giá trị từ các thành phần giao diện
         String sanBayDi = sanbaydi_menubtn.getText().trim();
         String sanBayDen = sanbayden_menubtn.getText().trim();
         LocalDate ngayBay = ngay_datepicker.getValue();
@@ -124,15 +127,30 @@ public class TraCuuBanVeController implements Initializable {
     private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
+    private final EventBus eventBusXoaGheTrong = XacNhanVeController.getEventBus();
+    private final EventBus eventBusThemGheTrong = LichSuDatVeController.getEventBus();
+    private final EventBus eventBusThemChuyenBay = ThemLichChuyenBayController.getEventBus();
+    private final EventBus eventBusXoaChuyenBay = LichSuDatVeController.getEventBus();
+    private final EventBus eventBusSuaChuyenBay = SuaLichChuyenBayController.getEventBus();
 
     private final AlertMessage alert = new AlertMessage();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         connect = DatabaseDriver.getConnection();
+        eventBusXoaGheTrong.register(this);
+        eventBusThemGheTrong.register(this);
+        eventBusThemChuyenBay.register(this);
+        eventBusXoaChuyenBay.register(this);
+        eventBusSuaChuyenBay.register(this);
         loadData();
         sanbaydi_menubtn.setOnShowing(event -> updateSanBayMenuItems());
         sanbayden_menubtn.setOnShowing(event -> updateSanBayMenuItems());
+    }
+
+    @Subscribe
+    public void handleUpdateData(Object event) {
+        loadData();
     }
 
     private void loadData() {

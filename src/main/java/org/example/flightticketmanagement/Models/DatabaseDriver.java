@@ -4,7 +4,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseDriver {
-    private static final String user = "fly_the_end12";
+    private static final String user = "FLY_THE_END12";
     private static final String password = "password";
     private static final String port = "1521";
     private static final String database = "TRINH";

@@ -1,5 +1,6 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
+import com.google.common.eventbus.EventBus;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
@@ -12,7 +13,7 @@ import org.example.flightticketmanagement.Models.DatabaseDriver;
 
 import java.net.URL;
 import java.sql.*;
-import java.time.LocalDateTime;
+        import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -70,6 +71,13 @@ public class XacNhanVeController implements Initializable {
 
     // DATABASE TOOLS
     private Connection connect;
+    private static final EventBus eventBus = new EventBus();
+
+    public XacNhanVeController() {}
+
+    public static EventBus getEventBus() {
+        return eventBus;
+    }
 
     private final AlertMessage alert = new AlertMessage();
 
@@ -85,7 +93,7 @@ public class XacNhanVeController implements Initializable {
             Stage stage = (Stage) sua_btn.getScene().getWindow();
             stage.close();
         }
-        closeStage();
+        closeStage(huy_btn);
     }
 
     @FXML
@@ -105,9 +113,7 @@ public class XacNhanVeController implements Initializable {
         }
     }
 
-
     private ManHinhDatVeController manHinhDatVeController;
-
 
     public void setManHinhDatVeController(ManHinhDatVeController controller) {
         this.manHinhDatVeController = controller;
@@ -141,40 +147,22 @@ public class XacNhanVeController implements Initializable {
         gioBay_txtfld.setText(gioBay);
     }
 
-    private void generateCustomerId(String cccd) {
-        // SQL query to check if customer already exists
-        String checkSql = "SELECT MAKHACHHANG FROM KHACHHANG WHERE CCCD = ?";
-        // SQL query to get the maximum customer ID
-        String maxIdSql = "SELECT MAX(MAKHACHHANG) AS MaxMaKH FROM KHACHHANG";
+    public void generateCustomerId(String cccd) {
+        String sql = "{call GenerateCustomerId(?, ?)}";
 
-        try (PreparedStatement checkPs = connect.prepareStatement(checkSql)) {
-            checkPs.setString(1, cccd);
-            try (ResultSet checkRs = checkPs.executeQuery()) {
-                if (checkRs.next()) {
-                    // Customer exists, set the existing ID
-                    String existingMaKH = checkRs.getString("MAKHACHHANG");
-                    maKH_txtfld.setText(existingMaKH);
-                } else {
-                    // Customer does not exist, generate a new ID
-                    try (PreparedStatement maxIdPs = connect.prepareStatement(maxIdSql);
-                         ResultSet maxIdRs = maxIdPs.executeQuery()) {
-                        if (maxIdRs.next()) {
-                            String maxMaKH = maxIdRs.getString("MaxMaKH");
-                            if (maxMaKH != null) {
-                                int newMaKH = Integer.parseInt(maxMaKH.substring(2)) + 1;
-                                maKH_txtfld.setText(String.format("KH%03d", newMaKH));
-                            } else {
-                                maKH_txtfld.setText("KH001");
-                            }
-                        }
-                    }
-                }
-            }
+        try (CallableStatement callableStatement = connect.prepareCall(sql)) {
+            callableStatement.setString(1, cccd);
+            callableStatement.registerOutParameter(2, Types.VARCHAR);
+            callableStatement.execute();
+
+            String maKH = callableStatement.getString(2);
+            maKH_txtfld.setText(maKH);
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Không thể tạo mã khách hàng mới hoặc kiểm tra khách hàng hiện có.");
         }
     }
+
 
 
     private void handleInsertBooking(boolean isDatVe) {
@@ -185,7 +173,8 @@ public class XacNhanVeController implements Initializable {
             if (manHinhDatVeController != null) {
                 manHinhDatVeController.closeStage();
             }
-            closeStage();
+            eventBus.post(new Object());
+            closeStage(isDatVe ? datVe_btn : datCho_btn);
         } else {
             alert.errorMessage("Có lỗi xảy ra khi đặt vé hoặc đặt chỗ.");
         }
@@ -224,33 +213,12 @@ public class XacNhanVeController implements Initializable {
                 cs.setInt(10, trangThai);
                 cs.execute();
             }
-
-            // Gọi hàm update_soghetrong sau khi SellTicket
-            String maCT_DATVE = getMaCT_DATVEByMaVe(maVe); // Hàm này cần được tạo để lấy MaCT_DATVE từ MaVe
-            update_soghetrong(maCT_DATVE, trangThai);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Có lỗi xảy ra khi đặt vé hoặc đặt chỗ.");
             return false;
         }
-    }
-
-    private String getMaCT_DATVEByMaVe(String maVe) {
-        String maCT_DATVE = null;
-        String query = "SELECT MACT_DATVE FROM CT_DATVE WHERE MaVe = ?";
-        try (PreparedStatement ps = connect.prepareStatement(query)) {
-            ps.setString(1, maVe);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    maCT_DATVE = rs.getString("MACT_DATVE");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            alert.errorMessage("Có lỗi xảy ra khi lấy MaCT_DATVE.");
-        }
-        return maCT_DATVE;
     }
 
     private void deleteBooking() {
@@ -265,18 +233,8 @@ public class XacNhanVeController implements Initializable {
         }
     }
 
-    // Hàm update_soghetrong
-    private void update_soghetrong(String maCT_DATVE, int trangThai) throws SQLException {
-        String callProcedureSql = "{CALL update_soghetrong(?, ?)}";
-        try (CallableStatement cs = connect.prepareCall(callProcedureSql)) {
-            cs.setString(1, maCT_DATVE);
-            cs.setInt(2, trangThai);
-            cs.execute();
-        }
-    }
-
-    private void closeStage() {
-        Stage stage = (Stage) datVe_btn.getScene().getWindow();
+    private void closeStage(MFXButton button) {
+        Stage stage = (Stage) button.getScene().getWindow();
         stage.close();
     }
 }
