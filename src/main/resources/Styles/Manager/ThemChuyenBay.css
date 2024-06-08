@@ -39,7 +39,7 @@
     -fx-background-color: #00A4BD;
     -fx-text-fill: white;
     -fx-border-radius: 10;
-    -fx-font-size: 16;
+    -fx-font-size: 13;
 }
 
 .vbox {
@@ -129,3 +129,14 @@
 .custom-tableview .resize-line {
     -fx-stroke: white;
 }
+
+/* styles.css */
+
+#disabled-field {
+    -fx-opacity: 1.0; /* Retain original opacity */
+    -fx-background-color: white; /* Maintain background color */
+    -fx-text-fill: black; /* Maintain text color */
+    -fx-font-weight: bold; /* Maintain font weight */
+}
+
+

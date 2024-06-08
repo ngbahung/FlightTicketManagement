@@ -42,12 +42,12 @@
             <TextField fx:id="gia_txtfld" promptText="VNĐ" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <ComboBox fx:id="tenDuongBay_combobox" prefHeight="23.0" prefWidth="249.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Dự kiến hạ cánh:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <DatePicker fx:id="ngayHaCanh_datepicker" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <DatePicker id="disabled-field" fx:id="ngayHaCanh_datepicker" disable="true" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="2" />
             <Label text="Mã đường bay:" GridPane.columnIndex="2" />
             <TextField fx:id="maDuongBay_txtfld" disable="true" editable="false" GridPane.columnIndex="3" />
             <Label text="Giờ hạ cánh:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <ComboBox fx:id="gioBay_combobox" prefHeight="23.0" prefWidth="249.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <ComboBox fx:id="gioHaCanh_combobox" prefHeight="23.0" prefWidth="249.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <ComboBox id="disabled-field" fx:id="gioHaCanh_combobox" disable="true" prefHeight="23.0" prefWidth="249.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
          </children>
          <padding>
             <Insets left="10.0" right="10.0" />
@@ -55,10 +55,10 @@
       </GridPane>
       <MFXButton id="custom-2" fx:id="luu_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="615.0" layoutY="534.0" onAction="#luuButtonClicked" prefHeight="41.0" prefWidth="99.0" text="Lưu" />
       <Label layoutX="185.0" layoutY="14.0" styleClass="title-text" text="NHẬN LỊCH CHUYẾN BAY" />
-      <TableView fx:id="hangVe_tableview" layoutX="28.0" layoutY="318.0" prefHeight="200.0" prefWidth="269.0" styleClass="custom-tableview">
+      <TableView fx:id="hangVe_tableview" layoutX="28.0" layoutY="318.0" prefHeight="200.0" prefWidth="322.0" styleClass="custom-tableview">
         <columns>
-          <TableColumn fx:id="tenHangVe_tbcl" prefWidth="89.60001373291016" text="Tên hạng vé" />
-          <TableColumn fx:id="soLuongGhe_tbcl" prefWidth="151.20001220703125" text="Số lượng ghế" />
+          <TableColumn fx:id="tenHangVe_tbcl" prefWidth="201.60003280639648" text="Tên hạng vé" />
+          <TableColumn fx:id="soLuongGhe_tbcl" prefWidth="94.39997863769531" text="Số lượng ghế" />
         </columns>
       </TableView>
       <MFXButton id="custom-2" fx:id="themHangVe_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="28.0" layoutY="534.0" onAction="#moThemHangVeChuyenBay" prefHeight="42.0" prefWidth="134.0" text="Thêm hạng vé" />

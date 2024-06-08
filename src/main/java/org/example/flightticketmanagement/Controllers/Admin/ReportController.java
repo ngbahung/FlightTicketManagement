@@ -8,6 +8,7 @@ import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.BaoCaoNam;
 import org.example.flightticketmanagement.Models.BaoCaoThang;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -15,13 +16,14 @@ import java.util.Map;
 
 public class ReportController {
     private final AlertMessage alert = new AlertMessage();
-    public void PrintReportBaoCaoNam(Integer namBaoCao, List<BaoCaoNam> listBaoCaoNam) {
+    public void PrintReportBaoCaoNam(Integer namBaoCao, List<BaoCaoNam> listBaoCaoNam, BigDecimal tongDoanhThuNam) {
         try {
             String fileJRXMLPath = "src/main/resources/Report/DT_Nam_Report.jrxml";
             String ngayLapBaoCao = LocalDateTime.now()+"";
             Map<String, Object> parameters = new HashMap<String, Object>();
             parameters.put("namBaoCao", namBaoCao);
             parameters.put("ngayLapBaoCao", ngayLapBaoCao);
+            parameters.put("tongDoanhThuNam", tongDoanhThuNam);
 
             JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(listBaoCaoNam);
 
@@ -34,7 +36,7 @@ public class ReportController {
             e.printStackTrace();
         }
     }
-    public void PrintReportBaoCaoThang(Integer namBaoCao,Integer thangBaoCao, List<BaoCaoThang> listBaoCaoThang){
+    public void PrintReportBaoCaoThang(Integer namBaoCao,Integer thangBaoCao, List<BaoCaoThang> listBaoCaoThang, BigDecimal tongDoanhThuThang){
         try {
             String fileJRXMLPath = "src/main/resources/Report/DT_Thang_Report.jrxml";
             String ngayLapBaoCao = LocalDateTime.now()+"";
@@ -42,6 +44,7 @@ public class ReportController {
             parameters.put("namBaoCao", namBaoCao);
             parameters.put("thangBaoCao", thangBaoCao);
             parameters.put("ngayLapBaoCao", ngayLapBaoCao);
+            parameters.put("tongDoanhThuThang", tongDoanhThuThang);
 
             JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(listBaoCaoThang);
 
