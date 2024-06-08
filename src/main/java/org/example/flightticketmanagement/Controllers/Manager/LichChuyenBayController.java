@@ -294,12 +294,12 @@ public class LichChuyenBayController implements Initializable {
         }
 
         try {
-            PreparedStatement prepare = connect.prepareStatement(baseQuery);
+            prepare = connect.prepareStatement(baseQuery);
             for (int i = 0; i < parameters.size(); i++) {
                 prepare.setObject(i + 1, parameters.get(i));
             }
 
-            ResultSet result = prepare.executeQuery();
+            result = prepare.executeQuery();
 
             while (result.next()) {
                 ChuyenBay chuyenBay = new ChuyenBay(
@@ -326,7 +326,7 @@ public class LichChuyenBayController implements Initializable {
             diemDung_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getSoDiemDung(cellData.getValue().getMaDuongBay())));
             soGheTrong_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGheTrong(cellData.getValue().getMaChuyenBay()).toString()));
             soGhe_tbcoumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGhe(cellData.getValue().getMaChuyenBay()).toString()));
-            thoiGianBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(dinhDangKhoangThoiGian(Duration.between(cellData.getValue().getThoiGianXuatPhat(), cellData.getValue().getThoiGianKetThuc()))));
+            thoiGianBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getThoiGianBayByMaDuongBay(cellData.getValue().getMaDuongBay())));
             giaVe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getGiaVe())));
 
         } catch (SQLException e) {
@@ -336,7 +336,8 @@ public class LichChuyenBayController implements Initializable {
     }
 
     private void prepareAndExecuteQuery(String query, List<Object> parameters, TableView<ChuyenBay> tableView) throws SQLException {
-        try (PreparedStatement prepare = connect.prepareStatement(query)) {
+        try {
+            prepare = connect.prepareStatement(query);
             for (int i = 0; i < parameters.size(); i++) {
                 prepare.setObject(i + 1, parameters.get(i));
             }
@@ -354,6 +355,8 @@ public class LichChuyenBayController implements Initializable {
                     tableView.getItems().add(chuyenBay);
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -395,22 +398,22 @@ public class LichChuyenBayController implements Initializable {
             statement.setString(1, maDuongBay);
             statement.registerOutParameter(2, Types.VARCHAR);
             statement.execute();
-            return statement.getString(2);
-        } catch (Exception e) {
-            sanBayDi = "";
+            sanBayDi = statement.getString(2);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return sanBayDi;
     }
 
     private String getSanBayDen(String maDuongBay) {
-        String sanBayDen ="";
+        String sanBayDen = "";
         try (CallableStatement statement = connect.prepareCall("{call GET_SANBAYDEN(?, ?)}")) {
             statement.setString(1, maDuongBay);
             statement.registerOutParameter(2, Types.VARCHAR);
             statement.execute();
-            return statement.getString(2);
-        } catch (Exception e) {
-            sanBayDen = "";
+            sanBayDen = statement.getString(2);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return sanBayDen;
     }
@@ -421,8 +424,8 @@ public class LichChuyenBayController implements Initializable {
             statement.setString(1, maChuyenBay);
             statement.registerOutParameter(2, Types.INTEGER);
             statement.execute();
-            return statement.getInt(2);
-        } catch (Exception e) {
+            soGheTrong = statement.getInt(2);
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return soGheTrong;
@@ -434,45 +437,53 @@ public class LichChuyenBayController implements Initializable {
             statement.setString(1, maChuyenBay);
             statement.registerOutParameter(2, Types.INTEGER);
             statement.execute();
-            return statement.getInt(2);
-        } catch (Exception e) {
+            soGhe = statement.getInt(2);
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return soGhe;
     }
 
     private String getSoDiemDung(String maDuongBay) {
-        String soDiemDung = "";
+        String soDiemDung;
         try (CallableStatement statement = connect.prepareCall("{call GET_SODIEMDUNG(?, ?)}")) {
             statement.setString(1, maDuongBay);
             statement.registerOutParameter(2, Types.INTEGER);
             statement.execute();
-            return String.valueOf(statement.getInt(2));
-        } catch (Exception e) {
+            soDiemDung = String.valueOf(statement.getInt(2));
+        } catch (SQLException e) {
             e.printStackTrace();
             soDiemDung = "0";
         }
         return soDiemDung;
     }
 
-    private String dinhDangKhoangThoiGian(Duration duration) {
-        long totalMinutes = duration.toMinutes();
-        long days = totalMinutes / (24 * 60);
-        long hours = (totalMinutes % (24 * 60)) / 60;
-        long minutes = totalMinutes % 60;
+    private String getThoiGianBayByMaDuongBay(String maDuongBay) {
+        String query = "SELECT ThoiGianBay FROM DuongBay WHERE MaDuongBay = ?";
+        try (PreparedStatement prepare = connect.prepareStatement(query)) {
+            prepare.setString(1, maDuongBay);
+            try (ResultSet result = prepare.executeQuery()) {
+                if (result.next()) {
+                    String thoiGianBay = result.getString("ThoiGianBay");
+                    return formatThoiGianBay(thoiGianBay);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Could not fetch flight duration.");
+        }
+        return null;
+    }
 
-        String formattedDuration = "";
-        if (days > 0) {
-            formattedDuration += days + " ngày ";
+    private String formatThoiGianBay(String thoiGianBay) {
+        if (thoiGianBay == null || thoiGianBay.isEmpty()) {
+            return "";
         }
-        if (hours > 0) {
-            formattedDuration += hours + " giờ ";
+        String[] parts = thoiGianBay.split(" ");
+        if (parts.length == 2 && "0".equals(parts[0])) {
+            return parts[1];
         }
-        if (minutes > 0) {
-            formattedDuration += minutes + " phút";
-        }
-
-        return formattedDuration.trim(); // Loại bỏ khoảng trắng thừa nếu có
+        return thoiGianBay;
     }
 
 }

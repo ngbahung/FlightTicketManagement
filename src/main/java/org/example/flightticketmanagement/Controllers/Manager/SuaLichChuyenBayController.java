@@ -18,13 +18,18 @@ import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.CT_HangVe;
 import org.example.flightticketmanagement.Models.ChuyenBay;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
+import org.example.flightticketmanagement.Models.SanBayTrungGian;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
 
 public class SuaLichChuyenBayController implements Initializable {
@@ -74,6 +79,15 @@ public class SuaLichChuyenBayController implements Initializable {
 
     @FXML
     private MFXButton luu_btn;
+
+    @FXML
+    private TableColumn<SanBayTrungGian, Integer> stt_tbcl;
+
+    @FXML
+    private TableColumn<SanBayTrungGian, String> tenSBTG_tbcl;
+
+    @FXML
+    private TableView<SanBayTrungGian> sanBayTrungGian_tbview;
 
     private int MIN_FLIGHT_HOURS;
 
@@ -130,11 +144,10 @@ public class SuaLichChuyenBayController implements Initializable {
     void xuLyLuaChonDuongBay() {
         String selectedTenDuongBay = tenDuongBay_combobox.getValue();
         if (selectedTenDuongBay != null && !selectedTenDuongBay.isEmpty()) {
-            String maDuongBay = getMaDuongBayFromTenDuongBay(selectedTenDuongBay);
+            String maDuongBay = getMaDuongBayByTen(selectedTenDuongBay);
             maDuongBay_txtfld.setText(maDuongBay);
         }
     }
-
     @FXML
     void luuButtonClicked() {
         try {
@@ -143,33 +156,32 @@ public class SuaLichChuyenBayController implements Initializable {
                     ngayBay_datepicker.getValue() == null || ngayHaCanh_datepicker.getValue() == null ||
                     gioBay_combobox.getValue() == null || gioHaCanh_combobox.getValue() == null ||
                     gia_txtfld.getText().isEmpty()) {
-                alert.errorMessage("Please fill in all information.");
+                alert.errorMessage("Hãy điền đủ thông tin.");
                 return;
             }
 
             // Check if the flight date is less than or equal to the landing date
             if (ngayBay_datepicker.getValue().isAfter(ngayHaCanh_datepicker.getValue())) {
-                alert.errorMessage("The flight date must be less than or equal to the landing date.");
+                alert.errorMessage("Ngày xuất phát không thể sau ngày hạ cánh.");
                 return;
             }
 
-            // Check if the flight duration is within the minimum and maximum flight hours
-            LocalDateTime departure = LocalDateTime.of(ngayBay_datepicker.getValue(),
-                    LocalTime.parse(gioBay_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
-            LocalDateTime arrival = LocalDateTime.of(ngayHaCanh_datepicker.getValue(),
-                    LocalTime.parse(gioHaCanh_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
-            Duration duration = Duration.between(departure, arrival);
-            long flightHours = duration.toHours();
+            // Extract flight hours from thoiGianBay_txtfld
+            String thoiGianBay = thoiGianBay_txtfld.getText();
+            int flightHours = getFlightHoursFromText(thoiGianBay);
+
+            // Check if flightHours is less than the minimum flight hours
             if (flightHours < MIN_FLIGHT_HOURS) {
-                alert.errorMessage("The flight duration must be between " + MIN_FLIGHT_HOURS + " hours.");
+                alert.errorMessage("Độ dài chuyến bay phải lớn hơn " + MIN_FLIGHT_HOURS + " giờ.");
                 return;
             }
 
             // Check if there is at least one ticket class information added
             if (hangVe_tableview.getItems().isEmpty()) {
-                alert.errorMessage("Please add at least one ticket class information.");
+                alert.errorMessage("Vui lòng thêm ít nhất một hạng vé cho chuyến bay.");
                 return;
             }
+
             // Lấy thông tin từ các trường nhập liệu
             String maChuyenBay = maChuyenBay_txtfld.getText();
             String maDuongBay = maDuongBay_txtfld.getText();
@@ -177,70 +189,83 @@ public class SuaLichChuyenBayController implements Initializable {
                     LocalTime.parse(gioBay_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
             LocalDateTime thoiGianHaCanh = LocalDateTime.of(ngayHaCanh_datepicker.getValue(),
                     LocalTime.parse(gioHaCanh_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
-            double giaVe = Double.parseDouble(gia_txtfld.getText());
+            BigDecimal giaVe = new BigDecimal(gia_txtfld.getText());
 
-            // Tạo câu lệnh SQL để cập nhật dữ liệu vào bảng CHUYENBAY
+            // Parse and format the price
+            DecimalFormat df = new DecimalFormat("#.00");  // Set the format to two decimal places
+            String formattedGiaVe = df.format(giaVe);
+
+            // Tạo câu lệnh SQL để cập nhật dữ liệu trong bảng CHUYENBAY
             String updateChuyenBayQuery = "UPDATE CHUYENBAY SET MaDuongBay = ?, TGXP = ?, TGKT = ?, GiaVe = ? WHERE MaChuyenBay = ?";
+            connect = DatabaseDriver.getConnection();
             PreparedStatement updateChuyenBayStatement = connect.prepareStatement(updateChuyenBayQuery);
             updateChuyenBayStatement.setString(1, maDuongBay);
             updateChuyenBayStatement.setTimestamp(2, Timestamp.valueOf(thoiGianXuatPhat));
             updateChuyenBayStatement.setTimestamp(3, Timestamp.valueOf(thoiGianHaCanh));
-            updateChuyenBayStatement.setDouble(4, giaVe);
+            updateChuyenBayStatement.setBigDecimal(4, giaVe);
             updateChuyenBayStatement.setString(5, maChuyenBay);
 
-            // Thực thi câu lệnh SQL cập nhật dữ liệu vào bảng CHUYENBAY
-            int rowsUpdated = updateChuyenBayStatement.executeUpdate();
+            // Thực thi câu lệnh SQL cập nhật dữ liệu trong bảng CHUYENBAY
+            updateChuyenBayStatement.executeUpdate();
 
-            if (rowsUpdated == 0) {
-                // Nếu không có hàng nào được cập nhật, chèn mới dữ liệu vào bảng CHUYENBAY
-                String insertChuyenBayQuery = "INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe) " +
-                        "VALUES (?, ?, ?, ?, 0, ?)";
-                PreparedStatement insertChuyenBayStatement = connect.prepareStatement(insertChuyenBayQuery);
-                insertChuyenBayStatement.setString(1, maChuyenBay);
-                insertChuyenBayStatement.setString(2, maDuongBay);
-                insertChuyenBayStatement.setTimestamp(3, Timestamp.valueOf(thoiGianXuatPhat));
-                insertChuyenBayStatement.setTimestamp(4, Timestamp.valueOf(thoiGianHaCanh));
-                insertChuyenBayStatement.setDouble(5, giaVe);
+            // Xóa các hạng vé cũ liên quan đến chuyến bay
+            String deleteCTHangVeQuery = "DELETE FROM CT_HANGVE WHERE MaChuyenBay = ?";
+            PreparedStatement deleteCTHangVeStatement = connect.prepareStatement(deleteCTHangVeQuery);
+            deleteCTHangVeStatement.setString(1, maChuyenBay);
+            deleteCTHangVeStatement.executeUpdate();
 
-                // Thực thi câu lệnh SQL chèn dữ liệu vào bảng CHUYENBAY
-                insertChuyenBayStatement.executeUpdate();
-            }
-
-            // Tạo các câu lệnh SQL để cập nhật dữ liệu vào bảng CT_HANGVE và thực thi chúng
+            // Tạo các câu lệnh SQL để chèn dữ liệu mới vào bảng CT_HANGVE và thực thi chúng
             for (CT_HangVe ctHangVe : hangVe_tableview.getItems()) {
-                String updateCTHangVeQuery = "UPDATE CT_HANGVE SET SoGheTrong = ? WHERE MaChuyenBay = ? AND MaHangVe = ?";
-                PreparedStatement updateCTHangVeStatement = connect.prepareStatement(updateCTHangVeQuery);
-                updateCTHangVeStatement.setInt(1, ctHangVe.getSoGheTrong());
-                updateCTHangVeStatement.setString(2, maChuyenBay);
-                updateCTHangVeStatement.setString(3, ctHangVe.getMaHangVe());
+                String insertCTHangVeQuery = "INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) " +
+                        "VALUES (?, ?, ?, 0)";
+                PreparedStatement insertCTHangVeStatement = connect.prepareStatement(insertCTHangVeQuery);
+                insertCTHangVeStatement.setString(1, maChuyenBay);
+                insertCTHangVeStatement.setString(2, ctHangVe.getMaHangVe());
+                insertCTHangVeStatement.setInt(3, ctHangVe.getSoGheTrong());
 
-                // Thực thi câu lệnh SQL cập nhật dữ liệu vào bảng CT_HANGVE
-                int ctRowsUpdated = updateCTHangVeStatement.executeUpdate();
-
-                if (ctRowsUpdated == 0) {
-                    // Nếu không có hàng nào được cập nhật, chèn mới dữ liệu vào bảng CT_HANGVE
-                    String insertCTHangVeQuery = "INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) " +
-                            "VALUES (?, ?, ?, 0)";
-                    PreparedStatement insertCTHangVeStatement = connect.prepareStatement(insertCTHangVeQuery);
-                    insertCTHangVeStatement.setString(1, maChuyenBay);
-                    insertCTHangVeStatement.setString(2, ctHangVe.getMaHangVe());
-                    insertCTHangVeStatement.setInt(3, ctHangVe.getSoGheTrong());
-
-                    // Thực thi câu lệnh SQL chèn dữ liệu vào bảng CT_HANGVE
-                    insertCTHangVeStatement.executeUpdate();
-                }
+                // Thực thi câu lệnh SQL chèn dữ liệu vào bảng CT_HANGVE
+                insertCTHangVeStatement.executeUpdate();
             }
 
             // Hiển thị thông báo thành công
-            alert.successMessage("Dữ liệu đã được lưu xuống cơ sở dữ liệu thành công");
-            eventBus.post(new Object());
+            alert.successMessage("Dữ liệu đã được cập nhật thành công.");
             if (parentController != null) {
                 parentController.layDuLieu(null, null, null);
             }
+            refreshTableView();
+            eventBus.post(new Object());
             closeStage();
         } catch (SQLException e) {
             e.printStackTrace();
-            alert.errorMessage("Đã xảy ra lỗi khi lưu dữ liệu xuống cơ sở dữ liệu.");
+            alert.errorMessage("Lỗi khi cập nhật dữ liệu vào cơ sở dữ liệu. Vui lòng kiểm tra lại.");
+        } catch (NumberFormatException e) {
+            alert.errorMessage("Lỗi khi chuyển đổi số giờ. Vui lòng kiểm tra định dạng.");
+        }
+    }
+
+
+    private int getFlightHoursFromText(String text) {
+        int flightHours = 0;
+        try {
+            String[] parts = text.split(" ");
+            for (int i = 0; i < parts.length; i++) {
+                if (parts[i].equals("ngày")) {
+                    flightHours += Integer.parseInt(parts[i - 1]) * 24; // Chuyển ngày thành giờ
+                } else if (parts[i].equals("giờ")) {
+                    flightHours += Integer.parseInt(parts[i - 1]);
+                }
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            alert.errorMessage("Lỗi khi chuyển đổi thời gian.");
+        }
+        return flightHours;
+    }
+
+    private void refreshTableView() {
+        // Fetch the updated data from the database
+        if (parentController != null) {
+            parentController.layDuLieu(null, null, null);
         }
     }
 
@@ -281,21 +306,48 @@ public class SuaLichChuyenBayController implements Initializable {
             alert.errorMessage("Could not retrieve flight duration from the database");
         }
 
-        gioBay_combobox.valueProperty().addListener((obs, oldVal, newVal) -> tinhThoiGianBay());
-        gioHaCanh_combobox.valueProperty().addListener((obs, oldVal, newVal) -> tinhThoiGianBay());
-        ngayBay_datepicker.valueProperty().addListener((obs, oldVal, newVal) -> tinhThoiGianBay());
-        ngayHaCanh_datepicker.valueProperty().addListener((obs, oldVal, newVal) -> tinhThoiGianBay());
-
         tenHangVe_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenHangVe(cellData.getValue().getMaHangVe())));
         soLuongGhe_tbcl.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getSoGheTrong()).asObject());
+
+        tenDuongBay_combobox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                String maDuongBay = getMaDuongBayByTen(newVal);
+                if (maDuongBay != null) {
+                    maDuongBay_txtfld.setText(maDuongBay);
+                    String thoiGianBay = getThoiGianBayByMaDuongBay(maDuongBay);
+                    if (thoiGianBay != null) {
+                        String formattedThoiGianBay = formatFlightTime(thoiGianBay);
+                        thoiGianBay_txtfld.setText(formattedThoiGianBay);
+                        updateArrivalDateTime();
+                    }
+                    populateSanBayTrungGianTableView(maDuongBay); // Sửa đổi
+                }
+            }
+        });
+
+        // Add listeners to update arrival date and time
+        ngayBay_datepicker.valueProperty().addListener((observable, oldValue, newValue) -> updateArrivalDateTime());
+        gioBay_combobox.valueProperty().addListener((observable, oldValue, newValue) -> updateArrivalDateTime());
+        thoiGianBay_txtfld.textProperty().addListener((observable, oldValue, newValue) -> updateArrivalDateTime());
+
+        stt_tbcl.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getThuTu()).asObject());
+        tenSBTG_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenSanBayTrungGian(cellData.getValue().getMaSanBay())));
+
+        sanBayTrungGian_tbview.setItems(FXCollections.observableArrayList());
+        gioBay_combobox.setOnMouseClicked(event -> {
+            populateTimeComboBox(gioBay_combobox);
+        });
+
     }
 
     public void setData(ChuyenBay chuyenBay) {
         // Thiết lập thông tin cơ bản
         maChuyenBay_txtfld.setText(chuyenBay.getMaChuyenBay());
         maDuongBay_txtfld.setText(chuyenBay.getMaDuongBay());
-        // Thực hiện truy vấn SQL để lấy tên đường bay từ bảng DUONGBAY
-        String tenDuongBay = getTenDuongBay(chuyenBay.getMaDuongBay());
+
+        // Thực hiện truy vấn SQL để lấy tên sân bay đi và tên sân bay đến từ bảng DUONGBAY
+        String[] tenSanBay = getTenSanBayFromMaDuongBay(chuyenBay.getMaDuongBay());
+        String tenDuongBay = tenSanBay[0] + " - " + tenSanBay[1];
         tenDuongBay_combobox.setValue(tenDuongBay);
 
         LocalDateTime thoiGianXuatPhat = chuyenBay.getThoiGianXuatPhat();
@@ -309,26 +361,36 @@ public class SuaLichChuyenBayController implements Initializable {
             gioBay_combobox.getItems().clear();
         }
 
-        // Thiết lập ngày và giờ hạ cánh
-        LocalDateTime thoiGianKetThuc = chuyenBay.getThoiGianKetThuc();
-        if (thoiGianKetThuc != null) {
-            ngayHaCanh_datepicker.setValue(thoiGianKetThuc.toLocalDate());
-            gioHaCanh_combobox.getItems().clear(); // Clear previous items
-            gioHaCanh_combobox.getItems().add(thoiGianKetThuc.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-            gioHaCanh_combobox.getSelectionModel().selectFirst(); // Select the first item
-        } else {
-            ngayHaCanh_datepicker.setValue(null);
-            gioHaCanh_combobox.getItems().clear();
-        }
-
         gia_txtfld.setText(String.valueOf(chuyenBay.getGiaVe()));
-        tinhThoiGianBay();
 
         xuLyLuaChonDuongBay();
 
         // Hiển thị thông tin hạng vé trên tableview
         displayHangVe(chuyenBay.getMaChuyenBay());
     }
+
+    private String[] getTenSanBayFromMaDuongBay(String maDuongBay) {
+        String[] tenSanBay = new String[2];
+        String sql = "SELECT sb1.TenSanBay AS SanBayDi, sb2.TenSanBay AS SanBayDen " +
+                "FROM DuongBay db " +
+                "JOIN SanBay sb1 ON db.MaSanBayDi = sb1.MaSanBay " +
+                "JOIN SanBay sb2 ON db.MaSanBayDen = sb2.MaSanBay " +
+                "WHERE db.MaDuongBay = ?";
+        try {
+            PreparedStatement statement = connect.prepareStatement(sql);
+            statement.setString(1, maDuongBay);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                tenSanBay[0] = resultSet.getString("SanBayDi");
+                tenSanBay[1] = resultSet.getString("SanBayDen");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Error occurred while retrieving airport names.");
+        }
+        return tenSanBay;
+    }
+
 
     private void displayHangVe(String maChuyenBay) {
         ObservableList<CT_HangVe> hangVeList = FXCollections.observableArrayList();
@@ -354,20 +416,131 @@ public class SuaLichChuyenBayController implements Initializable {
         hangVe_tableview.setItems(hangVeList);
     }
 
-    private String getTenDuongBay(String maDuongBay) {
-        String sql = "SELECT TenDuongBay FROM DUONGBAY WHERE MaDuongBay = ?";
+    private void populateSanBayTrungGianTableView(String maDuongBay) {
+        ObservableList<SanBayTrungGian> sanBayTrungGianList = FXCollections.observableArrayList();
+        String query = "SELECT ThuTu, MaSanBay FROM SANBAYTG WHERE MaDuongBay = ?";
         try {
-            PreparedStatement statement = connect.prepareStatement(sql);
-            statement.setString(1, maDuongBay);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getString("TenDuongBay");
+            prepare = connect.prepareStatement(query);
+            prepare.setString(1, maDuongBay);
+            result = prepare.executeQuery();
+            while (result.next()) {
+                int stt = result.getInt("ThuTu");
+                String maSanBay = result.getString("MaSanBay");
+                String tenSanBay = getTenSanBayTrungGian(maSanBay);
+                sanBayTrungGianList.add(new SanBayTrungGian(maDuongBay, maSanBay, stt, tenSanBay));
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            alert.errorMessage("Error occurred while retrieving flight route name from the database.");
+            alert.errorMessage("Could not fetch intermediate airports.");
         }
-        return "";
+        sanBayTrungGian_tbview.setItems(sanBayTrungGianList);
+    }
+
+    private String formatFlightTime(String thoiGianBay) {
+        if (thoiGianBay != null) {
+            // Tách chuỗi thời gian bay thành phần ngày và phần giờ:phút:giây.mili
+            String[] parts = thoiGianBay.split(" ");
+            int flightDays = Integer.parseInt(parts[0]); // Lấy số ngày bay
+
+            // Tách phần giờ:phút:giây.mili thành các thành phần tương ứng
+            String[] timeParts = parts[1].split(":");
+            int flightHours = Integer.parseInt(timeParts[0]); // Lấy số giờ bay
+            int flightMinutes = Integer.parseInt(timeParts[1]); // Lấy số phút bay
+            String[] secondParts = timeParts[2].split("\\."); // Tách giây và mili giây
+            int flightSeconds = Integer.parseInt(secondParts[0]); // Lấy số giây bay
+            int flightMillis = secondParts.length > 1 ? Integer.parseInt(secondParts[1]) : 0; // Lấy số mili giây bay, mặc định là 0 nếu không có
+
+            // Định dạng lại chuỗi thời gian bay
+            return String.format("%d ngày %d giờ %d phút %d giây", flightDays, flightHours, flightMinutes, flightSeconds);
+        }
+        return null;
+    }
+
+    private void updateArrivalDateTime() {
+        if (ngayBay_datepicker.getValue() == null || gioBay_combobox.getValue() == null || thoiGianBay_txtfld.getText().isEmpty()) {
+            return; // Do nothing if any of the required fields are empty
+        }
+
+        try {
+            LocalDateTime departure = LocalDateTime.of(
+                    ngayBay_datepicker.getValue(),
+                    LocalTime.parse(gioBay_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss"))
+            );
+
+            // Parse the flight duration from the thoiGianBay_txtfld
+            Duration flightDuration = parseFlightTime(thoiGianBay_txtfld.getText());
+            if (flightDuration == null) {
+                alert.errorMessage("Thời gian bay không hợp lệ.");
+                return;
+            }
+
+            // Calculate the arrival time
+            LocalDateTime arrival = departure.plus(flightDuration);
+
+            // Set the calculated arrival date and time to the respective fields
+            ngayHaCanh_datepicker.setValue(arrival.toLocalDate());
+            gioHaCanh_combobox.setValue(arrival.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        } catch (DateTimeParseException e) {
+            e.printStackTrace();
+            alert.errorMessage("Thời gian không hợp lệ.");
+        }
+    }
+
+    private Duration parseFlightTime(String flightTime) {
+        try {
+            // Initialize days, hours, minutes, and seconds to zero
+            int days = 0;
+            int hours = 0;
+            int minutes = 0;
+            int seconds = 0;
+
+            // Split the string by spaces
+            String[] parts = flightTime.split(" ");
+
+            for (int i = 0; i < parts.length; i++) {
+                // Check for days
+                if (parts[i].equals("ngày")) {
+                    days = Integer.parseInt(parts[i - 1]);
+                }
+                // Check for hours
+                else if (parts[i].equals("giờ")) {
+                    hours = Integer.parseInt(parts[i - 1]);
+                }
+                // Check for minutes
+                else if (parts[i].equals("phút")) {
+                    minutes = Integer.parseInt(parts[i - 1]);
+                }
+                // Check for seconds
+                else if (parts[i].equals("giây")) {
+                    seconds = Integer.parseInt(parts[i - 1]);
+                }
+            }
+
+            // Convert the parsed values to a Duration object
+            return Duration.ofDays(days)
+                    .plusHours(hours)
+                    .plusMinutes(minutes)
+                    .plusSeconds(seconds);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; // Return null if parsing fails
+        }
+    }
+
+    public String getTenSanBayTrungGian(String maSanBay) {
+        String query = "SELECT TenSanBay FROM SanBay WHERE MaSanBay = ?";
+        try {
+            prepare = connect.prepareStatement(query);
+            prepare.setString(1, maSanBay);
+            result = prepare.executeQuery();
+            if (result.next()) {
+                return result.getString("TenSanBay");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Could not fetch airport name.");
+        }
+        return ""; // Trả về chuỗi rỗng nếu không tìm thấy tên sân bay
     }
 
     private void populateTimeComboBox(ComboBox<String> comboBox) {
@@ -379,12 +552,20 @@ public class SuaLichChuyenBayController implements Initializable {
     }
 
     private void populateTenDuongBayComboBox() {
-        String query = "SELECT TenDuongBay FROM DuongBay";
+        String query = "SELECT " +
+                "sb1.TenSanBay AS SanBayDi, " +
+                "sb2.TenSanBay AS SanBayDen " +
+                "FROM DuongBay db " +
+                "JOIN SanBay sb1 ON db.MaSanBayDi = sb1.MaSanBay " +
+                "JOIN SanBay sb2 ON db.MaSanBayDen = sb2.MaSanBay " +
+                "WHERE db.TrangThai = 1";
         try {
             prepare = connect.prepareStatement(query);
             result = prepare.executeQuery();
             while (result.next()) {
-                tenDuongBay_combobox.getItems().add(result.getString("TenDuongBay"));
+                String sanBayDi = result.getString("SanBayDi");
+                String sanBayDen = result.getString("SanBayDen");
+                tenDuongBay_combobox.getItems().add(sanBayDi + " - " + sanBayDen);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -392,33 +573,47 @@ public class SuaLichChuyenBayController implements Initializable {
         }
     }
 
-    private String getMaDuongBayFromTenDuongBay(String tenDuongBay) {
-        String sql = "SELECT MaDuongBay FROM DUONGBAY WHERE TenDuongBay = ?";
+    private String[] splitTenDuongBay(String tenDuongBay) {
+        return tenDuongBay.split(" - ");
+    }
+
+    private String getMaDuongBayByTen(String tenDuongBay) {
+        String[] parts = splitTenDuongBay(tenDuongBay);
+        if (parts.length != 2) {
+            alert.errorMessage("Invalid route format.");
+            return null;
+        }
+        String query = "SELECT MaDuongBay FROM DuongBay WHERE MaSanBayDi = (SELECT MaSanBay FROM SanBay WHERE TenSanBay = ?) " +
+                "AND MaSanBayDen = (SELECT MaSanBay FROM SanBay WHERE TenSanBay = ?)";
         try {
-            prepare = connect.prepareStatement(sql);
-            prepare.setString(1, tenDuongBay);
+            prepare = connect.prepareStatement(query);
+            prepare.setString(1, parts[0]);
+            prepare.setString(2, parts[1]);
             result = prepare.executeQuery();
             if (result.next()) {
                 return result.getString("MaDuongBay");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            alert.errorMessage("Error occurred while retrieving flight route code from the database.");
+            alert.errorMessage("Could not fetch route code.");
         }
-        return "";
+        return null;
     }
 
-    private void tinhThoiGianBay() {
-        if (ngayBay_datepicker.getValue() != null && ngayHaCanh_datepicker.getValue() != null &&
-                gioBay_combobox.getValue() != null && gioHaCanh_combobox.getValue() != null) {
-            LocalDateTime departure = LocalDateTime.of(ngayBay_datepicker.getValue(),
-                    LocalTime.parse(gioBay_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
-            LocalDateTime arrival = LocalDateTime.of(ngayHaCanh_datepicker.getValue(),
-                    LocalTime.parse(gioHaCanh_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
-
-            Duration duration = Duration.between(departure, arrival);
-            thoiGianBay_txtfld.setText(String.format("%d giờ %d phút", duration.toHours(), duration.toMinutesPart()));
+    private String getThoiGianBayByMaDuongBay(String maDuongBay) {
+        String query = "SELECT ThoiGianBay FROM DuongBay WHERE MaDuongBay = ?";
+        try {
+            prepare = connect.prepareStatement(query);
+            prepare.setString(1, maDuongBay);
+            result = prepare.executeQuery();
+            if (result.next()) {
+                return result.getString("ThoiGianBay");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Could not fetch flight duration.");
         }
+        return null;
     }
 
     public String getGeneratedMaChuyenBay() {

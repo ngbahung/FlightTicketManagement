@@ -40,7 +40,7 @@
             <DatePicker fx:id="ngayBay_datepicker" prefHeight="28.0" prefWidth="266.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="thoiGianBay_txtfld" editable="false" prefHeight="27.0" prefWidth="158.0" promptText="phút" GridPane.columnIndex="3" GridPane.rowIndex="4" />
             <TextField fx:id="gia_txtfld" promptText="VNĐ" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ComboBox fx:id="tenDuongBay_combobox" prefHeight="23.0" prefWidth="249.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ComboBox fx:id="tenDuongBay_combobox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="252.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Dự kiến hạ cánh:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <DatePicker id="disabled-field" fx:id="ngayHaCanh_datepicker" disable="true" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="2" />
             <Label text="Mã đường bay:" GridPane.columnIndex="2" />

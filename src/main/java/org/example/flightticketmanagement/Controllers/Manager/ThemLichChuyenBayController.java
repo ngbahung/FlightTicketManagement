@@ -354,13 +354,11 @@ public class ThemLichChuyenBayController implements Initializable {
                 String maSanBay = result.getString("MaSanBay");
                 String tenSanBay = getTenSanBayTrungGian(maSanBay);
                 sanBayTrungGianList.add(new SanBayTrungGian(maDuongBay, maSanBay, stt, tenSanBay));
-                System.out.println("Added to list: " + maSanBay + " - " + tenSanBay); // Log để kiểm tra
             }
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Could not fetch intermediate airports.");
         }
-        System.out.println("Total items in list: " + sanBayTrungGianList.size()); // Log để kiểm tra
         sanBayTrungGian_tbview.setItems(sanBayTrungGianList);
     }
 
@@ -413,7 +411,6 @@ public class ThemLichChuyenBayController implements Initializable {
             alert.errorMessage("Thời gian không hợp lệ.");
         }
     }
-
 
     private Duration parseFlightTime(String flightTime) {
         try {
@@ -542,7 +539,6 @@ public class ThemLichChuyenBayController implements Initializable {
         return null;
     }
 
-
     private String getThoiGianBayByMaDuongBay(String maDuongBay) {
         String query = "SELECT ThoiGianBay FROM DuongBay WHERE MaDuongBay = ?";
         try {
@@ -559,7 +555,6 @@ public class ThemLichChuyenBayController implements Initializable {
         return null;
     }
 
-
     private void populateTimeComboBox(ComboBox<String> comboBox) {
         for (int h = 0; h < 24; h++) {
             for (int m = 0; m < 60; m++) {
@@ -567,7 +562,6 @@ public class ThemLichChuyenBayController implements Initializable {
             }
         }
     }
-
 
     public String getGeneratedMaChuyenBay() {
         return maChuyenBay_txtfld.getText();
