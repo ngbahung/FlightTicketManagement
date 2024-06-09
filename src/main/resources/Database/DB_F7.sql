@@ -2382,15 +2382,71 @@ BEGIN
 END rf_VE_CT_HANGVE_delete_CHUYENBAY;
 /
 
-/* R17: cập nhật trạng thái đường bay khi cập nhật trạng thái sân bay */
+
+/* R17: cập nhật trạng thái đường bay khi cập nhật trạng thái sân bay ngưng hoạt động */
 --DROP TRIGGER trg_update_trangthai_duongbay;
 CREATE OR REPLACE TRIGGER trg_update_trangthai_duongbay
     AFTER UPDATE OF TrangThai ON SANBAY
     FOR EACH ROW
 BEGIN
-    CapNhatTrangThaiDuongBay(:NEW.MaSanBay, :NEW.TrangThai);
-END;
-/
+    IF :NEW.TrangThai = 0 THEN
+        -- Update DUONGBAY where MaSanBayDen matches the updated MaSanBay
+        UPDATE DUONGBAY
+        SET TrangThai = 0
+        WHERE MaSanBayDen = :OLD.MaSanBay;
+
+        -- Update DUONGBAY where MaSanBayDi matches the updated MaSanBay
+        UPDATE DUONGBAY
+        SET TrangThai = 0
+        WHERE MaSanBayDi = :OLD.MaSanBay;
+
+        -- Update DUONGBAY where MaDuongBay matches MaDuongBay in SANBAYTG and MaSanBay in SANBAYTG matches the updated MaSanBay
+        UPDATE DUONGBAY
+        SET TrangThai = 0
+        WHERE MaDuongBay IN (
+            SELECT MaDuongBay
+            FROM SANBAYTG
+            WHERE MaSanBay = :OLD.MaSanBay
+        );
+    END IF;
+END; ----------------------------- trigger mục 3
+
+/* R18: kiểm tra trước khi cập nhật trạng thái đường bay hoạt động */
+--DROP TRIGGER trg_check_duongbay_status;
+CREATE OR REPLACE TRIGGER trg_check_duongbay_status
+    BEFORE UPDATE OF TrangThai ON DUONGBAY
+    FOR EACH ROW
+DECLARE
+    cnt NUMBER;
+BEGIN
+    IF :NEW.TrangThai = 1 THEN
+        -- Kiểm tra số lượng sân bay có TrangThai = 0 bằng cách sử dụng UNION
+        SELECT COUNT(*)
+        INTO cnt
+        FROM (
+                 SELECT 1
+                 FROM SANBAY sb
+                 WHERE sb.MaSanBay = :OLD.MaSanBayDi AND sb.TrangThai = 0
+                 UNION
+                 SELECT 1
+                 FROM SANBAY sb
+                 WHERE sb.MaSanBay = :OLD.MaSanBayDen AND sb.TrangThai = 0
+                 UNION
+                 SELECT 1
+                 FROM SANBAY sb
+                 WHERE sb.TrangThai = 0 AND sb.MaSanBay IN (
+                     SELECT sbtg.MaSanBay
+                     FROM SANBAYTG sbtg
+                     WHERE sbtg.MaDuongBay = :OLD.MaDuongBay
+                 )
+             );
+        -- Nếu số lượng sân bay có TrangThai = 0 lớn hơn 0 thì raise lỗi
+        IF cnt > 0 THEN
+            RAISE_APPLICATION_ERROR(-20001, 'Có sân bay thuộc đường bay đang hoạt động nên không thể thay đổi trạng thái');
+        END IF;
+    END IF;
+END;------------------------------------------------ trigger mục 2
+
 
 -----------------------------------------------------------------------------------------------------------------------------------------
 --PROCEDURE
@@ -2970,69 +3026,3 @@ END delete_CT_DATVE_by_VE;
 
 -------------------------------------------------------------------
 
-/* PROCEDURE cập nhật trạng thái đường bay khi cập nhật rạng thái sân bay*/
-CREATE OR REPLACE PROCEDURE CapNhatTrangThaiDuongBay (p_MaSanBay VARCHAR2, p_TrangThai NUMBER) AS
-    v_DemSanBay NUMBER;
-BEGIN
-    -- Trường hợp khi p_TrangThai = 0
-    IF p_TrangThai = 0 THEN
-        UPDATE DUONGBAY
-        SET TrangThai = 0
-        WHERE MaSanBayDi = p_MaSanBay
-           OR MaSanBayDen = p_MaSanBay
-           OR EXISTS (
-            SELECT 1
-            FROM SANBAYTG
-            WHERE MaDuongBay = DUONGBAY.MaDuongBay
-              AND MaSanBay = p_MaSanBay
-        );
-        -- Trường hợp khi p_TrangThai = 1
-    ELSIF p_TrangThai = 1 THEN
-        -- TH1: MaSanBayDi = p_MaSanBay
-        FOR r IN (SELECT MaDuongBay FROM DUONGBAY WHERE MaSanBayDi = p_MaSanBay) LOOP
-                SELECT COUNT(*) INTO v_DemSanBay
-                FROM SANBAY
-                WHERE TrangThai = 0
-                  AND (MaSanBay IN (SELECT MaSanBayDen FROM DUONGBAY WHERE MaDuongBay = r.MaDuongBay)
-                    OR MaSanBay IN (SELECT MaSanBay FROM SANBAYTG WHERE MaDuongBay = r.MaDuongBay));
-
-                IF v_DemSanBay = 0 THEN
-                    UPDATE DUONGBAY
-                    SET TrangThai = 1
-                    WHERE MaDuongBay = r.MaDuongBay;
-                END IF;
-            END LOOP;
-
-        -- TH2: MaSanBayDen = p_MaSanBay
-        FOR r IN (SELECT MaDuongBay FROM DUONGBAY WHERE MaSanBayDen = p_MaSanBay) LOOP
-                SELECT COUNT(*) INTO v_DemSanBay
-                FROM SANBAY
-                WHERE TrangThai = 0
-                  AND (MaSanBay IN (SELECT MaSanBayDi FROM DUONGBAY WHERE MaDuongBay = r.MaDuongBay)
-                    OR MaSanBay IN (SELECT MaSanBay FROM SANBAYTG WHERE MaDuongBay = r.MaDuongBay));
-
-                IF v_DemSanBay = 0 THEN
-                    UPDATE DUONGBAY
-                    SET TrangThai = 1
-                    WHERE MaDuongBay = r.MaDuongBay;
-                END IF;
-            END LOOP;
-
-        -- TH3: MaSanBay trong bảng SANBAYTG = p_MaSanBay
-        FOR r IN (SELECT MaDuongBay FROM SANBAYTG WHERE MaSanBay = p_MaSanBay) LOOP
-                SELECT COUNT(*) INTO v_DemSanBay
-                FROM SANBAY
-                WHERE TrangThai = 0
-                  AND (MaSanBay IN (SELECT MaSanBayDi FROM DUONGBAY WHERE MaDuongBay = r.MaDuongBay)
-                    OR MaSanBay IN (SELECT MaSanBayDen FROM DUONGBAY WHERE MaDuongBay = r.MaDuongBay)
-                    OR MaSanBay IN (SELECT MaSanBay FROM SANBAYTG WHERE MaDuongBay = r.MaDuongBay AND MaSanBay != p_MaSanBay));
-
-                IF v_DemSanBay = 0 THEN
-                    UPDATE DUONGBAY
-                    SET TrangThai = 1
-                    WHERE MaDuongBay = r.MaDuongBay;
-                END IF;
-            END LOOP;
-    END IF;
-END;
-/
