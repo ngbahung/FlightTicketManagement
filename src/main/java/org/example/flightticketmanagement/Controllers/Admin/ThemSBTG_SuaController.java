@@ -5,17 +5,21 @@ import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
-import org.example.flightticketmanagement.Controllers.Manager.ThemLichChuyenBayController;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
 import org.example.flightticketmanagement.Models.SanBay;
 
 import java.net.URL;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class ThemSBTGController implements Initializable {
+public class ThemSBTG_SuaController implements Initializable{
     @FXML
     private MFXButton luu_btn;
 
@@ -71,7 +75,7 @@ public class ThemSBTGController implements Initializable {
     private ResultSet result;
 
     private final AlertMessage alert = new AlertMessage();
-    private ThemDuongBayController parentController;
+    private SuaDuongBayController parentController;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -108,8 +112,7 @@ public class ThemSBTGController implements Initializable {
         }
     }
 
-
-    public void setParentController(ThemDuongBayController parentController) {
+    public void setParentController(SuaDuongBayController parentController) {
         this.parentController = parentController;
     }
 }

@@ -85,10 +85,69 @@ public class ThemDuongBayController implements Initializable {
 
     @FXML
     void xoaSBTG(ActionEvent event) {
+        SanBayTrungGian selectedSBTG = sanBayTrungGian_tbview.getSelectionModel().getSelectedItem();
+        if (selectedSBTG == null) {
+            alert.errorMessage("Vui lòng chọn sân bay trung gian để xóa.");
+            return;
+        }
 
+        boolean confirmed = alert.confirmationMessage("Bạn có chắc chắn muốn xóa sân bay trung gian này không?");
+        if (!confirmed) {
+            return;
+        }
+
+        deleteSBTG(selectedSBTG.getMaDuongBay(), selectedSBTG.getMaSanBay(), selectedSBTG.getThuTu());
+        reorderSBTG(selectedSBTG.getMaDuongBay());
+
+        sanBayTrungGianTempList.remove(selectedSBTG);
+        sanBayTrungGian_tbview.getItems().clear();
+        sanBayTrungGian_tbview.getItems().addAll(sanBayTrungGianTempList);
+
+        for (int i = 0; i < sanBayTrungGianTempList.size(); i++) {
+            sanBayTrungGianTempList.get(i).setThuTu(i + 1);
+        }
     }
 
+    private void reorderSBTG(String maDuongBay) {
+        String selectSql = "SELECT MaSanBay, ThuTu FROM SANBAYTG WHERE MaDuongBay = ? ORDER BY ThuTu";
+        String updateSql = "UPDATE SANBAYTG SET ThuTu = ? WHERE MaDuongBay = ? AND MaSanBay = ?";
 
+        try (Connection connect = DatabaseDriver.getConnection();
+             PreparedStatement selectStmt = connect.prepareStatement(selectSql);
+             PreparedStatement updateStmt = connect.prepareStatement(updateSql)) {
+
+            selectStmt.setString(1, maDuongBay);
+            ResultSet result = selectStmt.executeQuery();
+
+            int thuTu = 1;
+            while (result.next()) {
+                String maSanBay = result.getString("MaSanBay");
+
+                updateStmt.setInt(1, thuTu);
+                updateStmt.setString(2, maDuongBay);
+                updateStmt.setString(3, maSanBay);
+                updateStmt.executeUpdate();
+
+                thuTu++;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Lỗi khi sắp xếp lại thứ tự sân bay trung gian: " + e.getMessage());
+        }
+    }
+
+    private void deleteSBTG(String maDuongBay, String maSanBay, int thuTu) {
+        String sql = "DELETE FROM SANBAYTG WHERE MaDuongBay = ? AND MaSanBay = ? AND ThuTu = ?";
+        try (Connection connect = DatabaseDriver.getConnection();
+             PreparedStatement prepare = connect.prepareStatement(sql)) {
+            prepare.setString(1, maDuongBay);
+            prepare.setString(2, maSanBay);
+            prepare.setInt(3, thuTu);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Lỗi khi xóa sân bay trung gian: " + e.getMessage());
+        }
+    }
 
     private Connection connect;
     private PreparedStatement prepare;
@@ -108,7 +167,7 @@ public class ThemDuongBayController implements Initializable {
         // Initialize table columns
         stt_tbcl.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getThuTu()).asObject());
         tenSBTG_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenSanBayTrungGian(cellData.getValue().getMaSanBay())));
-        thoiGianDung_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getThoiGianDung()));
+        thoiGianDung_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(formatThoiGianDung(cellData.getValue().getThoiGianDung())));
 
         sanBayDi_cbx.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
             String tenVietTatDi = getTenVietTat(newValue);
@@ -164,8 +223,25 @@ public class ThemDuongBayController implements Initializable {
     private List<SanBayTrungGian> sanBayTrungGianTempList = new ArrayList<>();
 
     public void addSBTGTemp(String sanBay, String thoiGianDung) {
-        // Lấy mã sân bay từ tên sân bay
         String maSanBay = getMaSanBay(sanBay);
+        if (maSanBay == null) {
+            alert.errorMessage("Không tìm thấy mã sân bay cho sân bay: " + sanBay);
+            return;
+        }
+
+        // Validate against departure and arrival airports
+        if (sanBay.equals(sanBayDi_cbx.getValue()) || sanBay.equals(sanBayDen_cbx.getValue())) {
+            alert.errorMessage("Sân bay trung gian không được trùng với sân bay đi hoặc sân bay đến.");
+            return;
+        }
+
+        // Check if the intermediate airport is already in the list
+        for (SanBayTrungGian sbtg : sanBayTrungGianTempList) {
+            if (sbtg.getMaSanBay().equals(maSanBay)) {
+                alert.errorMessage("Sân bay trung gian đã tồn tại trong danh sách.");
+                return;
+            }
+        }
         if (maSanBay == null) {
             alert.errorMessage("Không tìm thấy mã sân bay cho sân bay: " + sanBay);
             return;
@@ -183,14 +259,13 @@ public class ThemDuongBayController implements Initializable {
         sanBayTrungGian_tbview.getItems().addAll(sanBayTrungGianTempList);
     }
 
-
     public void addSBTG(String maDuongBay, String maSanBay, String thoiGianDung) {
 
         // Xác định thứ tự tiếp theo cho sân bay trung gian
         int thuTu = getNextThuTu(maDuongBay);
 
         // Chuyển đổi thời gian dừng thành định dạng INTERVAL
-        String interval = "INTERVAL '0 " + thoiGianDung + ":00' DAY TO SECOND";
+        String interval = "INTERVAL '0 " + thoiGianDung + "' DAY TO SECOND";
 
         // Lưu dữ liệu vào cơ sở dữ liệu với truy vấn động
         String sql = "INSERT INTO SANBAYTG (MaDuongBay, MaSanBay, ThuTu, ThoiGianDung) VALUES (?, ?, ?, " + interval + ")";
@@ -203,7 +278,6 @@ public class ThemDuongBayController implements Initializable {
                 // Thêm vào TableView nếu lưu thành công
                 SanBayTrungGian sbtg = new SanBayTrungGian(maDuongBay, maSanBay, thuTu, thoiGianDung);
                 sanBayTrungGian_tbview.getItems().add(sbtg);
-                alert.successMessage("Thêm sân bay trung gian thành công");
             } else {
                 alert.errorMessage("Thêm sân bay trung gian thất bại");
             }
@@ -248,7 +322,6 @@ public class ThemDuongBayController implements Initializable {
         return maSanBay;
     }
 
-
     @FXML
     void luuDuongBay(ActionEvent event) {
         String sanBayDi = sanBayDi_cbx.getSelectionModel().getSelectedItem();
@@ -263,6 +336,13 @@ public class ThemDuongBayController implements Initializable {
         if (tenDuongBay.isEmpty()) {
             alert.errorMessage("Vui lòng điền đầy đủ thông tin");
             return;
+        }
+
+        for (SanBayTrungGian sbtg : sanBayTrungGianTempList) {
+            if (sbtg.getMaSanBay().equals(getMaSanBay(sanBayDi)) || sbtg.getMaSanBay().equals(getMaSanBay(sanBayDen))) {
+                alert.errorMessage("Sân bay trung gian không được trùng với sân bay đi hoặc sân bay đến.");
+                return;
+            }
         }
 
         String sql = "INSERT INTO DUONGBAY(MaDuongBay, MaSanBayDi, MaSanBayDen, TenDuongBay, TrangThai) VALUES(?, ?, ?, ?, ?)";
@@ -300,7 +380,6 @@ public class ThemDuongBayController implements Initializable {
         }
     }
 
-
     private String generateMaDuongBay() {
         String maDuongBay = "DB001";
         CallableStatement callableStmt = null;
@@ -335,7 +414,6 @@ public class ThemDuongBayController implements Initializable {
         return tenVietTat;
     }
 
-
     private void updateTenDuongBay() {
         if (sanBayDi_cbx.getValue() != null && sanBayDen_cbx.getValue() != null) {
             String tenDuongBay = getTenVietTat(sanBayDi_cbx.getValue()) + "-" + getTenVietTat(sanBayDen_cbx.getValue());
@@ -350,5 +428,20 @@ public class ThemDuongBayController implements Initializable {
 
     public String getMaDuongBay() {
         return maDuongBay_txf.getText();
+    }
+
+    private String formatThoiGianDung(String thoiGianDung) {
+        try {
+            // Assuming thoiGianDung is in the format "HH:mm:ss"
+            String[] parts = thoiGianDung.split(":");
+            int hours = Integer.parseInt(parts[0]);
+            int minutes = Integer.parseInt(parts[1]);
+            int seconds = Integer.parseInt(parts[2]);
+            return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        } catch (Exception e) {
+            e.printStackTrace();
+            alert.errorMessage("Could not format thoiGianDung.");
+            return thoiGianDung;
+        }
     }
 }
