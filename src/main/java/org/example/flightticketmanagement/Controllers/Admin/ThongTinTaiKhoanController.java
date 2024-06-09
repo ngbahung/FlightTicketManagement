@@ -98,13 +98,6 @@ public class ThongTinTaiKhoanController implements Initializable {
             }
         } catch (SQLException e) {
             alert.errorMessage("Không kết nối được với database.");
-        } finally {
-            try {
-                if (result != null) result.close();
-                if (prepare != null) prepare.close();
-            } catch (SQLException e) {
-                alert.errorMessage("Không kết nối được với database.");
-            }
         }
     }
 
@@ -220,12 +213,6 @@ public class ThongTinTaiKhoanController implements Initializable {
             alert.successMessage("Thông tin đã được cập nhật thành công.");
         } catch (SQLException e) {
             alert.errorMessage("Không kết nối được với database.");
-        } finally {
-            try {
-                if (prepare != null) prepare.close();
-            } catch (SQLException e) {
-                alert.errorMessage("Không kết nối được với database.");
-            }
         }
     }
 

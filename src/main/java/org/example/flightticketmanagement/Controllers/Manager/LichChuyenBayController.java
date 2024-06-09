@@ -480,10 +480,32 @@ public class LichChuyenBayController implements Initializable {
             return "";
         }
         String[] parts = thoiGianBay.split(" ");
-        if (parts.length == 2 && "0".equals(parts[0])) {
-            return parts[1];
+        if (parts.length == 2) {
+            int days = Integer.parseInt(parts[0]);
+            String timePart = parts[1];
+            String[] timeComponents = timePart.split(":");
+
+            int hours = Integer.parseInt(timeComponents[0]);
+            int minutes = Integer.parseInt(timeComponents[1]);
+            int seconds = Integer.parseInt(timeComponents[2].split("\\.")[0]); // ignore milliseconds
+
+            StringBuilder formattedTime = new StringBuilder();
+
+            if (days > 0) {
+                formattedTime.append(days).append(" ngày ");
+            }
+            if (hours > 0) {
+                formattedTime.append(hours).append(" giờ ");
+            }
+            if (minutes > 0) {
+                formattedTime.append(minutes).append(" phút ");
+            }
+            if (seconds > 0) {
+                formattedTime.append(seconds).append(" giây");
+            }
+
+            return formattedTime.toString().trim();
         }
         return thoiGianBay;
     }
-
 }

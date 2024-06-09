@@ -167,14 +167,6 @@ public class QuyDinhController implements Initializable {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (result != null) result.close();
-                if (statement != null) statement.close();
-                if (connect != null) connect.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -233,14 +225,6 @@ public class QuyDinhController implements Initializable {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (result != null) result.close();
-                if (statement != null) statement.close();
-                if (connect != null) connect.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -302,13 +286,6 @@ public class QuyDinhController implements Initializable {
             } catch (SQLException e) {
                 e.printStackTrace();
                 alert.errorMessage("Lỗi khi đang cập nhật trạng thái sân bay. Vui lòng kiểm tra lại.");
-            } finally {
-                try {
-                    if (prepare != null) prepare.close();
-                    if (connect != null) connect.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }

@@ -510,3 +510,13 @@ BEGIN
     WHERE MaChuyenBay = :OLD.MaChuyenBay;
 END rf_VE_CT_HANGVE_delete_CHUYENBAY;
 /
+
+/* R17: cập nhật trạng thái đường bay khi cập nhật trạng thái sân bay */
+--DROP TRIGGER trg_update_trangthai_duongbay;
+CREATE OR REPLACE TRIGGER trg_update_trangthai_duongbay
+    AFTER UPDATE OF TrangThai ON SANBAY
+    FOR EACH ROW
+BEGIN
+    CapNhatTrangThaiDuongBay(:NEW.MaSanBay, :NEW.TrangThai);
+END;
+/

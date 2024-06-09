@@ -95,13 +95,6 @@ public class DangNhapController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
             loi_lbl.setText("Database connection error.");
-        } finally {
-            try {
-                if (prepare != null) prepare.close();
-                if (connect != null) connect.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 

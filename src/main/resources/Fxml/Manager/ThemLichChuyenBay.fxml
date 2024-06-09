@@ -65,8 +65,9 @@
       <MFXButton id="custom-2" buttonType="RAISED" depthLevel="LEVEL1" layoutX="185.0" layoutY="534.0" onAction="#xoaHangVe" prefHeight="42.0" prefWidth="118.0" text="Xóa hạng vé" fx:id="xoaHangVe_btn" />
       <TableView fx:id="sanBayTrungGian_tbview" layoutX="372.0" layoutY="318.0" prefHeight="169.0" prefWidth="338.0" styleClass="custom-tableview">
          <columns>
-            <TableColumn fx:id="stt_tbcl" editable="false" prefWidth="72.0" text="STT" />
-            <TableColumn fx:id="tenSBTG_tbcl" editable="false" minWidth="0.0" prefWidth="240.00006103515625" text="Tên sân bay trung gian" />
+            <TableColumn fx:id="stt_tbcl" editable="false" prefWidth="35.20001220703125" text="STT" />
+            <TableColumn fx:id="tenSBTG_tbcl" editable="false" minWidth="0.0" prefWidth="167.20001220703125" text="Tên sân bay trung gian" />
+            <TableColumn fx:id="thoiGianDung_tbcl" prefWidth="113.5999755859375" text="Thời gian dừng" />
          </columns>
       </TableView>
    </children>

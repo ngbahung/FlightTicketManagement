@@ -4,18 +4,20 @@
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="313.0" prefWidth="445.0" style="-fx-background-color: #ffffff;" stylesheets="@../../Styles/Admin/ThemHangVe.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.ThemDuongBayController">
+<AnchorPane prefHeight="508.0" prefWidth="515.0" style="-fx-background-color: #ffffff;" stylesheets="@../../Styles/Admin/LichChuyenBay.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.ThemDuongBayController">
    <children>
-      <GridPane hgap="20.0" layoutX="28.0" layoutY="66.0" prefHeight="171.0" prefWidth="381.0" vgap="10.0">
+      <GridPane hgap="20.0" layoutX="28.0" layoutY="66.0" prefHeight="171.0" prefWidth="461.0" styleClass="custom-gridpane" vgap="10.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="157.0" minWidth="10.0" prefWidth="119.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="206.0" minWidth="10.0" prefWidth="205.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="157.0" minWidth="10.0" prefWidth="107.60002441406249" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="213.19997558593747" minWidth="10.0" prefWidth="213.19997558593747" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -25,19 +27,28 @@
         </rowConstraints>
          <children>
             <Label text="Mã đường bay:" />
-            <TextField fx:id="maDuongBay_txf" disable="true" editable="false" GridPane.columnIndex="1" />
+            <TextField fx:id="maDuongBay_txf" disable="true" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="214.0" GridPane.columnIndex="1" />
             <Label text="Sân bay đi:" GridPane.rowIndex="1" />
             <Label text="Sân bay đến:" GridPane.rowIndex="2" />
             <Label text="Tên đường bay:" GridPane.rowIndex="3" />
-            <TextField fx:id="tenDuongBay_txf" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <MFXComboBox fx:id="sanBayDi_cbx" floatMode="DISABLED" prefHeight="40.0" prefWidth="214.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <MFXComboBox fx:id="sanBayDen_cbx" floatMode="DISABLED" prefHeight="40.0" prefWidth="208.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="tenDuongBay_txf" disable="true" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="214.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <MFXComboBox fx:id="sanBayDi_cbx" floatMode="DISABLED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="214.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <MFXComboBox fx:id="sanBayDen_cbx" floatMode="DISABLED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="214.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
-      <Label layoutX="100.0" layoutY="22.0" styleClass="tittle" text="THÊM ĐƯỜNG BAY" />
-      <MFXButton fx:id="luuDuongBay_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="176.0" layoutY="261.0" prefHeight="30.0" prefWidth="85.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css" text="Lưu">
+      <Label id="custom" layoutX="184.0" layoutY="22.0" styleClass="tittle" text="THÊM ĐƯỜNG BAY" />
+      <MFXButton id="custom_1" fx:id="luuDuongBay_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="207.0" layoutY="453.0" prefHeight="42.0" prefWidth="106.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css" text="Lưu">
          <graphic>
             <FontAwesomeIconView fill="WHITE" glyphName="SAVE" size="20" />
          </graphic></MFXButton>
+      <TableView fx:id="sanBayTrungGian_tbview" layoutX="31.0" layoutY="264.0" prefHeight="169.0" prefWidth="338.0" styleClass="custom-tableview">
+         <columns>
+            <TableColumn fx:id="stt_tbcl" editable="false" prefWidth="35.20001220703125" text="STT" />
+            <TableColumn fx:id="tenSBTG_tbcl" editable="false" minWidth="0.0" prefWidth="167.20001220703125" text="Tên sân bay trung gian" />
+            <TableColumn fx:id="thoiGianDung_tbcl" prefWidth="113.5999755859375" text="Thời gian dừng" />
+         </columns>
+      </TableView>
+      <MFXButton id="custom_2" fx:id="themSBTG_btn" buttonType="RAISED" depthLevel="LEVEL1" layoutX="381.0" layoutY="278.0" onAction="#moThemSanBayTrungGian" prefHeight="42.0" prefWidth="126.0" text="Thêm SBTG" />
+      <MFXButton id="custom_2" buttonType="RAISED" depthLevel="LEVEL1" layoutX="381.0" layoutY="341.0" onAction="#xoaSBTG" prefHeight="42.0" prefWidth="126.0" text="Xóa SBTG" fx:id="xoaSBTG_btn" />
    </children>
 </AnchorPane>

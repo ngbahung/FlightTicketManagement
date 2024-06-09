@@ -1,7 +1,10 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
 import io.github.palexdev.materialfx.controls.MFXComboBox;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 
 import java.net.URL;
@@ -12,10 +15,18 @@ import java.util.ResourceBundle;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
+import org.example.flightticketmanagement.Controllers.Manager.ThemHangVe_ChuyenBayController;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
+import org.example.flightticketmanagement.Models.SanBay;
+import org.example.flightticketmanagement.Models.SanBayTrungGian;
 
 public class ThemDuongBayController implements Initializable {
 
@@ -34,6 +45,51 @@ public class ThemDuongBayController implements Initializable {
     @FXML
     private TextField tenDuongBay_txf;
 
+    @FXML
+    private TableView<SanBayTrungGian> sanBayTrungGian_tbview;
+
+    @FXML
+    private TableColumn<SanBayTrungGian, Integer> stt_tbcl;
+
+    @FXML
+    private TableColumn<SanBayTrungGian, String> tenSBTG_tbcl;
+
+    @FXML
+    private MFXButton themSBTG_btn;
+
+    @FXML
+    private TableColumn<SanBayTrungGian, String> thoiGianDung_tbcl;
+
+    @FXML
+    private MFXButton xoaSBTG_btn;
+
+    @FXML
+    void moThemSanBayTrungGian(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Admin/ThemSBTG.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Thêm sân bay trung gian");
+            stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/Admin/logo.png"))));
+            stage.setScene(new Scene(root));
+
+            ThemSBTGController controller = loader.getController();
+            controller.setParentController(this);
+
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            alert.errorMessage("Could not load the ThemSBTG.fxml file.");
+        }
+    }
+
+    @FXML
+    void xoaSBTG(ActionEvent event) {
+
+    }
+
+
+
     private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
@@ -49,15 +105,18 @@ public class ThemDuongBayController implements Initializable {
         sanBayDi_cbx.getItems().addAll(sanBayList);
         sanBayDen_cbx.getItems().addAll(sanBayList);
 
+        // Initialize table columns
+        stt_tbcl.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getThuTu()).asObject());
+        tenSBTG_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenSanBayTrungGian(cellData.getValue().getMaSanBay())));
+        thoiGianDung_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getThoiGianDung()));
+
         sanBayDi_cbx.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
             String tenVietTatDi = getTenVietTat(newValue);
-            System.out.println("TenVietTat for SanBayDi: " + tenVietTatDi);
             updateTenDuongBay();
         });
 
         sanBayDen_cbx.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
             String tenVietTatDen = getTenVietTat(newValue);
-            System.out.println("TenVietTat for SanBayDen: " + tenVietTatDen);
             updateTenDuongBay();
         });
 
@@ -82,10 +141,113 @@ public class ThemDuongBayController implements Initializable {
         return sanBayList;
     }
 
+    public String getTenSanBayTrungGian(String maSanBay) {
+        String query = "SELECT TenSanBay FROM SanBay WHERE MaSanBay = ?";
+        try {
+            prepare = connect.prepareStatement(query);
+            prepare.setString(1, maSanBay);
+            result = prepare.executeQuery();
+            if (result.next()) {
+                return result.getString("TenSanBay");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Could not fetch airport name.");
+        }
+        return ""; // Trả về chuỗi rỗng nếu không tìm thấy tên sân bay
+    }
 
     public void setParentController(QuyDinhController parentController) {
         this.parentController = parentController;
     }
+
+    private List<SanBayTrungGian> sanBayTrungGianTempList = new ArrayList<>();
+
+    public void addSBTGTemp(String sanBay, String thoiGianDung) {
+        // Lấy mã sân bay từ tên sân bay
+        String maSanBay = getMaSanBay(sanBay);
+        if (maSanBay == null) {
+            alert.errorMessage("Không tìm thấy mã sân bay cho sân bay: " + sanBay);
+            return;
+        }
+
+        // Xác định thứ tự tiếp theo cho sân bay trung gian
+        int thuTu = sanBayTrungGianTempList.size() + 1;
+
+        // Tạo đối tượng SanBayTrungGian và thêm vào danh sách tạm thời
+        SanBayTrungGian sbtg = new SanBayTrungGian("", maSanBay, thuTu, thoiGianDung);
+        sanBayTrungGianTempList.add(sbtg);
+
+        // Cập nhật TableView
+        sanBayTrungGian_tbview.getItems().clear();
+        sanBayTrungGian_tbview.getItems().addAll(sanBayTrungGianTempList);
+    }
+
+
+    public void addSBTG(String maDuongBay, String maSanBay, String thoiGianDung) {
+
+        // Xác định thứ tự tiếp theo cho sân bay trung gian
+        int thuTu = getNextThuTu(maDuongBay);
+
+        // Chuyển đổi thời gian dừng thành định dạng INTERVAL
+        String interval = "INTERVAL '0 " + thoiGianDung + ":00' DAY TO SECOND";
+
+        // Lưu dữ liệu vào cơ sở dữ liệu với truy vấn động
+        String sql = "INSERT INTO SANBAYTG (MaDuongBay, MaSanBay, ThuTu, ThoiGianDung) VALUES (?, ?, ?, " + interval + ")";
+        try (Connection connect = DatabaseDriver.getConnection();
+             Statement statement = connect.createStatement()) {
+            String formattedSQL = String.format("INSERT INTO SANBAYTG (MaDuongBay, MaSanBay, ThuTu, ThoiGianDung) VALUES ('%s', '%s', %d, %s)",
+                    maDuongBay, maSanBay, thuTu, interval);
+            int rowsAffected = statement.executeUpdate(formattedSQL);
+            if (rowsAffected > 0) {
+                // Thêm vào TableView nếu lưu thành công
+                SanBayTrungGian sbtg = new SanBayTrungGian(maDuongBay, maSanBay, thuTu, thoiGianDung);
+                sanBayTrungGian_tbview.getItems().add(sbtg);
+                alert.successMessage("Thêm sân bay trung gian thành công");
+            } else {
+                alert.errorMessage("Thêm sân bay trung gian thất bại");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Lỗi khi thêm sân bay trung gian: " + e.getMessage());
+        }
+    }
+
+    private int getNextThuTu(String maDuongBay) {
+        String sql = "SELECT MAX(ThuTu) AS MaxThuTu FROM SANBAYTG WHERE MaDuongBay = ?";
+        int thuTu = 1; // Mặc định là 1 nếu MaDuongBay chưa tồn tại
+        try (Connection connect = DatabaseDriver.getConnection();
+             PreparedStatement prepare = connect.prepareStatement(sql)) {
+            prepare.setString(1, maDuongBay);
+            try (ResultSet result = prepare.executeQuery()) {
+                if (result.next() && result.getInt("MaxThuTu") > 0) {
+                    thuTu = result.getInt("MaxThuTu") + 1;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Lỗi khi xác định thứ tự: " + e.getMessage());
+        }
+        return thuTu;
+    }
+
+    private String getMaSanBay(String tenSanBay) {
+        String maSanBay = null;
+        String sql = "SELECT MaSanBay FROM SANBAY WHERE TenSanBay = ?";
+        try (Connection connect = DatabaseDriver.getConnection();
+             PreparedStatement prepare = connect.prepareStatement(sql)) {
+            prepare.setString(1, tenSanBay);
+            try (ResultSet result = prepare.executeQuery()) {
+                if (result.next()) {
+                    maSanBay = result.getString("MaSanBay");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return maSanBay;
+    }
+
 
     @FXML
     void luuDuongBay(ActionEvent event) {
@@ -120,6 +282,12 @@ public class ThemDuongBayController implements Initializable {
             int rowsAffected = prepare.executeUpdate();
             if (rowsAffected > 0) {
                 alert.successMessage("Thêm đường bay thành công");
+
+                // Lưu các sân bay trung gian từ danh sách tạm vào cơ sở dữ liệu
+                for (SanBayTrungGian sbtg : sanBayTrungGianTempList) {
+                    addSBTG(maDuongBay, sbtg.getMaSanBay(), sbtg.getThoiGianDung());
+                }
+
                 if (parentController != null) {
                     parentController.refreshDuongBayData();
                 }
@@ -129,17 +297,9 @@ public class ThemDuongBayController implements Initializable {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (prepare != null) prepare.close();
-                if (connect != null && !connect.isClosed()) connect.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
-
-
     }
+
 
     private String generateMaDuongBay() {
         String maDuongBay = "DB001";
@@ -158,8 +318,6 @@ public class ThemDuongBayController implements Initializable {
         return maDuongBay;
     }
 
-
-
     private String getTenVietTat(String tenSanBay) {
         String tenVietTat = null;
         String sql = "SELECT TenVietTat FROM SANBAY WHERE TenSanBay = ?";
@@ -177,32 +335,6 @@ public class ThemDuongBayController implements Initializable {
         return tenVietTat;
     }
 
-    // Method to fetch MaSanBay from SANBAY table
-    private String getMaSanBay(String tenSanBay) {
-        String maSanBay = null;
-        String sql = "SELECT MaSanBay FROM SANBAY WHERE TenSanBay = ?";
-        try {
-            connect = DatabaseDriver.getConnection();
-            prepare = connect.prepareStatement(sql);
-            prepare.setString(1, tenSanBay);
-            result = prepare.executeQuery();
-            if (result.next()) {
-                maSanBay = result.getString("MaSanBay");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (result != null) result.close();
-                if (prepare != null) prepare.close();
-                if (connect != null && !connect.isClosed()) connect.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return maSanBay;
-    }
-
 
     private void updateTenDuongBay() {
         if (sanBayDi_cbx.getValue() != null && sanBayDen_cbx.getValue() != null) {
@@ -214,5 +346,9 @@ public class ThemDuongBayController implements Initializable {
     private void closeWindow() {
         Stage stage = (Stage) luuDuongBay_btn.getScene().getWindow();
         stage.close();
+    }
+
+    public String getMaDuongBay() {
+        return maDuongBay_txf.getText();
     }
 }

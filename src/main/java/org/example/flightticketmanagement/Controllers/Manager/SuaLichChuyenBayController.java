@@ -15,10 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
-import org.example.flightticketmanagement.Models.CT_HangVe;
-import org.example.flightticketmanagement.Models.ChuyenBay;
-import org.example.flightticketmanagement.Models.DatabaseDriver;
-import org.example.flightticketmanagement.Models.SanBayTrungGian;
+import org.example.flightticketmanagement.Models.*;
 
 import java.math.BigDecimal;
 import java.net.URL;
@@ -30,6 +27,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class SuaLichChuyenBayController implements Initializable {
@@ -85,6 +84,9 @@ public class SuaLichChuyenBayController implements Initializable {
 
     @FXML
     private TableColumn<SanBayTrungGian, String> tenSBTG_tbcl;
+
+    @FXML
+    private TableColumn<SanBayTrungGian, String> thoiGianDung_tbcl;
 
     @FXML
     private TableView<SanBayTrungGian> sanBayTrungGian_tbview;
@@ -329,15 +331,15 @@ public class SuaLichChuyenBayController implements Initializable {
         ngayBay_datepicker.valueProperty().addListener((observable, oldValue, newValue) -> updateArrivalDateTime());
         gioBay_combobox.valueProperty().addListener((observable, oldValue, newValue) -> updateArrivalDateTime());
         thoiGianBay_txtfld.textProperty().addListener((observable, oldValue, newValue) -> updateArrivalDateTime());
-
-        stt_tbcl.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getThuTu()).asObject());
-        tenSBTG_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenSanBayTrungGian(cellData.getValue().getMaSanBay())));
-
-        sanBayTrungGian_tbview.setItems(FXCollections.observableArrayList());
         gioBay_combobox.setOnMouseClicked(event -> {
             populateTimeComboBox(gioBay_combobox);
         });
-
+        stt_tbcl.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getThuTu()).asObject());
+        tenSBTG_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenSanBayTrungGian(cellData.getValue().getMaSanBay())));
+        thoiGianDung_tbcl.setCellValueFactory(cellData -> {
+            String thoiGianDung = cellData.getValue().getThoiGianDung();
+            return new SimpleStringProperty(formatThoiGianDung(thoiGianDung));
+        });
     }
 
     public void setData(ChuyenBay chuyenBay) {
@@ -360,12 +362,8 @@ public class SuaLichChuyenBayController implements Initializable {
             ngayBay_datepicker.setValue(null);
             gioBay_combobox.getItems().clear();
         }
-
         gia_txtfld.setText(String.valueOf(chuyenBay.getGiaVe()));
-
         xuLyLuaChonDuongBay();
-
-        // Hiển thị thông tin hạng vé trên tableview
         displayHangVe(chuyenBay.getMaChuyenBay());
     }
 
@@ -417,22 +415,41 @@ public class SuaLichChuyenBayController implements Initializable {
     }
 
     private void populateSanBayTrungGianTableView(String maDuongBay) {
+        String query = "SELECT sbt.MaSanBay, sb.TenSanBay, sbt.ThuTu, sbt.ThoiGianDung " +
+                "FROM SANBAYTG sbt " +
+                "JOIN SanBay sb ON sbt.MaSanBay = sb.MaSanBay " +
+                "WHERE sbt.MaDuongBay = ? " +
+                "ORDER BY sbt.ThuTu";
         ObservableList<SanBayTrungGian> sanBayTrungGianList = FXCollections.observableArrayList();
-        String query = "SELECT ThuTu, MaSanBay FROM SANBAYTG WHERE MaDuongBay = ?";
+        Map<String, SanBay> sanBayMap = new HashMap<>();
+
         try {
             prepare = connect.prepareStatement(query);
             prepare.setString(1, maDuongBay);
             result = prepare.executeQuery();
+
             while (result.next()) {
-                int stt = result.getInt("ThuTu");
                 String maSanBay = result.getString("MaSanBay");
-                String tenSanBay = getTenSanBayTrungGian(maSanBay);
-                sanBayTrungGianList.add(new SanBayTrungGian(maDuongBay, maSanBay, stt, tenSanBay));
+                String tenSanBay = result.getString("TenSanBay");
+                int thuTu = result.getInt("ThuTu");
+                String thoiGianDung = result.getString("ThoiGianDung");
+
+                // Create or get SanBay object
+                SanBay sanBay = sanBayMap.get(maSanBay);
+                if (sanBay == null) {
+                    sanBay = new SanBay(maSanBay, tenSanBay, null, null, null, null); // Only essential fields
+                    sanBayMap.put(maSanBay, sanBay);
+                }
+
+                // Create SanBayTrungGian object
+                SanBayTrungGian sanBayTrungGian = new SanBayTrungGian(maDuongBay, maSanBay, thuTu, thoiGianDung);
+                sanBayTrungGianList.add(sanBayTrungGian);
             }
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Could not fetch intermediate airports.");
         }
+
         sanBayTrungGian_tbview.setItems(sanBayTrungGianList);
     }
 
@@ -454,6 +471,40 @@ public class SuaLichChuyenBayController implements Initializable {
             return String.format("%d ngày %d giờ %d phút %d giây", flightDays, flightHours, flightMinutes, flightSeconds);
         }
         return null;
+    }
+
+    private String formatThoiGianDung(String thoiGianDung) {
+        if (thoiGianDung == null || thoiGianDung.isEmpty()) {
+            return "";
+        }
+        String[] parts = thoiGianDung.split(" ");
+        if (parts.length == 2) {
+            int days = Integer.parseInt(parts[0]);
+            String timePart = parts[1];
+            String[] timeComponents = timePart.split(":");
+
+            int hours = Integer.parseInt(timeComponents[0]);
+            int minutes = Integer.parseInt(timeComponents[1]);
+            int seconds = Integer.parseInt(timeComponents[2].split("\\.")[0]); // ignore milliseconds
+
+            StringBuilder formattedTime = new StringBuilder();
+
+            if (days > 0) {
+                formattedTime.append(days).append(" ngày ");
+            }
+            if (hours > 0) {
+                formattedTime.append(hours).append(" giờ ");
+            }
+            if (minutes > 0) {
+                formattedTime.append(minutes).append(" phút ");
+            }
+            if (seconds > 0) {
+                formattedTime.append(seconds).append(" giây");
+            }
+
+            return formattedTime.toString().trim();
+        }
+        return thoiGianDung;
     }
 
     private void updateArrivalDateTime() {

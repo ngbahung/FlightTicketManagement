@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
 import org.example.flightticketmanagement.Models.CT_HangVe;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
+import org.example.flightticketmanagement.Models.SanBay;
 import org.example.flightticketmanagement.Models.SanBayTrungGian;
 
 import java.math.BigDecimal;
@@ -28,9 +29,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ThemLichChuyenBayController implements Initializable {
     @FXML
@@ -42,6 +41,10 @@ public class ThemLichChuyenBayController implements Initializable {
     @FXML
 
     private TableColumn<SanBayTrungGian, String> tenSBTG_tbcl;
+
+    @FXML
+    private TableColumn<SanBayTrungGian, String> thoiGianDung_tbcl;
+
 
     @FXML
     private TableView<SanBayTrungGian> sanBayTrungGian_tbview;
@@ -338,29 +341,53 @@ public class ThemLichChuyenBayController implements Initializable {
 
         stt_tbcl.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getThuTu()).asObject());
         tenSBTG_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenSanBayTrungGian(cellData.getValue().getMaSanBay())));
+        // Initialize the thoiGianDung_tbcl column with formatted time
+        thoiGianDung_tbcl.setCellValueFactory(cellData -> {
+            String thoiGianDung = cellData.getValue().getThoiGianDung();
+            return new SimpleStringProperty(formatThoiGianDung(thoiGianDung));
+        });
 
-        sanBayTrungGian_tbview.setItems(FXCollections.observableArrayList());
     }
 
     private void populateSanBayTrungGianTableView(String maDuongBay) {
+        String query = "SELECT sbt.MaSanBay, sb.TenSanBay, sbt.ThuTu, sbt.ThoiGianDung " +
+                "FROM SANBAYTG sbt " +
+                "JOIN SanBay sb ON sbt.MaSanBay = sb.MaSanBay " +
+                "WHERE sbt.MaDuongBay = ? " +
+                "ORDER BY sbt.ThuTu";
         ObservableList<SanBayTrungGian> sanBayTrungGianList = FXCollections.observableArrayList();
-        String query = "SELECT ThuTu, MaSanBay FROM SANBAYTG WHERE MaDuongBay = ?";
+        Map<String, SanBay> sanBayMap = new HashMap<>();
+
         try {
             prepare = connect.prepareStatement(query);
             prepare.setString(1, maDuongBay);
             result = prepare.executeQuery();
+
             while (result.next()) {
-                int stt = result.getInt("ThuTu");
                 String maSanBay = result.getString("MaSanBay");
-                String tenSanBay = getTenSanBayTrungGian(maSanBay);
-                sanBayTrungGianList.add(new SanBayTrungGian(maDuongBay, maSanBay, stt, tenSanBay));
+                String tenSanBay = result.getString("TenSanBay");
+                int thuTu = result.getInt("ThuTu");
+                String thoiGianDung = result.getString("ThoiGianDung");
+
+                // Create or get SanBay object
+                SanBay sanBay = sanBayMap.get(maSanBay);
+                if (sanBay == null) {
+                    sanBay = new SanBay(maSanBay, tenSanBay, null, null, null, null); // Only essential fields
+                    sanBayMap.put(maSanBay, sanBay);
+                }
+
+                // Create SanBayTrungGian object
+                SanBayTrungGian sanBayTrungGian = new SanBayTrungGian(maDuongBay, maSanBay, thuTu, thoiGianDung);
+                sanBayTrungGianList.add(sanBayTrungGian);
             }
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Could not fetch intermediate airports.");
         }
+
         sanBayTrungGian_tbview.setItems(sanBayTrungGianList);
     }
+
 
     private String formatFlightTime(String thoiGianBay) {
         if (thoiGianBay != null) {
@@ -381,6 +408,41 @@ public class ThemLichChuyenBayController implements Initializable {
         }
         return null;
     }
+
+    private String formatThoiGianDung(String thoiGianDung) {
+        if (thoiGianDung == null || thoiGianDung.isEmpty()) {
+            return "";
+        }
+        String[] parts = thoiGianDung.split(" ");
+        if (parts.length == 2) {
+            int days = Integer.parseInt(parts[0]);
+            String timePart = parts[1];
+            String[] timeComponents = timePart.split(":");
+
+            int hours = Integer.parseInt(timeComponents[0]);
+            int minutes = Integer.parseInt(timeComponents[1]);
+            int seconds = Integer.parseInt(timeComponents[2].split("\\.")[0]); // ignore milliseconds
+
+            StringBuilder formattedTime = new StringBuilder();
+
+            if (days > 0) {
+                formattedTime.append(days).append(" ngày ");
+            }
+            if (hours > 0) {
+                formattedTime.append(hours).append(" giờ ");
+            }
+            if (minutes > 0) {
+                formattedTime.append(minutes).append(" phút ");
+            }
+            if (seconds > 0) {
+                formattedTime.append(seconds).append(" giây");
+            }
+
+            return formattedTime.toString().trim();
+        }
+        return thoiGianDung;
+    }
+
 
     private void updateArrivalDateTime() {
         if (ngayBay_datepicker.getValue() == null || gioBay_combobox.getValue() == null || thoiGianBay_txtfld.getText().isEmpty()) {

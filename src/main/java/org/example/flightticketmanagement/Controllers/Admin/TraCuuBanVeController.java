@@ -219,13 +219,6 @@ public class TraCuuBanVeController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Error occurred while loading data from the database.");
-        } finally {
-            try {
-                if (result != null) result.close();
-                if (prepare != null) prepare.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 

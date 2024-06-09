@@ -115,17 +115,6 @@ public class ThemPhanQuyenController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Không thêm được tài khoản. Vui lòng kiểm tra lại.");
-        } finally {
-            try {
-                if (prepare != null) {
-                    prepare.close();
-                }
-                if (connect != null && !connect.isClosed()) {
-                    connect.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -175,14 +164,6 @@ public class ThemPhanQuyenController implements Initializable {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (tempResult != null) tempResult.close();
-                if (tempPrepare != null) tempPrepare.close();
-                if (tempConnect != null && !tempConnect.isClosed()) tempConnect.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return maTaiKhoan;
     }

@@ -184,16 +184,6 @@
     -fx-padding: 0;
     -fx-font-family: Inter;
 }
-
-/*!* Tùy chỉnh các text field trong GridPane *!*/
-/*.custom-gridpane .text-field {*/
-/*    -fx-font-size: 12px;*/
-/*    -fx-border-color: #cccccc;*/
-/*    -fx-border-width: 1;*/
-/*    -fx-border-radius: 5;*/
-/*    -fx-padding: 0;*/
-/*}*/
-
 /* Tùy chỉnh AnchorPane */
 
 .custom-anchorpane {

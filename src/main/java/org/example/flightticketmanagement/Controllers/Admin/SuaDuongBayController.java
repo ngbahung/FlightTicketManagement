@@ -87,13 +87,11 @@ public class SuaDuongBayController implements Initializable {
 
         sanBayDi_cbx.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
             String tenVietTatDi = getTenVietTat(newValue);
-            System.out.println("TenVietTat for SanBayDi: " + tenVietTatDi);
             updateTenDuongBay();
         });
 
         sanBayDen_cbx.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
             String tenVietTatDen = getTenVietTat(newValue);
-            System.out.println("TenVietTat for SanBayDen: " + tenVietTatDen);
             updateTenDuongBay();
         });
 
@@ -146,14 +144,6 @@ public class SuaDuongBayController implements Initializable {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (result != null) result.close();
-                if (prepare != null) prepare.close();
-                if (connect != null && !connect.isClosed()) connect.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return maSanBay;
     }
