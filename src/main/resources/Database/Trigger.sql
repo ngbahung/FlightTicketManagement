@@ -514,21 +514,7 @@ CREATE OR REPLACE TRIGGER trg_update_trangthai_duongbay
     AFTER UPDATE OF TrangThai ON SANBAY
     FOR EACH ROW
 BEGIN
-    IF :NEW.TrangThai = 0 THEN
-        -- Update DUONGBAY where MaSanBayDen matches the updated MaSanBay
-        UPDATE DUONGBAY
-        SET TrangThai = 0
-        WHERE MaSanBayDen = :OLD.MaSanBay;
-        OR MaSanBayDi = :OLD.MaSanBay;
-
-        -- Update DUONGBAY where MaDuongBay matches MaDuongBay in SANBAYTG and MaSanBay in SANBAYTG matches the updated MaSanBay
-        UPDATE DUONGBAY
-        SET TrangThai = 0
-        WHERE MaDuongBay IN (
-            SELECT MaDuongBay
-            FROM SANBAYTG
-            WHERE MaSanBay = :OLD.MaSanBay
-        );
-    END IF;
+    CapNhatTrangThaiDuongBay(:NEW.MaSanBay, :NEW.TrangThai);
 END;
 /
+
