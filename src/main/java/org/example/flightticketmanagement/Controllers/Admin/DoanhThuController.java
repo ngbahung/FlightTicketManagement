@@ -101,8 +101,8 @@ public class DoanhThuController implements Initializable {
 
     @Subscribe
     public void handleUpdateData(Object e) {
-        DTNam_LoadData();
         DTThang_LoadData();
+        DTNam_LoadData();
     }
 
     public void InBaoCaoNam() {
@@ -175,8 +175,6 @@ public class DoanhThuController implements Initializable {
             alert.errorMessage("Error occurred while loading data from the database.");
         }
     }
-
-
 
     public void DTNam_LoadTongDT() {
         if (dtNam_cbbox_namSelection.getSelectionModel().isEmpty()) {
@@ -320,7 +318,6 @@ public class DoanhThuController implements Initializable {
             alert.errorMessage("Error occurred while loading data from the database.");
         }
     }
-
 
     public void DTThang_LoadTongDT() {
         if (dtThang_cbbox_namSelection.getSelectionModel().isEmpty()) {
