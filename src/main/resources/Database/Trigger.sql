@@ -536,7 +536,7 @@ BEGIN
             WHERE MaSanBay = :OLD.MaSanBay
         );
     END IF;
-
+END;
 /* R18: kiểm tra trước khi cập nhật trạng thái đường bay hoạt động */
 --DROP TRIGGER trg_check_duongbay_status;
 CREATE OR REPLACE TRIGGER trg_check_duongbay_status
