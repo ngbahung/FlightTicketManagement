@@ -79,30 +79,6 @@ public class ThemSBTG_SuaController implements Initializable{
         stage.close();
     }
 
-
-    private SanBay getSanBayByName(String tenSanBay) {
-        String sql = "SELECT * FROM SANBAY WHERE TenSanBay = ?";
-        try (Connection connect = DatabaseDriver.getConnection();
-             PreparedStatement prepare = connect.prepareStatement(sql)) {
-            prepare.setString(1, tenSanBay);
-            try (ResultSet result = prepare.executeQuery()) {
-                if (result.next()) {
-                    return new SanBay(
-                            result.getString("MaSanBay"),
-                            result.getString("TenSanBay"),
-                            result.getString("TenVietTat"),
-                            result.getString("DiaChi"),
-                            result.getInt("TrangThai"),
-                            result.getInt("SoThuTu")
-                    );
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     @FXML
     private MFXComboBox<String> thoiGianDung_cbb;
 

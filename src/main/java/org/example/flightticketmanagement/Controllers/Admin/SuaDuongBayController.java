@@ -208,7 +208,6 @@ public class SuaDuongBayController implements Initializable {
         }
     }
 
-
     private void reorderSBTGAfterDeletion(String maDuongBay) {
         for (int i = 0; i < sanBayTrungGianTempList.size(); i++) {
             SanBayTrungGian sbtg = sanBayTrungGianTempList.get(i);
@@ -230,9 +229,7 @@ public class SuaDuongBayController implements Initializable {
             alert.errorMessage("Lỗi khi cập nhật thứ tự sân bay trung gian: " + e.getMessage());
         }
     }
-
-
-
+    
     private List<SanBayTrungGian> sanBayTrungGianTempList = new ArrayList<>();
 
     @Override
