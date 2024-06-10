@@ -10,6 +10,7 @@ Bước 4:
 Bước 5:
     chạy insert dữ liệu ( TRỪ CT_DATVE VÌ ĐỂ UPDATE DOANHTHU)
 Bước 6:
+    [TRIGGER VỚI PROCEDURE CHẠY TỪNG CÁI ĐỂ TRÁNH LỖI XẢY RA]
     CHẠY HẾT PROC
 Bước 7:
     CHẠY HẾT TRIGGER

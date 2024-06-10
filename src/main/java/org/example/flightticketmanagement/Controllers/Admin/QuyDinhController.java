@@ -394,6 +394,10 @@ public class QuyDinhController implements Initializable {
         SortedList<SanBay> sortedData = new SortedList<>(filteredSanBayData);
         sortedData.comparatorProperty().bind(sanbay_tbv.comparatorProperty());
         sanbay_tbv.setItems(sortedData);
+
+        if (sortedData.isEmpty()) {
+            alert.errorMessage("Không tìm thấy dữ liệu phù hợp với từ khóa.");
+        }
     }
 
     @FXML
@@ -411,6 +415,10 @@ public class QuyDinhController implements Initializable {
         SortedList<HangVe> sortedData = new SortedList<>(filteredHangVeData);
         sortedData.comparatorProperty().bind(hangve_tbv.comparatorProperty());
         hangve_tbv.setItems(sortedData);
+
+        if (sortedData.isEmpty()) {
+            alert.errorMessage("Không tìm thấy dữ liệu phù hợp với từ khóa.");
+        }
     }
 
     @FXML
@@ -430,6 +438,10 @@ public class QuyDinhController implements Initializable {
         SortedList<DuongBay> sortedData = new SortedList<>(filteredDuongBayData);
         sortedData.comparatorProperty().bind(duongBay_tbv.comparatorProperty());
         duongBay_tbv.setItems(sortedData);
+
+        if (sortedData.isEmpty()) {
+            alert.errorMessage("Không tìm thấy dữ liệu phù hợp với từ khóa.");
+        }
     }
 
     @FXML
