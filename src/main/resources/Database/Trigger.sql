@@ -510,11 +510,7 @@ BEGIN
 END rf_VE_CT_HANGVE_delete_CHUYENBAY;
 /
 
-<<<<<<< HEAD
 /* R17: cập nhật trạng thái đường bay khi cập nhật trạng thái sân bay ngưng hoạt động */
-=======
-/* R17: cập nhật trạng thái đường bay khi cập nhật trạng thái sân bay ngưng hoạt động */ 
->>>>>>> 1745949b63b20392f6e82f63d9191665beb3edbc
 --DROP TRIGGER trg_update_trangthai_duongbay;
 CREATE OR REPLACE TRIGGER trg_update_trangthai_duongbay
     AFTER UPDATE OF TrangThai ON SANBAY
