@@ -8,16 +8,23 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
+import org.example.flightticketmanagement.Controllers.Manager.ThemLichChuyenBayController;
 import org.example.flightticketmanagement.Models.CT_DatVe;
 import org.example.flightticketmanagement.Models.DatabaseDriver;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -204,7 +211,6 @@ public class LichSuDatVeController implements Initializable {
         }
     }
 
-
     @FXML
     void cancelTicketOrReservation() {
         CT_DatVe selectedVeDaDat = veDaDat_tbview.getSelectionModel().getSelectedItem();
@@ -349,6 +355,22 @@ public class LichSuDatVeController implements Initializable {
         ReportController report = new ReportController();
         report.PrintVe(maVe, tenKhachHang,  SDT,  maGhe,  hangVe,  giaVe,  sanBayDi,  sanBayDen,  ngayBay,  gioBay);
         // Thực hiện các thao tác cần thiết với các giá trị này, ví dụ: in ra console hoặc thực hiện các xử lý khác
+    }
+
+    @FXML
+    void xemVeDaHuy(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/Admin/VeHuy.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/Admin/logo.png"))));
+            stage.setTitle("Xem vé đã hủy");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            alert.errorMessage("Không thể mở trang mới.");
+        }
     }
 
     private Connection connect;

@@ -297,8 +297,6 @@ public class ManHinhDatVeController implements Initializable {
                 cs.setFloat(5, giaTien);
 
                 cs.execute();
-
-                System.out.println("Ticket saved successfully.");
             } catch (SQLException e) {
                 e.printStackTrace();
                 alert.errorMessage("Error occurred while saving ticket to the database.");

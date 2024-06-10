@@ -1,5 +1,6 @@
 package org.example.flightticketmanagement.Controllers.Admin;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -37,8 +38,8 @@ public class QuyDinhController implements Initializable {
     @FXML
     private TableColumn<?, ?> idsanbay_col;
 
-    @FXML
-    private TextField maxsbtg_txf;
+//    @FXML
+//    private TextField maxsbtg_txf;
 
     @FXML
     private TextField maxtgdung_tfx;
@@ -121,6 +122,9 @@ public class QuyDinhController implements Initializable {
     @FXML
     private Button changeDuongBayStatus_btn;
 
+    @FXML
+    private TableColumn<DuongBay, String> diemDung_tbcl;
+
 
     private Connection connect;
     private PreparedStatement prepare;
@@ -192,14 +196,6 @@ public class QuyDinhController implements Initializable {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (result != null) result.close();
-                if (statement != null) statement.close();
-                if (connect != null) connect.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -258,14 +254,6 @@ public class QuyDinhController implements Initializable {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (result != null) result.close();
-                if (statement != null) statement.close();
-                if (connect != null) connect.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -346,13 +334,6 @@ public class QuyDinhController implements Initializable {
             } catch (SQLException e) {
                 e.printStackTrace();
                 alert.errorMessage("Lỗi khi đang cập nhật trạng thái sân bay. Vui lòng kiểm tra lại.");
-            } finally {
-                try {
-                    if (prepare != null) prepare.close();
-                    if (connect != null) connect.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }
@@ -413,6 +394,10 @@ public class QuyDinhController implements Initializable {
         SortedList<SanBay> sortedData = new SortedList<>(filteredSanBayData);
         sortedData.comparatorProperty().bind(sanbay_tbv.comparatorProperty());
         sanbay_tbv.setItems(sortedData);
+
+        if (sortedData.isEmpty()) {
+            alert.errorMessage("Không tìm thấy dữ liệu phù hợp với từ khóa.");
+        }
     }
 
     @FXML
@@ -430,6 +415,10 @@ public class QuyDinhController implements Initializable {
         SortedList<HangVe> sortedData = new SortedList<>(filteredHangVeData);
         sortedData.comparatorProperty().bind(hangve_tbv.comparatorProperty());
         hangve_tbv.setItems(sortedData);
+
+        if (sortedData.isEmpty()) {
+            alert.errorMessage("Không tìm thấy dữ liệu phù hợp với từ khóa.");
+        }
     }
 
     @FXML
@@ -449,6 +438,10 @@ public class QuyDinhController implements Initializable {
         SortedList<DuongBay> sortedData = new SortedList<>(filteredDuongBayData);
         sortedData.comparatorProperty().bind(duongBay_tbv.comparatorProperty());
         duongBay_tbv.setItems(sortedData);
+
+        if (sortedData.isEmpty()) {
+            alert.errorMessage("Không tìm thấy dữ liệu phù hợp với từ khóa.");
+        }
     }
 
     @FXML
@@ -490,13 +483,6 @@ public class QuyDinhController implements Initializable {
             } catch (SQLException e) {
                 e.printStackTrace();
                 alert.errorMessage("Lỗi khi đang cập nhật trạng thái hạng vé. Vui lòng kiểm tra lại.");
-            } finally {
-                try {
-                    if (prepare != null) prepare.close();
-                    if (connect != null) connect.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }
@@ -541,9 +527,9 @@ public class QuyDinhController implements Initializable {
                     case "TGBTT":
                         mintgbay_txf.setText(String.valueOf(giaTri));
                         break;
-                    case "SSBTGTMD":
-                        maxsbtg_txf.setText(String.valueOf(giaTri));
-                        break;
+//                    case "SSBTGTMD":
+//                        maxsbtg_txf.setText(String.valueOf(giaTri));
+//                        break;
                     case "TGDTT":
                         mintgdung_tfx.setText(String.valueOf(giaTri));
                         break;
@@ -561,17 +547,7 @@ public class QuyDinhController implements Initializable {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (result != null) result.close();
-                if (statement != null) statement.close();
-                if (connect != null) connect.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
-
-
     }
 
     @FXML
@@ -620,6 +596,7 @@ public class QuyDinhController implements Initializable {
                 int soThuTu = rowNum++;
 
                 DuongBay duongBay = new DuongBay(maDuongBay, tenSanBayDi, tenSanBayDen, tenDuongBay, soThuTu, trangThai);
+
                 duongBayList.add(duongBay);
             }
 
@@ -648,20 +625,20 @@ public class QuyDinhController implements Initializable {
                 }
             });
 
+            // Cập nhật cột diemDung_tbcl để hiển thị số điểm dừng
+            diemDung_tbcl.setCellValueFactory(cellData -> {
+                DuongBay duongBay = cellData.getValue();
+                String maDuongBay = duongBay.getMaDuongBay();
+                String soDiemDung = getSoDiemDung(maDuongBay); // Lấy số điểm dừng từ hàm getSoDiemDung
+                return new SimpleStringProperty(soDiemDung);
+            });
+
             duongBay_tbv.setItems(duongBayList);
             filteredDuongBayData = new FilteredList<>(duongBayList, p -> true);
             duongBay_tbv.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);  // Allow multiple selection
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (result != null) result.close();
-                if (statement != null) statement.close();
-                if (connect != null) connect.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -747,15 +724,22 @@ public class QuyDinhController implements Initializable {
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 alert.errorMessage("Lỗi khi đang cập nhật trạng thái đường bay. Vui lòng kiểm tra lại.");
-            } finally {
-                try {
-                    if (prepare != null) prepare.close();
-                    if (connect != null) connect.close();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
             }
         }
+    }
+
+    private String getSoDiemDung(String maDuongBay) {
+        String soDiemDung;
+        try (CallableStatement statement = connect.prepareCall("{call GET_SODIEMDUNG(?, ?)}")) {
+            statement.setString(1, maDuongBay);
+            statement.registerOutParameter(2, Types.INTEGER);
+            statement.execute();
+            soDiemDung = String.valueOf(statement.getInt(2));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            soDiemDung = "0";
+        }
+        return soDiemDung;
     }
 
 }

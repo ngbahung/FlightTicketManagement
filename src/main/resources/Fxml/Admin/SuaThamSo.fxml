@@ -6,13 +6,18 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="549.0" prefWidth="598.0" spacing="20.0" style="-fx-background-color: #ffffff;" stylesheets="@../../Styles/Admin/SuaThamSo.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.SuaThamSoQuyDinhController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="504.0" prefWidth="598.0" spacing="20.0" style="-fx-background-color: #ffffff;" stylesheets="@../../Styles/Admin/SuaThamSo.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.SuaThamSoQuyDinhController">
    <children>
-      <Label text="Số sân bay trung gian tối đa:" visible="false" VBox.vgrow="NEVER" />
-      <TextField fx:id="numSBTGmax_tf" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="89.0" visible="false" />
+      <HBox prefHeight="0.0" prefWidth="558.0">
+         <children>
+            <Label text="Số sân bay trung gian tối đa:" visible="false" />
+            <TextField fx:id="numSBTGmax_tf" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="54.0" visible="false" />
+         </children>
+      </HBox>
       <Label styleClass="title" text="SỬA THAM SỐ" />
       <GridPane hgap="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="270.0" prefWidth="438.0" styleClass="grid-pane">
          <columnConstraints>

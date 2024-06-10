@@ -160,13 +160,6 @@ public class PhanQuyenController implements Initializable {
             } catch (SQLException e) {
                 e.printStackTrace();
                 alert.errorMessage("Lỗi khi đang xóa tài khoản. Vui lòng kiểm tra lại.");
-            } finally {
-                try {
-                    if (prepare != null) prepare.close();
-                    if (connect != null) connect.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }

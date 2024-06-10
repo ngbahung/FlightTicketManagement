@@ -37,6 +37,9 @@ public class LichChuyenBayController implements Initializable {
     private TableView<ChuyenBay> chuyenBay_tableview;
 
     @FXML
+    private TableColumn<ChuyenBay, String> diemDung_tbcl;
+
+    @FXML
     private TableColumn<ChuyenBay, String> giaVe_tbcolumn;
 
     @FXML
@@ -291,12 +294,12 @@ public class LichChuyenBayController implements Initializable {
         }
 
         try {
-            PreparedStatement prepare = connect.prepareStatement(baseQuery);
+            prepare = connect.prepareStatement(baseQuery);
             for (int i = 0; i < parameters.size(); i++) {
                 prepare.setObject(i + 1, parameters.get(i));
             }
 
-            ResultSet result = prepare.executeQuery();
+            result = prepare.executeQuery();
 
             while (result.next()) {
                 ChuyenBay chuyenBay = new ChuyenBay(
@@ -320,9 +323,10 @@ public class LichChuyenBayController implements Initializable {
             });
 
             gioBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getThoiGianXuatPhat().toLocalTime().toString()));
+            diemDung_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getSoDiemDung(cellData.getValue().getMaDuongBay())));
             soGheTrong_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGheTrong(cellData.getValue().getMaChuyenBay()).toString()));
             soGhe_tbcoumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGhe(cellData.getValue().getMaChuyenBay()).toString()));
-            thoiGianBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(dinhDangKhoangThoiGian(Duration.between(cellData.getValue().getThoiGianXuatPhat(), cellData.getValue().getThoiGianKetThuc()))));
+            thoiGianBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getThoiGianBayByMaDuongBay(cellData.getValue().getMaDuongBay())));
             giaVe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getGiaVe())));
 
         } catch (SQLException e) {
@@ -332,7 +336,8 @@ public class LichChuyenBayController implements Initializable {
     }
 
     private void prepareAndExecuteQuery(String query, List<Object> parameters, TableView<ChuyenBay> tableView) throws SQLException {
-        try (PreparedStatement prepare = connect.prepareStatement(query)) {
+        try {
+            prepare = connect.prepareStatement(query);
             for (int i = 0; i < parameters.size(); i++) {
                 prepare.setObject(i + 1, parameters.get(i));
             }
@@ -350,6 +355,8 @@ public class LichChuyenBayController implements Initializable {
                     tableView.getItems().add(chuyenBay);
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -391,22 +398,22 @@ public class LichChuyenBayController implements Initializable {
             statement.setString(1, maDuongBay);
             statement.registerOutParameter(2, Types.VARCHAR);
             statement.execute();
-            return statement.getString(2);
-        } catch (Exception e) {
-            sanBayDi = "";
+            sanBayDi = statement.getString(2);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return sanBayDi;
     }
 
     private String getSanBayDen(String maDuongBay) {
-        String sanBayDen ="";
+        String sanBayDen = "";
         try (CallableStatement statement = connect.prepareCall("{call GET_SANBAYDEN(?, ?)}")) {
             statement.setString(1, maDuongBay);
             statement.registerOutParameter(2, Types.VARCHAR);
             statement.execute();
-            return statement.getString(2);
-        } catch (Exception e) {
-            sanBayDen = "";
+            sanBayDen = statement.getString(2);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return sanBayDen;
     }
@@ -417,8 +424,8 @@ public class LichChuyenBayController implements Initializable {
             statement.setString(1, maChuyenBay);
             statement.registerOutParameter(2, Types.INTEGER);
             statement.execute();
-            return statement.getInt(2);
-        } catch (Exception e) {
+            soGheTrong = statement.getInt(2);
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return soGheTrong;
@@ -430,31 +437,75 @@ public class LichChuyenBayController implements Initializable {
             statement.setString(1, maChuyenBay);
             statement.registerOutParameter(2, Types.INTEGER);
             statement.execute();
-            return statement.getInt(2);
-        } catch (Exception e) {
+            soGhe = statement.getInt(2);
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return soGhe;
     }
 
-    private String dinhDangKhoangThoiGian(Duration duration) {
-        long totalMinutes = duration.toMinutes();
-        long days = totalMinutes / (24 * 60);
-        long hours = (totalMinutes % (24 * 60)) / 60;
-        long minutes = totalMinutes % 60;
-
-        String formattedDuration = "";
-        if (days > 0) {
-            formattedDuration += days + " ngày ";
+    private String getSoDiemDung(String maDuongBay) {
+        String soDiemDung;
+        try (CallableStatement statement = connect.prepareCall("{call GET_SODIEMDUNG(?, ?)}")) {
+            statement.setString(1, maDuongBay);
+            statement.registerOutParameter(2, Types.INTEGER);
+            statement.execute();
+            soDiemDung = String.valueOf(statement.getInt(2));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            soDiemDung = "0";
         }
-        if (hours > 0) {
-            formattedDuration += hours + " giờ ";
-        }
-        if (minutes > 0) {
-            formattedDuration += minutes + " phút";
-        }
-
-        return formattedDuration.trim(); // Loại bỏ khoảng trắng thừa nếu có
+        return soDiemDung;
     }
 
+    private String getThoiGianBayByMaDuongBay(String maDuongBay) {
+        String query = "SELECT ThoiGianBay FROM DuongBay WHERE MaDuongBay = ?";
+        try (PreparedStatement prepare = connect.prepareStatement(query)) {
+            prepare.setString(1, maDuongBay);
+            try (ResultSet result = prepare.executeQuery()) {
+                if (result.next()) {
+                    String thoiGianBay = result.getString("ThoiGianBay");
+                    return formatThoiGianBay(thoiGianBay);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Could not fetch flight duration.");
+        }
+        return null;
+    }
+
+    private String formatThoiGianBay(String thoiGianBay) {
+        if (thoiGianBay == null || thoiGianBay.isEmpty()) {
+            return "";
+        }
+        String[] parts = thoiGianBay.split(" ");
+        if (parts.length == 2) {
+            int days = Integer.parseInt(parts[0]);
+            String timePart = parts[1];
+            String[] timeComponents = timePart.split(":");
+
+            int hours = Integer.parseInt(timeComponents[0]);
+            int minutes = Integer.parseInt(timeComponents[1]);
+            int seconds = Integer.parseInt(timeComponents[2].split("\\.")[0]); // ignore milliseconds
+
+            StringBuilder formattedTime = new StringBuilder();
+
+            if (days > 0) {
+                formattedTime.append(days).append(" ngày ");
+            }
+            if (hours > 0) {
+                formattedTime.append(hours).append(" giờ ");
+            }
+            if (minutes > 0) {
+                formattedTime.append(minutes).append(" phút ");
+            }
+            if (seconds > 0) {
+                formattedTime.append(seconds).append(" giây");
+            }
+
+            return formattedTime.toString().trim();
+        }
+        return thoiGianBay;
+    }
 }

@@ -16,13 +16,14 @@
    <TableView fx:id="chuyenBay_tableview" layoutX="12.0" layoutY="155.0" prefHeight="530.0" prefWidth="974.0" stylesheets="@../../Styles/Admin/LichChuyenBay.css">
       <columns>
          <TableColumn fx:id="maChuyenBay_tbcolumn" minWidth="7.0" prefWidth="100.0" text="Mã chuyến bay" />
-         <TableColumn fx:id="sanBayDi_tbcolumn" prefWidth="120.0" text="Sân bay đi" />
-         <TableColumn fx:id="sanBayDen_tbcolumn" prefWidth="120.0" text="Sân bay đến" />
-         <TableColumn fx:id="ngayBay_tbcolumn" prefWidth="100.0" text="Ngày bay" />
-         <TableColumn fx:id="gioBay_tbcolumn" prefWidth="90.0" text="Giờ bay" />
+         <TableColumn fx:id="sanBayDi_tbcolumn" prefWidth="110.0" text="Sân bay đi" />
+         <TableColumn fx:id="sanBayDen_tbcolumn" prefWidth="100.0" text="Sân bay đến" />
+         <TableColumn fx:id="ngayBay_tbcolumn" prefWidth="90.0" text="Ngày bay" />
+         <TableColumn fx:id="gioBay_tbcolumn" text="Giờ bay" />
+         <TableColumn fx:id="diemDung_tbcl" prefWidth="75.0" text="Điểm dừng" />
          <TableColumn fx:id="soGheTrong_tbcolumn" prefWidth="85.0" text="Số ghế trống" />
          <TableColumn fx:id="soGhe_tbcoumn" prefWidth="70.0" text="Số ghế" />
-         <TableColumn fx:id="thoiGianBay_tbcolumn" prefWidth="150.0" text="Thời gian bay" />
+         <TableColumn fx:id="thoiGianBay_tbcolumn" prefWidth="120.0" text="Thời gian bay" />
          <TableColumn fx:id="giaVe_tbcolumn" prefWidth="109.0" text="Giá vé" />
       </columns>
       <styleClass>

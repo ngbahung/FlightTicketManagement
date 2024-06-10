@@ -101,8 +101,8 @@ public class DoanhThuController implements Initializable {
 
     @Subscribe
     public void handleUpdateData(Object e) {
-        DTNam_LoadData();
         DTThang_LoadData();
+        DTNam_LoadData();
     }
 
     public void InBaoCaoNam() {
@@ -110,7 +110,7 @@ public class DoanhThuController implements Initializable {
             alert.errorMessage("Vui lòng thống kê doanh thu trước khi xuất báo cáo!");
             return;
         }
-        reportController.PrintReportBaoCaoNam(DTN_namBaoCao, listBaoCaoNam);
+        reportController.PrintReportBaoCaoNam(DTN_namBaoCao, listBaoCaoNam, tongDoanhThuNam);
     }
 
     public void DTNam_UpdateData(Integer namBaoCao, BigDecimal tongDoanhThuNam){
@@ -175,8 +175,6 @@ public class DoanhThuController implements Initializable {
             alert.errorMessage("Error occurred while loading data from the database.");
         }
     }
-
-
 
     public void DTNam_LoadTongDT() {
         if (dtNam_cbbox_namSelection.getSelectionModel().isEmpty()) {
@@ -265,7 +263,7 @@ public class DoanhThuController implements Initializable {
             alert.errorMessage("Vui lòng thống kê doanh thu trước khi xuất báo cáo!");
             return;
         }
-        reportController.PrintReportBaoCaoThang(DTT_namBaoCao, DTT_thangBaoCao, listBaoCaoThang);
+        reportController.PrintReportBaoCaoThang(DTT_namBaoCao, DTT_thangBaoCao, listBaoCaoThang, tongDoanhThuThang);
     }
 
     public void DTThang_UpDateData(Integer namBaoCao, Integer thangBaoCao, BigDecimal tongDoanhThuThang) {
@@ -320,7 +318,6 @@ public class DoanhThuController implements Initializable {
             alert.errorMessage("Error occurred while loading data from the database.");
         }
     }
-
 
     public void DTThang_LoadTongDT() {
         if (dtThang_cbbox_namSelection.getSelectionModel().isEmpty()) {

@@ -47,6 +47,9 @@ public class TraCuuBanVeController implements Initializable {
     private TableColumn<ChuyenBay, String> ngayBay_tbcolumn;
 
     @FXML
+    private TableColumn<ChuyenBay, String> diemDung_tbcl;
+
+    @FXML
     private MFXDatePicker ngay_datepicker;
 
     @FXML
@@ -193,6 +196,7 @@ public class TraCuuBanVeController implements Initializable {
             gioBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getThoiGianXuatPhat().toLocalTime().toString()));
             soGheTrong_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGheTrong(cellData.getValue().getMaChuyenBay()).toString()));
             soGhe_tbcoumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGhe(cellData.getValue().getMaChuyenBay()).toString()));
+            diemDung_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getSoDiemDung(cellData.getValue().getMaDuongBay())));
             giaVe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGiaVe().toString()));
             chiTiet_tbcl.setCellFactory(param -> new TableCell<>() {
                 private final Button detailButton = new Button("Xem chi tiết");
@@ -215,13 +219,6 @@ public class TraCuuBanVeController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Error occurred while loading data from the database.");
-        } finally {
-            try {
-                if (result != null) result.close();
-                if (prepare != null) prepare.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -329,6 +326,20 @@ public class TraCuuBanVeController implements Initializable {
             e.printStackTrace();
         }
         return soGhe;
+    }
+
+    private String getSoDiemDung(String maDuongBay) {
+        String soDiemDung = "";
+        try (CallableStatement statement = connect.prepareCall("{call GET_SODIEMDUNG(?, ?)}")) {
+            statement.setString(1, maDuongBay);
+            statement.registerOutParameter(2, Types.INTEGER);
+            statement.execute();
+            return String.valueOf(statement.getInt(2));
+        } catch (Exception e) {
+            e.printStackTrace();
+            soDiemDung = "0";
+        }
+        return soDiemDung;
     }
 
     private void showDetailWindow(ChuyenBay flight) {

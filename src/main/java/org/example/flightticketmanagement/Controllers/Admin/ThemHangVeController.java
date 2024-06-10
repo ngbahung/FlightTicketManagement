@@ -71,13 +71,6 @@ public class ThemHangVeController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Thêm sân bay thất bại");
-        } finally {
-            try {
-                if (prepare != null) prepare.close();
-                if (connect != null) connect.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 

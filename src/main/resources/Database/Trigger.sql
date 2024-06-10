@@ -1,4 +1,7 @@
 
+-----------------------------------------------------------------------------------------------
+--TRIGGER
+
 
 
 /* R1: Thời gian xuất phát của một chuyến bay phải nhỏ hơn thời gian kết thúc */
@@ -38,7 +41,6 @@ END;
 
 /* R4: Cập nhật doanh thu  tháng khi có thêm doanh thu chuyến bay.*/
 
-DROP TRIGGER Update_DoanhThu_Thang;
 CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang
     FOR INSERT OR update ON CT_DATVE
     COMPOUND TRIGGER
@@ -201,7 +203,7 @@ END BEFORE STATEMENT;
     END Update_DoanhThu_Thang;
 
 --trigger cho delete
---DROP TRIGGER Update_DoanhThu_Thang_delete;
+
 CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang_delete
     FOR delete ON CT_DATVE
     COMPOUND TRIGGER
@@ -332,7 +334,7 @@ END;
 
 /* R5: Cập nhật Số chuyến bay báo cáo năm khi có chuyến bay mới được update vào baocaothang.*/
 --DROP TRIGGER Update_DoanhThu_Nam;
-SHOW
+
 CREATE OR REPLACE TRIGGER Update_DoanhThu_Nam
     BEFORE INSERT ON baocaothang
     FOR EACH ROW
@@ -477,7 +479,8 @@ END;
 
 
 /* R16: xóa VE và CT_HANGVE liên quan đến chuyến bay đã xóa */
--- DROP TRIGGER rf_VE_CT_DATVE_delete_CHUYENBAY;
+
+--CHẠY PROCEDURE XONG MỚI CHẠY LẠI TRIGGER NÀY
 
 CREATE OR REPLACE TRIGGER rf_VE_CT_HANGVE_delete_CHUYENBAY
     before DELETE ON CHUYENBAY
@@ -507,3 +510,68 @@ BEGIN
     WHERE MaChuyenBay = :OLD.MaChuyenBay;
 END rf_VE_CT_HANGVE_delete_CHUYENBAY;
 /
+
+
+/* R17: cập nhật trạng thái đường bay khi cập nhật trạng thái sân bay ngưng hoạt động */
+--DROP TRIGGER trg_update_trangthai_duongbay;
+CREATE OR REPLACE TRIGGER trg_update_trangthai_duongbay
+    AFTER UPDATE OF TrangThai ON SANBAY
+    FOR EACH ROW
+BEGIN
+    IF :NEW.TrangThai = 0 THEN
+        -- Update DUONGBAY where MaSanBayDen matches the updated MaSanBay
+        UPDATE DUONGBAY
+        SET TrangThai = 0
+        WHERE MaSanBayDen = :OLD.MaSanBay;
+
+        -- Update DUONGBAY where MaSanBayDi matches the updated MaSanBay
+        UPDATE DUONGBAY
+        SET TrangThai = 0
+        WHERE MaSanBayDi = :OLD.MaSanBay;
+
+        -- Update DUONGBAY where MaDuongBay matches MaDuongBay in SANBAYTG and MaSanBay in SANBAYTG matches the updated MaSanBay
+        UPDATE DUONGBAY
+        SET TrangThai = 0
+        WHERE MaDuongBay IN (
+            SELECT MaDuongBay
+            FROM SANBAYTG
+            WHERE MaSanBay = :OLD.MaSanBay
+        );
+    END IF;
+END; ----------------------------- trigger mục 3
+
+/* R18: kiểm tra trước khi cập nhật trạng thái đường bay hoạt động */
+--DROP TRIGGER trg_check_duongbay_status;
+CREATE OR REPLACE TRIGGER trg_check_duongbay_status
+    BEFORE UPDATE OF TrangThai ON DUONGBAY
+    FOR EACH ROW
+DECLARE
+    cnt NUMBER;
+BEGIN
+    IF :NEW.TrangThai = 1 THEN
+        -- Kiểm tra số lượng sân bay có TrangThai = 0 bằng cách sử dụng UNION
+        SELECT COUNT(*)
+        INTO cnt
+        FROM (
+                 SELECT 1
+                 FROM SANBAY sb
+                 WHERE sb.MaSanBay = :OLD.MaSanBayDi AND sb.TrangThai = 0
+                 UNION
+                 SELECT 1
+                 FROM SANBAY sb
+                 WHERE sb.MaSanBay = :OLD.MaSanBayDen AND sb.TrangThai = 0
+                 UNION
+                 SELECT 1
+                 FROM SANBAY sb
+                 WHERE sb.TrangThai = 0 AND sb.MaSanBay IN (
+                     SELECT sbtg.MaSanBay
+                     FROM SANBAYTG sbtg
+                     WHERE sbtg.MaDuongBay = :OLD.MaDuongBay
+                 )
+             );
+        -- Nếu số lượng sân bay có TrangThai = 0 lớn hơn 0 thì raise lỗi
+        IF cnt > 0 THEN
+            RAISE_APPLICATION_ERROR(-20001, 'Có sân bay thuộc đường bay đang hoạt động nên không thể thay đổi trạng thái');
+        END IF;
+    END IF;
+END;------------------------------------------------ trigger mục 2

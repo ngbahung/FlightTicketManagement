@@ -1,0 +1,19 @@
+Bước 1:
+    Tạo user: tên và password
+    Kết nối user
+Bước 2:
+    Mở file DB_F7 (bằng user mới kết nối)
+Bước 3:
+    chạy câu [ALTER SESSION SET CURRENT_SCHEMA = user;]
+Bước 4:
+    Chạy all câu lệnh tạo table, khóa ngoại
+Bước 5:
+    chạy insert dữ liệu ( TRỪ CT_DATVE VÌ ĐỂ UPDATE DOANHTHU)
+Bước 6:
+    [TRIGGER VỚI PROCEDURE CHẠY TỪNG CÁI ĐỂ TRÁNH LỖI XẢY RA]
+    CHẠY HẾT PROC
+Bước 7:
+    CHẠY HẾT TRIGGER
+BƯỚC 8:
+    CHẠY LẠI CT_DATVE
+    ---> XONG RÙI NHÉ <------

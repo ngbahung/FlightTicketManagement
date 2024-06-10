@@ -1,3 +1,6 @@
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+--PROCEDURE
 -- LỊCH CHUYẾN BAY CONTROLLER
 -- GET SAN BAY DI
 CREATE OR REPLACE PROCEDURE GET_SANBAYDI (
@@ -61,6 +64,31 @@ EXCEPTION
         p_SoGhe := 0; -- Trả về giá trị mặc định nếu không tìm thấy dữ liệu
 END GET_SOGHE;
 /
+
+--GET SỐ ĐIỂM DỪNG
+CREATE OR REPLACE PROCEDURE GET_SODIEMDUNG (
+    p_MaDuongBay IN VARCHAR2,
+    p_SoDiemDung OUT NUMBER
+) AS
+BEGIN
+    -- Đếm số lượng điểm dừng (sân bay trung gian) của đường bay
+    SELECT COUNT(*)
+    INTO p_SoDiemDung
+    FROM SANBAYTG
+    WHERE MaDuongBay = p_MaDuongBay;
+
+    -- Nếu không có kết quả, gán giá trị 0 cho p_SoDiemDung
+    IF p_SoDiemDung IS NULL THEN
+        p_SoDiemDung := 0;
+    END IF;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_SoDiemDung := 0;
+    WHEN OTHERS THEN
+        p_SoDiemDung := 0;
+END GET_SODIEMDUNG;
+/
+
 
 --------------------------------------------------------------------------------------
 -- TRA CỨU DẶT VÉ CONTROLLER

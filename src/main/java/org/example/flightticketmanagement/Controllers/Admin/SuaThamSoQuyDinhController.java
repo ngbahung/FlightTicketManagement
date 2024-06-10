@@ -52,6 +52,12 @@ public class SuaThamSoQuyDinhController implements Initializable {
 //            alert.errorMessage("Vui lòng điền đầy đủ thông tin");
 //            return;
 //        }
+
+        if (maxTGDung_tf.getText().isEmpty() || minTGDung_tf.getText().isEmpty() ||
+                tgBayToiThieu_tf.getText().isEmpty() || tgChamNhatDatVe_tf.getText().isEmpty() || tgChamNhatHuyVe_tf.getText().isEmpty()) {
+            alert.errorMessage("Vui lòng điền đầy đủ thông tin");
+            return;
+        }
         if (maxTGDung_tf.getText().isEmpty() || minTGDung_tf.getText().isEmpty() ||
                 tgBayToiThieu_tf.getText().isEmpty() || tgChamNhatDatVe_tf.getText().isEmpty() || tgChamNhatHuyVe_tf.getText().isEmpty()) {
             alert.errorMessage("Vui lòng điền đầy đủ thông tin");
@@ -61,7 +67,7 @@ public class SuaThamSoQuyDinhController implements Initializable {
         // Parsing values and validation
         int maxTGDung;
         int minTGDung;
-//        int numSBTGmax;
+        int numSBTGmax;
         int tgBayToiThieu;
         int tgChamNhatDatVe;
         int tgChamNhatHuyVe;
@@ -78,11 +84,18 @@ public class SuaThamSoQuyDinhController implements Initializable {
             return;
         }
 
-        // Validating logical constraints
+//        // Validating logical constraints
 //        if (maxTGDung < 0 || minTGDung < 0 || numSBTGmax < 0 || tgBayToiThieu < 0 || tgChamNhatDatVe < 0 || tgChamNhatHuyVe < 0) {
 //            alert.errorMessage("Vui lòng nhập số nguyên dương");
 //            return;
 //        }
+
+        // Validating logical constraints
+        if (maxTGDung < 0 || minTGDung < 0 || tgBayToiThieu < 0 || tgChamNhatDatVe < 0 || tgChamNhatHuyVe < 0) {
+            alert.errorMessage("Vui lòng nhập số nguyên dương");
+            return;
+        }
+
         if (maxTGDung < 0 || minTGDung < 0 || tgBayToiThieu < 0 || tgChamNhatDatVe < 0 || tgChamNhatHuyVe < 0) {
             alert.errorMessage("Vui lòng nhập số nguyên dương");
             return;
@@ -162,9 +175,9 @@ public class SuaThamSoQuyDinhController implements Initializable {
                     case "TGBTT":
                         tgBayToiThieu_tf.setText(String.valueOf(giaTri));
                         break;
-                    case "SSBTGTMD":
-                        numSBTGmax_tf.setText(String.valueOf(giaTri));
-                        break;
+//                    case "SSBTGTMD":
+//                        numSBTGmax_tf.setText(String.valueOf(giaTri));
+//                        break;
                     case "TGDTT":
                         minTGDung_tf.setText(String.valueOf(giaTri));
                         break;
@@ -181,15 +194,7 @@ public class SuaThamSoQuyDinhController implements Initializable {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (result != null) result.close();
-                if (statement != null) statement.close();
-                if (connect != null) connect.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            e.printStackTrace();
         }
     }
 
