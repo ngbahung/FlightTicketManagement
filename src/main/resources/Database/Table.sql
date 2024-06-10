@@ -180,6 +180,7 @@ CREATE TABLE BAOCAONAM (
                            CONSTRAINT pk_bcn PRIMARY KEY (Nam,thang)
 );
 
+
 /* TABLE 10: baocaothang */
 
 CREATE TABLE BAOCAOTHANG (
