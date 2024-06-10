@@ -137,6 +137,7 @@ public class QuyDinhController implements Initializable {
     private FilteredList<HangVe> filteredHangVeData;
     private FilteredList<DuongBay> filteredDuongBayData;
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         showSanBayList();
@@ -722,8 +723,7 @@ public class QuyDinhController implements Initializable {
                 loadDuongBayData();  // Refresh the table
 
             } catch (SQLException ex) {
-                ex.printStackTrace();
-                alert.errorMessage("Lỗi khi đang cập nhật trạng thái đường bay. Vui lòng kiểm tra lại.");
+                alert.errorMessage("Lỗi khi đang cập nhật trạng thái đường bay. Vui lòng kiểm tra lại có thể có sân bay đang ngưng hoạt động..");
             }
         }
     }
@@ -741,5 +741,4 @@ public class QuyDinhController implements Initializable {
         }
         return soDiemDung;
     }
-
 }

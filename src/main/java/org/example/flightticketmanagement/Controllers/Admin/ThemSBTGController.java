@@ -13,6 +13,8 @@ import org.example.flightticketmanagement.Models.SanBay;
 
 import java.net.URL;
 import java.sql.*;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 public class ThemSBTGController implements Initializable {
@@ -32,35 +34,45 @@ public class ThemSBTGController implements Initializable {
             return;
         }
 
-        // Thêm sân bay trung gian vào danh sách tạm của parentController
-        parentController.addSBTGTemp(selectedSanBay, selectedThoiGianDung);
+        Duration layoverDuration = Duration.between(LocalTime.MIN, LocalTime.parse(selectedThoiGianDung));
 
-        // Đóng stage sau khi thêm
-        Stage stage = (Stage) luu_btn.getScene().getWindow();
-        stage.close();
-    }
+        try {
+            connect = DatabaseDriver.getConnection();
+            prepare = connect.prepareStatement("SELECT MaThuocTinh, GiaTri FROM THAMSO WHERE MaThuocTinh IN ('TGDTT', 'TGDTD')");
+            result = prepare.executeQuery();
 
-    private SanBay getSanBayByName(String tenSanBay) {
-        String sql = "SELECT * FROM SANBAY WHERE TenSanBay = ?";
-        try (Connection connect = DatabaseDriver.getConnection();
-             PreparedStatement prepare = connect.prepareStatement(sql)) {
-            prepare.setString(1, tenSanBay);
-            try (ResultSet result = prepare.executeQuery()) {
-                if (result.next()) {
-                    return new SanBay(
-                            result.getString("MaSanBay"),
-                            result.getString("TenSanBay"),
-                            result.getString("TenVietTat"),
-                            result.getString("DiaChi"),
-                            result.getInt("TrangThai"),
-                            result.getInt("SoThuTu")
-                    );
+            Duration TGDTT = null;
+            Duration TGDTD = null;
+
+            while (result.next()) {
+                String maThuocTinh = result.getString("MaThuocTinh");
+                int giaTri = result.getInt("GiaTri");
+
+                if ("TGDTT".equals(maThuocTinh)) {
+                    TGDTT = Duration.ofMinutes(giaTri);
+                } else if ("TGDTD".equals(maThuocTinh)) {
+                    TGDTD = Duration.ofHours(giaTri);
                 }
+            }
+
+            if (TGDTT == null || TGDTD == null) {
+                alert.errorMessage("Không thể tải thông số thời gian dừng.");
+                return;
+            }
+
+            if (layoverDuration.compareTo(TGDTT) < 0 || layoverDuration.compareTo(TGDTD) > 0) {
+                alert.errorMessage("Thời gian dừng phải nằm trong khoảng từ " + TGDTT.toMinutes() + " phút đến " + TGDTD.toHours() + " giờ.");
+                return;
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            alert.errorMessage("Lỗi khi kiểm tra thông số thời gian dừng.");
+            return;
         }
-        return null;
+
+        parentController.addSBTGTemp(selectedSanBay, selectedThoiGianDung);
+        Stage stage = (Stage) luu_btn.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
@@ -107,7 +119,6 @@ public class ThemSBTGController implements Initializable {
             hours++;
         }
     }
-
 
     public void setParentController(ThemDuongBayController parentController) {
         this.parentController = parentController;

@@ -119,12 +119,12 @@ public class SuaDuongBayController implements Initializable {
 
                 // Lưu và cập nhật các sân bay trung gian
                 for (SanBayTrungGian sbtg : sanBayTrungGianTempList) {
-                    if (sbtg.getMaDuongBay().isEmpty()) {
-                        // Sân bay trung gian mới
-                        addSBTG(maDuongBay, sbtg.getMaSanBay(), sbtg.getThoiGianDung());
-                    } else {
+                    if (isExistingSBTG(maDuongBay, sbtg.getMaSanBay())) {
                         // Cập nhật sân bay trung gian hiện có
                         updateSBTG(maDuongBay, sbtg.getMaSanBay(), sbtg.getThoiGianDung(), sbtg.getThuTu());
+                    } else {
+                        // Sân bay trung gian mới
+                        addSBTG(maDuongBay, sbtg.getMaSanBay(), sbtg.getThoiGianDung());
                     }
                 }
 
@@ -139,6 +139,23 @@ public class SuaDuongBayController implements Initializable {
         }
     }
 
+    private boolean isExistingSBTG(String maDuongBay, String maSanBay) {
+        String sql = "SELECT COUNT(*) FROM SANBAYTG WHERE MaDuongBay = ? AND MaSanBay = ?";
+        try (Connection connect = DatabaseDriver.getConnection();
+             PreparedStatement prepare = connect.prepareStatement(sql)) {
+            prepare.setString(1, maDuongBay);
+            prepare.setString(2, maSanBay);
+            try (ResultSet result = prepare.executeQuery()) {
+                if (result.next() && result.getInt(1) > 0) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Lỗi khi kiểm tra sân bay trung gian: " + e.getMessage());
+        }
+        return false;
+    }
 
     @FXML
     void moThemSanBayTrungGian(ActionEvent event) {
@@ -174,42 +191,43 @@ public class SuaDuongBayController implements Initializable {
         }
 
         deleteSBTG(selectedSBTG.getMaDuongBay(), selectedSBTG.getMaSanBay(), selectedSBTG.getThuTu());
-        reorderSBTG(selectedSBTG.getMaDuongBay());
 
+        // Xóa sân bay trung gian khỏi danh sách tạm thời
         sanBayTrungGianTempList.remove(selectedSBTG);
+        reorderSBTGAfterDeletion(selectedSBTG.getMaDuongBay()); // Cập nhật lại thứ tự các sân bay trung gian sau khi xóa
+
+        // Cập nhật lại TableView
         sanBayTrungGian_tbview.getItems().clear();
         sanBayTrungGian_tbview.getItems().addAll(sanBayTrungGianTempList);
+    }
 
+
+    private void reorderSBTGAfterDeletion() {
         for (int i = 0; i < sanBayTrungGianTempList.size(); i++) {
             sanBayTrungGianTempList.get(i).setThuTu(i + 1);
         }
     }
 
-    private void reorderSBTG(String maDuongBay) {
-        String selectSql = "SELECT MaSanBay, ThuTu FROM SANBAYTG WHERE MaDuongBay = ? ORDER BY ThuTu";
-        String updateSql = "UPDATE SANBAYTG SET ThuTu = ? WHERE MaDuongBay = ? AND MaSanBay = ?";
 
+    private void reorderSBTGAfterDeletion(String maDuongBay) {
+        for (int i = 0; i < sanBayTrungGianTempList.size(); i++) {
+            SanBayTrungGian sbtg = sanBayTrungGianTempList.get(i);
+            sbtg.setThuTu(i + 1);
+            updateThuTuSBTG(maDuongBay, sbtg.getMaSanBay(), sbtg.getThuTu()); // Cập nhật lại thứ tự trong cơ sở dữ liệu
+        }
+    }
+
+    private void updateThuTuSBTG(String maDuongBay, String maSanBay, int thuTu) {
+        String sql = "UPDATE SANBAYTG SET ThuTu = ? WHERE MaDuongBay = ? AND MaSanBay = ?";
         try (Connection connect = DatabaseDriver.getConnection();
-             PreparedStatement selectStmt = connect.prepareStatement(selectSql);
-             PreparedStatement updateStmt = connect.prepareStatement(updateSql)) {
-
-            selectStmt.setString(1, maDuongBay);
-            ResultSet result = selectStmt.executeQuery();
-
-            int thuTu = 1;
-            while (result.next()) {
-                String maSanBay = result.getString("MaSanBay");
-
-                updateStmt.setInt(1, thuTu);
-                updateStmt.setString(2, maDuongBay);
-                updateStmt.setString(3, maSanBay);
-                updateStmt.executeUpdate();
-
-                thuTu++;
-            }
+             PreparedStatement prepare = connect.prepareStatement(sql)) {
+            prepare.setInt(1, thuTu);
+            prepare.setString(2, maDuongBay);
+            prepare.setString(3, maSanBay);
+            prepare.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            alert.errorMessage("Lỗi khi sắp xếp lại thứ tự sân bay trung gian: " + e.getMessage());
+            alert.errorMessage("Lỗi khi cập nhật thứ tự sân bay trung gian: " + e.getMessage());
         }
     }
 
@@ -500,13 +518,10 @@ public class SuaDuongBayController implements Initializable {
             prepare.setString(1, maDuongBay);
             prepare.setString(2, maSanBay);
             prepare.setInt(3, thuTu);
-            int rowsUpdated = prepare.executeUpdate();
-            if (rowsUpdated == 0) {
-                alert.errorMessage("Cập nhật sân bay trung gian thất bại");
-            }
+            prepare.executeUpdate(); // Execute the update
         } catch (SQLException e) {
+            System.out.println("Cập nhật sân bay trung gian thất bại.");
             e.printStackTrace();
-            alert.errorMessage("Lỗi khi cập nhật sân bay trung gian: " + e.getMessage());
         }
     }
 
@@ -517,6 +532,18 @@ public class SuaDuongBayController implements Initializable {
             prepare.setString(1, maDuongBay);
             prepare.setString(2, maSanBay);
             prepare.setInt(3, thuTu);
+            prepare.executeUpdate(); // Thực hiện lệnh xóa
+
+            // Xóa sân bay trung gian khỏi danh sách tạm thời
+            sanBayTrungGianTempList.removeIf(sbtg -> sbtg.getMaSanBay().equals(maSanBay) && sbtg.getThuTu() == thuTu);
+
+            // Cập nhật lại thứ tự các sân bay trung gian
+            reorderSBTGAfterDeletion();
+
+            // Cập nhật lại TableView
+            sanBayTrungGian_tbview.getItems().clear();
+            sanBayTrungGian_tbview.getItems().addAll(sanBayTrungGianTempList);
+
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Lỗi khi xóa sân bay trung gian: " + e.getMessage());
