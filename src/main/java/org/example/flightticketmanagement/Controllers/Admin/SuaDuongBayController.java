@@ -229,7 +229,7 @@ public class SuaDuongBayController implements Initializable {
             alert.errorMessage("Lỗi khi cập nhật thứ tự sân bay trung gian: " + e.getMessage());
         }
     }
-    
+
     private List<SanBayTrungGian> sanBayTrungGianTempList = new ArrayList<>();
 
     @Override

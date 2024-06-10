@@ -2452,18 +2452,19 @@ BEGIN
 
     -- Nếu không có MAVE nào trong bảng VE, bắt đầu với VE001
     IF v_maxMaVe IS NULL THEN
-        p_newMaVe := 'VE001';
+        p_newMaVe := 'VE00001';
     ELSE
         -- Tăng giá trị của MAVE lớn nhất thêm 1
-        v_newMaVeNumber := TO_NUMBER(SUBSTR(v_maxMaVe, 3)) + 1;
+        v_newMaVeNumber := TO_NUMBER(SUBSTR(v_maxMaVe, 5)) + 1;
         -- Tạo MAVE mới với định dạng VExxx
-        p_newMaVe := 'VE' || TO_CHAR(v_newMaVeNumber, 'FM000');
+        p_newMaVe := 'VE' || TO_CHAR(v_newMaVeNumber, 'FM00000');
     END IF;
 EXCEPTION
     WHEN OTHERS THEN
-        p_newMaVe := 'VE001'; -- Trả về giá trị mặc định nếu có lỗi
+        p_newMaVe := 'VE00001'; -- Trả về giá trị mặc định nếu có lỗi
 END GENERATE_MA_VE;
 /
+
 
 CREATE OR REPLACE PROCEDURE GENERATE_MA_GHE (
     p_newMaGhe OUT NUMBER
