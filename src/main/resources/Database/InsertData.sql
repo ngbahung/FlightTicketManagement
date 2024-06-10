@@ -343,7 +343,7 @@ INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
 VALUES ('CB047', 'DB050', TO_TIMESTAMP('2024-07-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-07-10 22:00:00', 'YYYY-MM-DD HH24:MI:SS'), 0, 9500000);
 
 INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
-VALUES ('CB048', 'DB051', TO_TIMESTAMP('2024-09-15 19:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-09-15 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 0, 5000000);
+VALUES ('CB048', 'DB051', TO_TIMESTAMP('2024-09-15 19:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-09-16 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 0, 5000000);
 
 INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
 VALUES ('CB049', 'DB052', TO_TIMESTAMP('2024-07-31 7:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-08-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), 0, 4300000);
@@ -794,6 +794,50 @@ INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE0336', '
 INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE0337', 'CB023', 'HV002', 15, 1850000);
 
 
+--TRINH Thêm
+-- Chuyến bay CB047
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04701', 'CB047', 'HV001', 1, 9500000 * 1);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04702', 'CB047', 'HV001', 2, 9500000 * 1);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04703', 'CB047', 'HV002', 3, 9500000 * 1.5);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04704', 'CB047', 'HV003', 4, 9500000 * 2);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04705', 'CB047', 'HV004', 5, 9500000 * 2.5);
+
+-- Chuyến bay CB048
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04801', 'CB048', 'HV001', 1, 5000000 * 1);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04802', 'CB048', 'HV002', 2, 5000000 * 1.5);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04803', 'CB048', 'HV003', 3, 5000000 * 2);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04804', 'CB048', 'HV004', 4, 5000000 * 2.5);
+
+-- Chuyến bay CB049
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04901', 'CB049', 'HV001', 1, 4300000 * 1);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04902', 'CB049', 'HV002', 2, 4300000 * 1.5);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04903', 'CB049', 'HV003', 3, 4300000 * 2);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04904', 'CB049', 'HV004', 4, 4300000 * 2.5);
+
+-- Chuyến bay CB050
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05001', 'CB050', 'HV001', 1, 8760000 * 1);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05002', 'CB050', 'HV002', 2, 8760000 * 1.5);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05003', 'CB050', 'HV003', 3, 8760000 * 2);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05004', 'CB050', 'HV004', 4, 8760000 * 2.5);
+
+-- Chuyến bay CB051
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05101', 'CB051', 'HV001', 1, 2360000 * 1);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05102', 'CB051', 'HV002', 2, 2360000 * 1.5);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05103', 'CB051', 'HV003', 3, 2360000 * 2);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05104', 'CB051', 'HV004', 4, 2360000 * 2.5);
+
+-- Chuyến bay CB052
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05201', 'CB052', 'HV001', 1, 7760000 * 1);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05202', 'CB052', 'HV002', 2, 7760000 * 1.5);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05203', 'CB052', 'HV003', 3, 7760000 * 2);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05204', 'CB052', 'HV004', 4, 7760000 * 2.5);
+
+-- Chuyến bay CB053
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05301', 'CB053', 'HV001', 1, 3530000 * 1);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05302', 'CB053', 'HV002', 2, 3530000 * 1.5);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05303', 'CB053', 'HV003', 3, 3530000 * 2);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05304', 'CB053', 'HV004', 4, 3530000 * 2.5);
+
 
 -- TABLE : KHACHHANG
 
@@ -822,268 +866,268 @@ VALUES ('KH007', 'Nguyễn Thị G', 789654123, 321987654, 'nguyenthig@example.c
 -- TABLE : CT_HANGVE
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB001', 'HV001', 10, 0);
+VALUES ('CB001', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB001', 'HV002', 12, 0);
+VALUES ( 'CB001', 'HV002', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB001', 'HV003', 10, 0);
+VALUES ( 'CB001', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB001', 'HV004', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB001', 'HV005', 10, 0);
+VALUES ( 'CB001', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB001', 'HV006', 15, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB002', 'HV001', 10, 0);
+VALUES ('CB002', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB002', 'HV002', 11, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB002', 'HV003', 12, 0);
+VALUES ( 'CB002', 'HV003', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB002', 'HV004', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB002', 'HV005', 14, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB002', 'HV006', 10, 0);
+VALUES ( 'CB002', 'HV006', 20, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB003', 'HV001', 10, 0);
+VALUES ('CB003', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB003', 'HV002', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB003', 'HV003', 10, 0);
+VALUES ( 'CB003', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB003', 'HV004', 10, 0);
+VALUES ( 'CB003', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB003', 'HV005', 14, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB003', 'HV006', 10, 0);
+VALUES ( 'CB003', 'HV006', 20, 0);
 
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB004', 'HV001', 10, 0);
+VALUES ('CB004', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB004', 'HV002', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB004', 'HV003', 10, 0);
+VALUES ( 'CB004', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB004', 'HV004', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB004', 'HV005', 10, 0);
+VALUES ( 'CB004', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB004', 'HV006', 11, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB005', 'HV001', 10, 0);
+VALUES ('CB005', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB005', 'HV002', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB005', 'HV003', 10, 0);
+VALUES ( 'CB005', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB005', 'HV004', 10, 0);
+VALUES ( 'CB005', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB005', 'HV005', 12, 0);
+VALUES ( 'CB005', 'HV005', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB005', 'HV006', 10, 0);
+VALUES ( 'CB005', 'HV006', 20, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB006', 'HV001', 10, 0);
+VALUES ('CB006', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB006', 'HV002', 10, 0);
+VALUES ( 'CB006', 'HV002', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB006', 'HV003', 11, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB006', 'HV004', 10, 0);
+VALUES ( 'CB006', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB006', 'HV005', 10, 0);
+VALUES ( 'CB006', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB006', 'HV006', 15, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB007', 'HV001', 10, 0);
+VALUES ('CB007', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB007', 'HV002', 10, 0);
+VALUES ( 'CB007', 'HV002', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB007', 'HV003', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB007', 'HV004', 10, 0);
+VALUES ( 'CB007', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB007', 'HV005', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB007', 'HV006', 10, 0);
+VALUES ( 'CB007', 'HV006', 20, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB008', 'HV001', 12, 0);
+VALUES ('CB008', 'HV001', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB008', 'HV002', 10, 0);
+VALUES ( 'CB008', 'HV002', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB008', 'HV003', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB008', 'HV004', 10, 0);
+VALUES ( 'CB008', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB008', 'HV005', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB008', 'HV006', 10, 0);
+VALUES ( 'CB008', 'HV006', 20, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB009', 'HV001', 10, 0);
+VALUES ('CB009', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB009', 'HV002', 12, 0);
+VALUES ( 'CB009', 'HV002', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB009', 'HV003', 10, 0);
+VALUES ( 'CB009', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB009', 'HV004', 12, 0);
+VALUES ( 'CB009', 'HV004', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB009', 'HV005', 10, 0);
+VALUES ( 'CB009', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB009', 'HV006', 10, 0);
+VALUES ( 'CB009', 'HV006', 20, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB010', 'HV001', 10, 0);
+VALUES ('CB010', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB010', 'HV002', 14, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB010', 'HV003', 10, 0);
+VALUES ( 'CB010', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB010', 'HV004', 10, 0);
+VALUES ( 'CB010', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB010', 'HV005', 10, 0);
+VALUES ( 'CB010', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB010', 'HV006', 10, 0);
+VALUES ( 'CB010', 'HV006', 20, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB011', 'HV001', 10, 0);
+VALUES ('CB011', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB011', 'HV002', 12, 0);
+VALUES ( 'CB011', 'HV002', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB011', 'HV003', 10, 0);
+VALUES ( 'CB011', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB011', 'HV004', 12, 0);
+VALUES ( 'CB011', 'HV004', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB011', 'HV005', 10, 0);
+VALUES ( 'CB011', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB011', 'HV006', 12, 0);
+VALUES ( 'CB011', 'HV006', 15, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB012', 'HV001', 10, 0);
+VALUES ('CB012', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB012', 'HV002', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB012', 'HV003', 10, 0);
+VALUES ( 'CB012', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB012', 'HV004', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB012', 'HV005', 10, 0);
+VALUES ( 'CB012', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB012', 'HV006', 15, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ('CB013', 'HV001', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB013', 'HV002', 10, 0);
+VALUES ( 'CB013', 'HV002', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB013', 'HV003', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB013', 'HV004', 10, 0);
+VALUES ( 'CB013', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB013', 'HV005', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB013', 'HV006', 10, 0);
+VALUES ( 'CB013', 'HV006', 20, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB014', 'HV001', 10, 0);
+VALUES ('CB014', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB014', 'HV002', 14, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB014', 'HV003', 10, 0);
+VALUES ( 'CB014', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB014', 'HV004', 14, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB014', 'HV005', 10, 0);
+VALUES ( 'CB014', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB014', 'HV006', 14, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB015', 'HV001', 10, 0);
+VALUES ('CB015', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB015', 'HV002', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB015', 'HV003', 10, 0);
+VALUES ( 'CB015', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB015', 'HV004', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB015', 'HV005', 10, 0);
+VALUES ( 'CB015', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB015', 'HV006', 15, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB016', 'HV001', 10, 0);
+VALUES ('CB016', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB016', 'HV002', 10, 0);
+VALUES ( 'CB016', 'HV002', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB016', 'HV003', 11, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB016', 'HV004', 10, 0);
+VALUES ( 'CB016', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB016', 'HV005', 12, 0);
+VALUES ( 'CB016', 'HV005', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB016', 'HV006', 10, 0);
+VALUES ( 'CB016', 'HV006', 20, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB017', 'HV001', 10, 0);
+VALUES ('CB017', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB017', 'HV002', 12, 0);
+VALUES ( 'CB017', 'HV002', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB017', 'HV003', 10, 0);
+VALUES ( 'CB017', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB017', 'HV004', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB017', 'HV005', 10, 0);
+VALUES ( 'CB017', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB017', 'HV006', 14, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB018', 'HV001', 10, 0);
+VALUES ('CB018', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB018', 'HV002', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB018', 'HV003', 10, 0);
+VALUES ( 'CB018', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB018', 'HV004', 10, 0);
+VALUES ( 'CB018', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB018', 'HV005', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB018', 'HV006', 12, 0);
+VALUES ( 'CB018', 'HV006', 15, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB019', 'HV001', 10, 0);
+VALUES ('CB019', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB019', 'HV002', 11, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB019', 'HV003', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB019', 'HV004', 10, 0);
+VALUES ( 'CB019', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB019', 'HV005', 10, 0);
+VALUES ( 'CB019', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB019', 'HV006', 12, 0);
+VALUES ( 'CB019', 'HV006', 15, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB020', 'HV001', 10, 0);
+VALUES ('CB020', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB020', 'HV002', 10, 0);
+VALUES ( 'CB020', 'HV002', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB020', 'HV003', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB020', 'HV004', 10, 0);
+VALUES ( 'CB020', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB020', 'HV005', 12, 0);
+VALUES ( 'CB020', 'HV005', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB020', 'HV006', 11, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB021', 'HV001', 10, 0);
+VALUES ('CB021', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB021', 'HV002', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
@@ -1091,36 +1135,78 @@ VALUES ( 'CB021', 'HV003', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB021', 'HV004', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB021', 'HV005', 10, 0);
+VALUES ( 'CB021', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB021', 'HV006', 15, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB022', 'HV001', 10, 0);
+VALUES ('CB022', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB022', 'HV002', 11, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB022', 'HV003', 10, 0);
+VALUES ( 'CB022', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB022', 'HV004', 12, 0);
+VALUES ( 'CB022', 'HV004', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB022', 'HV005', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB022', 'HV006', 15, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB023', 'HV001', 10, 0);
+VALUES ('CB023', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB023', 'HV002', 14, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB023', 'HV003', 10, 0);
+VALUES ( 'CB023', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB023', 'HV004', 12, 0);
+VALUES ( 'CB023', 'HV004', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB023', 'HV005', 10, 0);
+VALUES ( 'CB023', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB023', 'HV006', 15, 0);
 
+-- TRINH Thêm
+-- Chuyến bay CB047
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB047', 'HV001', 30, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB047', 'HV002', 25, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB047', 'HV003', 20, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB047', 'HV004', 20, 0);
+
+-- Chuyến bay CB048
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB048', 'HV001', 30, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB048', 'HV002', 25, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB048', 'HV003', 20, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB048', 'HV004', 20, 0);
+
+-- Chuyến bay CB049
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB049', 'HV001', 30, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB049', 'HV002', 25, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB049', 'HV003', 20, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB049', 'HV004', 20, 0);
+
+-- Chuyến bay CB050
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB050', 'HV001', 30, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB050', 'HV002', 25, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB050', 'HV003', 20, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB050', 'HV004', 20, 0);
+
+-- Chuyến bay CB051
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB051', 'HV001', 30, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB051', 'HV002', 25, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB051', 'HV003', 20, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB051', 'HV004', 20, 0);
+
+-- Chuyến bay CB052
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB052', 'HV001', 30, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB052', 'HV002', 25, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB052', 'HV003', 20, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB052', 'HV004', 20, 0);
+
+-- Chuyến bay CB053
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB053', 'HV001', 30, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB053', 'HV002', 25, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB053', 'HV003', 20, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB053', 'HV004', 20, 0);
 
 INSERT INTO QUYEN VALUES ('RL0001', N'Admin');
 INSERT INTO QUYEN VALUES ('RL0002', N'Manager');
@@ -1192,7 +1278,7 @@ VALUES ('CTDV018', 'VE0018', 'KH002', TO_TIMESTAMP('2023-02-03 09:00:00', 'YYYY-
 INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
 VALUES ('CTDV019', 'VE0019', 'KH002', TO_TIMESTAMP('2023-02-04 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-02-05 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
 INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
-VALUES ('CTDV020', 'VE0020', 'KH002', TO_TIMESTAMP('2023-02-05 12:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-02-06 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+VALUES ('CTDV020', 'VE0020', 'KH002', TO_TIMESTAMP('2023-02-05 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-02-06 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
 INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
 VALUES ('CTDV021', 'VE0021', 'KH002', TO_TIMESTAMP('2023-02-06 11:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-02-07 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
 INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
@@ -1332,9 +1418,6 @@ INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, T
 VALUES ('CTDV081', 'VE0081', 'KH002', TO_TIMESTAMP('2023-06-05 09:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-06-07 15:29:59', 'YYYY-MM-DD HH24:MI:SS'), 1);
 INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
 VALUES ('CTDV082', 'VE0082', 'KH002', TO_TIMESTAMP('2023-06-06 09:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-06-08 15:29:59', 'YYYY-MM-DD HH24:MI:SS'), 1);
-
-
-
 
 
 INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
@@ -1539,6 +1622,40 @@ VALUES ('CTDV171', 'VE0171', 'KH002', TO_TIMESTAMP('2023-11-14 09:00:00', 'YYYY-
 INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
 VALUES ('CTDV172', 'VE0172', 'KH002', TO_TIMESTAMP('2023-11-15 09:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-11-16 15:29:59', 'YYYY-MM-DD HH24:MI:SS'), 1);
 
+-- TRINH Thêm
+-- Chuyến bay CB047
+
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV04701', 'VE04701', 'KH001', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV04702', 'VE04702', 'KH002', TO_TIMESTAMP('2024-05-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 0);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV04703', 'VE04703', 'KH003', TO_TIMESTAMP('2024-04-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-04-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+
+-- Chuyến bay CB048
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV04802', 'VE04802', 'KH005', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 0);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV04803', 'VE04803', 'KH006', TO_TIMESTAMP('2024-04-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-04-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+
+-- Chuyến bay CB049
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV04901', 'VE04901', 'KH007', TO_TIMESTAMP('2024-05-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-05-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV04902', 'VE04902', 'KH003', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 0);
+
+-- Chuyến bay CB050
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05001', 'VE05001', 'KH001', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05002', 'VE05002', 'KH002', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 0);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05003', 'VE05003', 'KH004', TO_TIMESTAMP('2024-03-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-03-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+
+-- Chuyến bay CB051
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05101', 'VE05101', 'KH005', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05102', 'VE05102', 'KH007', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 0);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05103', 'VE05103', 'KH003', TO_TIMESTAMP('2024-02-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-02-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+
+-- Chuyến bay CB052
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05201', 'VE05201', 'KH005', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05202', 'VE05202', 'KH007', TO_TIMESTAMP('2024-02-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 0);
+
+-- Chuyến bay CB053 05
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05301', 'VE05301', 'KH005', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05302', 'VE05302', 'KH007', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 0);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05303', 'VE05303', 'KH003', TO_TIMESTAMP('2024-01-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-01-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+
 
 /*
 -- Xóa dữ liệu trong bảng CT_DATVE
@@ -1583,4 +1700,3 @@ DELETE FROM THAMSO;
 -- Xóa dữ liệu trong bảng SANBAYTG
 DELETE FRROM SANBAYTG;
 */
-

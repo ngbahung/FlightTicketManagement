@@ -1,3 +1,11 @@
+/*-- DROP ALL TABLE
+BEGIN
+   FOR t IN (SELECT table_name FROM user_tables) LOOP
+      EXECUTE IMMEDIATE 'DROP TABLE ' || t.table_name || ' CASCADE CONSTRAINTS';
+   END LOOP;
+END;
+*/
+
 -- Tạo Schema
 
 alter session set "_ORACLE_SCRIPT"=true;
@@ -627,7 +635,7 @@ INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
 VALUES ('CB047', 'DB050', TO_TIMESTAMP('2024-07-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-07-10 22:00:00', 'YYYY-MM-DD HH24:MI:SS'), 0, 9500000);
 
 INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
-VALUES ('CB048', 'DB051', TO_TIMESTAMP('2024-09-15 19:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-09-15 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 0, 5000000);
+VALUES ('CB048', 'DB051', TO_TIMESTAMP('2024-09-15 19:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-09-16 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 0, 5000000);
 
 INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe)
 VALUES ('CB049', 'DB052', TO_TIMESTAMP('2024-07-31 7:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-08-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), 0, 4300000);
@@ -1078,6 +1086,50 @@ INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE0336', '
 INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE0337', 'CB023', 'HV002', 15, 1850000);
 
 
+--TRINH Thêm
+-- Chuyến bay CB047
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04701', 'CB047', 'HV001', 1, 9500000 * 1);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04702', 'CB047', 'HV001', 2, 9500000 * 1);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04703', 'CB047', 'HV002', 3, 9500000 * 1.5);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04704', 'CB047', 'HV003', 4, 9500000 * 2);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04705', 'CB047', 'HV004', 5, 9500000 * 2.5);
+
+-- Chuyến bay CB048
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04801', 'CB048', 'HV001', 1, 5000000 * 1);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04802', 'CB048', 'HV002', 2, 5000000 * 1.5);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04803', 'CB048', 'HV003', 3, 5000000 * 2);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04804', 'CB048', 'HV004', 4, 5000000 * 2.5);
+
+-- Chuyến bay CB049
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04901', 'CB049', 'HV001', 1, 4300000 * 1);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04902', 'CB049', 'HV002', 2, 4300000 * 1.5);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04903', 'CB049', 'HV003', 3, 4300000 * 2);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE04904', 'CB049', 'HV004', 4, 4300000 * 2.5);
+
+-- Chuyến bay CB050
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05001', 'CB050', 'HV001', 1, 8760000 * 1);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05002', 'CB050', 'HV002', 2, 8760000 * 1.5);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05003', 'CB050', 'HV003', 3, 8760000 * 2);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05004', 'CB050', 'HV004', 4, 8760000 * 2.5);
+
+-- Chuyến bay CB051
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05101', 'CB051', 'HV001', 1, 2360000 * 1);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05102', 'CB051', 'HV002', 2, 2360000 * 1.5);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05103', 'CB051', 'HV003', 3, 2360000 * 2);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05104', 'CB051', 'HV004', 4, 2360000 * 2.5);
+
+-- Chuyến bay CB052
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05201', 'CB052', 'HV001', 1, 7760000 * 1);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05202', 'CB052', 'HV002', 2, 7760000 * 1.5);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05203', 'CB052', 'HV003', 3, 7760000 * 2);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05204', 'CB052', 'HV004', 4, 7760000 * 2.5);
+
+-- Chuyến bay CB053
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05301', 'CB053', 'HV001', 1, 3530000 * 1);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05302', 'CB053', 'HV002', 2, 3530000 * 1.5);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05303', 'CB053', 'HV003', 3, 3530000 * 2);
+INSERT INTO VE (MaVe, MaChuyenBay, MaHangVe, MaGhe, GiaTien) VALUES ('VE05304', 'CB053', 'HV004', 4, 3530000 * 2.5);
+
 
 -- TABLE : KHACHHANG
 
@@ -1106,268 +1158,268 @@ VALUES ('KH007', 'Nguyễn Thị G', 789654123, 321987654, 'nguyenthig@example.c
 -- TABLE : CT_HANGVE
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB001', 'HV001', 10, 0);
+VALUES ('CB001', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB001', 'HV002', 12, 0);
+VALUES ( 'CB001', 'HV002', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB001', 'HV003', 10, 0);
+VALUES ( 'CB001', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB001', 'HV004', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB001', 'HV005', 10, 0);
+VALUES ( 'CB001', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB001', 'HV006', 15, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB002', 'HV001', 10, 0);
+VALUES ('CB002', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB002', 'HV002', 11, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB002', 'HV003', 12, 0);
+VALUES ( 'CB002', 'HV003', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB002', 'HV004', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB002', 'HV005', 14, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB002', 'HV006', 10, 0);
+VALUES ( 'CB002', 'HV006', 20, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB003', 'HV001', 10, 0);
+VALUES ('CB003', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB003', 'HV002', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB003', 'HV003', 10, 0);
+VALUES ( 'CB003', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB003', 'HV004', 10, 0);
+VALUES ( 'CB003', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB003', 'HV005', 14, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB003', 'HV006', 10, 0);
+VALUES ( 'CB003', 'HV006', 20, 0);
 
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB004', 'HV001', 10, 0);
+VALUES ('CB004', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB004', 'HV002', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB004', 'HV003', 10, 0);
+VALUES ( 'CB004', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB004', 'HV004', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB004', 'HV005', 10, 0);
+VALUES ( 'CB004', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB004', 'HV006', 11, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB005', 'HV001', 10, 0);
+VALUES ('CB005', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB005', 'HV002', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB005', 'HV003', 10, 0);
+VALUES ( 'CB005', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB005', 'HV004', 10, 0);
+VALUES ( 'CB005', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB005', 'HV005', 12, 0);
+VALUES ( 'CB005', 'HV005', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB005', 'HV006', 10, 0);
+VALUES ( 'CB005', 'HV006', 20, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB006', 'HV001', 10, 0);
+VALUES ('CB006', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB006', 'HV002', 10, 0);
+VALUES ( 'CB006', 'HV002', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB006', 'HV003', 11, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB006', 'HV004', 10, 0);
+VALUES ( 'CB006', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB006', 'HV005', 10, 0);
+VALUES ( 'CB006', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB006', 'HV006', 15, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB007', 'HV001', 10, 0);
+VALUES ('CB007', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB007', 'HV002', 10, 0);
+VALUES ( 'CB007', 'HV002', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB007', 'HV003', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB007', 'HV004', 10, 0);
+VALUES ( 'CB007', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB007', 'HV005', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB007', 'HV006', 10, 0);
+VALUES ( 'CB007', 'HV006', 20, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB008', 'HV001', 12, 0);
+VALUES ('CB008', 'HV001', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB008', 'HV002', 10, 0);
+VALUES ( 'CB008', 'HV002', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB008', 'HV003', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB008', 'HV004', 10, 0);
+VALUES ( 'CB008', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB008', 'HV005', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB008', 'HV006', 10, 0);
+VALUES ( 'CB008', 'HV006', 20, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB009', 'HV001', 10, 0);
+VALUES ('CB009', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB009', 'HV002', 12, 0);
+VALUES ( 'CB009', 'HV002', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB009', 'HV003', 10, 0);
+VALUES ( 'CB009', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB009', 'HV004', 12, 0);
+VALUES ( 'CB009', 'HV004', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB009', 'HV005', 10, 0);
+VALUES ( 'CB009', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB009', 'HV006', 10, 0);
+VALUES ( 'CB009', 'HV006', 20, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB010', 'HV001', 10, 0);
+VALUES ('CB010', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB010', 'HV002', 14, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB010', 'HV003', 10, 0);
+VALUES ( 'CB010', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB010', 'HV004', 10, 0);
+VALUES ( 'CB010', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB010', 'HV005', 10, 0);
+VALUES ( 'CB010', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB010', 'HV006', 10, 0);
+VALUES ( 'CB010', 'HV006', 20, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB011', 'HV001', 10, 0);
+VALUES ('CB011', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB011', 'HV002', 12, 0);
+VALUES ( 'CB011', 'HV002', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB011', 'HV003', 10, 0);
+VALUES ( 'CB011', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB011', 'HV004', 12, 0);
+VALUES ( 'CB011', 'HV004', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB011', 'HV005', 10, 0);
+VALUES ( 'CB011', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB011', 'HV006', 12, 0);
+VALUES ( 'CB011', 'HV006', 15, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB012', 'HV001', 10, 0);
+VALUES ('CB012', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB012', 'HV002', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB012', 'HV003', 10, 0);
+VALUES ( 'CB012', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB012', 'HV004', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB012', 'HV005', 10, 0);
+VALUES ( 'CB012', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB012', 'HV006', 15, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ('CB013', 'HV001', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB013', 'HV002', 10, 0);
+VALUES ( 'CB013', 'HV002', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB013', 'HV003', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB013', 'HV004', 10, 0);
+VALUES ( 'CB013', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB013', 'HV005', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB013', 'HV006', 10, 0);
+VALUES ( 'CB013', 'HV006', 20, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB014', 'HV001', 10, 0);
+VALUES ('CB014', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB014', 'HV002', 14, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB014', 'HV003', 10, 0);
+VALUES ( 'CB014', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB014', 'HV004', 14, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB014', 'HV005', 10, 0);
+VALUES ( 'CB014', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB014', 'HV006', 14, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB015', 'HV001', 10, 0);
+VALUES ('CB015', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB015', 'HV002', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB015', 'HV003', 10, 0);
+VALUES ( 'CB015', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB015', 'HV004', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB015', 'HV005', 10, 0);
+VALUES ( 'CB015', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB015', 'HV006', 15, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB016', 'HV001', 10, 0);
+VALUES ('CB016', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB016', 'HV002', 10, 0);
+VALUES ( 'CB016', 'HV002', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB016', 'HV003', 11, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB016', 'HV004', 10, 0);
+VALUES ( 'CB016', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB016', 'HV005', 12, 0);
+VALUES ( 'CB016', 'HV005', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB016', 'HV006', 10, 0);
+VALUES ( 'CB016', 'HV006', 20, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB017', 'HV001', 10, 0);
+VALUES ('CB017', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB017', 'HV002', 12, 0);
+VALUES ( 'CB017', 'HV002', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB017', 'HV003', 10, 0);
+VALUES ( 'CB017', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB017', 'HV004', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB017', 'HV005', 10, 0);
+VALUES ( 'CB017', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB017', 'HV006', 14, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB018', 'HV001', 10, 0);
+VALUES ('CB018', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB018', 'HV002', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB018', 'HV003', 10, 0);
+VALUES ( 'CB018', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB018', 'HV004', 10, 0);
+VALUES ( 'CB018', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB018', 'HV005', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB018', 'HV006', 12, 0);
+VALUES ( 'CB018', 'HV006', 15, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB019', 'HV001', 10, 0);
+VALUES ('CB019', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB019', 'HV002', 11, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB019', 'HV003', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB019', 'HV004', 10, 0);
+VALUES ( 'CB019', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB019', 'HV005', 10, 0);
+VALUES ( 'CB019', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB019', 'HV006', 12, 0);
+VALUES ( 'CB019', 'HV006', 15, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB020', 'HV001', 10, 0);
+VALUES ('CB020', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB020', 'HV002', 10, 0);
+VALUES ( 'CB020', 'HV002', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB020', 'HV003', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB020', 'HV004', 10, 0);
+VALUES ( 'CB020', 'HV004', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB020', 'HV005', 12, 0);
+VALUES ( 'CB020', 'HV005', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB020', 'HV006', 11, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB021', 'HV001', 10, 0);
+VALUES ('CB021', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB021', 'HV002', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
@@ -1375,36 +1427,78 @@ VALUES ( 'CB021', 'HV003', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB021', 'HV004', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB021', 'HV005', 10, 0);
+VALUES ( 'CB021', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB021', 'HV006', 15, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB022', 'HV001', 10, 0);
+VALUES ('CB022', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB022', 'HV002', 11, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB022', 'HV003', 10, 0);
+VALUES ( 'CB022', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB022', 'HV004', 12, 0);
+VALUES ( 'CB022', 'HV004', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB022', 'HV005', 13, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB022', 'HV006', 15, 0);
 
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ('CB023', 'HV001', 10, 0);
+VALUES ('CB023', 'HV001', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB023', 'HV002', 14, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB023', 'HV003', 10, 0);
+VALUES ( 'CB023', 'HV003', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB023', 'HV004', 12, 0);
+VALUES ( 'CB023', 'HV004', 15, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
-VALUES ( 'CB023', 'HV005', 10, 0);
+VALUES ( 'CB023', 'HV005', 20, 0);
 INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat)
 VALUES ( 'CB023', 'HV006', 15, 0);
 
+-- TRINH Thêm
+-- Chuyến bay CB047
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB047', 'HV001', 30, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB047', 'HV002', 25, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB047', 'HV003', 20, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB047', 'HV004', 20, 0);
+
+-- Chuyến bay CB048
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB048', 'HV001', 30, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB048', 'HV002', 25, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB048', 'HV003', 20, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB048', 'HV004', 20, 0);
+
+-- Chuyến bay CB049
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB049', 'HV001', 30, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB049', 'HV002', 25, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB049', 'HV003', 20, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB049', 'HV004', 20, 0);
+
+-- Chuyến bay CB050
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB050', 'HV001', 30, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB050', 'HV002', 25, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB050', 'HV003', 20, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB050', 'HV004', 20, 0);
+
+-- Chuyến bay CB051
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB051', 'HV001', 30, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB051', 'HV002', 25, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB051', 'HV003', 20, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB051', 'HV004', 20, 0);
+
+-- Chuyến bay CB052
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB052', 'HV001', 30, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB052', 'HV002', 25, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB052', 'HV003', 20, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB052', 'HV004', 20, 0);
+
+-- Chuyến bay CB053
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB053', 'HV001', 30, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB053', 'HV002', 25, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB053', 'HV003', 20, 0);
+INSERT INTO CT_HANGVE (MaChuyenBay, MaHangVe, SoGheTrong, SoGheDat) VALUES ('CB053', 'HV004', 20, 0);
 
 INSERT INTO QUYEN VALUES ('RL0001', N'Admin');
 INSERT INTO QUYEN VALUES ('RL0002', N'Manager');
@@ -1476,7 +1570,7 @@ VALUES ('CTDV018', 'VE0018', 'KH002', TO_TIMESTAMP('2023-02-03 09:00:00', 'YYYY-
 INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
 VALUES ('CTDV019', 'VE0019', 'KH002', TO_TIMESTAMP('2023-02-04 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-02-05 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
 INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
-VALUES ('CTDV020', 'VE0020', 'KH002', TO_TIMESTAMP('2023-02-05 12:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-02-06 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+VALUES ('CTDV020', 'VE0020', 'KH002', TO_TIMESTAMP('2023-02-05 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-02-06 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
 INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
 VALUES ('CTDV021', 'VE0021', 'KH002', TO_TIMESTAMP('2023-02-06 11:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-02-07 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
 INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
@@ -1616,9 +1710,6 @@ INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, T
 VALUES ('CTDV081', 'VE0081', 'KH002', TO_TIMESTAMP('2023-06-05 09:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-06-07 15:29:59', 'YYYY-MM-DD HH24:MI:SS'), 1);
 INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
 VALUES ('CTDV082', 'VE0082', 'KH002', TO_TIMESTAMP('2023-06-06 09:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-06-08 15:29:59', 'YYYY-MM-DD HH24:MI:SS'), 1);
-
-
-
 
 
 INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
@@ -1823,6 +1914,39 @@ VALUES ('CTDV171', 'VE0171', 'KH002', TO_TIMESTAMP('2023-11-14 09:00:00', 'YYYY-
 INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
 VALUES ('CTDV172', 'VE0172', 'KH002', TO_TIMESTAMP('2023-11-15 09:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2023-11-16 15:29:59', 'YYYY-MM-DD HH24:MI:SS'), 1);
 
+-- TRINH Thêm
+-- Chuyến bay CB047
+
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV04701', 'VE04701', 'KH001', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV04702', 'VE04702', 'KH002', TO_TIMESTAMP('2024-05-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 0);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV04703', 'VE04703', 'KH003', TO_TIMESTAMP('2024-04-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-04-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+
+-- Chuyến bay CB048
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV04802', 'VE04802', 'KH005', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 0);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV04803', 'VE04803', 'KH006', TO_TIMESTAMP('2024-04-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-04-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+
+-- Chuyến bay CB049
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV04901', 'VE04901', 'KH007', TO_TIMESTAMP('2024-05-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-05-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV04902', 'VE04902', 'KH003', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 0);
+
+-- Chuyến bay CB050
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05001', 'VE05001', 'KH001', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05002', 'VE05002', 'KH002', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 0);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05003', 'VE05003', 'KH004', TO_TIMESTAMP('2024-03-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-03-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+
+-- Chuyến bay CB051
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05101', 'VE05101', 'KH005', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05102', 'VE05102', 'KH007', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 0);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05103', 'VE05103', 'KH003', TO_TIMESTAMP('2024-02-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-02-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+
+-- Chuyến bay CB052
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05201', 'VE05201', 'KH005', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05202', 'VE05202', 'KH007', TO_TIMESTAMP('2024-02-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 0);
+
+-- Chuyến bay CB053 05
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05301', 'VE05301', 'KH005', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05302', 'VE05302', 'KH007', TO_TIMESTAMP('2024-06-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 0);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05303', 'VE05303', 'KH003', TO_TIMESTAMP('2024-01-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-01-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
 
 
 /*
@@ -1868,585 +1992,6 @@ DELETE FROM THAMSO;
 -- Xóa dữ liệu trong bảng SANBAYTG
 DELETE FRROM SANBAYTG;
 */
-
-
------------------------------------------------------------------------------------------------
---TRIGGER
-
-
-
-/* R1: Thời gian xuất phát của một chuyến bay phải nhỏ hơn thời gian kết thúc */
-
-ALTER TABLE CHUYENBAY
-    ADD CONSTRAINT Check_ThoiGian_CB CHECK (TGXP < TGKT);
-
-
-/* R2: Ngày thanh toán vé phải sau ngày mua vé */
-
-ALTER TABLE CT_DATVE
-    ADD CONSTRAINT Check_NgayThanhToan_VE CHECK (NgayMuaVe <= NgayThanhToan);
-
-
-/* R3:Tổng giá tiền thanh toán = giá vé x hệ số */
-
-CREATE OR REPLACE TRIGGER Tienthanhtoan_VE
-    AFTER INSERT OR UPDATE ON VE
-    FOR EACH ROW
-DECLARE
-    v_GiaVe CHUYENBAY.GiaVe%TYPE;
-    v_HeSo HANGVE.HeSo%TYPE;
-BEGIN
-
-    SELECT cb.GiaVe, hv.HeSo
-    INTO v_GiaVe, v_HeSo
-    FROM CHUYENBAY cb, HANGVE hv
-    WHERE cb.MaChuyenBay = :NEW.MaChuyenBay
-      AND hv.MaHangVe = :NEW.MaHangVe;
-
-
-    IF :NEW.GiaTien <> v_HeSo * v_GiaVe THEN
-        RAISE_APPLICATION_ERROR(-20002, 'Tổng giá tiền thanh toán không hợp lệ.');
-    END IF;
-END;
-/
-
-/* R4: Cập nhật doanh thu  tháng khi có thêm doanh thu chuyến bay.*/
-
-CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang
-    FOR INSERT OR update ON CT_DATVE
-    COMPOUND TRIGGER
-    v_nam NUMBER;
-    v_thang NUMBER;
-    giave NUMBER;
-    v_dem NUMBER;
-    v_dem_nam NUMBER;
-    v_machuyenbay VARCHAR2(10);
-    v_countMaChuyenBay NUMBER;
-    CheckExist NUMBER := 0 ;
-    v_count NUMBER;
-    p_trangThai NUMBER;
-    v_maVe VARCHAR2(10);
-    v_maHangVe VARCHAR2(10);
-
-BEFORE STATEMENT IS
-BEGIN
-    NULL;
-END BEFORE STATEMENT;
-
-    BEFORE EACH ROW IS
-    BEGIN
-
-        IF (:NEW.NgayThanhToan IS NULL) THEN
-            BEGIN
-                SELECT 0,0 INTO v_nam,V_THANG
-                FROM dual;
-            END;
-        ELSE
-            SELECT EXTRACT(YEAR FROM :NEW.NgayThanhToan), EXTRACT(MONTH FROM :NEW.NgayThanhToan) INTO v_nam,v_thang
-            FROM dual;
-        END IF;
-
-        SELECT :NEW.TrangThai INTO p_trangThai
-        FROM dual;
-
-        SELECT MAHANGVE INTO v_maHangVe
-        FROM VE
-        WHERE Ve.MaVE = :NEW.MAVE;
-
-        SELECT Giatien INTO giave
-        FROM VE v
-        WHERE V.MaVE = :NEW.MaVE;
-
-        SELECT Machuyenbay INTO v_machuyenbay
-        FROM ve
-        WHERE Ve.MaVE = :NEW.MAVE;
-
-
-
-        IF (:NEW.TrangThai = 2) THEN
-            BEGIN
-                CheckExist := 1;
-            END;
-        END IF;
-
-    END BEFORE EACH ROW;
-
-
-    AFTER EACH ROW IS
-    BEGIN
-        NULL;
-    END AFTER EACH ROW;
-
-
-    AFTER STATEMENT IS
-    BEGIN
-
-        IF (( p_trangThai = 1) OR (p_trangThai = 0) ) THEN
-            UPDATE CT_HANGVE
-            SET SoGheTrong = SoGheTrong - 1,
-                SoGheDat = SoGheDat + 1
-            WHERE MaChuyenBay = v_maChuyenBay AND MaHangVe = v_maHangVe;
-        ELSIF p_trangThai = 2 THEN
-            UPDATE CT_HANGVE
-            SET SoGheTrong = SoGheTrong + 1,
-                SoGheDat = SoGheDat - 1
-            WHERE MaChuyenBay = v_maChuyenBay AND MaHangVe = v_maHangVe;
-        END IF;
-
-
-        IF (v_nam > 0 AND v_thang > 0 AND CheckExist = 0) THEN
-            BEGIN
-                SELECT COUNT(*) INTO v_dem
-                FROM baocaothang
-                WHERE thang = v_thang AND nam = v_nam;
-
-                SELECT COUNT(*) INTO v_dem_nam
-                FROM baocaonam
-                WHERE nam = v_nam;
-
-                SELECT COUNT(*) INTO v_countMaChuyenBay
-                FROM BAOCAOTHANG
-                WHERE machuyenbay = v_machuyenbay;
-
-                IF (v_dem > 0) THEN
-                    begin
-                        IF (v_countMaChuyenBay > 0 ) THEN
-                            begin
-                                UPDATE BAOCAOTHANG
-                                SET DoanhThu = DoanhThu + GiaVe,
-                                    SoVeDaBan = SoVeDaBan + 1
-                                WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
-                            END;
-                        ELSE
-                            BEGIN
-                                INSERT INTO BAOCAOTHANG ( MaChuyenBay, SoVeDaBan, DoanhThu, Thang, Nam)
-                                VALUES (v_machuyenbay, 1, giave, v_thang, v_nam);
-                            END;
-                        END IF;
-                    END;
-                ELSE
-                    BEGIN
-                        INSERT INTO BAOCAOTHANG ( MaChuyenBay, SoVeDaBan, DoanhThu, Thang, Nam)
-                        VALUES (v_machuyenbay, 1, giave, v_thang, v_nam);
-                    END;
-                END IF;
-
-                UPDATE baocaonam
-                SET doanhthu = doanhthu + GIAVE
-                WHERE nam = v_nam AND thang = v_thang;
-
-            END;
-        END IF;
-
-        ----
-        IF (CheckExist = 1 ) THEN
-            BEGIN
-                SELECT sovedaban INTO v_count
-                FROM BAOCAOTHANG
-                WHERE thang = v_thang AND nam = v_nam AND machuyenbay = v_machuyenbay ;
-
-                IF (v_count > 1 ) THEN
-                    begin
-                        UPDATE BAOCAOTHANG
-                        SET DoanhThu = DoanhThu - GiaVe,
-                            SoVeDaBan = SoVeDaBan - 1
-                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
-
-                        UPDATE BAOCAONAM
-                        SET doanhthu = doanhthu - giave
-                        WHERE nam = v_nam AND thang = v_thang;
-                    END;
-                ELSE
-                    BEGIN
-                        UPDATE BAOCAONAM
-                        SET doanhthu = doanhthu - giave, SOCHUYENBAY = SOCHUYENBAY - 1
-                        WHERE nam = v_nam AND thang = v_thang;
-
-                        DELETE FROM baocaothang
-                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
-
-                    END;
-                END IF;
-            END;
-        END IF;
-
-    END AFTER STATEMENT;
-    END Update_DoanhThu_Thang;
-
---trigger cho delete
-
-CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang_delete
-    FOR delete ON CT_DATVE
-    COMPOUND TRIGGER
-    v_nam NUMBER;
-    v_thang NUMBER;
-    giave NUMBER;
-    v_dem NUMBER;
-    v_machuyenbay VARCHAR2(10);
-    v_count NUMBER;
-    v_maHangVe VARCHAR2(10);
-
-
-BEFORE STATEMENT IS
-BEGIN
-    NULL;
-END BEFORE STATEMENT;
-
-    BEFORE EACH ROW IS
-    BEGIN
-        IF (:OLD.NgayThanhToan IS NULL) THEN
-            BEGIN
-                SELECT 0,0 INTO v_nam,V_THANG
-                FROM dual;
-            END;
-        ELSE
-            BEGIN
-                SELECT EXTRACT(YEAR FROM :OLD.NgayThanhToan), EXTRACT(MONTH FROM :OLD.NgayThanhToan) INTO v_nam,v_thang
-                FROM dual;
-            END;
-        END IF;
-
-        SELECT Giatien INTO giave
-        FROM VE v
-        WHERE V.MaVE = :OLD.MaVE;
-
-        SELECT machuyenbay INTO v_machuyenbay
-        FROM VE
-        WHERE mave = :OLD.mave;
-
-        SELECT MAHANGVE INTO v_maHangVe
-        FROM VE
-        WHERE Ve.MaVE = :OLD.MAVE;
-
-    END BEFORE EACH ROW;
-
-    AFTER EACH ROW IS
-    BEGIN
-        NULL;
-    END AFTER EACH ROW;
-
-    AFTER STATEMENT IS
-    BEGIN
-
-        UPDATE ct_hangve
-        SET soghetrong = soghetrong + 1 ,
-            soghedat = soghedat - 1
-        WHERE machuyenbay = v_machuyenbay  AND mahangve = V_MAHANGVE;
-
-        IF (v_nam > 0 AND v_thang > 0 ) THEN
-            BEGIN
-                SELECT sovedaban INTO v_count
-                FROM BAOCAOTHANG
-                WHERE thang = v_thang AND nam = v_nam AND machuyenbay = v_machuyenbay ;
-
-                IF (v_count > 1 ) THEN
-                    begin
-                        UPDATE BAOCAOTHANG
-                        SET DoanhThu = DoanhThu - GiaVe,
-                            SoVeDaBan = SoVeDaBan - 1
-                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
-
-                        UPDATE BAOCAONAM
-                        SET doanhthu = doanhthu - giave
-                        WHERE nam = v_nam AND thang = v_thang;
-                    END;
-                ELSE
-                    BEGIN
-                        UPDATE BAOCAOTHANG
-                        SET DoanhThu = DoanhThu - GiaVe,
-                            SoVeDaBan = SoVeDaBan - 1
-                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
-
-                        UPDATE BAOCAONAM
-                        SET doanhthu = doanhthu - giave, SOCHUYENBAY = SOCHUYENBAY - 1
-                        WHERE nam = v_nam AND thang = v_thang;
-
-                        DELETE FROM baocaothang
-                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
-
-                    END;
-                END IF;
-            END;
-        END IF;
-    END AFTER STATEMENT;
-
-    END Update_DoanhThu_Thang_delete;
-
-/* R4: Mỗi vé phải đặt trước một khoảng thời gian nhất định trước khi máy bay xuất phát. */
---DROP TRIGGER trigger_CT_DATVE
-
-CREATE OR REPLACE TRIGGER trigger_CT_DATVE
-    BEFORE INSERT OR update ON CT_DATVE
-    FOR EACH ROW
-DECLARE
-    v_MinBookingTime NUMBER;
-    v_Interval INTERVAL DAY(4) TO SECOND;
-    v_TimeMin INTERVAL DAY(4) TO SECOND;
-BEGIN
-    SELECT GiaTri into v_MinBookingTime
-    FROM THAMSO
-    WHERE TenThuocTinh = 'ThoiGianToiThieuDatVe';
-
-    v_Interval := NUMTODSINTERVAL(v_MinBookingTime, 'HOUR');
-
-    SELECT (TGXP - :NEW.NgayMuaVe  ) INTO v_TimeMin
-    FROM chuyenbay cb, ve v
-    WHERE V.MAVE = :NEW.MaVE  AND CB.MACHUYENBAY = V.MACHUYENBAY;
-
-
-    IF v_TimeMin < v_Interval THEN
-        RAISE_APPLICATION_ERROR(-20004, 'Mỗi vé phải được đặt trước ít nhất ' || v_MinBookingTime || ' giờ trước khi máy bay xuất phát.');
-    END IF;
-
-END;
-/
-
-
-
-/* R5: Cập nhật Số chuyến bay báo cáo năm khi có chuyến bay mới được update vào baocaothang.*/
---DROP TRIGGER Update_DoanhThu_Nam;
-
-CREATE OR REPLACE TRIGGER Update_DoanhThu_Nam
-    BEFORE INSERT ON baocaothang
-    FOR EACH ROW
-DECLARE
-    v_checkExist NUMBER;
-BEGIN
-
-    SELECT COUNT(*) INTO V_CHECKEXIST
-    FROM baocaonam
-    WHERE nam = :NEW.Nam AND thang = :NEW.thang;
-
-    IF (V_CHECKEXIST > 0) THEN
-        BEGIN
-            UPDATE BAOCAONAM
-            SET sochuyenbay = sochuyenbay + 1
-            WHERE thang = :NEW.thang AND nam = :NEW.nam;
-        END;
-    ELSE
-        BEGIN
-            INSERT INTO baocaonam(thang,nam,sochuyenbay,doanhthu) VALUES (:NEW.thang,:NEW.nam,1,0);
-        END;
-    END IF;
-END;
-/
-
-
-
-
-
-/* R6:  Giá tiền của Vé là một số không âm. */
-
-ALTER TABLE VE
-    ADD CONSTRAINT Check_GiaTien_ CHECK (GiaTien >= 0);
-
-
-/* R7: Trạng thái là chưa đổi hoặc đã đổi */
-
-ALTER TABLE HANGVE
-    ADD CONSTRAINT Check_TrangThai_HV CHECK (TrangThai IN (0,1));
-
-
-/* R8.1: Trạng thái mặc định ban đầu là chưa đổi */
-
-ALTER TABLE HANGVE
-    MODIFY TrangThai DEFAULT 1;
-
-
-/* R18.2: Trạng thái mặc định ban đầu là chưa đổi */
-
-ALTER TABLE CT_DATVE
-    MODIFY TrangThai DEFAULT 1;
-
-
-
-/* R9: Số vé là một số không âm. */
-
-ALTER TABLE baocaothang
-    ADD CONSTRAINT Check_SoVe CHECK (SoVeDaBan >= 0);
-
-
-/* R10: Doanh thu là một số không âm. */
-
-ALTER TABLE baocaothang
-    ADD CONSTRAINT Check_DoanhThu CHECK (DoanhThu >= 0);
-
-
-/* R11: Doanh thu mặc định là 0. */
-
-ALTER TABLE BAOCAONAM
-    MODIFY DoanhThu DEFAULT 0;
-
-
-/* R12: So Ve mặc định là 0.  */
-
-ALTER TABLE baocaothang
-    MODIFY SoVeDaBan DEFAULT 0;
-
-
-/* R13: Thời gian bay phải không nhỏ hơn thời gian bay tối thiểu. */
---DROP TRIGGER Check_ThoiGianXuatPhat
-
-CREATE OR REPLACE TRIGGER Check_ThoiGianXuatPhat
-    BEFORE INSERT OR UPDATE ON CHUYENBAY
-    FOR EACH ROW
-DECLARE
-    v_ThoiGianToiThieu THAMSO.GiaTri%TYPE;
-    thoigianbay NUMBER;
-    distance INTERVAL DAY TO SECOND;
-BEGIN
-    SELECT GiaTri INTO v_ThoiGianToiThieu
-    FROM THAMSO
-    WHERE TenThuocTinh = 'ThoiGianBayToiThieu';
-
-    distance := :NEW.TGKT - :NEW.TGXP;
-
-    SELECT EXTRACT(DAY FROM (distance)) * 24 +
-           EXTRACT(HOUR FROM (distance)) +
-           EXTRACT(MINUTE FROM (distance)) / 60 +
-           EXTRACT(SECOND FROM (distance)) / 3600 into thoigianbay
-    FROM dual;
-
-    IF thoigianbay  < v_ThoiGianToiThieu THEN
-        RAISE_APPLICATION_ERROR(-20008, 'Thời gian bay phải lớn hơn hoặc bằng thời gian bay tối thiểu.');
-    END IF;
-END;
-/
-
-
-/* R14: sân bay đến và sân bay đi của đường bay không trùng nhau */
---DROP TRIGGER Check_DuongBay
-
-CREATE OR REPLACE TRIGGER Check_DuongBay
-    BEFORE INSERT OR UPDATE ON DUONGBAY
-    FOR EACH ROW
-BEGIN
-    IF :NEW.MaSanBayDi = :NEW.MaSanBayDen THEN
-        RAISE_APPLICATION_ERROR(-20009, 'Sân bay đi và sân bay đến không được trùng nhau.');
-    END IF;
-END;
-/
-
-/* R15: nếu số lượng ghế trống = 0 thì không cho đặt vé */
---DROP TRIGGER check_SL_GheTrong;
-
-CREATE OR REPLACE TRIGGER check_SL_GheTrong
-    BEFORE INSERT ON CT_DATVE
-    FOR EACH ROW
-DECLARE
-    v_soghetrong CT_HANGVE.SOGHETRONG%TYPE;
-BEGIN
-
-    SELECT soghetrong INTO v_soghetrong
-    FROM CT_HANGVE cthv, ve v
-    WHERE v.MaVE = :NEW.MaVe AND v.machuyenbay = cthv.machuyenbay AND v.MAHANGVE = cthv.MAHANGVE;
-
-
-    IF (v_SoGheTrong = 0) THEN
-        RAISE_APPLICATION_ERROR(-20009, 'Hết vé trống');
-    END IF;
-END;
-/
-
-
-/* R16: xóa VE và CT_HANGVE liên quan đến chuyến bay đã xóa */
-
---CHẠY PROCEDURE XONG MỚI CHẠY LẠI TRIGGER NÀY
-
-CREATE OR REPLACE TRIGGER rf_VE_CT_HANGVE_delete_CHUYENBAY
-    before DELETE ON CHUYENBAY
-    FOR EACH ROW
-BEGIN
-    -- Xóa các bản ghi liên quan từ bảng VE
-    DELETE CT_HANGVE
-    WHERE machuyenbay = :OLD.machuyenbay;
-
-    FOR rec IN (SELECT MaVe FROM VE WHERE MaChuyenBay = :OLD.MaChuyenBay)
-        LOOP
-            BEGIN
-                -- Gọi procedure delete_CT_DATVE_by_VE để xóa các bản ghi trong CT_DATVE, nếu không tìm thấy thì bỏ qua
-                delete_CT_DATVE_by_VE(rec.MaVe);
-            EXCEPTION
-                WHEN NO_DATA_FOUND THEN
-                    -- Nếu không tìm thấy MaVe trong CT_DATVE thì bỏ qua
-                    NULL;
-                WHEN OTHERS THEN
-                    -- Xử lý các ngoại lệ khác nếu cần thiết
-                    NULL;
-            END;
-        END LOOP;
-
-    -- Xóa các bản ghi trong bảng VE liên quan đến MaChuyenBay vừa xóa
-    DELETE FROM VE
-    WHERE MaChuyenBay = :OLD.MaChuyenBay;
-END rf_VE_CT_HANGVE_delete_CHUYENBAY;
-/
-
-
-/* R17: cập nhật trạng thái đường bay khi cập nhật trạng thái sân bay ngưng hoạt động */
---DROP TRIGGER trg_update_trangthai_duongbay;
-CREATE OR REPLACE TRIGGER trg_update_trangthai_duongbay
-    AFTER UPDATE OF TrangThai ON SANBAY
-    FOR EACH ROW
-BEGIN
-    IF :NEW.TrangThai = 0 THEN
-        -- Update DUONGBAY where MaSanBayDen matches the updated MaSanBay
-        UPDATE DUONGBAY
-        SET TrangThai = 0
-        WHERE MaSanBayDen = :OLD.MaSanBay;
-
-        -- Update DUONGBAY where MaSanBayDi matches the updated MaSanBay
-        UPDATE DUONGBAY
-        SET TrangThai = 0
-        WHERE MaSanBayDi = :OLD.MaSanBay;
-
-        -- Update DUONGBAY where MaDuongBay matches MaDuongBay in SANBAYTG and MaSanBay in SANBAYTG matches the updated MaSanBay
-        UPDATE DUONGBAY
-        SET TrangThai = 0
-        WHERE MaDuongBay IN (
-            SELECT MaDuongBay
-            FROM SANBAYTG
-            WHERE MaSanBay = :OLD.MaSanBay
-        );
-    END IF;
-END; ----------------------------- trigger mục 3
-
-/* R18: kiểm tra trước khi cập nhật trạng thái đường bay hoạt động */
---DROP TRIGGER trg_check_duongbay_status;
-CREATE OR REPLACE TRIGGER trg_check_duongbay_status
-    BEFORE UPDATE OF TrangThai ON DUONGBAY
-    FOR EACH ROW
-DECLARE
-    cnt NUMBER;
-BEGIN
-    IF :NEW.TrangThai = 1 THEN
-        -- Kiểm tra số lượng sân bay có TrangThai = 0 bằng cách sử dụng UNION
-        SELECT COUNT(*)
-        INTO cnt
-        FROM (
-                 SELECT 1
-                 FROM SANBAY sb
-                 WHERE sb.MaSanBay = :OLD.MaSanBayDi AND sb.TrangThai = 0
-                 UNION
-                 SELECT 1
-                 FROM SANBAY sb
-                 WHERE sb.MaSanBay = :OLD.MaSanBayDen AND sb.TrangThai = 0
-                 UNION
-                 SELECT 1
-                 FROM SANBAY sb
-                 WHERE sb.TrangThai = 0 AND sb.MaSanBay IN (
-                     SELECT sbtg.MaSanBay
-                     FROM SANBAYTG sbtg
-                     WHERE sbtg.MaDuongBay = :OLD.MaDuongBay
-                 )
-             );
-        -- Nếu số lượng sân bay có TrangThai = 0 lớn hơn 0 thì raise lỗi
-        IF cnt > 0 THEN
-            RAISE_APPLICATION_ERROR(-20001, 'Có sân bay thuộc đường bay đang hoạt động nên không thể thay đổi trạng thái');
-        END IF;
-    END IF;
-END;------------------------------------------------ trigger mục 2
-
 
 -----------------------------------------------------------------------------------------------------------------------------------------
 --PROCEDURE
@@ -3025,4 +2570,582 @@ END delete_CT_DATVE_by_VE;
 
 
 -------------------------------------------------------------------
+
+
+
+-----------------------------------------------------------------------------------------------
+--TRIGGER
+
+
+
+/* R1: Thời gian xuất phát của một chuyến bay phải nhỏ hơn thời gian kết thúc */
+
+ALTER TABLE CHUYENBAY
+    ADD CONSTRAINT Check_ThoiGian_CB CHECK (TGXP < TGKT);
+
+
+/* R2: Ngày thanh toán vé phải sau ngày mua vé */
+
+ALTER TABLE CT_DATVE
+    ADD CONSTRAINT Check_NgayThanhToan_VE CHECK (NgayMuaVe <= NgayThanhToan);
+
+
+/* R3:Tổng giá tiền thanh toán = giá vé x hệ số */
+
+CREATE OR REPLACE TRIGGER Tienthanhtoan_VE
+    AFTER INSERT OR UPDATE ON VE
+    FOR EACH ROW
+DECLARE
+    v_GiaVe CHUYENBAY.GiaVe%TYPE;
+    v_HeSo HANGVE.HeSo%TYPE;
+BEGIN
+
+    SELECT cb.GiaVe, hv.HeSo
+    INTO v_GiaVe, v_HeSo
+    FROM CHUYENBAY cb, HANGVE hv
+    WHERE cb.MaChuyenBay = :NEW.MaChuyenBay
+      AND hv.MaHangVe = :NEW.MaHangVe;
+
+
+    IF :NEW.GiaTien <> v_HeSo * v_GiaVe THEN
+        RAISE_APPLICATION_ERROR(-20002, 'Tổng giá tiền thanh toán không hợp lệ.');
+    END IF;
+END;
+/
+
+/* R4: Cập nhật doanh thu  tháng khi có thêm doanh thu chuyến bay.*/
+
+CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang
+    FOR INSERT OR update ON CT_DATVE
+    COMPOUND TRIGGER
+    v_nam NUMBER;
+    v_thang NUMBER;
+    giave NUMBER;
+    v_dem NUMBER;
+    v_dem_nam NUMBER;
+    v_machuyenbay VARCHAR2(10);
+    v_countMaChuyenBay NUMBER;
+    CheckExist NUMBER := 0 ;
+    v_count NUMBER;
+    p_trangThai NUMBER;
+    v_maVe VARCHAR2(10);
+    v_maHangVe VARCHAR2(10);
+
+BEFORE STATEMENT IS
+BEGIN
+    NULL;
+END BEFORE STATEMENT;
+
+    BEFORE EACH ROW IS
+    BEGIN
+
+        IF (:NEW.NgayThanhToan IS NULL) THEN
+            BEGIN
+                SELECT 0,0 INTO v_nam,V_THANG
+                FROM dual;
+            END;
+        ELSE
+            SELECT EXTRACT(YEAR FROM :NEW.NgayThanhToan), EXTRACT(MONTH FROM :NEW.NgayThanhToan) INTO v_nam,v_thang
+            FROM dual;
+        END IF;
+
+        SELECT :NEW.TrangThai INTO p_trangThai
+        FROM dual;
+
+        SELECT MAHANGVE INTO v_maHangVe
+        FROM VE
+        WHERE Ve.MaVE = :NEW.MAVE;
+
+        SELECT Giatien INTO giave
+        FROM VE v
+        WHERE V.MaVE = :NEW.MaVE;
+
+        SELECT Machuyenbay INTO v_machuyenbay
+        FROM ve
+        WHERE Ve.MaVE = :NEW.MAVE;
+
+
+
+        IF (:NEW.TrangThai = 2) THEN
+            BEGIN
+                CheckExist := 1;
+            END;
+        END IF;
+
+    END BEFORE EACH ROW;
+
+
+    AFTER EACH ROW IS
+    BEGIN
+        NULL;
+    END AFTER EACH ROW;
+
+
+    AFTER STATEMENT IS
+    BEGIN
+
+        IF (( p_trangThai = 1) OR (p_trangThai = 0) ) THEN
+            UPDATE CT_HANGVE
+            SET SoGheTrong = SoGheTrong - 1,
+                SoGheDat = SoGheDat + 1
+            WHERE MaChuyenBay = v_maChuyenBay AND MaHangVe = v_maHangVe;
+        ELSIF p_trangThai = 2 THEN
+            UPDATE CT_HANGVE
+            SET SoGheTrong = SoGheTrong + 1,
+                SoGheDat = SoGheDat - 1
+            WHERE MaChuyenBay = v_maChuyenBay AND MaHangVe = v_maHangVe;
+        END IF;
+
+
+        IF (v_nam > 0 AND v_thang > 0 AND CheckExist = 0) THEN
+            BEGIN
+                SELECT COUNT(*) INTO v_dem
+                FROM baocaothang
+                WHERE thang = v_thang AND nam = v_nam;
+
+                SELECT COUNT(*) INTO v_dem_nam
+                FROM baocaonam
+                WHERE nam = v_nam;
+
+                SELECT COUNT(*) INTO v_countMaChuyenBay
+                FROM BAOCAOTHANG
+                WHERE machuyenbay = v_machuyenbay;
+
+                IF (v_dem > 0) THEN
+                    begin
+                        IF (v_countMaChuyenBay > 0 ) THEN
+                            begin
+                                UPDATE BAOCAOTHANG
+                                SET DoanhThu = DoanhThu + GiaVe,
+                                    SoVeDaBan = SoVeDaBan + 1
+                                WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
+                            END;
+                        ELSE
+                            BEGIN
+                                INSERT INTO BAOCAOTHANG ( MaChuyenBay, SoVeDaBan, DoanhThu, Thang, Nam)
+                                VALUES (v_machuyenbay, 1, giave, v_thang, v_nam);
+                            END;
+                        END IF;
+                    END;
+                ELSE
+                    BEGIN
+                        INSERT INTO BAOCAOTHANG ( MaChuyenBay, SoVeDaBan, DoanhThu, Thang, Nam)
+                        VALUES (v_machuyenbay, 1, giave, v_thang, v_nam);
+                    END;
+                END IF;
+
+                UPDATE baocaonam
+                SET doanhthu = doanhthu + GIAVE
+                WHERE nam = v_nam AND thang = v_thang;
+
+            END;
+        END IF;
+
+        ----
+        IF (CheckExist = 1 ) THEN
+            BEGIN
+                SELECT sovedaban INTO v_count
+                FROM BAOCAOTHANG
+                WHERE thang = v_thang AND nam = v_nam AND machuyenbay = v_machuyenbay ;
+
+                IF (v_count > 1 ) THEN
+                    begin
+                        UPDATE BAOCAOTHANG
+                        SET DoanhThu = DoanhThu - GiaVe,
+                            SoVeDaBan = SoVeDaBan - 1
+                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
+
+                        UPDATE BAOCAONAM
+                        SET doanhthu = doanhthu - giave
+                        WHERE nam = v_nam AND thang = v_thang;
+                    END;
+                ELSE
+                    BEGIN
+                        UPDATE BAOCAONAM
+                        SET doanhthu = doanhthu - giave, SOCHUYENBAY = SOCHUYENBAY - 1
+                        WHERE nam = v_nam AND thang = v_thang;
+
+                        DELETE FROM baocaothang
+                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
+
+                    END;
+                END IF;
+            END;
+        END IF;
+
+    END AFTER STATEMENT;
+    END Update_DoanhThu_Thang;
+
+--trigger cho delete
+
+CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang_delete
+    FOR delete ON CT_DATVE
+    COMPOUND TRIGGER
+    v_nam NUMBER;
+    v_thang NUMBER;
+    giave NUMBER;
+    v_dem NUMBER;
+    v_machuyenbay VARCHAR2(10);
+    v_count NUMBER;
+    v_maHangVe VARCHAR2(10);
+
+
+BEFORE STATEMENT IS
+BEGIN
+    NULL;
+END BEFORE STATEMENT;
+
+    BEFORE EACH ROW IS
+    BEGIN
+        IF (:OLD.NgayThanhToan IS NULL) THEN
+            BEGIN
+                SELECT 0,0 INTO v_nam,V_THANG
+                FROM dual;
+            END;
+        ELSE
+            BEGIN
+                SELECT EXTRACT(YEAR FROM :OLD.NgayThanhToan), EXTRACT(MONTH FROM :OLD.NgayThanhToan) INTO v_nam,v_thang
+                FROM dual;
+            END;
+        END IF;
+
+        SELECT Giatien INTO giave
+        FROM VE v
+        WHERE V.MaVE = :OLD.MaVE;
+
+        SELECT machuyenbay INTO v_machuyenbay
+        FROM VE
+        WHERE mave = :OLD.mave;
+
+        SELECT MAHANGVE INTO v_maHangVe
+        FROM VE
+        WHERE Ve.MaVE = :OLD.MAVE;
+
+    END BEFORE EACH ROW;
+
+    AFTER EACH ROW IS
+    BEGIN
+        NULL;
+    END AFTER EACH ROW;
+
+    AFTER STATEMENT IS
+    BEGIN
+
+        UPDATE ct_hangve
+        SET soghetrong = soghetrong + 1 ,
+            soghedat = soghedat - 1
+        WHERE machuyenbay = v_machuyenbay  AND mahangve = V_MAHANGVE;
+
+        IF (v_nam > 0 AND v_thang > 0 ) THEN
+            BEGIN
+                SELECT sovedaban INTO v_count
+                FROM BAOCAOTHANG
+                WHERE thang = v_thang AND nam = v_nam AND machuyenbay = v_machuyenbay ;
+
+                IF (v_count > 1 ) THEN
+                    begin
+                        UPDATE BAOCAOTHANG
+                        SET DoanhThu = DoanhThu - GiaVe,
+                            SoVeDaBan = SoVeDaBan - 1
+                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
+
+                        UPDATE BAOCAONAM
+                        SET doanhthu = doanhthu - giave
+                        WHERE nam = v_nam AND thang = v_thang;
+                    END;
+                ELSE
+                    BEGIN
+                        UPDATE BAOCAOTHANG
+                        SET DoanhThu = DoanhThu - GiaVe,
+                            SoVeDaBan = SoVeDaBan - 1
+                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
+
+                        UPDATE BAOCAONAM
+                        SET doanhthu = doanhthu - giave, SOCHUYENBAY = SOCHUYENBAY - 1
+                        WHERE nam = v_nam AND thang = v_thang;
+
+                        DELETE FROM baocaothang
+                        WHERE nam = v_Nam AND thang = v_Thang AND machuyenbay = v_machuyenbay;
+
+                    END;
+                END IF;
+            END;
+        END IF;
+    END AFTER STATEMENT;
+
+    END Update_DoanhThu_Thang_delete;
+
+/* R4: Mỗi vé phải đặt trước một khoảng thời gian nhất định trước khi máy bay xuất phát. */
+--DROP TRIGGER trigger_CT_DATVE
+
+CREATE OR REPLACE TRIGGER trigger_CT_DATVE
+    BEFORE INSERT OR update ON CT_DATVE
+    FOR EACH ROW
+DECLARE
+    v_MinBookingTime NUMBER;
+    v_Interval INTERVAL DAY(4) TO SECOND;
+    v_TimeMin INTERVAL DAY(4) TO SECOND;
+BEGIN
+    SELECT GiaTri into v_MinBookingTime
+    FROM THAMSO
+    WHERE TenThuocTinh = 'ThoiGianToiThieuDatVe';
+
+    v_Interval := NUMTODSINTERVAL(v_MinBookingTime, 'HOUR');
+
+    SELECT (TGXP - :NEW.NgayMuaVe  ) INTO v_TimeMin
+    FROM chuyenbay cb, ve v
+    WHERE V.MAVE = :NEW.MaVE  AND CB.MACHUYENBAY = V.MACHUYENBAY;
+
+
+    IF v_TimeMin < v_Interval THEN
+        RAISE_APPLICATION_ERROR(-20004, 'Mỗi vé phải được đặt trước ít nhất ' || v_MinBookingTime || ' giờ trước khi máy bay xuất phát.');
+    END IF;
+
+END;
+/
+
+
+
+/* R5: Cập nhật Số chuyến bay báo cáo năm khi có chuyến bay mới được update vào baocaothang.*/
+--DROP TRIGGER Update_DoanhThu_Nam;
+
+CREATE OR REPLACE TRIGGER Update_DoanhThu_Nam
+    BEFORE INSERT ON baocaothang
+    FOR EACH ROW
+DECLARE
+    v_checkExist NUMBER;
+BEGIN
+
+    SELECT COUNT(*) INTO V_CHECKEXIST
+    FROM baocaonam
+    WHERE nam = :NEW.Nam AND thang = :NEW.thang;
+
+    IF (V_CHECKEXIST > 0) THEN
+        BEGIN
+            UPDATE BAOCAONAM
+            SET sochuyenbay = sochuyenbay + 1
+            WHERE thang = :NEW.thang AND nam = :NEW.nam;
+        END;
+    ELSE
+        BEGIN
+            INSERT INTO baocaonam(thang,nam,sochuyenbay,doanhthu) VALUES (:NEW.thang,:NEW.nam,1,0);
+        END;
+    END IF;
+END;
+/
+
+
+
+
+
+/* R6:  Giá tiền của Vé là một số không âm. */
+
+ALTER TABLE VE
+    ADD CONSTRAINT Check_GiaTien_ CHECK (GiaTien >= 0);
+
+
+/* R7: Trạng thái là chưa đổi hoặc đã đổi */
+
+ALTER TABLE HANGVE
+    ADD CONSTRAINT Check_TrangThai_HV CHECK (TrangThai IN (0,1));
+
+
+/* R8.1: Trạng thái mặc định ban đầu là chưa đổi */
+
+ALTER TABLE HANGVE
+    MODIFY TrangThai DEFAULT 1;
+
+
+/* R18.2: Trạng thái mặc định ban đầu là chưa đổi */
+
+ALTER TABLE CT_DATVE
+    MODIFY TrangThai DEFAULT 1;
+
+
+
+/* R9: Số vé là một số không âm. */
+
+ALTER TABLE baocaothang
+    ADD CONSTRAINT Check_SoVe CHECK (SoVeDaBan >= 0);
+
+
+/* R10: Doanh thu là một số không âm. */
+
+ALTER TABLE baocaothang
+    ADD CONSTRAINT Check_DoanhThu CHECK (DoanhThu >= 0);
+
+
+/* R11: Doanh thu mặc định là 0. */
+
+ALTER TABLE BAOCAONAM
+    MODIFY DoanhThu DEFAULT 0;
+
+
+/* R12: So Ve mặc định là 0.  */
+
+ALTER TABLE baocaothang
+    MODIFY SoVeDaBan DEFAULT 0;
+
+
+/* R13: Thời gian bay phải không nhỏ hơn thời gian bay tối thiểu. */
+--DROP TRIGGER Check_ThoiGianXuatPhat
+
+CREATE OR REPLACE TRIGGER Check_ThoiGianXuatPhat
+    BEFORE INSERT OR UPDATE ON CHUYENBAY
+    FOR EACH ROW
+DECLARE
+    v_ThoiGianToiThieu THAMSO.GiaTri%TYPE;
+    thoigianbay NUMBER;
+    distance INTERVAL DAY TO SECOND;
+BEGIN
+    SELECT GiaTri INTO v_ThoiGianToiThieu
+    FROM THAMSO
+    WHERE TenThuocTinh = 'ThoiGianBayToiThieu';
+
+    distance := :NEW.TGKT - :NEW.TGXP;
+
+    SELECT EXTRACT(DAY FROM (distance)) * 24 +
+           EXTRACT(HOUR FROM (distance)) +
+           EXTRACT(MINUTE FROM (distance)) / 60 +
+           EXTRACT(SECOND FROM (distance)) / 3600 into thoigianbay
+    FROM dual;
+
+    IF thoigianbay  < v_ThoiGianToiThieu THEN
+        RAISE_APPLICATION_ERROR(-20008, 'Thời gian bay phải lớn hơn hoặc bằng thời gian bay tối thiểu.');
+    END IF;
+END;
+/
+
+
+/* R14: sân bay đến và sân bay đi của đường bay không trùng nhau */
+--DROP TRIGGER Check_DuongBay
+
+CREATE OR REPLACE TRIGGER Check_DuongBay
+    BEFORE INSERT OR UPDATE ON DUONGBAY
+    FOR EACH ROW
+BEGIN
+    IF :NEW.MaSanBayDi = :NEW.MaSanBayDen THEN
+        RAISE_APPLICATION_ERROR(-20009, 'Sân bay đi và sân bay đến không được trùng nhau.');
+    END IF;
+END;
+/
+
+/* R15: nếu số lượng ghế trống = 0 thì không cho đặt vé */
+--DROP TRIGGER check_SL_GheTrong;
+
+CREATE OR REPLACE TRIGGER check_SL_GheTrong
+    BEFORE INSERT ON CT_DATVE
+    FOR EACH ROW
+DECLARE
+    v_soghetrong CT_HANGVE.SOGHETRONG%TYPE;
+BEGIN
+
+    SELECT soghetrong INTO v_soghetrong
+    FROM CT_HANGVE cthv, ve v
+    WHERE v.MaVE = :NEW.MaVe AND v.machuyenbay = cthv.machuyenbay AND v.MAHANGVE = cthv.MAHANGVE;
+
+
+    IF (v_SoGheTrong = 0) THEN
+        RAISE_APPLICATION_ERROR(-20009, 'Hết vé trống');
+    END IF;
+END;
+/
+
+
+/* R16: xóa VE và CT_HANGVE liên quan đến chuyến bay đã xóa */
+
+--CHẠY PROCEDURE XONG MỚI CHẠY LẠI TRIGGER NÀY
+
+CREATE OR REPLACE TRIGGER rf_VE_CT_HANGVE_delete_CHUYENBAY
+    before DELETE ON CHUYENBAY
+    FOR EACH ROW
+BEGIN
+    -- Xóa các bản ghi liên quan từ bảng VE
+    DELETE CT_HANGVE
+    WHERE machuyenbay = :OLD.machuyenbay;
+
+    FOR rec IN (SELECT MaVe FROM VE WHERE MaChuyenBay = :OLD.MaChuyenBay)
+        LOOP
+            BEGIN
+                -- Gọi procedure delete_CT_DATVE_by_VE để xóa các bản ghi trong CT_DATVE, nếu không tìm thấy thì bỏ qua
+                delete_CT_DATVE_by_VE(rec.MaVe);
+            EXCEPTION
+                WHEN NO_DATA_FOUND THEN
+                    -- Nếu không tìm thấy MaVe trong CT_DATVE thì bỏ qua
+                    NULL;
+                WHEN OTHERS THEN
+                    -- Xử lý các ngoại lệ khác nếu cần thiết
+                    NULL;
+            END;
+        END LOOP;
+
+    -- Xóa các bản ghi trong bảng VE liên quan đến MaChuyenBay vừa xóa
+    DELETE FROM VE
+    WHERE MaChuyenBay = :OLD.MaChuyenBay;
+END rf_VE_CT_HANGVE_delete_CHUYENBAY;
+/
+
+/* R17: cập nhật trạng thái đường bay khi cập nhật trạng thái sân bay ngưng hoạt động */
+--DROP TRIGGER trg_update_trangthai_duongbay;
+CREATE OR REPLACE TRIGGER trg_update_trangthai_duongbay
+    AFTER UPDATE OF TrangThai ON SANBAY
+    FOR EACH ROW
+BEGIN
+    IF :NEW.TrangThai = 0 THEN
+        -- Update DUONGBAY where MaSanBayDen matches the updated MaSanBay
+        UPDATE DUONGBAY
+        SET TrangThai = 0
+        WHERE MaSanBayDen = :OLD.MaSanBay;
+
+        -- Update DUONGBAY where MaSanBayDi matches the updated MaSanBay
+        UPDATE DUONGBAY
+        SET TrangThai = 0
+        WHERE MaSanBayDi = :OLD.MaSanBay;
+
+        -- Update DUONGBAY where MaDuongBay matches MaDuongBay in SANBAYTG and MaSanBay in SANBAYTG matches the updated MaSanBay
+        UPDATE DUONGBAY
+        SET TrangThai = 0
+        WHERE MaDuongBay IN (
+            SELECT MaDuongBay
+            FROM SANBAYTG
+            WHERE MaSanBay = :OLD.MaSanBay
+        );
+    END IF;
+END; ----------------------------- trigger mục 3
+
+/* R18: kiểm tra trước khi cập nhật trạng thái đường bay hoạt động */
+--DROP TRIGGER trg_check_duongbay_status;
+CREATE OR REPLACE TRIGGER trg_check_duongbay_status
+    BEFORE UPDATE OF TrangThai ON DUONGBAY
+    FOR EACH ROW
+DECLARE
+    cnt NUMBER;
+BEGIN
+    IF :NEW.TrangThai = 1 THEN
+        -- Kiểm tra số lượng sân bay có TrangThai = 0 bằng cách sử dụng UNION
+        SELECT COUNT(*)
+        INTO cnt
+        FROM (
+                 SELECT 1
+                 FROM SANBAY sb
+                 WHERE sb.MaSanBay = :OLD.MaSanBayDi AND sb.TrangThai = 0
+                 UNION
+                 SELECT 1
+                 FROM SANBAY sb
+                 WHERE sb.MaSanBay = :OLD.MaSanBayDen AND sb.TrangThai = 0
+                 UNION
+                 SELECT 1
+                 FROM SANBAY sb
+                 WHERE sb.TrangThai = 0 AND sb.MaSanBay IN (
+                     SELECT sbtg.MaSanBay
+                     FROM SANBAYTG sbtg
+                     WHERE sbtg.MaDuongBay = :OLD.MaDuongBay
+                 )
+             );
+        -- Nếu số lượng sân bay có TrangThai = 0 lớn hơn 0 thì raise lỗi
+        IF cnt > 0 THEN
+            RAISE_APPLICATION_ERROR(-20001, 'Có sân bay thuộc đường bay đang hoạt động nên không thể thay đổi trạng thái');
+        END IF;
+    END IF;
+END;------------------------------------------------ trigger mục 2
 
