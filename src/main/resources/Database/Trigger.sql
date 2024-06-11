@@ -44,15 +44,15 @@ END;
 CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang
     FOR INSERT OR update ON CT_DATVE
     COMPOUND TRIGGER
-    v_nam NUMBER;
-    v_thang NUMBER;
+    v_nam NUMBER :=0 ;
+    v_thang NUMBER := 0 ;
     giave NUMBER;
-    v_dem NUMBER;
-    v_dem_nam NUMBER;
+    v_dem NUMBER := 0 ;
+    v_dem_nam NUMBER :=0 ;
     v_machuyenbay VARCHAR2(10);
-    v_countMaChuyenBay NUMBER;
+    v_countMaChuyenBay NUMBER := 0 ;
     CheckExist NUMBER := 0 ;
-    v_count NUMBER;
+    v_count NUMBER := 0 ;
     p_trangThai NUMBER;
     v_maVe VARCHAR2(10);
     v_maHangVe VARCHAR2(10);
@@ -135,7 +135,7 @@ END BEFORE STATEMENT;
 
                 SELECT COUNT(*) INTO v_countMaChuyenBay
                 FROM BAOCAOTHANG
-                WHERE machuyenbay = v_machuyenbay;
+                WHERE machuyenbay = v_machuyenbay AND nam = v_Nam AND thang = v_Thang;
 
                 IF (v_dem > 0) THEN
                     begin
@@ -413,7 +413,6 @@ ALTER TABLE baocaothang
 
 
 /* R13: Thời gian bay phải không nhỏ hơn thời gian bay tối thiểu. */
---DROP TRIGGER Check_ThoiGianXuatPhat
 
 CREATE OR REPLACE TRIGGER Check_ThoiGianXuatPhat
     BEFORE INSERT OR UPDATE ON CHUYENBAY
@@ -443,7 +442,6 @@ END;
 
 
 /* R14: sân bay đến và sân bay đi của đường bay không trùng nhau */
---DROP TRIGGER Check_DuongBay
 
 CREATE OR REPLACE TRIGGER Check_DuongBay
     BEFORE INSERT OR UPDATE ON DUONGBAY
@@ -456,7 +454,6 @@ END;
 /
 
 /* R15: nếu số lượng ghế trống = 0 thì không cho đặt vé */
---DROP TRIGGER check_SL_GheTrong;
 
 CREATE OR REPLACE TRIGGER check_SL_GheTrong
     BEFORE INSERT ON CT_DATVE
@@ -478,8 +475,6 @@ END;
 
 
 /* R16: xóa VE và CT_HANGVE liên quan đến chuyến bay đã xóa */
-
---CHẠY PROCEDURE XONG MỚI CHẠY LẠI TRIGGER NÀY
 
 CREATE OR REPLACE TRIGGER rf_VE_CT_HANGVE_delete_CHUYENBAY
     before DELETE ON CHUYENBAY
@@ -510,9 +505,8 @@ BEGIN
 END rf_VE_CT_HANGVE_delete_CHUYENBAY;
 /
 
-
 /* R17: cập nhật trạng thái đường bay khi cập nhật trạng thái sân bay ngưng hoạt động */
---DROP TRIGGER trg_update_trangthai_duongbay;
+
 CREATE OR REPLACE TRIGGER trg_update_trangthai_duongbay
     AFTER UPDATE OF TrangThai ON SANBAY
     FOR EACH ROW
@@ -537,10 +531,10 @@ BEGIN
             WHERE MaSanBay = :OLD.MaSanBay
         );
     END IF;
-END; ----------------------------- trigger mục 3
+END;
 
 /* R18: kiểm tra trước khi cập nhật trạng thái đường bay hoạt động */
---DROP TRIGGER trg_check_duongbay_status;
+
 CREATE OR REPLACE TRIGGER trg_check_duongbay_status
     BEFORE UPDATE OF TrangThai ON DUONGBAY
     FOR EACH ROW
@@ -573,4 +567,5 @@ BEGIN
             RAISE_APPLICATION_ERROR(-20001, 'Có sân bay thuộc đường bay đang hoạt động nên không thể thay đổi trạng thái');
         END IF;
     END IF;
-END;------------------------------------------------ trigger mục 2
+END;
+

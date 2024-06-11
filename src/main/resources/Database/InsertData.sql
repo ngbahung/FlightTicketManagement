@@ -1228,7 +1228,7 @@ INSERT INTO THAMSO (MaThuocTinh, TenThuocTinh, GiaTri) VALUES ('TGDTT', 'ThoiGia
 INSERT INTO THAMSO (MaThuocTinh, TenThuocTinh, GiaTri) VALUES ('TGDTD', 'ThoiGianDungToiDa', 20);
 INSERT INTO THAMSO (MaThuocTinh, TenThuocTinh, GiaTri) VALUES ('TGTTDV', 'ThoiGianToiThieuDatVe', 24);
 INSERT INTO THAMSO (MaThuocTinh, TenThuocTinh, GiaTri) VALUES ('TGTT_HV', 'ThoiGianToiThieuHuyVe', 24);
-
+INSERT INTO THAMSO (MaThuocTinh, TenThuocTinh, GiaTri) VALUES ('SBTGTD', 'SanBayTrungGianToiDa', 3);
 -- ----------------------------------------------------------------------------------------------------------------------------------------------------------
 --CHẠY TRIGGER VÀ PROC RỒI MỚI CHẠY CT_DATVE
 
@@ -1666,9 +1666,6 @@ INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, T
 INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05303', 'VE05303', 'KH003', TO_TIMESTAMP('2024-01-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-01-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
 INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai) VALUES ('CTDV05304', 'VE05304', 'KH001', TO_TIMESTAMP('2024-02-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-02-10 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1);
 
-
-
-/*
 -- Xóa dữ liệu trong bảng CT_DATVE
 DELETE FROM CT_DATVE;
 
@@ -1709,5 +1706,5 @@ DELETE FROM QUYEN;
 DELETE FROM THAMSO;
 
 -- Xóa dữ liệu trong bảng SANBAYTG
-DELETE FRROM SANBAYTG;
+DELETE FROM SANBAYTG;
 */
