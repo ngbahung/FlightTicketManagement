@@ -38,8 +38,8 @@ public class QuyDinhController implements Initializable {
     @FXML
     private TableColumn<?, ?> idsanbay_col;
 
-//    @FXML
-//    private TextField maxsbtg_txf;
+    @FXML
+    private TextField maxsbtg_txf;
 
     @FXML
     private TextField maxtgdung_tfx;
@@ -528,9 +528,9 @@ public class QuyDinhController implements Initializable {
                     case "TGBTT":
                         mintgbay_txf.setText(String.valueOf(giaTri));
                         break;
-//                    case "SSBTGTMD":
-//                        maxsbtg_txf.setText(String.valueOf(giaTri));
-//                        break;
+                    case "SBTGTD":
+                        maxsbtg_txf.setText(String.valueOf(giaTri));
+                        break;
                     case "TGDTT":
                         mintgdung_tfx.setText(String.valueOf(giaTri));
                         break;
