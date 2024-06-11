@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.sql.Date;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -197,7 +198,13 @@ public class TraCuuBanVeController implements Initializable {
             soGheTrong_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGheTrong(cellData.getValue().getMaChuyenBay()).toString()));
             soGhe_tbcoumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGhe(cellData.getValue().getMaChuyenBay()).toString()));
             diemDung_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getSoDiemDung(cellData.getValue().getMaDuongBay())));
-            giaVe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGiaVe().toString()));
+            DecimalFormat df = new DecimalFormat("#,###");
+
+            giaVe_tbcolumn.setCellValueFactory(cellData -> {
+                double giaVe = cellData.getValue().getGiaVe();
+                String formattedGiaVe = df.format(giaVe);
+                return new SimpleStringProperty(formattedGiaVe);
+            });
             chiTiet_tbcl.setCellFactory(param -> new TableCell<>() {
                 private final Button detailButton = new Button("Xem chi tiết");
 

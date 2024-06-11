@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.sql.Date;
+import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -327,8 +328,13 @@ public class LichChuyenBayController implements Initializable {
             soGheTrong_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGheTrong(cellData.getValue().getMaChuyenBay()).toString()));
             soGhe_tbcoumn.setCellValueFactory(cellData -> new SimpleStringProperty(getSoGhe(cellData.getValue().getMaChuyenBay()).toString()));
             thoiGianBay_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(getThoiGianBayByMaDuongBay(cellData.getValue().getMaDuongBay())));
-            giaVe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getGiaVe())));
+            DecimalFormat df = new DecimalFormat("#,###");
 
+            giaVe_tbcolumn.setCellValueFactory(cellData -> {
+                double giaVe = cellData.getValue().getGiaVe();
+                String formattedGiaVe = df.format(giaVe);
+                return new SimpleStringProperty(formattedGiaVe);
+            });
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Đã xảy ra lỗi khi tải dữ liệu từ cơ sở dữ liệu.");

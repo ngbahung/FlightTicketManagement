@@ -200,11 +200,17 @@ public class ThemLichChuyenBayController implements Initializable {
                     LocalTime.parse(gioBay_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
             LocalDateTime thoiGianHaCanh = LocalDateTime.of(ngayHaCanh_datepicker.getValue(),
                     LocalTime.parse(gioHaCanh_combobox.getValue(), DateTimeFormatter.ofPattern("HH:mm:ss")));
-            BigDecimal giaVe = new BigDecimal(gia_txtfld.getText());
+            BigDecimal giaVe;
+            try {
+                // Lấy giá trị từ text field và chuyển đổi sang số nguyên
+                int giaVeNguyen = Integer.parseInt(gia_txtfld.getText());
 
-            // Parse and format the price
-            DecimalFormat df = new DecimalFormat("#.00");  // Set the format to two decimal places
-            String formattedGiaVe = df.format(giaVe);
+                // Chuyển đổi số nguyên thành BigDecimal và định dạng thành số thập phân
+                giaVe = BigDecimal.valueOf(giaVeNguyen).setScale(2, BigDecimal.ROUND_HALF_UP);
+            } catch (NumberFormatException e) {
+                alert.errorMessage("Giá tiền không hợp lệ. Vui lòng nhập một số nguyên hợp lệ.");
+                return;
+            }
 
             // Tạo câu lệnh SQL để chèn dữ liệu vào bảng CHUYENBAY
             String insertChuyenBayQuery = "INSERT INTO CHUYENBAY (MaChuyenBay, MaDuongBay, TGXP, TGKT, TrangThai, GiaVe) " +

@@ -99,6 +99,9 @@ public class PhanQuyenController implements Initializable {
         SortedList<TaiKhoan> sortedData = new SortedList<>(filteredData);
         sortedData.comparatorProperty().bind(phanQuyen_table.comparatorProperty());
         phanQuyen_table.setItems(sortedData);
+        if (sortedData.isEmpty()) {
+            alert.errorMessage("Không tìm thấy dữ liệu phù hợp.");
+        }
     }
 
     @FXML

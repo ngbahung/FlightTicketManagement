@@ -13,10 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.example.flightticketmanagement.Controllers.AlertMessage;
@@ -27,6 +24,7 @@ import org.example.flightticketmanagement.Models.DatabaseDriver;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,6 +33,9 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class LichSuDatVeController implements Initializable {
     @FXML
@@ -394,6 +395,7 @@ public class LichSuDatVeController implements Initializable {
         connect = DatabaseDriver.getConnection();
         eventBusXoaGheTrong.register(this);
         // Setup table columns
+        startBookingExpiryScheduler();
         setupTableViewColumns(phDC_maVe_tbcl, phDC_tenKH_tbcl, phDC_sdt_tbcl, phDC_ngayBay_tbcl, phDC_hangVe_tbcl,
                 phDC_maGhe_tbcl, phDC_sanBayDi_tbcl, phDC_sanBayDen_tbcl, phDC_gioBay_tbcl, phDC_giaTien_tbcl);
 
@@ -459,10 +461,27 @@ public class LichSuDatVeController implements Initializable {
             return new SimpleStringProperty(parseLocalDateTime(gioBayDateTime).orElse(""));
         });
 
+        // Định dạng giá tiền dưới dạng số thập phân
+        DecimalFormat df = new DecimalFormat("#,###");
+
         giaTienCol.setCellValueFactory(cellData -> {
             float giaTien = getGiaTien(cellData.getValue().getMaVe());
             return new SimpleFloatProperty(giaTien).asObject();
         });
+
+        giaTienCol.setCellFactory(column -> new TableCell<CT_DatVe, Float>() {
+            @Override
+            protected void updateItem(Float item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    String formattedGiaTien = df.format(item);
+                    setText(formattedGiaTien);
+                }
+            }
+        });
+
     }
 
     private Optional<String> parseLocalDate(LocalDate date) {
@@ -750,6 +769,39 @@ public class LichSuDatVeController implements Initializable {
             MenuItem menuItem = new MenuItem(sanBay);
             menuItem.setOnAction(event -> sanbayden_menubtn.setText(sanBay));
             sanbayden_menubtn.getItems().add(menuItem);
+        }
+    }
+
+    private void startBookingExpiryScheduler() {
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        scheduler.scheduleAtFixedRate(this::cancelExpiredBookings, 0, 2, TimeUnit.MINUTES); // Thực hiện mỗi phút một lần
+    }
+
+    private void cancelExpiredBookings() {
+        String query = "SELECT MaCT_DATVE FROM CT_DATVE WHERE TRANGTHAI = 0 AND NGAYMUAVE < SYSDATE - 1"; // Giả sử trạng thái 0 là chưa thanh toán và NGAYMUAVE là cột lưu ngày đặt vé
+
+        try (PreparedStatement ps = connect.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                String maCTDV = rs.getString("MaCT_DATVE");
+                deleteBookingById(maCTDV);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Có lỗi xảy ra khi hủy vé hoặc phiếu đặt chỗ quá hạn.");
+        }
+    }
+
+    private void deleteBookingById(String maCTDV) {
+        String deleteBookingSql = "DELETE FROM CT_DATVE WHERE MaCT_DATVE = ?";
+        try (PreparedStatement ps = connect.prepareStatement(deleteBookingSql)) {
+            ps.setString(1, maCTDV);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Có lỗi xảy ra khi xóa vé.");
         }
     }
 }

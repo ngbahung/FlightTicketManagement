@@ -2789,7 +2789,6 @@ END BEFORE STATEMENT;
     END Update_DoanhThu_Thang;
 
 --trigger cho delete
-
 CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang_delete
     FOR delete ON CT_DATVE
     COMPOUND TRIGGER
