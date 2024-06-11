@@ -66,6 +66,18 @@ public class ThemDuongBayController implements Initializable {
     @FXML
     void moThemSanBayTrungGian(ActionEvent event) {
         try {
+            // Get the current number of intermediate airports for the airline
+            int currentSoDiemDung = sanBayTrungGian_tbview.getItems().size();
+
+            // Get the maximum number of intermediate airports from the THAMSO table
+            int maxSoDiemDung = getThamSo("SBTGTD");
+
+            // Check if the current number of intermediate airports is equal to or greater than the maximum number
+            if (currentSoDiemDung >= maxSoDiemDung) {
+                alert.errorMessage("Không thể thêm điểm dừng vì số lượng điểm dừng tối đa là " + maxSoDiemDung + ".");
+                return;
+            }
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Admin/ThemSBTG.fxml"));
             Parent root = loader.load();
             Stage stage = new Stage();
@@ -443,5 +455,21 @@ public class ThemDuongBayController implements Initializable {
             alert.errorMessage("Could not format thoiGianDung.");
             return thoiGianDung;
         }
+    }
+
+    private int getThamSo(String maThuocTinh) {
+        String query = "SELECT GiaTri FROM THAMSO WHERE MaThuocTinh = ?";
+        int giaTri = 0;
+        try (PreparedStatement prepare = connect.prepareStatement(query)) {
+            prepare.setString(1, maThuocTinh);
+            try (ResultSet result = prepare.executeQuery()) {
+                if (result.next()) {
+                    giaTri = result.getInt("GiaTri");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return giaTri;
     }
 }

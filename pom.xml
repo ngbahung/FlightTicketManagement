@@ -85,7 +85,7 @@
       <artifactId>jasperreports-fonts</artifactId>
       <version>6.21.2</version> <!-- Hoặc phiên bản bạn đang sử dụng -->
     </dependency>
-</dependencies>
+  </dependencies>
   <build>
     <plugins>
       <plugin>

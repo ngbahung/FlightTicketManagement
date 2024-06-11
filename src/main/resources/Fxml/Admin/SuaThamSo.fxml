@@ -12,12 +12,7 @@
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="504.0" prefWidth="598.0" spacing="20.0" style="-fx-background-color: #ffffff;" stylesheets="@../../Styles/Admin/SuaThamSo.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.SuaThamSoQuyDinhController">
    <children>
-      <HBox prefHeight="0.0" prefWidth="558.0">
-         <children>
-            <Label text="Số sân bay trung gian tối đa:" visible="false" />
-            <TextField fx:id="numSBTGmax_tf" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="54.0" visible="false" />
-         </children>
-      </HBox>
+      <HBox prefHeight="0.0" prefWidth="558.0" />
       <Label styleClass="title" text="SỬA THAM SỐ" />
       <GridPane hgap="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="270.0" prefWidth="438.0" styleClass="grid-pane">
          <columnConstraints>
@@ -31,23 +26,26 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
             <Label text="Thời gian bay tối thiểu:" />
-            <Label text="Thời gian dừng tối thiểu:" GridPane.rowIndex="1" />
-            <Label text="Thời gian dừng tối đa:" GridPane.rowIndex="2" />
-            <Label text="Thời gian chậm nhất cho phép đặt vé:" GridPane.rowIndex="3" />
-            <Label text="Thời gian chậm nhất cho phép hủy đặt vé:" GridPane.rowIndex="4" />
+            <Label text="Thời gian dừng tối thiểu:" GridPane.rowIndex="2" />
+            <Label text="Thời gian dừng tối đa:" GridPane.rowIndex="3" />
+            <Label text="Thời gian chậm nhất cho phép đặt vé:" GridPane.rowIndex="4" />
+            <Label text="Thời gian chậm nhất cho phép hủy đặt vé:" GridPane.rowIndex="5" />
             <TextField fx:id="tgBayToiThieu_tf" promptText="phút" GridPane.columnIndex="1" />
-            <TextField fx:id="minTGDung_tf" promptText="phút" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="maxTGDung_tf" promptText="phút" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="tgChamNhatDatVe_tf" promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField fx:id="tgChamNhatHuyVe_tf" promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="minTGDung_tf" promptText="phút" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="maxTGDung_tf" promptText="phút" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="tgChamNhatDatVe_tf" promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="tgChamNhatHuyVe_tf" promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label text="giờ" GridPane.columnIndex="2" />
-            <Label text="phút" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <Label text="phút" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Label text="giờ" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label text="phút" GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <Label text="giờ" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Label text="giờ" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <Label text="Số sân bay trung gian tối đa:" GridPane.rowIndex="1" />
+            <TextField fx:id="numSBTGmax_tf" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="54.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
          <padding>
             <Insets left="20.0" right="20.0" />
