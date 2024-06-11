@@ -1,8 +1,4 @@
 
-
--- create table
-
-
 /* TABLE 1: SANBAY */
 
 CREATE TABLE SANBAY (
@@ -61,7 +57,7 @@ CREATE TABLE CHUYENBAY (
                            TGXP TIMESTAMP,
                            TGKT TIMESTAMP,
                            TrangThai number,
-                           GiaVe NUMBER(10,2),
+                           GiaVe NUMBER(20,2),
                            CONSTRAINT PK_CHUYENBAY PRIMARY KEY (MaChuyenBay)
 );
 
@@ -85,7 +81,7 @@ CREATE TABLE VE (
                     MaChuyenBay VARCHAR2(10) NOT NULL,
                     MaHangVe VARCHAR2(10) NOT NULL,
                     MaGhe NUMBER  NOT NULL,
-                    GiaTien NUMBER,
+                    GiaTien NUMBER(20,2),
                     CONSTRAINT PK_VE PRIMARY KEY (MaVe)
 );
 

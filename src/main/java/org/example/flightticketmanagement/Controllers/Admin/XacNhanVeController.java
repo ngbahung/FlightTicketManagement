@@ -128,6 +128,7 @@ public class XacNhanVeController implements Initializable {
         datCho_btn.setOnAction(e -> handleInsertBooking(false)); // for datCho (reserving seat)
     }
 
+
     public void initData(String maKH, String hoten, String cccd, String email, String sdt,
                          String diaChi, String maVe, String maGhe, String thanhTien, String maChuyenBay,
                          String sanBayDi, String sanBayDen, String ngayBay, String gioBay) {
