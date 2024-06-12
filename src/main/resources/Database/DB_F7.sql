@@ -7,12 +7,20 @@ END;
 */
 
 -- Tạo Schema
+-- sqlplus user1/user1@localhost:1521/TRINH
+-- sqlplus user2/user2@localhost:1521/TRINH
 
 alter session set "_ORACLE_SCRIPT"=true;
 
 CREATE USER fly_the_end12A IDENTIFIED BY password;
 GRANT CONNECT, RESOURCE, DBA TO fly_the_end12A;
 
+DROP USER user3;
+
+DROP USER user4;
+--  TAO CHẠY RỒI KO DROP ĐC- à mà ko nó có r =)) hay sai password ta
+-- tạo user 3 và 4 đi tr
+-- xong r đó
 
 alter session set "_ORACLE_SCRIPT"=true;
 CREATE USER user1 IDENTIFIED BY user1;
@@ -2001,6 +2009,7 @@ DELETE FROM THAMSO;
 DELETE FROM SANBAYTG;
 */
 
+
 -----------------------------------------------------------------------------------------------------------------------------------------
 --PROCEDURE
 -- LỊCH CHUYẾN BAY CONTROLLER
@@ -2017,7 +2026,7 @@ BEGIN
     WHERE db.MaDuongBay = p_MaDuongBay;
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
-        p_TenSanBay := 'N/A'; -- Trả về giá trị mặc định nếu không tìm thấy dữ liệu
+        p_TenSanBay := 'N/A';
 END GET_SANBAYDI;
 /
 --GET SAN BAY ĐẾN
@@ -2107,7 +2116,6 @@ EXCEPTION
     WHEN NO_DATA_FOUND THEN
         p_HoTen := NULL;
     WHEN OTHERS THEN
-        -- Xử lí các trường hợp ngoại lệ khác ở đây
         NULL;
 END GET_TEN_KHACH_HANG;
 /
@@ -2259,10 +2267,7 @@ EXCEPTION
 END GET_GIA_TIEN;
 /
 
--- PROCEDURE 9: update lại số ghế trống, số ghế đặt khi thay đổi trạng thái của ct_datve */
---UPDATE TRANGTHAI
---DROP PROCEDURE update_ticket_status;
-
+-- PROCEDURE 9: update lại số ghế trống, số ghế đặt khi thay đổi trạng thái của ct_datve
 CREATE OR REPLACE PROCEDURE update_ticket_status(
     p_maCT_DATVE IN VARCHAR2,
     p_trangThai IN number
@@ -2283,15 +2288,20 @@ BEGIN
     WHERE CD.MACT_DATVE = P_MACT_DATVE;
 
 -- Update the status of the ticket in CT_DATVE
-    UPDATE CT_DATVE
-    SET
-        TrangThai = p_trangThai,
-        NgayThanhToan =  CASE
-                             WHEN p_trangThai = 1 THEN SYSDATE
-                             ELSE v_NgayThanhToan
-            END
-    WHERE
-        MaCT_DATVE = p_maCT_DATVE;
+    IF (p_trangThai = 1 ) then
+        UPDATE CT_DATVE
+        SET
+            TrangThai = p_trangThai,
+            NgayThanhToan =  SYSDATE                                       
+        WHERE
+            MaCT_DATVE = p_maCT_DATVE;
+    ELSE
+        UPDATE CT_DATVE
+          SET 
+          TrangThai = p_trangThai               
+         WHERE
+          MaCT_DATVE = p_maCT_DATVE;             
+    END IF;
 -- Fetch related MaChuyenBay and MaHangVe
     SELECT V.MaChuyenBay, V.MaHangVe INTO v_maChuyenBay, v_maHangVe
     FROM VE V
@@ -2312,7 +2322,7 @@ EXCEPTION
         ROLLBACK;
         RAISE;
 END;
-
+/
 --XÁC NHẬN ĐẶT VÉ CONTROLLER
 --PROCEDURE 1: SELL ticket
 CREATE OR REPLACE PROCEDURE SellTicket(
@@ -2355,6 +2365,8 @@ EXCEPTION
         ROLLBACK;
         RAISE;
 END SellTicket;
+/
+
 
 --PROCEDURE 3: TẠO MÃ KHÁCH hàng
 CREATE OR REPLACE PROCEDURE GenerateCustomerId(
@@ -2384,7 +2396,7 @@ EXCEPTION
             p_maKH := 'KH001';
         END IF;
 END GenerateCustomerId;
-
+/
 ----------------------------------------------------------------------------------
 -- MÀN HÌNH ĐẶT VÉ CONTROLLER
 
@@ -2436,31 +2448,54 @@ EXCEPTION
 END GET_TENHANGVE;
 /
 
-
 CREATE OR REPLACE PROCEDURE GENERATE_MA_VE (
     p_newMaVe OUT VARCHAR2
 )
-    IS
+IS
     v_maxMaVe VE.MAVE%TYPE;
     v_newMaVeNumber NUMBER;
 BEGIN
-    -- Lấy giá trị lớn nhất của MAVE từ bảng VE
     SELECT MAX(MAVE) INTO v_maxMaVe FROM VE;
 
-    -- Nếu không có MAVE nào trong bảng VE, bắt đầu với VE001
-    IF v_maxMaVe IS NULL THEN
-        p_newMaVe := 'VE001';
+   IF v_maxMaVe IS NULL THEN
+        p_newMaVe := 'VE00001';
     ELSE
-        -- Tăng giá trị của MAVE lớn nhất thêm 1
-        v_newMaVeNumber := TO_NUMBER(SUBSTR(v_maxMaVe, 3)) + 1;
-        -- Tạo MAVE mới với định dạng VExxx
-        p_newMaVe := 'VE' || TO_CHAR(v_newMaVeNumber, 'FM000');
+       v_newMaVeNumber := TO_NUMBER(SUBSTR(v_maxMaVe, 3)) + 1;
+       p_newMaVe := 'VE' || LPAD(v_newMaVeNumber, 5, '0');
     END IF;
 EXCEPTION
     WHEN OTHERS THEN
-        p_newMaVe := 'VE001'; -- Trả về giá trị mặc định nếu có lỗi
+        p_newMaVe := 'VE00001'; -- Trả về giá trị mặc định nếu có lỗi
 END GENERATE_MA_VE;
 /
+
+
+CREATE OR REPLACE PROCEDURE GENERATE_MA_CT_DATVE (
+    p_newMaCT_DATVE OUT VARCHAR2
+)
+IS
+    v_maxMaCT_DATVE CT_DATVE.MaCT_DATVE%TYPE;
+    v_newMaCT_DATVENumber NUMBER;
+BEGIN
+    -- Lấy giá trị lớn nhất của MaCT_DATVE từ bảng CT_DATVE
+    SELECT MAX(TO_NUMBER(SUBSTR(MaCT_DATVE, 5))) INTO v_newMaCT_DATVENumber FROM CT_DATVE;
+
+    -- Nếu không có MaCT_DATVE nào trong bảng CT_DATVE, bắt đầu với CTDV00000
+    IF v_newMaCT_DATVENumber IS NULL THEN
+        p_newMaCT_DATVE := 'CTDV00000';
+    ELSE
+        -- Tăng giá trị số lên 1
+        v_newMaCT_DATVENumber := v_newMaCT_DATVENumber + 1;
+        -- Tạo MaCT_DATVE mới với định dạng CTDVxxxxx
+        p_newMaCT_DATVE := 'CTDV' || LPAD(v_newMaCT_DATVENumber, 5, '0');
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        p_newMaCT_DATVE := 'CTDV00000'; -- Trả về giá trị mặc định nếu có lỗi
+END GENERATE_MA_CT_DATVE;
+/
+
+
 
 CREATE OR REPLACE PROCEDURE GENERATE_MA_GHE (
     p_newMaGhe OUT NUMBER
@@ -2559,6 +2594,7 @@ EXCEPTION
     WHEN OTHERS THEN
         p_newMaDB := 'DB001'; -- Trả về giá trị mặc định nếu có lỗi
 END GENERATE_MA_DUONGBAY;
+/
 -----------------------------------------------------------------------------
 -- XÓA CT_DATVE LIÊN QUAN ĐẾN VE ĐÃ XÓA
 CREATE OR REPLACE PROCEDURE delete_CT_DATVE_by_VE(
@@ -2574,7 +2610,7 @@ EXCEPTION
         -- Xử lý các ngoại lệ khác nếu cần thiết
         NULL;
 END delete_CT_DATVE_by_VE;
-
+/
 
 
 -------------------------------------------------------------------
@@ -2622,7 +2658,6 @@ END;
 /
 
 /* R4: Cập nhật doanh thu  tháng khi có thêm doanh thu chuyến bay.*/
-
 CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang
 FOR INSERT OR update ON CT_DATVE
 COMPOUND TRIGGER
@@ -2750,7 +2785,7 @@ COMPOUND TRIGGER
       END IF;
 
     ----     
-    IF (CheckExist = 1 ) THEN 
+    IF (CheckExist = 1 AND v_nam > 0 AND v_thang > 0  ) THEN 
         BEGIN 
                SELECT sovedaban INTO v_count 
                 FROM BAOCAOTHANG
@@ -2783,6 +2818,7 @@ COMPOUND TRIGGER
   
      END AFTER STATEMENT;
 END Update_DoanhThu_Thang;
+/
 
 --trigger cho delete
 CREATE OR REPLACE TRIGGER Update_DoanhThu_Thang_delete
@@ -2881,6 +2917,7 @@ COMPOUND TRIGGER
     END AFTER STATEMENT;
 
 END Update_DoanhThu_Thang_delete;
+/
 
 /* R4: Mỗi vé phải đặt trước một khoảng thời gian nhất định trước khi máy bay xuất phát. */
 --DROP TRIGGER trigger_CT_DATVE
@@ -3114,6 +3151,7 @@ BEGIN
         );
     END IF;
 END; 
+/
 
 /* R18: kiểm tra trước khi cập nhật trạng thái đường bay hoạt động */
 
@@ -3150,4 +3188,4 @@ BEGIN
         END IF;
     END IF;
 END;
-
+/

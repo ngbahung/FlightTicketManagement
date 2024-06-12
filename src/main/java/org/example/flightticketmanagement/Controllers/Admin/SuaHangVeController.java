@@ -13,6 +13,7 @@ import org.example.flightticketmanagement.Models.HangVe;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
@@ -34,6 +35,9 @@ public class SuaHangVeController implements Initializable {
     private QuyDinhController parentController;
 
     private final AlertMessage alert = new AlertMessage();
+    private Connection connect;
+    private PreparedStatement prepare;
+    private ResultSet result;
 
     @FXML
     void luuHangVe(ActionEvent event) {
@@ -48,13 +52,14 @@ public class SuaHangVeController implements Initializable {
 
         String sql = "UPDATE HANGVE SET TenHangVe = ?, HeSo = ? WHERE MaHangVe = ?";
 
-        try(Connection connect = DatabaseDriver.getConnection();
-            PreparedStatement preState = connect.prepareStatement(sql)) {
-            preState.setString(1, tenHangVe);
-            preState.setDouble(2, Double.parseDouble(heSo));
-            preState.setString(3, maHangVe);
+        try {
+            connect = DatabaseDriver.getConnection();
+            prepare = connect.prepareStatement(sql);
+            prepare.setString(1, tenHangVe);
+            prepare.setDouble(2, Double.parseDouble(heSo));
+            prepare.setString(3, maHangVe);
 
-            int rowsUpdated = preState.executeUpdate();
+            int rowsUpdated = prepare.executeUpdate();
 
             if (rowsUpdated > 0) {
                 alert.successMessage("Cập nhật hạng vé thành công");

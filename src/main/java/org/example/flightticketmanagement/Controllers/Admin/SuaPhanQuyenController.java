@@ -42,6 +42,10 @@ public class SuaPhanQuyenController implements Initializable {
     @FXML
     private MFXComboBox<String> vaiTro_combobox;
 
+    private Connection connect;
+    private PreparedStatement prepare;
+    private ResultSet result;
+
 
     @FXML
     void updateAccount() {
@@ -61,9 +65,9 @@ public class SuaPhanQuyenController implements Initializable {
 
         String sql = "UPDATE TaiKhoan SET ten = ?, sdt = ?, email = ?, password = ?, maQuyen = ?, created = ? WHERE maTaiKhoan = ?";
 
-        try (Connection connect = DatabaseDriver.getConnection();
-             PreparedStatement prepare = connect.prepareStatement(sql)) {
-
+        try {
+            connect = DatabaseDriver.getConnection();
+            prepare = connect.prepareStatement(sql);
             prepare.setString(1, ten);
             prepare.setString(2, sdt);
             prepare.setString(3, email);

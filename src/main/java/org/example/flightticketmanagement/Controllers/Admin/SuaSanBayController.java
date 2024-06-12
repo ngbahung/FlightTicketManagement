@@ -13,6 +13,7 @@ import org.example.flightticketmanagement.Models.SanBay;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
@@ -37,6 +38,9 @@ public class SuaSanBayController implements Initializable {
     private QuyDinhController parentController;
 
     private final AlertMessage alert = new AlertMessage();
+    private Connection connect;
+    private PreparedStatement prepare;
+    private ResultSet result;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -79,8 +83,9 @@ public class SuaSanBayController implements Initializable {
 
         String sql = "UPDATE SANBAY SET TenSanBay = ?, TenVietTat = ?, DiaChi = ? WHERE MaSanBay = ?";
 
-        try (Connection connect = DatabaseDriver.getConnection();
-             PreparedStatement prepare = connect.prepareStatement(sql)) {
+        try {
+            connect = DatabaseDriver.getConnection();
+            prepare = connect.prepareStatement(sql);
 
             prepare.setString(1, tenSanBay);
             prepare.setString(2, tenVietTat);
