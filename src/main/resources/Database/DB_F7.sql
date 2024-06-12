@@ -2338,32 +2338,31 @@ CREATE OR REPLACE PROCEDURE SellTicket(
     p_trangThai IN INTEGER
 ) AS
     v_customerExists INTEGER;
-    v_newMaCT_DATVE VARCHAR2(10);
+v_newMaCT_DATVE VARCHAR2(10);
 BEGIN
-    -- Check if customer exists
-    SELECT COUNT(*) INTO v_customerExists
-    FROM KHACHHANG
-    WHERE MAKHACHHANG = p_maKH;
+-- Check if customer exists
+SELECT COUNT(*) INTO v_customerExists
+FROM KHACHHANG
+WHERE MAKHACHHANG = p_maKH;
 
 -- If customer does not exist, insert into KHACHHANG
-    IF v_customerExists = 0 THEN
-        INSERT INTO KHACHHANG (MAKHACHHANG, HOTEN, CCCD, EMAIL, SDT, DIACHI)
-        VALUES (p_maKH, p_hoten, p_cccd, p_email, p_sdt, p_diaChi);
-    END IF;
+IF v_customerExists = 0 THEN
+INSERT INTO KHACHHANG (MAKHACHHANG, HOTEN, CCCD, EMAIL, SDT, DIACHI)
+VALUES (p_maKH, p_hoten, p_cccd, p_email, p_sdt, p_diaChi);
+END IF;
 
-    -- Generate new MaCT_DATVE
-    SELECT 'CTDV' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(MaCT_DATVE, 5))), 0) + 1, 3, '0') INTO v_newMaCT_DATVE
-    FROM CT_DATVE;
+    -- Generate new MaCT_DATVE using the separate procedure
+GENERATE_MA_CT_DATVE(v_newMaCT_DATVE);
 
 -- Insert booking into CT_DATVE
-    INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
-    VALUES (v_newMaCT_DATVE, p_maVe, p_maKH, p_ngayMuaVe, p_ngayThanhToan, p_trangThai);
+INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
+VALUES (v_newMaCT_DATVE, p_maVe, p_maKH, p_ngayMuaVe, p_ngayThanhToan, p_trangThai);
 
-    COMMIT;
+COMMIT;
 EXCEPTION
     WHEN OTHERS THEN
-        ROLLBACK;
-        RAISE;
+ROLLBACK;
+RAISE;
 END SellTicket;
 /
 
