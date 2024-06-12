@@ -71,6 +71,9 @@ public class XacNhanVeController implements Initializable {
 
     // DATABASE TOOLS
     private Connection connect;
+    private PreparedStatement prepare;
+    private ResultSet result;
+
     private static final EventBus eventBus = new EventBus();
 
     public XacNhanVeController() {}
@@ -127,6 +130,7 @@ public class XacNhanVeController implements Initializable {
         datVe_btn.setOnAction(e -> handleInsertBooking(true)); // for datVe (booking ticket)
         datCho_btn.setOnAction(e -> handleInsertBooking(false)); // for datCho (reserving seat)
     }
+
 
     public void initData(String maKH, String hoten, String cccd, String email, String sdt,
                          String diaChi, String maVe, String maGhe, String thanhTien, String maChuyenBay,
@@ -224,9 +228,11 @@ public class XacNhanVeController implements Initializable {
     private void deleteBooking() {
         String maVe = maVe_txtfld.getText().trim();
         String deleteBookingSql = "DELETE FROM VE WHERE MAVE = ?";
-        try (PreparedStatement ps = connect.prepareStatement(deleteBookingSql)) {
-            ps.setString(1, maVe);
-            ps.executeUpdate();
+        try {
+            connect = DatabaseDriver.getConnection();
+            prepare = connect.prepareStatement(deleteBookingSql);
+            prepare.setString(1, maVe);
+            prepare.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Có lỗi xảy ra khi xóa vé.");

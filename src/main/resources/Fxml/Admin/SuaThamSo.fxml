@@ -41,7 +41,7 @@
             <TextField fx:id="tgChamNhatHuyVe_tf" promptText="giờ" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label text="giờ" GridPane.columnIndex="2" />
             <Label text="phút" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Label text="phút" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label text="giờ" GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <Label text="giờ" GridPane.columnIndex="2" GridPane.rowIndex="4" />
             <Label text="giờ" GridPane.columnIndex="2" GridPane.rowIndex="5" />
             <Label text="Số sân bay trung gian tối đa:" GridPane.rowIndex="1" />

@@ -106,8 +106,9 @@ public class SuaDuongBayController implements Initializable {
         }
 
         String sql = "UPDATE DUONGBAY SET MaSanBayDi = ?, MaSanBayDen = ?, TenDuongBay = ? WHERE MaDuongBay = ?";
-        try (Connection connect = DatabaseDriver.getConnection();
-             PreparedStatement prepare = connect.prepareStatement(sql)) {
+        try {
+            connect = DatabaseDriver.getConnection();
+            prepare = connect.prepareStatement(sql);
             prepare.setString(1, maSanBayDi);
             prepare.setString(2, maSanBayDen);
             prepare.setString(3, tenDuongBay);
@@ -141,8 +142,9 @@ public class SuaDuongBayController implements Initializable {
 
     private boolean isExistingSBTG(String maDuongBay, String maSanBay) {
         String sql = "SELECT COUNT(*) FROM SANBAYTG WHERE MaDuongBay = ? AND MaSanBay = ?";
-        try (Connection connect = DatabaseDriver.getConnection();
-             PreparedStatement prepare = connect.prepareStatement(sql)) {
+        try {
+            connect = DatabaseDriver.getConnection();
+            prepare = connect.prepareStatement(sql);
             prepare.setString(1, maDuongBay);
             prepare.setString(2, maSanBay);
             try (ResultSet result = prepare.executeQuery()) {
@@ -230,8 +232,9 @@ public class SuaDuongBayController implements Initializable {
 
     private void updateThuTuSBTG(String maDuongBay, String maSanBay, int thuTu) {
         String sql = "UPDATE SANBAYTG SET ThuTu = ? WHERE MaDuongBay = ? AND MaSanBay = ?";
-        try (Connection connect = DatabaseDriver.getConnection();
-             PreparedStatement prepare = connect.prepareStatement(sql)) {
+        try {
+            connect = DatabaseDriver.getConnection();
+            prepare = connect.prepareStatement(sql);
             prepare.setInt(1, thuTu);
             prepare.setString(2, maDuongBay);
             prepare.setString(3, maSanBay);
@@ -321,8 +324,9 @@ public class SuaDuongBayController implements Initializable {
 
         // Lưu dữ liệu vào cơ sở dữ liệu với truy vấn động
         String sql = "INSERT INTO SANBAYTG (MaDuongBay, MaSanBay, ThuTu, ThoiGianDung) VALUES (?, ?, ?, " + interval + ")";
-        try (Connection connect = DatabaseDriver.getConnection();
-             PreparedStatement prepare = connect.prepareStatement(sql)) {
+        try {
+            connect = DatabaseDriver.getConnection();
+            prepare = connect.prepareStatement(sql);
             prepare.setString(1, maDuongBay);
             prepare.setString(2, maSanBay);
             prepare.setInt(3, thuTu);
@@ -343,8 +347,9 @@ public class SuaDuongBayController implements Initializable {
     private int getNextThuTu(String maDuongBay) {
         String sql = "SELECT MAX(ThuTu) AS MaxThuTu FROM SANBAYTG WHERE MaDuongBay = ?";
         int thuTu = 1; // Mặc định là 1 nếu MaDuongBay chưa tồn tại
-        try (Connection connect = DatabaseDriver.getConnection();
-             PreparedStatement prepare = connect.prepareStatement(sql)) {
+        try {
+            connect = DatabaseDriver.getConnection();
+            prepare = connect.prepareStatement(sql);
             prepare.setString(1, maDuongBay);
             try (ResultSet result = prepare.executeQuery()) {
                 if (result.next() && result.getInt("MaxThuTu") > 0) {
@@ -391,8 +396,9 @@ public class SuaDuongBayController implements Initializable {
     private String getTenVietTat(String tenSanBay) {
         String tenVietTat = null;
         String sql = "SELECT TenVietTat FROM SANBAY WHERE TenSanBay = ?";
-        try (Connection connect = DatabaseDriver.getConnection();
-             PreparedStatement prepare = connect.prepareStatement(sql)) {
+        try {
+            connect = DatabaseDriver.getConnection();
+            prepare = connect.prepareStatement(sql);
             prepare.setString(1, tenSanBay);
             try (ResultSet result = prepare.executeQuery()) {
                 if (result.next()) {
@@ -432,9 +438,10 @@ public class SuaDuongBayController implements Initializable {
     private List<String> getSanBayData() {
         List<String> sanBayList = new ArrayList<>();
         String sql = "SELECT TenSanBay FROM SANBAY";
-        try (Connection connect = DatabaseDriver.getConnection();
-             PreparedStatement prepare = connect.prepareStatement(sql);
-             ResultSet result = prepare.executeQuery()) {
+        try {
+            connect = DatabaseDriver.getConnection();
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
             while (result.next()) {
                 sanBayList.add(result.getString("TenSanBay"));
             }
@@ -463,8 +470,9 @@ public class SuaDuongBayController implements Initializable {
 
         // Lấy danh sách các sân bay trung gian từ cơ sở dữ liệu dựa trên mã đường bay được chọn
         String sql = "SELECT * FROM SANBAYTG WHERE MaDuongBay = ?";
-        try (Connection connect = DatabaseDriver.getConnection();
-             PreparedStatement prepare = connect.prepareStatement(sql)) {
+        try {
+            connect = DatabaseDriver.getConnection();
+            prepare = connect.prepareStatement(sql);
             prepare.setString(1, selectedDuongBay.getMaDuongBay());
             try (ResultSet result = prepare.executeQuery()) {
                 // Duyệt qua các hàng trong kết quả
@@ -522,8 +530,9 @@ public class SuaDuongBayController implements Initializable {
         String interval = String.format("INTERVAL '0 %s' DAY TO SECOND", thoiGianDung);
 
         String sql = "UPDATE SANBAYTG SET ThoiGianDung = " + interval + " WHERE MaDuongBay = ? AND MaSanBay = ? AND ThuTu = ?";
-        try (Connection connect = DatabaseDriver.getConnection();
-             PreparedStatement prepare = connect.prepareStatement(sql)) {
+        try {
+            connect = DatabaseDriver.getConnection();
+            prepare = connect.prepareStatement(sql);
             prepare.setString(1, maDuongBay);
             prepare.setString(2, maSanBay);
             prepare.setInt(3, thuTu);
@@ -536,8 +545,9 @@ public class SuaDuongBayController implements Initializable {
 
     private void deleteSBTG(String maDuongBay, String maSanBay, int thuTu) {
         String sql = "DELETE FROM SANBAYTG WHERE MaDuongBay = ? AND MaSanBay = ? AND ThuTu = ?";
-        try (Connection connect = DatabaseDriver.getConnection();
-             PreparedStatement prepare = connect.prepareStatement(sql)) {
+        try {
+            connect = DatabaseDriver.getConnection();
+            prepare = connect.prepareStatement(sql);
             prepare.setString(1, maDuongBay);
             prepare.setString(2, maSanBay);
             prepare.setInt(3, thuTu);
