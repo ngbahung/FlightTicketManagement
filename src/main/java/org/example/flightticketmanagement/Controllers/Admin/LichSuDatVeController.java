@@ -178,15 +178,12 @@ public class LichSuDatVeController implements Initializable {
     @FXML
     void handleThanhToan() {
         CT_DatVe selectedVe = phDC_tbview.getSelectionModel().getSelectedItem();
-
         if (selectedVe == null) {
             alert.errorMessage("Vui lòng chọn một phiếu đặt chỗ để thanh toán.");
             return;
         }
-
         boolean confirm = alert.confirmationMessage("Bạn có chắc chắn muốn thanh toán phiếu đặt chỗ này?");
         if (confirm) {
-            Connection connect = null;
             try {
                 connect = DatabaseDriver.getConnection();
                 connect.setAutoCommit(false);  // Begin transaction
@@ -202,85 +199,50 @@ public class LichSuDatVeController implements Initializable {
                 loadData();  // Reload data
                 alert.successMessage("Thanh toán thành công.");
             } catch (SQLException e) {
-                try {
-                    connect.rollback();  // Rollback transaction in case of error
-                } catch (SQLException rollbackEx) {
-                    alert.errorMessage("Lỗi khi rollback: " + rollbackEx.getMessage());
-                }
-                alert.errorMessage("Có lỗi xảy ra khi thanh toán: " + e.getMessage());
+                e.printStackTrace();
             }
         }
     }
 
     @FXML
     void cancelTicketOrReservation() {
-        CT_DatVe selectedVeDaDat = veDaDat_tbview.getSelectionModel().getSelectedItem();
-        CT_DatVe selectedPhDC = phDC_tbview.getSelectionModel().getSelectedItem();
+        CT_DatVe selected = veDaDat_tbview.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            selected = phDC_tbview.getSelectionModel().getSelectedItem();
+        }
 
-        if (selectedVeDaDat == null && selectedPhDC == null) {
+        if (selected == null) {
             alert.errorMessage("Vui lòng chọn một vé hoặc phiếu đặt chỗ để hủy.");
             return;
         }
 
-        String message = "Bạn có chắc chắn muốn hủy ";
-        CT_DatVe selected;
-        boolean isTicket = selectedVeDaDat != null;
-        if (isTicket) {
-            message += "vé này?";
-            selected = selectedVeDaDat;
-        } else {
-            message += "phiếu đặt chỗ này?";
-            selected = selectedPhDC;
-        }
-
-        // Get the flight date
+        String message = "Bạn có chắc chắn muốn hủy " + (selected == veDaDat_tbview.getSelectionModel().getSelectedItem() ? "vé này?" : "phiếu đặt chỗ này?");
         LocalDateTime ngayBayDateTime = getNgayGioBay(selected.getMaVe());
-
-        // Get the value of n
         int n = getThamSo("TGTT_HV");
 
-        // Compare the flight date with the current date and time minus n hours
         if (ngayBayDateTime != null && ngayBayDateTime.isBefore(LocalDateTime.now().minusHours(n))) {
             alert.errorMessage("Không thể hủy vé hoặc phiếu đặt chỗ nếu ngày bay còn ít hơn " + n + " giờ.");
             return;
         }
 
-        boolean confirm = alert.confirmationMessage(message);
-        if (confirm) {
-            try {
-                connect = DatabaseDriver.getConnection();
+        if (alert.confirmationMessage(message)) {
+            try (Connection connect = DatabaseDriver.getConnection()) {
                 connect.setAutoCommit(false);
-
-                if (isTicket) {
-                    try (CallableStatement cstmt = connect.prepareCall("{call update_ticket_status(?, ?)}")) {
-                        cstmt.setString(1, selected.getMaCT_DatVe());
-                        cstmt.setInt(2, 2);
-                        cstmt.executeUpdate();
-                    }
-                } else {
-                    // Directly delete reservation
-                    try (PreparedStatement pstmt = connect.prepareStatement("DELETE FROM CT_DATVE WHERE MaCT_DATVE = ?")) {
-                        pstmt.setString(1, selected.getMaCT_DatVe());
-                        pstmt.executeUpdate();
-                    }
+                try (CallableStatement cstmt = connect.prepareCall("{call update_ticket_status(?, ?)}")) {
+                    cstmt.setString(1, selected.getMaCT_DatVe());
+                    cstmt.setInt(2, 2);
+                    cstmt.executeUpdate();
                 }
-
                 connect.commit();
                 eventBus.post(new Object());
                 loadData();
                 alert.successMessage("Hủy vé hoặc phiếu đặt chỗ thành công.");
             } catch (SQLException e) {
-                try {
-                    if (connect != null) {
-                        connect.rollback();
-                    }
-                } catch (SQLException rollbackEx) {
-                    alert.errorMessage("Lỗi khi rollback: " + rollbackEx.getMessage());
-                }
                 alert.errorMessage("Có lỗi xảy ra khi hủy vé hoặc phiếu đặt chỗ: " + e.getMessage());
             }
         }
     }
+
 
     private int getThamSo(String maThuocTinh) {
         String query = "SELECT GiaTri FROM THAMSO WHERE MaThuocTinh = ?";
@@ -428,8 +390,7 @@ public class LichSuDatVeController implements Initializable {
     public void handleUpdateData(Object event) {
         loadData();
     }
-
-
+    
     private void setupTableViewColumns(TableColumn<CT_DatVe, String> maVeCol,
                                        TableColumn<CT_DatVe, String> tenKHCol,
                                        TableColumn<CT_DatVe, String> sdtCol,
@@ -511,9 +472,10 @@ public class LichSuDatVeController implements Initializable {
             phDC_tbview.getItems().clear();
 
             String queryVeDaDat = "SELECT * FROM CT_DATVE WHERE TrangThai = 1";
-            try (PreparedStatement prepare = connect.prepareStatement(queryVeDaDat);
-                 ResultSet result = prepare.executeQuery()) {
-
+            try {
+                connect = DatabaseDriver.getConnection();
+                prepare = connect.prepareStatement(queryVeDaDat);
+                result = prepare.executeQuery();
                 while (result.next()) {
                     Timestamp ngayMuaVeTimestamp = result.getTimestamp("NgayMuaVe");
                     LocalDateTime ngayMuaVe = (ngayMuaVeTimestamp != null) ? ngayMuaVeTimestamp.toLocalDateTime() : null;
@@ -532,11 +494,15 @@ public class LichSuDatVeController implements Initializable {
 
                     veDaDat_tbview.getItems().add(datVe);
                 }
+            } catch (SQLException e){
+                e.printStackTrace();
             }
 
             String queryPhDC = "SELECT * FROM CT_DATVE WHERE TrangThai = 0";
-            try (PreparedStatement prepare = connect.prepareStatement(queryPhDC);
-                 ResultSet result = prepare.executeQuery()) {
+            try {
+                connect = DatabaseDriver.getConnection();
+                prepare = connect.prepareStatement(queryPhDC);
+                result = prepare.executeQuery();
 
                 while (result.next()) {
                     Timestamp ngayMuaVeTimestamp = result.getTimestamp("NgayMuaVe");
@@ -556,8 +522,10 @@ public class LichSuDatVeController implements Initializable {
 
                     phDC_tbview.getItems().add(datVe);
                 }
+            } catch (SQLException e){
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -774,7 +742,7 @@ public class LichSuDatVeController implements Initializable {
 
     private void startBookingExpiryScheduler() {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(this::cancelExpiredBookings, 0, 2, TimeUnit.MINUTES); // Thực hiện mỗi phút một lần
+        scheduler.scheduleAtFixedRate(this::cancelExpiredBookings, 0, 2, TimeUnit.MINUTES); // Thực hiện 2 phút một lần
     }
 
     private void cancelExpiredBookings() {
@@ -795,13 +763,13 @@ public class LichSuDatVeController implements Initializable {
     }
 
     private void deleteBookingById(String maCTDV) {
-        String deleteBookingSql = "DELETE FROM CT_DATVE WHERE MaCT_DATVE = ?";
-        try (PreparedStatement ps = connect.prepareStatement(deleteBookingSql)) {
-            ps.setString(1, maCTDV);
-            ps.executeUpdate();
+        connect = DatabaseDriver.getConnection();
+        try (CallableStatement cstmt = connect.prepareCall("{call update_ticket_status(?, ?)}")) {
+            cstmt.setString(1, maCTDV);
+            cstmt.setInt(2, 2);
+            cstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            alert.errorMessage("Có lỗi xảy ra khi xóa vé.");
         }
     }
 }
