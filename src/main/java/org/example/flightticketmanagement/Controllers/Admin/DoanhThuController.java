@@ -19,6 +19,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javafx.scene.input.MouseEvent;
 import org.example.flightticketmanagement.Controllers.Manager.LichChuyenBayController;
@@ -58,6 +61,7 @@ public class DoanhThuController implements Initializable {
     private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     private final AlertMessage alert = new AlertMessage();
     private final EventBus eventBusXoaGheTrong = XacNhanVeController.getEventBus();
@@ -130,6 +134,7 @@ public class DoanhThuController implements Initializable {
         try {
             connect = DatabaseDriver.getConnection();
             connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            connect.setAutoCommit(false);
             prepare = connect.prepareStatement(query);
             prepare.setInt(1, namBaoCao);
             try (ResultSet result = prepare.executeQuery()) {
@@ -173,6 +178,7 @@ public class DoanhThuController implements Initializable {
                 dtNam_dt_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDoanhThu().toString()));
                 dtNam_tiLe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTyLe().toString()));
             }
+            connect.commit();
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Error occurred while loading data from the database.");
@@ -222,7 +228,17 @@ public class DoanhThuController implements Initializable {
     public void DTNam_LoadData(){
         DTNam_LoadTongDT();
         DTNam_UpdateData(DTN_namBaoCao, tongDoanhThuNam);
-        // Update BarChart with new data
+
+        // Đặt mức độ cô lập là SERIALIZABLE
+        try {
+            connect = DatabaseDriver.getConnection();
+            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+//            connect.setAutoCommit(false);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Error occurred while setting transaction isolation level.");
+            return;
+        }
         UpdateBarChartWithData(listBaoCaoNam);
     }
 
@@ -281,6 +297,7 @@ public class DoanhThuController implements Initializable {
         try {
             connect = DatabaseDriver.getConnection();
             connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            connect.setAutoCommit(false);
             prepare = connect.prepareStatement(query);
             prepare.setInt(1, thangBaoCao);
             prepare.setInt(2, namBaoCao);
@@ -323,6 +340,7 @@ public class DoanhThuController implements Initializable {
                 dtThang_doanhThu_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDoanhThu().toString()));
                 dtThang_tyLe_tbcolumn.setCellValueFactory(cellData -> new SimpleStringProperty(Double.toString(cellData.getValue().getTyLe())));
             }
+            connect.commit();
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Error occurred while loading data from the database.");
@@ -344,7 +362,7 @@ public class DoanhThuController implements Initializable {
 
         String query = "SELECT DoanhThu " +
                 "FROM BAOCAOTHANG " +
-                "WHERE Thang = ? AND Nam = ?";
+                "WHERE Thang = ? AND Nam = ? ";
 
         try  {
             connect = DatabaseDriver.getConnection();
@@ -363,6 +381,7 @@ public class DoanhThuController implements Initializable {
             alert.errorMessage("Error occurred while loading data from the database.");
         }
     }
+
 
     public void DTThang_FillDataForComboBoxNam() {
         int currentYear = LocalDate.now().getYear();

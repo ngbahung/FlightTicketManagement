@@ -167,8 +167,6 @@ public class XacNhanVeController implements Initializable {
         }
     }
 
-
-
     private void handleInsertBooking(boolean isDatVe) {
         generateCustomerId(cccd_txtfld.getText());
         int trangThai = isDatVe ? 1 : 0;
@@ -184,7 +182,6 @@ public class XacNhanVeController implements Initializable {
         }
     }
 
-
     private boolean insertBooking(boolean isDatVe, int trangThai, String maChuyenBay, String maHangVe) {
         String maKH = maKH_txtfld.getText().trim();
         String hoten = hoten_txtfld.getText().trim();
@@ -199,6 +196,10 @@ public class XacNhanVeController implements Initializable {
         Timestamp ngayThanhToan = isDatVe ? Timestamp.valueOf(now) : null;
 
         try {
+            connect = DatabaseDriver.getConnection();
+            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            connect.setAutoCommit(false);
+
             String callProcedureSql = "{CALL SellTicket(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
             try (CallableStatement cs = connect.prepareCall(callProcedureSql)) {
                 cs.setString(1, maKH);
@@ -217,10 +218,22 @@ public class XacNhanVeController implements Initializable {
                 cs.setInt(10, trangThai);
                 cs.execute();
             }
+            connect.commit();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
-            alert.errorMessage("Có lỗi xảy ra khi đặt vé hoặc đặt chỗ.");
+            if (e.getErrorCode() == 1205) { // Deadlock or serialization failure
+                alert.errorMessage("Can't access because serializable. Please try again later.");
+            } else {
+                e.printStackTrace();
+                alert.errorMessage("Có lỗi xảy ra khi đặt vé hoặc đặt chỗ.");
+            }
+            try {
+                if (connect != null) {
+                    connect.rollback();
+                }
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
             return false;
         }
     }

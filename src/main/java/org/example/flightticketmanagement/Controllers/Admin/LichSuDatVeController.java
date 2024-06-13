@@ -175,6 +175,7 @@ public class LichSuDatVeController implements Initializable {
         }
     }
 
+//    Hàm xử lý thanh toán cho một vé
     @FXML
     void handleThanhToan() {
         CT_DatVe selectedVe = phDC_tbview.getSelectionModel().getSelectedItem();
@@ -182,28 +183,45 @@ public class LichSuDatVeController implements Initializable {
             alert.errorMessage("Vui lòng chọn một phiếu đặt chỗ để thanh toán.");
             return;
         }
-        boolean confirm = alert.confirmationMessage("Bạn có chắc chắn muốn thanh toán phiếu đặt chỗ này?");
-        if (confirm) {
-            try {
-                connect = DatabaseDriver.getConnection();
-                connect.setAutoCommit(false);  // Begin transaction
 
-                try (CallableStatement cstmt = connect.prepareCall("{call update_ticket_status(?, ?)}")) {
-                    cstmt.setString(1, selectedVe.getMaCT_DatVe());
-                    cstmt.setInt(2, 1);  // Status value 1 to indicate payment
-                    cstmt.executeUpdate();
-                }
+        try {
+            connect = DatabaseDriver.getConnection();
+//            Thiết lập serializable
+            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            connect.setAutoCommit(false);  // Begin transaction
 
-                connect.commit();  // Commit transaction
-                eventBus.post(new Object());
-                loadData();  // Reload data
+            // Show confirmation dialog
+            boolean confirm = alert.confirmationMessage("Bạn có chắc chắn muốn thanh toán phiếu đặt chỗ này?");
+            if (!confirm) {
+                connect.rollback();
+                return;
+            }
+
+//            Cập nhật một phiếu đặt chỗ từ 0 lên vé đã đặt là 1
+            // Update status to indicate payment
+            try (CallableStatement cstmt = connect.prepareCall("{call update_ticket_status(?, ?)}")) {
+                cstmt.setString(1, selectedVe.getMaCT_DatVe());
+                cstmt.setInt(2, 1);  // Status value 1 to indicate payment
+                cstmt.executeUpdate();
                 alert.successMessage("Thanh toán thành công.");
-            } catch (SQLException e) {
-                e.printStackTrace();
+            }
+
+            connect.commit();  // Commit transaction
+            eventBus.post(new Object());
+            loadData();  // Reload data
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Có lỗi xảy ra khi thanh toán: " + e.getMessage());
+            try {
+                connect.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
         }
     }
 
+
+//    Hàm xử lý hủy vé hoặc phiếu, tất cả chuyển thành thành trạng thái 2
     @FXML
     void cancelTicketOrReservation() {
         CT_DatVe selected = veDaDat_tbview.getSelectionModel().getSelectedItem();
@@ -225,23 +243,40 @@ public class LichSuDatVeController implements Initializable {
             return;
         }
 
-        if (alert.confirmationMessage(message)) {
-            try (Connection connect = DatabaseDriver.getConnection()) {
-                connect.setAutoCommit(false);
-                try (CallableStatement cstmt = connect.prepareCall("{call update_ticket_status(?, ?)}")) {
-                    cstmt.setString(1, selected.getMaCT_DatVe());
-                    cstmt.setInt(2, 2);
-                    cstmt.executeUpdate();
-                }
-                connect.commit();
-                eventBus.post(new Object());
-                loadData();
+        try {
+            connect = DatabaseDriver.getConnection();
+//            Thiết lập set serializable
+            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            connect.setAutoCommit(false);  // Begin transaction
+
+            // Show confirmation dialog
+            if (!alert.confirmationMessage(message)) {
+                connect.rollback();
+                return;
+            }
+
+            // Update status to indicate cancellation
+            try (CallableStatement cstmt = connect.prepareCall("{call update_ticket_status(?, ?)}")) {
+                cstmt.setString(1, selected.getMaCT_DatVe());
+                cstmt.setInt(2, 2);  // Status value 2 to indicate cancellation
+                cstmt.executeUpdate();
                 alert.successMessage("Hủy vé hoặc phiếu đặt chỗ thành công.");
-            } catch (SQLException e) {
-                alert.errorMessage("Có lỗi xảy ra khi hủy vé hoặc phiếu đặt chỗ: " + e.getMessage());
+            }
+
+            connect.commit();  // Commit transaction
+            eventBus.post(new Object());
+            loadData();  // Reload data
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alert.errorMessage("Có lỗi xảy ra khi hủy vé hoặc phiếu đặt chỗ: " + e.getMessage());
+            try {
+                connect.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
         }
     }
+
 
 
     private int getThamSo(String maThuocTinh) {
@@ -657,14 +692,8 @@ public class LichSuDatVeController implements Initializable {
     }
 
     private void prepareAndExecuteQuery(String query, LocalDateTime selectedDate, String sanBayDi, String sanBayDen, String maVe, String tenKhachHang, TableView<CT_DatVe> tableView, int trangThai) throws SQLException {
-
-
-
-
         try {
             connect = DatabaseDriver.getConnection();
-            // Set transaction isolation level here
-            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             prepare = connect.prepareStatement(query);
             prepare.setInt(1, trangThai);
             int paramIndex = 2;
@@ -685,7 +714,8 @@ public class LichSuDatVeController implements Initializable {
                 prepare.setString(paramIndex++, "%" + tenKhachHang + "%");
             }
 
-            try (ResultSet result = prepare.executeQuery()) {
+            try {
+                result = prepare.executeQuery();
                 while (result.next()) {
                     LocalDateTime ngayMuaVe = result.getTimestamp("NgayMuaVe") != null ? result.getTimestamp("NgayMuaVe").toLocalDateTime() : null;
                     LocalDateTime ngayThanhToan = result.getTimestamp("NgayThanhToan") != null ? result.getTimestamp("NgayThanhToan").toLocalDateTime() : null;
@@ -701,6 +731,8 @@ public class LichSuDatVeController implements Initializable {
 
                     tableView.getItems().add(datVe);
                 }
+            } catch (SQLException e){
+                e.printStackTrace();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -755,14 +787,17 @@ public class LichSuDatVeController implements Initializable {
     private void cancelExpiredBookings() {
         String query = "SELECT MaCT_DATVE FROM CT_DATVE WHERE TRANGTHAI = 0 AND NGAYMUAVE < SYSDATE - 1"; // Giả sử trạng thái 0 là chưa thanh toán và NGAYMUAVE là cột lưu ngày đặt vé
 
-        try (PreparedStatement ps = connect.prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                String maCTDV = rs.getString("MaCT_DATVE");
+        try  {
+            connect = DatabaseDriver.getConnection();
+            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            connect.setAutoCommit(false);
+            prepare = connect.prepareStatement(query);
+            result = prepare.executeQuery();
+            while (result.next()) {
+                String maCTDV = result.getString("MaCT_DATVE");
                 deleteBookingById(maCTDV);
             }
-
+            connect.commit();
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Có lỗi xảy ra khi hủy vé hoặc phiếu đặt chỗ quá hạn.");
@@ -770,11 +805,15 @@ public class LichSuDatVeController implements Initializable {
     }
 
     private void deleteBookingById(String maCTDV) {
-        connect = DatabaseDriver.getConnection();
-        try (CallableStatement cstmt = connect.prepareCall("{call update_ticket_status(?, ?)}")) {
+        try {
+            connect = DatabaseDriver.getConnection();
+            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            connect.setAutoCommit(false);
+            CallableStatement cstmt = connect.prepareCall("{call update_ticket_status(?, ?)}");
             cstmt.setString(1, maCTDV);
             cstmt.setInt(2, 2);
             cstmt.executeUpdate();
+            connect.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }

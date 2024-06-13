@@ -289,8 +289,10 @@ public class ManHinhDatVeController implements Initializable {
         float giaTien = selectedVe.getGiaTien();
 
         try {
+            connect = DatabaseDriver.getConnection();
             // Đặt transaction isolation level ở đây
             connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            connect.setAutoCommit(false);
 
             String sql = "{call SAVE_TICKET(?, ?, ?, ?, ?)}";
 
@@ -306,6 +308,7 @@ public class ManHinhDatVeController implements Initializable {
                 e.printStackTrace();
                 alert.errorMessage("Error occurred while saving ticket to the database.");
             }
+            connect.commit();
         } catch (SQLException e) {
             e.printStackTrace();
             alert.errorMessage("Error setting transaction isolation level.");

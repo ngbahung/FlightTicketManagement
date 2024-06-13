@@ -276,8 +276,6 @@ public class VeHuyController implements Initializable {
     }
 
     private void prepareAndExecuteQuery(String query, LocalDateTime selectedDate, String sanBayDi, String sanBayDen, String maVe, String tenKhachHang, TableView<CT_DatVe> tableView, int trangThai) throws SQLException {
-        // Set transaction isolation level here
-        connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 
         try (PreparedStatement prepare = connect.prepareStatement(query)) {
             prepare.setInt(1, trangThai);
