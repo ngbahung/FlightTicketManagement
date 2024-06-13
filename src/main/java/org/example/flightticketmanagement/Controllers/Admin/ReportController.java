@@ -9,6 +9,7 @@ import org.example.flightticketmanagement.Models.BaoCaoNam;
 import org.example.flightticketmanagement.Models.BaoCaoThang;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -72,7 +73,10 @@ public class ReportController {
             parameters.put("sanBayDen", sanBayDen);
             parameters.put("hoTen", tenKhachHang);
             parameters.put("sdt", SDT);
-            parameters.put("giaVe", giaVe);
+            DecimalFormat df = new DecimalFormat("#,###");
+            Double numericGiaVe = Double.parseDouble(giaVe);
+            String formattedGiaVe = df.format(numericGiaVe);
+            parameters.put("giaVe", formattedGiaVe);
 
 
             JasperReport report = JasperCompileManager.compileReport(fileJRXMLPath);
