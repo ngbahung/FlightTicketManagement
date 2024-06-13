@@ -1,4 +1,4 @@
-ALTER SESSION SET CURRENT_SCHEMA = fly_the_end12A;
+ALTER SESSION SET CURRENT_SCHEMA = fly_the_end12B;
 
 
 set transaction isolation level read committed;
@@ -108,6 +108,96 @@ set AUTOCOMMIT on;
 commit;
 
 Exec UPDATE_TICKET_STATUS('CTDV05002',1);
+
+update hangve
+set trangthai = 0
+where mahangve
+='HV002';
+
+update hangve
+set trangthai = 0
+where mahangve
+='HV001';
+
+-------------------------------------------------------------------
+-- TEST LOST UPDATE
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+SET AUTOCOMMIT OFF;
+SET AUTOCOMMIT ON;
+COMMIT;
+
+SELECT * FROM CT_DATVE 
+WHERE MACT_DATVE = 'CTDV05210';
+
+
+SELECT * FROM BAOCAOTHANG
+WHERE THANG = 6 AND NAM = 2024
+AND MACHUYENBAY = 'CB052';
+
+EXECUTE UPDATE_TICKET_STATUS('CTDV05210', 1);
+EXECUTE UPDATE_TICKET_STATUS('CTDV05211', 1);
+
+-------------------------------------------------------------------
+-- TEST NON-REPEATABLE READ
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+SET AUTOCOMMIT OFF;
+SET AUTOCOMMIT ON;
+COMMIT;
+
+EXECUTE UPDATE_TICKET_STATUS('CTDV05201', 2);
+EXECUTE UPDATE_TICKET_STATUS('CTDV05205', 2);
+
+
+-------------------------------------------------------------------
+-- TEST PHANTOM READ
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+SET AUTOCOMMIT OFF;
+SET AUTOCOMMIT ON;
+COMMIT;
+
+SELECT *
+FROM BAOCAOTHANG 
+WHERE Thang = 6  
+AND Nam = 2024;
+
+--  Bán 1 vé 
+DECLARE
+    v_newMaVe VARCHAR2(10);
+    v_newMaGhe NUMBER;
+    v_maChuyenBay VARCHAR2(10) := 'CB021';
+    v_maHangVe VARCHAR2(10) := 'HV001';
+    v_giaTien NUMBER := 1100000;
+    v_newMaCT_DATVE VARCHAR2(10);
+BEGIN
+    GENERATE_MA_VE(v_newMaVe);
+    GENERATE_MA_GHE(v_newMaGhe);
+    GENERATE_MA_CT_DATVE(v_newMaCT_DATVE);
+    SAVE_TICKET(v_newMaVe, v_maChuyenBay, v_maHangVe, TO_CHAR(v_newMaGhe), v_giaTien);
+    INSERT INTO CT_DATVE (MaCT_DATVE, MaVe, MaKhachHang, NgayMuaVe, NgayThanhToan, TrangThai)
+    VALUES (
+        v_newMaCT_DATVE,
+        v_newMaVe,
+        'KH001',
+        SYSTIMESTAMP,
+        SYSTIMESTAMP,
+        1
+    );
+
+    COMMIT;
+END;
+/
+-- CB022, 1150000
+
+-------------------------------------------------------------------
+-- TEST DEADLOCK
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+SET AUTOCOMMIT OFF;
+SET AUTOCOMMIT ON;
+COMMIT;
 
 update hangve
 set trangthai = 0
