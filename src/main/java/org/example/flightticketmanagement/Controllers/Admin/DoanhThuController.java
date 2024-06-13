@@ -128,7 +128,8 @@ public class DoanhThuController implements Initializable {
                 "ORDER BY" +
                 "    m.Thang";
         try {
-//            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            connect = DatabaseDriver.getConnection();
+            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             prepare = connect.prepareStatement(query);
             prepare.setInt(1, namBaoCao);
             try (ResultSet result = prepare.executeQuery()) {
@@ -202,7 +203,8 @@ public class DoanhThuController implements Initializable {
 
 
         try {
-//            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            connect = DatabaseDriver.getConnection();
+            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             prepare = connect.prepareStatement(query);
             prepare.setInt(1, DTN_namBaoCao);
             try (ResultSet result = prepare.executeQuery()) {
@@ -277,7 +279,8 @@ public class DoanhThuController implements Initializable {
                 "WHERE Thang = ? AND Nam = ?";
 
         try {
-//            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            connect = DatabaseDriver.getConnection();
+            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             prepare = connect.prepareStatement(query);
             prepare.setInt(1, thangBaoCao);
             prepare.setInt(2, namBaoCao);
@@ -344,7 +347,8 @@ public class DoanhThuController implements Initializable {
                 "WHERE Thang = ? AND Nam = ?";
 
         try  {
-//            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            connect = DatabaseDriver.getConnection();
+            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             prepare = connect.prepareStatement(query);
             prepare.setInt(1, DTT_thangBaoCao);
             prepare.setInt(2, DTT_namBaoCao);
