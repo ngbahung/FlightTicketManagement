@@ -127,7 +127,10 @@ public class DoanhThuController implements Initializable {
                 "    BAOCAONAM b ON m.Thang = b.Thang AND b.Nam = ? " +
                 "ORDER BY" +
                 "    m.Thang";
-        try (PreparedStatement prepare = connect.prepareStatement(query)) {
+        try {
+            connect = DatabaseDriver.getConnection();
+            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            prepare = connect.prepareStatement(query);
             prepare.setInt(1, namBaoCao);
             try (ResultSet result = prepare.executeQuery()) {
                 dtNam_tableview.getItems().clear();
@@ -198,7 +201,11 @@ public class DoanhThuController implements Initializable {
                 "ORDER BY" +
                 "    m.Thang";
 
-        try (PreparedStatement prepare = connect.prepareStatement(query)) {
+
+        try {
+            connect = DatabaseDriver.getConnection();
+            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            prepare = connect.prepareStatement(query);
             prepare.setInt(1, DTN_namBaoCao);
             try (ResultSet result = prepare.executeQuery()) {
                 tongDoanhThuNam = BigDecimal.valueOf(0.0);
@@ -271,7 +278,10 @@ public class DoanhThuController implements Initializable {
                 "FROM BAOCAOTHANG " +
                 "WHERE Thang = ? AND Nam = ?";
 
-        try (PreparedStatement prepare = connect.prepareStatement(query)) {
+        try {
+            connect = DatabaseDriver.getConnection();
+            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            prepare = connect.prepareStatement(query);
             prepare.setInt(1, thangBaoCao);
             prepare.setInt(2, namBaoCao);
             try (ResultSet result = prepare.executeQuery()) {
@@ -336,7 +346,10 @@ public class DoanhThuController implements Initializable {
                 "FROM BAOCAOTHANG " +
                 "WHERE Thang = ? AND Nam = ?";
 
-        try (PreparedStatement prepare = connect.prepareStatement(query)) {
+        try  {
+            connect = DatabaseDriver.getConnection();
+            connect.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            prepare = connect.prepareStatement(query);
             prepare.setInt(1, DTT_thangBaoCao);
             prepare.setInt(2, DTT_namBaoCao);
             try (ResultSet result = prepare.executeQuery()) {

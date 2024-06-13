@@ -20,6 +20,7 @@ import org.example.flightticketmanagement.Models.Ve;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
@@ -83,13 +84,17 @@ public class ManHinhDatVeController implements Initializable {
 
     private final AlertMessage alert = new AlertMessage();
 
+    // Định dạng giá tiền dưới dạng số thập phân
+    private final DecimalFormat df = new DecimalFormat("#,###");
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         connect = DatabaseDriver.getConnection();
 
         // Thiết lập các cột của TableView
         hangVe_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenHangVe(cellData.getValue().getMaHangVe())));
-        giaTien_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getGiaTien())));
+        giaTien_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(df.format(cellData.getValue().getGiaTien())));
 
         // Add listener to the table view selection
         ve_tableview.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -174,7 +179,7 @@ public class ManHinhDatVeController implements Initializable {
                 }
 
                 hangVe_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(getTenHangVe(cellData.getValue().getMaHangVe())));
-                giaTien_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getGiaTien())));
+                giaTien_tbcl.setCellValueFactory(cellData -> new SimpleStringProperty(df.format(cellData.getValue().getGiaTien())));
             }
 
         } catch (SQLException e) {
@@ -203,7 +208,7 @@ public class ManHinhDatVeController implements Initializable {
     private void generateTicketDetails(Ve ve) {
         maVe_txtfld.setText(generateMaVe());
         maGhe_txtfld.setText(generateMaGhe());
-        thanhTien_txtfld.setText(String.valueOf(ve.getGiaTien()));
+        thanhTien_txtfld.setText(df.format(ve.getGiaTien()));
     }
 
     public String generateMaVe() {
