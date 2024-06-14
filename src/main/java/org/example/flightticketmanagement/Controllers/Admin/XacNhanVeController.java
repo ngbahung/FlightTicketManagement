@@ -122,7 +122,6 @@ public class XacNhanVeController implements Initializable {
         this.manHinhDatVeController = controller;
     }
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         connect = DatabaseDriver.getConnection();
@@ -130,7 +129,6 @@ public class XacNhanVeController implements Initializable {
         datVe_btn.setOnAction(e -> handleInsertBooking(true)); // for datVe (booking ticket)
         datCho_btn.setOnAction(e -> handleInsertBooking(false)); // for datCho (reserving seat)
     }
-
 
     public void initData(String maKH, String hoten, String cccd, String email, String sdt,
                          String diaChi, String maVe, String maGhe, String thanhTien, String maChuyenBay,
@@ -167,8 +165,6 @@ public class XacNhanVeController implements Initializable {
         }
     }
 
-
-
     private void handleInsertBooking(boolean isDatVe) {
         generateCustomerId(cccd_txtfld.getText());
         int trangThai = isDatVe ? 1 : 0;
@@ -183,7 +179,6 @@ public class XacNhanVeController implements Initializable {
             alert.errorMessage("Có lỗi xảy ra khi đặt vé hoặc đặt chỗ.");
         }
     }
-
 
     private boolean insertBooking(boolean isDatVe, int trangThai, String maChuyenBay, String maHangVe) {
         String maKH = maKH_txtfld.getText().trim();

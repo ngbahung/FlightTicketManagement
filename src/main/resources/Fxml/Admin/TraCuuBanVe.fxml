@@ -9,11 +9,18 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="800.0" prefWidth="992.0" style="-fx-background-color: white;" stylesheets="@../../Styles/Admin/LichChuyenBay.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.flightticketmanagement.Controllers.Admin.TraCuuBanVeController">
+   <ImageView fitHeight="483.0" fitWidth="992.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@../../Images/admin/World.png" />
+      </image>
+   </ImageView>
    <AnchorPane layoutX="143.0" layoutY="54.0" prefHeight="75.0" prefWidth="766.0" styleClass="filter-pane">
       <effect>
          <DropShadow />

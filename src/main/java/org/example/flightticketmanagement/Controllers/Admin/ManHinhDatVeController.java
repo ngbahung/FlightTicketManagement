@@ -312,7 +312,6 @@ public class ManHinhDatVeController implements Initializable {
         }
     }
 
-
     private void showConfirmationDialog() {
         if (validateInputs()) {
             try {
